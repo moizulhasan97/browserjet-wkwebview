@@ -13,8 +13,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AF19E6EB2F0D87AC007278CD /* browserjet-wkwebview */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			name = "browserjet-wkwebview";
-			path = "../../../moizulhassan/Desktop/browserjet-wkwebview/browserjet-wkwebview";
+			path = "browserjet-wkwebview";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
