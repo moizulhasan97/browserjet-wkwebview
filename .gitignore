@@ -1,0 +1,94 @@
+####################################
+# macOS
+####################################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+####################################
+# Xcode
+####################################
+build/
+DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.xcuserdata/
+*.moved-aside
+*.swp
+*.lock
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Xcode temporary files
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+####################################
+# Swift / SwiftPM
+####################################
+.swiftpm/
+.build/
+Package.resolved
+
+####################################
+# CocoaPods
+####################################
+Pods/
+Podfile.lock
+
+####################################
+# Carthage
+####################################
+Carthage/Build/
+
+####################################
+# Fastlane
+####################################
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+####################################
+# Logs & Temp
+####################################
+*.log
+tmp/
+temp/
+
+####################################
+# Environment / Secrets
+####################################
+.env
+.env.*
+*.secret.plist
+Secrets.plist
+Config.plist
+
+# Always track Info.plist
+!**/Info.plist
+
+####################################
+# Crash Reports
+####################################
+*.crash
+
+####################################
+# Playground
+####################################
+timeline.xctimeline
+playground.xcworkspace
+
+####################################
+# Binary & Archives
+####################################
+*.app
+*.pkg
+*.zip
