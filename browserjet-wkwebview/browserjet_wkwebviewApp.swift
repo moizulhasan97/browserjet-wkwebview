@@ -20,7 +20,7 @@ import Combine
 
 // MARK: - AppConfig
 enum AppConfig {
-    static let isUserAgentEnabled: Bool = true
+    static let isUserAgentEnabled: Bool = false
 }
 
 // MARK: - BrowserUserAgent
@@ -265,13 +265,15 @@ final class BrowserWindowState: ObservableObject {
 
 struct WebViewContainer: NSViewRepresentable {
     @ObservedObject var tab: TabModel
+    let onOpenInNewTab: (URL) -> Void
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(tab: tab)
+        Coordinator(tab: tab, onOpenInNewTab: onOpenInNewTab)
     }
     
     func makeNSView(context: Context) -> WKWebView {
         tab.webView.navigationDelegate = context.coordinator
+        tab.webView.uiDelegate = context.coordinator
         //tab.webView.addObserver(context.coordinator, forKeyPath: "title", options: .new, context: nil)
         //tab.webView.addObserver(context.coordinator, forKeyPath: "URL", options: .new, context: nil)
         return tab.webView
@@ -281,13 +283,15 @@ struct WebViewContainer: NSViewRepresentable {
         // no-op
     }
     
-    final class Coordinator: NSObject, WKNavigationDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
         private weak var tab: TabModel?
+        private let onOpenInNewTab: (URL) -> Void
         private var titleObservation: NSKeyValueObservation?
         private var urlObservation: NSKeyValueObservation?
 
-        init(tab: TabModel) {
+        init(tab: TabModel, onOpenInNewTab: @escaping (URL) -> Void) {
             self.tab = tab
+            self.onOpenInNewTab = onOpenInNewTab
 //        }
 //        
 //        override func observeValue(forKeyPath keyPath: String?,
@@ -333,6 +337,31 @@ struct WebViewContainer: NSViewRepresentable {
                     }
                 }
             }
+        }
+        
+        func webView(_ webView: WKWebView,
+                     decidePolicyFor navigationAction: WKNavigationAction,
+                     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            // Handle links that want to open in a new tab/window (target=_blank).
+            if navigationAction.targetFrame == nil,
+               let url = navigationAction.request.url {
+                onOpenInNewTab(url)
+                decisionHandler(.cancel)
+                return
+            }
+            decisionHandler(.allow)
+        }
+
+        func webView(_ webView: WKWebView,
+                     createWebViewWith configuration: WKWebViewConfiguration,
+                     for navigationAction: WKNavigationAction,
+                     windowFeatures: WKWindowFeatures) -> WKWebView? {
+            // Many sites use window.open() which lands here.
+            if navigationAction.targetFrame == nil,
+               let url = navigationAction.request.url {
+                onOpenInNewTab(url)
+            }
+            return nil
         }
         
         
@@ -641,9 +670,15 @@ struct BrowserWindowView: View {
 
             if let tab = state.selectedTab {
                 AddressBar(tab: tab)
-                WebViewContainer(tab: tab)
-                    .id(tab.id)
-                    .background(AppTheme.bg)
+                WebViewContainer(
+                    tab: tab,
+                    onOpenInNewTab: { url in
+                        // Open popups/target=_blank as a new tab in the same window (same proxy + UA)
+                        state.addTab(url: url)
+                    }
+                )
+                .id(tab.id)
+                .background(AppTheme.bg)
             } else {
                 Text("No tab selected")
                     .foregroundColor(AppTheme.text)
