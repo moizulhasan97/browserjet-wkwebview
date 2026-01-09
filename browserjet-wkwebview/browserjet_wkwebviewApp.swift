@@ -21,7 +21,30 @@ import Combine
 // MARK: - App Window State
 @MainActor
 final class AppWindowState: ObservableObject {
-    @Published var isProxy2WindowOpen: Bool = false
+    /// 10 window “slots”: w1...w10 (index 0...9)
+    @Published private(set) var openSlots: [Bool] = Array(repeating: false, count: 10)
+
+    func setOpen(_ slot: Int, _ isOpen: Bool) {
+        guard openSlots.indices.contains(slot) else { return }
+        openSlots[slot] = isOpen
+    }
+
+    var openCount: Int { openSlots.filter { $0 }.count }
+    var canOpenMore: Bool { openCount < 10 }
+
+    /// Next available slot (0...9) for opening a new window
+    func nextAvailableSlot() -> Int? {
+        openSlots.firstIndex(where: { !$0 })
+    }
+
+    /// The “display number” (1...N) for a given slot among currently open windows.
+    /// This enables renumbering after a close (e.g. if slot 2 closes, slot 3 becomes “2”, etc.)
+    func displayNumber(for slot: Int) -> Int? {
+        guard openSlots.indices.contains(slot), openSlots[slot] else { return nil }
+        let openIndices = openSlots.enumerated().compactMap { $0.element ? $0.offset : nil }
+        guard let rank = openIndices.firstIndex(of: slot) else { return nil }
+        return rank + 1
+    }
 }
 
 // MARK: - NSWindow Close Observer
@@ -147,6 +170,8 @@ final class TabModel: ObservableObject, Identifiable {
     }
     
     func load(_ url: URL) {
+        // Ensure UI shows loading even if WKNavigationDelegate callbacks are delayed/missed
+        isLoading = true
         addressText = url.absoluteString
         webView.load(URLRequest(url: url))
     }
@@ -363,6 +388,32 @@ struct WebViewContainer: NSViewRepresentable {
             tab.isLoading = false
             tab.canGoBack = webView.canGoBack
             tab.canGoForward = webView.canGoForward
+            tab.addressText = webView.url?.absoluteString ?? tab.addressText
+        }
+        
+        
+        func webView(_ webView: WKWebView,
+                     didReceive challenge: URLAuthenticationChallenge,
+                     completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+            // Some proxies require an explicit auth challenge response from WebKit.
+            // If we don't answer, navigation can appear to "load forever".
+            guard let tab else {
+                completionHandler(.performDefaultHandling, nil)
+                return
+            }
+
+            // Proxy auth challenges usually come through with a proxyType (HTTP/HTTPS).
+            if let proxyType = challenge.protectionSpace.proxyType,
+               proxyType == kCFProxyTypeHTTP as String || proxyType == kCFProxyTypeHTTPS as String {
+                let credential = URLCredential(user: tab.proxy.username,
+                                               password: tab.proxy.password,
+                                               persistence: .forSession)
+                completionHandler(.useCredential, credential)
+                return
+            }
+
+            // Server/basic auth (not proxy) — let the system handle unless you want to customize.
+            completionHandler(.performDefaultHandling, nil)
         }
     }
 }
@@ -483,16 +534,24 @@ struct AddressBar: View {
 struct BrowserWindowView: View {
     @StateObject var state: BrowserWindowState
     let showsNewWindowButton: Bool
-    
+    let slotIndex: Int   // ✅ add this (0...9)
+
     @EnvironmentObject private var appWindowState: AppWindowState
     @Environment(\.openWindow) private var openWindow
-    private var newTabProxy: AuthProxy? {
-        state.selectedTab?.proxy
+
+    private var computedWindowTitle: String {
+        if let n = appWindowState.displayNumber(for: slotIndex) {
+            return "Proxy Browser \(n)"
+        } else {
+            // fallback (shouldn’t really happen while open)
+            return "Proxy Browser"
+        }
     }
+
     var body: some View {
         VStack(spacing: 0) {
-            // Tabs row + (optional) New Window + plus + proxy badge
             HStack(spacing: 10) {
+
                 Text("Proxy: \(state.proxy.display)")
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(AppTheme.text)
@@ -504,7 +563,7 @@ struct BrowserWindowView: View {
                             .stroke(AppTheme.stroke.opacity(0.35), lineWidth: 1)
                     )
                     .cornerRadius(10)
-                
+
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(state.tabs) { tab in
@@ -518,12 +577,14 @@ struct BrowserWindowView: View {
                     }
                     .padding(.vertical, 6)
                 }
-                
-                // ✅ New Window button (only in Proxy 1 window)
+
+                // ✅ New Window button (from every window), disabled at 10
                 if showsNewWindowButton {
+                    let canOpenMore = appWindowState.canOpenMore
                     Button {
-                        openWindow(id: "proxy2")
-                        appWindowState.isProxy2WindowOpen = true
+                        guard let next = appWindowState.nextAvailableSlot() else { return }
+                        openWindow(id: "w\(next + 1)")
+                        appWindowState.setOpen(next, true)
                     } label: {
                         HStack(spacing: 6) {
                             Image(systemName: "macwindow.badge.plus")
@@ -534,14 +595,14 @@ struct BrowserWindowView: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 10)
                         .frame(height: 30)
-                        .background(appWindowState.isProxy2WindowOpen ? AppTheme.stroke.opacity(0.4) : AppTheme.stroke)
+                        .background(canOpenMore ? AppTheme.stroke : AppTheme.stroke.opacity(0.4))
                         .cornerRadius(10)
                     }
                     .buttonStyle(.plain)
-                    .disabled(appWindowState.isProxy2WindowOpen)
-                    .opacity(appWindowState.isProxy2WindowOpen ? 0.6 : 1)
+                    .disabled(!canOpenMore)
+                    .opacity(canOpenMore ? 1 : 0.6)
                 }
-                
+
                 // ✅ Add Tab button (max 5 tabs)
                 Button {
                     state.addTab()
@@ -562,8 +623,7 @@ struct BrowserWindowView: View {
             .padding(.bottom, 6)
             .background(AppTheme.chrome2)
             .overlay(Divider().opacity(0.4), alignment: .bottom)
-            
-            // Address bar + content
+
             if let tab = state.selectedTab {
                 AddressBar(tab: tab)
                 WebViewContainer(tab: tab)
@@ -578,6 +638,9 @@ struct BrowserWindowView: View {
         }
         .frame(minWidth: 1000, minHeight: 700)
         .background(AppTheme.bg)
+
+        // ✅ This makes titles auto-renumber on close/open
+        .background(WindowTitleSetter(title: computedWindowTitle))
     }
 }
 
@@ -586,37 +649,132 @@ struct BrowserWindowView: View {
 @main
 struct ProxyBrowserApp: App {
 
-    private let proxy1 = AuthProxy.parse("151.145.144.63:9143:eagaO:jOJFcfzM") // Window 1
-    private let proxy2 = AuthProxy.parse("151.145.144.62:9142:eagaO:jOJFcfzM") // Window 2
+    private let proxies: [AuthProxy] = [
+        AuthProxy.parse("151.145.144.63:9143:eagaO:jOJFcfzM"), // w1
+        AuthProxy.parse("151.145.144.62:9142:eagaO:jOJFcfzM"), // w2
+        AuthProxy.parse("151.145.144.61:9141:eagaO:jOJFcfzM"), // w3
+        AuthProxy.parse("151.145.156.73:12213:eagaO:jOJFcfzM"), // w4
+        AuthProxy.parse("151.145.156.72:12212:eagaO:jOJFcfzM"), // w5
+        AuthProxy.parse("151.145.156.71:12211:eagaO:jOJFcfzM"), // w6
+        AuthProxy.parse("151.145.156.70:12210:eagaO:jOJFcfzM"), // w7
+        AuthProxy.parse("151.145.156.69:12209:eagaO:jOJFcfzM"), // w8
+        AuthProxy.parse("151.145.156.68:12208:eagaO:jOJFcfzM"), // w9
+        AuthProxy.parse("151.145.156.67:12207:eagaO:jOJFcfzM")  // w10
+    ]
 
     @StateObject private var appWindowState = AppWindowState()
 
     var body: some Scene {
 
-        // Window 1 — opens on launch
-        WindowGroup("Proxy 1 Browser") {
+        // w1 opens on launch
+        WindowGroup("Proxy Browser", id: "w1") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxy1),
-                showsNewWindowButton: true
+                state: BrowserWindowState(proxy: proxies[0]),
+                showsNewWindowButton: true,
+                slotIndex: 0
             )
             .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(0, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(0, false) })
         }
 
-        // Window 2 — opens ONLY when requested
-        WindowGroup("Proxy 2 Browser", id: "proxy2") {
+        WindowGroup("Proxy Browser", id: "w2") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxy2),
-                showsNewWindowButton: false
+                state: BrowserWindowState(proxy: proxies[1]),
+                showsNewWindowButton: true,
+                slotIndex: 1
             )
             .environmentObject(appWindowState)
-            .background(
-                WindowCloseObserver {
-                    appWindowState.isProxy2WindowOpen = false
-                }
+            .onAppear { appWindowState.setOpen(1, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(1, false) })
+        }
+
+        WindowGroup("Proxy Browser", id: "w3") {
+            BrowserWindowView(
+                state: BrowserWindowState(proxy: proxies[2]),
+                showsNewWindowButton: true,
+                slotIndex: 2
             )
-            .onAppear {
-                appWindowState.isProxy2WindowOpen = true
-            }
+            .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(2, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(2, false) })
+        }
+
+        WindowGroup("Proxy Browser", id: "w4") {
+            BrowserWindowView(
+                state: BrowserWindowState(proxy: proxies[3]),
+                showsNewWindowButton: true,
+                slotIndex: 3
+            )
+            .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(3, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(3, false) })
+        }
+
+        WindowGroup("Proxy Browser", id: "w5") {
+            BrowserWindowView(
+                state: BrowserWindowState(proxy: proxies[4]),
+                showsNewWindowButton: true,
+                slotIndex: 4
+            )
+            .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(4, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(4, false) })
+        }
+
+        WindowGroup("Proxy Browser", id: "w6") {
+            BrowserWindowView(
+                state: BrowserWindowState(proxy: proxies[5]),
+                showsNewWindowButton: true,
+                slotIndex: 5
+            )
+            .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(5, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(5, false) })
+        }
+
+        WindowGroup("Proxy Browser", id: "w7") {
+            BrowserWindowView(
+                state: BrowserWindowState(proxy: proxies[6]),
+                showsNewWindowButton: true,
+                slotIndex: 6
+            )
+            .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(6, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(6, false) })
+        }
+
+        WindowGroup("Proxy Browser", id: "w8") {
+            BrowserWindowView(
+                state: BrowserWindowState(proxy: proxies[7]),
+                showsNewWindowButton: true,
+                slotIndex: 7
+            )
+            .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(7, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(7, false) })
+        }
+
+        WindowGroup("Proxy Browser", id: "w9") {
+            BrowserWindowView(
+                state: BrowserWindowState(proxy: proxies[8]),
+                showsNewWindowButton: true,
+                slotIndex: 8
+            )
+            .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(8, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(8, false) })
+        }
+
+        WindowGroup("Proxy Browser", id: "w10") {
+            BrowserWindowView(
+                state: BrowserWindowState(proxy: proxies[9]),
+                showsNewWindowButton: true,
+                slotIndex: 9
+            )
+            .environmentObject(appWindowState)
+            .onAppear { appWindowState.setOpen(9, true) }
+            .background(WindowCloseObserver { appWindowState.setOpen(9, false) })
         }
     }
 }
@@ -657,3 +815,17 @@ struct ProxyBrowserApp: App {
 //    }
 //}
 
+
+struct WindowTitleSetter: NSViewRepresentable {
+    let title: String
+
+    func makeNSView(context: Context) -> NSView {
+        NSView(frame: .zero)
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        DispatchQueue.main.async {
+            nsView.window?.title = title
+        }
+    }
+}
