@@ -18,6 +18,19 @@ import Combine
 //    }
 //}
 
+// MARK: - AppConfig
+enum AppConfig {
+    static let isUserAgentEnabled: Bool = true
+}
+
+// MARK: - BrowserUserAgent
+enum BrowserUserAgent: String, CaseIterable {
+    case chrome116 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
+    case chrome118 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+    case chrome120 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    case chrome143 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+}
+
 // MARK: - App Window State
 @MainActor
 final class AppWindowState: ObservableObject {
@@ -153,7 +166,7 @@ final class TabModel: ObservableObject, Identifiable {
     
     let webView: WKWebView
     
-    init(startURL: URL, proxy: AuthProxy) {
+    init(startURL: URL, proxy: AuthProxy, userAgent: String?) {
         self.proxy = proxy
         self.startedAsAboutBlank = (startURL.absoluteString == "about:blank")
         self.hasNavigatedAwayFromInitialBlank = !self.startedAsAboutBlank
@@ -165,6 +178,10 @@ final class TabModel: ObservableObject, Identifiable {
         config.websiteDataStore = dataStore
 
         self.webView = WKWebView(frame: .zero, configuration: config)
+
+        if let ua = userAgent {
+            self.webView.customUserAgent = ua
+        }
 
         load(startURL)
     }
@@ -206,31 +223,29 @@ final class TabModel: ObservableObject, Identifiable {
 
 @MainActor
 final class BrowserWindowState: ObservableObject {
-
-    // ✅ Window-level proxy only
     let proxy: AuthProxy
-
+    let userAgent: String?
     @Published var tabs: [TabModel] = []
     @Published var selectedTabID: UUID?
 
-    init(proxy: AuthProxy) {
+    init(proxy: AuthProxy, userAgent: String?) {
         self.proxy = proxy
-        addTab() // default 1 tab on launch
+        self.userAgent = userAgent
+        addTab()
     }
-
+    
     var selectedTab: TabModel? {
         tabs.first(where: { $0.id == selectedTabID })
     }
 
-    func addTab(url: URL = URL(string: "about:blank")!) {
-        // ✅ max 5 tabs per window (as per your last requirement)
-        guard tabs.count < 5 else { return }
 
-        let tab = TabModel(startURL: url, proxy: proxy)
+    func addTab(url: URL = URL(string: "about:blank")!) {
+        guard tabs.count < 5 else { return }
+        let tab = TabModel(startURL: url, proxy: proxy, userAgent: userAgent)
         tabs.append(tab)
         selectedTabID = tab.id
     }
-
+    
     func closeTab(_ id: UUID) {
         tabs.removeAll { $0.id == id }
         if selectedTabID == id {
@@ -669,7 +684,7 @@ struct ProxyBrowserApp: App {
         // w1 opens on launch
         WindowGroup("Proxy Browser", id: "w1") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[0]),
+                state: BrowserWindowState(proxy: proxies[0], userAgent: userAgentForSlot(0)),
                 showsNewWindowButton: true,
                 slotIndex: 0
             )
@@ -680,7 +695,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w2") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[1]),
+                state: BrowserWindowState(proxy: proxies[1], userAgent: userAgentForSlot(1)),
                 showsNewWindowButton: true,
                 slotIndex: 1
             )
@@ -691,7 +706,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w3") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[2]),
+                state: BrowserWindowState(proxy: proxies[2], userAgent: userAgentForSlot(2)),
                 showsNewWindowButton: true,
                 slotIndex: 2
             )
@@ -702,7 +717,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w4") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[3]),
+                state: BrowserWindowState(proxy: proxies[3], userAgent: userAgentForSlot(3)),
                 showsNewWindowButton: true,
                 slotIndex: 3
             )
@@ -713,7 +728,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w5") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[4]),
+                state: BrowserWindowState(proxy: proxies[4], userAgent: userAgentForSlot(4)),
                 showsNewWindowButton: true,
                 slotIndex: 4
             )
@@ -724,7 +739,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w6") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[5]),
+                state: BrowserWindowState(proxy: proxies[5], userAgent: userAgentForSlot(5)),
                 showsNewWindowButton: true,
                 slotIndex: 5
             )
@@ -735,7 +750,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w7") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[6]),
+                state: BrowserWindowState(proxy: proxies[6], userAgent: userAgentForSlot(6)),
                 showsNewWindowButton: true,
                 slotIndex: 6
             )
@@ -746,7 +761,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w8") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[7]),
+                state: BrowserWindowState(proxy: proxies[7], userAgent: userAgentForSlot(7)),
                 showsNewWindowButton: true,
                 slotIndex: 7
             )
@@ -757,7 +772,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w9") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[8]),
+                state: BrowserWindowState(proxy: proxies[8], userAgent: userAgentForSlot(8)),
                 showsNewWindowButton: true,
                 slotIndex: 8
             )
@@ -768,7 +783,7 @@ struct ProxyBrowserApp: App {
 
         WindowGroup("Proxy Browser", id: "w10") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[9]),
+                state: BrowserWindowState(proxy: proxies[9], userAgent: userAgentForSlot(9)),
                 showsNewWindowButton: true,
                 slotIndex: 9
             )
@@ -777,44 +792,24 @@ struct ProxyBrowserApp: App {
             .background(WindowCloseObserver { appWindowState.setOpen(9, false) })
         }
     }
+    
+    private func activeUserAgents() -> [String] {
+        guard AppConfig.isUserAgentEnabled else { return [] }
+
+        // Never exceed allowed windows
+        let maxWindows = 10
+        let allAgents = BrowserUserAgent.allCases.map { $0.rawValue }
+        return Array(allAgents.prefix(maxWindows))
+    }
+
+    private func userAgentForSlot(_ slot: Int) -> String? {
+        let agents = activeUserAgents()
+        guard !agents.isEmpty else { return nil }
+
+        // Round-robin assignment
+        return agents[slot % agents.count]
+    }
 }
-
-//private struct RootWindowView: View {
-//    let proxy: AuthProxy
-//    let userAgent: String
-//
-//    @Binding var didAutoOpenAllWindows: Bool
-//
-//    @Environment(\.openWindow) private var openWindow
-//    @EnvironmentObject private var appWindowState: AppWindowState
-//
-//    var body: some View {
-//        BrowserWindowView(
-//            state: BrowserWindowState(proxy: proxy, userAgent: userAgent),
-//            showsNewWindowButton: false
-//        )
-//        .onAppear { appWindowState.setOpen(0, true) }
-//        .background(
-//            WindowCloseObserver { appWindowState.setOpen(0, false) }
-//        )
-//        .task {
-//            guard !didAutoOpenAllWindows else { return }
-//            didAutoOpenAllWindows = true
-//
-//            // Open windows 2..10
-//            openWindow(id: "w2");  appWindowState.setOpen(1, true)
-//            openWindow(id: "w3");  appWindowState.setOpen(2, true)
-//            openWindow(id: "w4");  appWindowState.setOpen(3, true)
-//            openWindow(id: "w5");  appWindowState.setOpen(4, true)
-//            openWindow(id: "w6");  appWindowState.setOpen(5, true)
-//            openWindow(id: "w7");  appWindowState.setOpen(6, true)
-//            openWindow(id: "w8");  appWindowState.setOpen(7, true)
-//            openWindow(id: "w9");  appWindowState.setOpen(8, true)
-//            openWindow(id: "w10"); appWindowState.setOpen(9, true)
-//        }
-//    }
-//}
-
 
 struct WindowTitleSetter: NSViewRepresentable {
     let title: String
@@ -829,3 +824,4 @@ struct WindowTitleSetter: NSViewRepresentable {
         }
     }
 }
+
