@@ -20,7 +20,7 @@ import Combine
 
 // MARK: - AppConfig
 enum AppConfig {
-    static let isUserAgentEnabled: Bool = false
+    static let isUserAgentEnabled: Bool = true
 }
 
 // MARK: - BrowserUserAgent
