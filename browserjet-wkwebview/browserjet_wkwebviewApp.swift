@@ -9,18 +9,17 @@ import SwiftUI
 import WebKit
 import Network
 import Combine
-//@main
-//struct browserjet_wkwebviewApp: App {
-//    var body: some Scene {
-//        WindowGroup {
-//            ContentView()
-//        }
-//    }
-//}
+
+// MARK: - ProxyType
+enum ProxyType {
+    case local
+    case proxy
+}
 
 // MARK: - AppConfig
 enum AppConfig {
-    static let isUserAgentEnabled: Bool = true
+    static let isUserAgentEnabled: Bool = false
+    static let proxyType: ProxyType = .proxy
 }
 
 // MARK: - BrowserUserAgent
@@ -146,7 +145,7 @@ func makeProxyConfiguration(_ proxy: AuthProxy) -> ProxyConfiguration {
 @MainActor
 final class TabModel: ObservableObject, Identifiable {
     let id = UUID()
-    let proxy: AuthProxy
+    let proxy: AuthProxy?
     
     private let startedAsAboutBlank: Bool
     @Published var hasNavigatedAwayFromInitialBlank: Bool = false
@@ -166,16 +165,21 @@ final class TabModel: ObservableObject, Identifiable {
     
     let webView: WKWebView
     
-    init(startURL: URL, proxy: AuthProxy, userAgent: String?) {
+    init(startURL: URL, proxyType: ProxyType, proxy: AuthProxy?, userAgent: String?) {
         self.proxy = proxy
         self.startedAsAboutBlank = (startURL.absoluteString == "about:blank")
         self.hasNavigatedAwayFromInitialBlank = !self.startedAsAboutBlank
 
-        let dataStore = WKWebsiteDataStore(forIdentifier: UUID())
-        dataStore.proxyConfigurations = [makeProxyConfiguration(proxy)]
-
         let config = WKWebViewConfiguration()
-        config.websiteDataStore = dataStore
+
+        if proxyType == .proxy, let proxy {
+            let dataStore = WKWebsiteDataStore(forIdentifier: UUID())
+            dataStore.proxyConfigurations = [makeProxyConfiguration(proxy)]
+            config.websiteDataStore = dataStore
+        } else {
+            // ✅ Local = use normal internet / system networking
+            config.websiteDataStore = .default()
+        }
 
         self.webView = WKWebView(frame: .zero, configuration: config)
 
@@ -223,37 +227,49 @@ final class TabModel: ObservableObject, Identifiable {
 
 @MainActor
 final class BrowserWindowState: ObservableObject {
-    let proxy: AuthProxy
+    let proxyType: ProxyType
+    let proxy: AuthProxy?
     let userAgent: String?
+
     @Published var tabs: [TabModel] = []
     @Published var selectedTabID: UUID?
 
-    init(proxy: AuthProxy, userAgent: String?) {
-        self.proxy = proxy
+    init(proxy: AuthProxy?, userAgent: String?) {
+        self.proxyType = AppConfig.proxyType
+
+        // ✅ If Local: ignore proxies entirely
+        if AppConfig.proxyType == .local {
+            self.proxy = nil
+        } else {
+            self.proxy = proxy
+        }
+
         self.userAgent = userAgent
         addTab()
     }
-    
+
     var selectedTab: TabModel? {
         tabs.first(where: { $0.id == selectedTabID })
     }
 
-
     func addTab(url: URL = URL(string: "about:blank")!) {
         guard tabs.count < 5 else { return }
-        let tab = TabModel(startURL: url, proxy: proxy, userAgent: userAgent)
+
+        let tab = TabModel(
+            startURL: url,
+            proxyType: proxyType,
+            proxy: proxy,               // nil if local, proxy if proxy-mode
+            userAgent: userAgent
+        )
+
         tabs.append(tab)
         selectedTabID = tab.id
     }
-    
+
     func closeTab(_ id: UUID) {
         tabs.removeAll { $0.id == id }
-        if selectedTabID == id {
-            selectedTabID = tabs.last?.id
-        }
-        if tabs.isEmpty {
-            addTab()
-        }
+        if selectedTabID == id { selectedTabID = tabs.last?.id }
+        if tabs.isEmpty { addTab() }
     }
 
     func select(_ tab: TabModel) {
@@ -449,8 +465,13 @@ struct WebViewContainer: NSViewRepresentable {
             // Proxy auth challenges usually come through with a proxyType (HTTP/HTTPS).
             if let proxyType = challenge.protectionSpace.proxyType,
                proxyType == kCFProxyTypeHTTP as String || proxyType == kCFProxyTypeHTTPS as String {
-                let credential = URLCredential(user: tab.proxy.username,
-                                               password: tab.proxy.password,
+                guard let proxy = tab.proxy else {
+                    completionHandler(.performDefaultHandling, nil)
+                    return
+                }
+
+                let credential = URLCredential(user: proxy.username,
+                                               password: proxy.password,
                                                persistence: .forSession)
                 completionHandler(.useCredential, credential)
                 return
@@ -596,7 +617,11 @@ struct BrowserWindowView: View {
         VStack(spacing: 0) {
             HStack(spacing: 10) {
 
-                Text("Proxy: \(state.proxy.display)")
+                Text(
+                    state.proxyType == .local
+                    ? "Connection: Local"
+                    : "Proxy: \(state.proxy?.display ?? "—")"
+                )
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(AppTheme.text)
                     .padding(.horizontal, 10)
