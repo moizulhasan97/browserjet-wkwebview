@@ -9,18 +9,59 @@ import SwiftUI
 import WebKit
 import Network
 import Combine
-//@main
-//struct browserjet_wkwebviewApp: App {
-//    var body: some Scene {
-//        WindowGroup {
-//            ContentView()
-//        }
-//    }
-//}
+
+// MARK: - ProxyType
+enum ProxyType {
+    case local
+    case proxy
+}
+
+// MARK: - SessionIsolationMode
+enum SessionIsolationMode {
+    case perWindow   // shared cookies across tabs in a window
+    case perTab      // isolated cookies per tab
+}
+
 
 // MARK: - AppConfig
 enum AppConfig {
-    static let isUserAgentEnabled: Bool = true
+    static let isUserAgentEnabled: Bool = false
+    static let proxyType: ProxyType = .proxy
+    
+    /// Controls whether tabs share session storage within a window or each tab is isolated.
+    /// Default is `.perTab` to match current behavior.
+    static let sessionIsolationMode: SessionIsolationMode = .perTab
+}
+
+// MARK: - SessionManager
+@MainActor
+final class SessionManager: ObservableObject {
+    private let maxSessions = 10
+    
+    // Tracks which session slots are in use. Index == session/proxy slot.
+    private var slotInUse: [Bool] = Array(repeating: false, count: 10)
+
+    @Published private(set) var activeSessions: Int = 0
+
+    var canCreateSession: Bool {
+        activeSessions < maxSessions
+    }
+
+    /// Acquires the next available session slot (0...9). Returns nil if at capacity.
+    func acquireSessionSlot() -> Int? {
+        guard canCreateSession else { return nil }
+        guard let slot = slotInUse.firstIndex(where: { !$0 }) else { return nil }
+        slotInUse[slot] = true
+        return slot
+    }
+
+    /// Releases a previously acquired session slot.
+    func releaseSessionSlot(_ slot: Int) {
+        guard slotInUse.indices.contains(slot) else { return }
+        guard slotInUse[slot] else { return }
+        slotInUse[slot] = false
+        activeSessions = max(activeSessions - 1, 0)
+    }
 }
 
 // MARK: - BrowserUserAgent
@@ -29,74 +70,6 @@ enum BrowserUserAgent: String, CaseIterable {
     case chrome118 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
     case chrome120 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     case chrome143 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
-}
-
-// MARK: - App Window State
-@MainActor
-final class AppWindowState: ObservableObject {
-    /// 10 window “slots”: w1...w10 (index 0...9)
-    @Published private(set) var openSlots: [Bool] = Array(repeating: false, count: 10)
-
-    func setOpen(_ slot: Int, _ isOpen: Bool) {
-        guard openSlots.indices.contains(slot) else { return }
-        openSlots[slot] = isOpen
-    }
-
-    var openCount: Int { openSlots.filter { $0 }.count }
-    var canOpenMore: Bool { openCount < 10 }
-
-    /// Next available slot (0...9) for opening a new window
-    func nextAvailableSlot() -> Int? {
-        openSlots.firstIndex(where: { !$0 })
-    }
-
-    /// The “display number” (1...N) for a given slot among currently open windows.
-    /// This enables renumbering after a close (e.g. if slot 2 closes, slot 3 becomes “2”, etc.)
-    func displayNumber(for slot: Int) -> Int? {
-        guard openSlots.indices.contains(slot), openSlots[slot] else { return nil }
-        let openIndices = openSlots.enumerated().compactMap { $0.element ? $0.offset : nil }
-        guard let rank = openIndices.firstIndex(of: slot) else { return nil }
-        return rank + 1
-    }
-}
-
-// MARK: - NSWindow Close Observer
-
-struct WindowCloseObserver: NSViewRepresentable {
-    let onWillClose: () -> Void
-    
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView(frame: .zero)
-        DispatchQueue.main.async {
-            guard let window = view.window else { return }
-            NotificationCenter.default.addObserver(
-                context.coordinator,
-                selector: #selector(Coordinator.windowWillClose(_:)),
-                name: NSWindow.willCloseNotification,
-                object: window
-            )
-        }
-        return view
-    }
-    
-    func updateNSView(_ nsView: NSView, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(onWillClose: onWillClose)
-    }
-    
-    final class Coordinator: NSObject {
-        let onWillClose: () -> Void
-        init(onWillClose: @escaping () -> Void) { self.onWillClose = onWillClose }
-        
-        @objc func windowWillClose(_ note: Notification) {
-            onWillClose()
-        }
-        
-        deinit {
-            NotificationCenter.default.removeObserver(self)
-        }
-    }
 }
 
 // MARK: - Theme
@@ -146,7 +119,8 @@ func makeProxyConfiguration(_ proxy: AuthProxy) -> ProxyConfiguration {
 @MainActor
 final class TabModel: ObservableObject, Identifiable {
     let id = UUID()
-    let proxy: AuthProxy
+    let sessionSlot: Int
+    let proxy: AuthProxy?
     
     private let startedAsAboutBlank: Bool
     @Published var hasNavigatedAwayFromInitialBlank: Bool = false
@@ -166,16 +140,22 @@ final class TabModel: ObservableObject, Identifiable {
     
     let webView: WKWebView
     
-    init(startURL: URL, proxy: AuthProxy, userAgent: String?) {
+    init(sessionSlot: Int, startURL: URL, dataStore: WKWebsiteDataStore, proxy: AuthProxy?, userAgent: String?) {
+        self.sessionSlot = sessionSlot
         self.proxy = proxy
         self.startedAsAboutBlank = (startURL.absoluteString == "about:blank")
         self.hasNavigatedAwayFromInitialBlank = !self.startedAsAboutBlank
 
-        let dataStore = WKWebsiteDataStore(forIdentifier: UUID())
-        dataStore.proxyConfigurations = [makeProxyConfiguration(proxy)]
-
         let config = WKWebViewConfiguration()
         config.websiteDataStore = dataStore
+//        if proxyType == .proxy, let proxy {
+//            let dataStore = WKWebsiteDataStore(forIdentifier: UUID())
+//            dataStore.proxyConfigurations = [makeProxyConfiguration(proxy)]
+//            config.websiteDataStore = dataStore
+//        } else {
+//            // ✅ Local = use normal internet / system networking
+//            config.websiteDataStore = .default()
+//        }
 
         self.webView = WKWebView(frame: .zero, configuration: config)
 
@@ -223,41 +203,113 @@ final class TabModel: ObservableObject, Identifiable {
 
 @MainActor
 final class BrowserWindowState: ObservableObject {
-    let proxy: AuthProxy
+
+    let proxyType: ProxyType
     let userAgent: String?
+    private let isolationMode: SessionIsolationMode
+    private let sessionManager: SessionManager
+    //let proxy: AuthProxy?
+    //private lazy var perWindowDataStore: WKWebsiteDataStore = makeNewDataStore()
+    let proxies: [AuthProxy]
+
+    /// When using `.perWindow`, all tabs share this proxy (first proxy in the list).
+    private lazy var perWindowProxy: AuthProxy? = {
+        guard proxyType == .proxy else { return nil }
+        return proxies.first
+    }()
+
+    private lazy var perWindowDataStore: WKWebsiteDataStore = makeNewDataStore(proxy: perWindowProxy)
     @Published var tabs: [TabModel] = []
     @Published var selectedTabID: UUID?
 
-    init(proxy: AuthProxy, userAgent: String?) {
-        self.proxy = proxy
+    init(
+        proxies: [AuthProxy],
+        userAgent: String?,
+        sessionManager: SessionManager
+    ) {
+        self.proxyType = AppConfig.proxyType
+        self.isolationMode = AppConfig.sessionIsolationMode
         self.userAgent = userAgent
-        addTab()
+        self.sessionManager = sessionManager
+        self.proxies = proxies
+        addTab() // initial tab = 1 session
+    }
+
+    private func makeNewDataStore(proxy: AuthProxy?) -> WKWebsiteDataStore {
+        // A unique data store means unique cookies/storage (a separate “session”).
+        let store = WKWebsiteDataStore(forIdentifier: UUID())
+        if proxyType == .proxy, let proxy {
+            store.proxyConfigurations = [makeProxyConfiguration(proxy)]
+        }
+        return store
     }
     
-    var selectedTab: TabModel? {
-        tabs.first(where: { $0.id == selectedTabID })
+    private func dataStoreForNewTab() -> WKWebsiteDataStore {
+        switch isolationMode {
+        case .perWindow:
+            // All tabs share the SAME store (shared cookies) within this window
+            return perWindowDataStore
+        case .perTab:
+            // Each tab gets its OWN store (isolated cookies)
+            return makeNewDataStore(proxy: nil)
+        }
     }
 
 
     func addTab(url: URL = URL(string: "about:blank")!) {
-        guard tabs.count < 5 else { return }
-        let tab = TabModel(startURL: url, proxy: proxy, userAgent: userAgent)
+        guard let slot = sessionManager.acquireSessionSlot() else { return }
+        let tabProxy: AuthProxy?
+        if proxyType == .proxy {
+            switch isolationMode {
+            case .perWindow:
+                tabProxy = perWindowProxy
+            case .perTab:
+                tabProxy = proxies.indices.contains(slot) ? proxies[slot] : proxies.first
+            }
+        } else {
+            tabProxy = nil
+        }
+
+        let store: WKWebsiteDataStore
+        switch isolationMode {
+        case .perWindow:
+            store = perWindowDataStore
+        case .perTab:
+            store = makeNewDataStore(proxy: tabProxy)
+        }
+
+
+        let tab = TabModel(
+            sessionSlot: slot,
+            startURL: url,
+            dataStore: store,
+            proxy: tabProxy,
+            userAgent: userAgent
+        )
+
         tabs.append(tab)
         selectedTabID = tab.id
     }
-    
-    func closeTab(_ id: UUID) {
-        tabs.removeAll { $0.id == id }
-        if selectedTabID == id {
-            selectedTabID = tabs.last?.id
-        }
+
+    func closeTab(_ tabID: UUID) {
+        guard let index = tabs.firstIndex(where: { $0.id == tabID }) else { return }
+        let slot = tabs[index].sessionSlot
+        tabs.remove(at: index)
+        sessionManager.releaseSessionSlot(slot)
+
         if tabs.isEmpty {
             addTab()
+        } else {
+            selectedTabID = tabs.last?.id
         }
     }
 
     func select(_ tab: TabModel) {
         selectedTabID = tab.id
+    }
+
+    var selectedTab: TabModel? {
+        tabs.first(where: { $0.id == selectedTabID })
     }
 }
 
@@ -339,12 +391,35 @@ struct WebViewContainer: NSViewRepresentable {
             }
         }
         
+        // MARK: - New-tab routing rules
+
+        private func isSeatGeekCheckoutURL(_ url: URL) -> Bool {
+            guard let host = url.host?.lowercased() else { return false }
+            // Accept both seatgeek.com and www.seatgeek.com
+            guard host == "seatgeek.com" || host.hasSuffix(".seatgeek.com") else { return false }
+            return url.path.lowercased().hasPrefix("/checkout")
+        }
+
+        private func openInSameTab(_ url: URL, webView: WKWebView) {
+            // Force navigation in the current tab instead of opening a new tab/window
+            webView.load(URLRequest(url: url))
+        }
+        
         func webView(_ webView: WKWebView,
                      decidePolicyFor navigationAction: WKNavigationAction,
                      decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             // Handle links that want to open in a new tab/window (target=_blank).
             if navigationAction.targetFrame == nil,
                let url = navigationAction.request.url {
+                
+                // ✅ SeatGeek checkout: stay in the SAME tab (avoid opening a new tab)
+                if isSeatGeekCheckoutURL(url) {
+                    openInSameTab(url, webView: webView)
+                    decisionHandler(.cancel)
+                    return
+                }
+
+                // Default behavior: open in a new tab in the same window
                 onOpenInNewTab(url)
                 decisionHandler(.cancel)
                 return
@@ -359,6 +434,14 @@ struct WebViewContainer: NSViewRepresentable {
             // Many sites use window.open() which lands here.
             if navigationAction.targetFrame == nil,
                let url = navigationAction.request.url {
+                
+                // ✅ SeatGeek checkout: stay in the SAME tab (avoid opening a new tab)
+                if isSeatGeekCheckoutURL(url) {
+                    openInSameTab(url, webView: webView)
+                    return nil
+                }
+
+                // Default behavior: open in a new tab in the same window
                 onOpenInNewTab(url)
             }
             return nil
@@ -449,8 +532,13 @@ struct WebViewContainer: NSViewRepresentable {
             // Proxy auth challenges usually come through with a proxyType (HTTP/HTTPS).
             if let proxyType = challenge.protectionSpace.proxyType,
                proxyType == kCFProxyTypeHTTP as String || proxyType == kCFProxyTypeHTTPS as String {
-                let credential = URLCredential(user: tab.proxy.username,
-                                               password: tab.proxy.password,
+                guard let proxy = tab.proxy else {
+                    completionHandler(.performDefaultHandling, nil)
+                    return
+                }
+
+                let credential = URLCredential(user: proxy.username,
+                                               password: proxy.password,
                                                persistence: .forSession)
                 completionHandler(.useCredential, credential)
                 return
@@ -577,26 +665,17 @@ struct AddressBar: View {
 
 struct BrowserWindowView: View {
     @StateObject var state: BrowserWindowState
-    let showsNewWindowButton: Bool
-    let slotIndex: Int   // ✅ add this (0...9)
-
-    @EnvironmentObject private var appWindowState: AppWindowState
-    @Environment(\.openWindow) private var openWindow
-
-    private var computedWindowTitle: String {
-        if let n = appWindowState.displayNumber(for: slotIndex) {
-            return "Proxy Browser \(n)"
-        } else {
-            // fallback (shouldn’t really happen while open)
-            return "Proxy Browser"
-        }
-    }
+    @EnvironmentObject private var sessionManager: SessionManager
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 10) {
 
-                Text("Proxy: \(state.proxy.display)")
+                Text(
+                    state.proxyType == .local
+                    ? "Connection: Local"
+                    : "Proxy: \(state.selectedTab?.proxy?.display ?? "—")"
+                )
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(AppTheme.text)
                     .padding(.horizontal, 10)
@@ -622,45 +701,26 @@ struct BrowserWindowView: View {
                     .padding(.vertical, 6)
                 }
 
-                // ✅ New Window button (from every window), disabled at 10
-                if showsNewWindowButton {
-                    let canOpenMore = appWindowState.canOpenMore
-                    Button {
-                        guard let next = appWindowState.nextAvailableSlot() else { return }
-                        openWindow(id: "w\(next + 1)")
-                        appWindowState.setOpen(next, true)
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "macwindow.badge.plus")
-                                .font(.system(size: 13, weight: .bold))
-                            Text("New Window")
-                                .font(.system(size: 12, weight: .bold))
-                        }
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 10)
-                        .frame(height: 30)
-                        .background(canOpenMore ? AppTheme.stroke : AppTheme.stroke.opacity(0.4))
-                        .cornerRadius(10)
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(!canOpenMore)
-                    .opacity(canOpenMore ? 1 : 0.6)
-                }
-
                 // ✅ Add Tab button (max 5 tabs)
                 Button {
                     state.addTab()
                 } label: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(width: 30, height: 30)
-                        .background(AppTheme.stroke)
-                        .cornerRadius(10)
+                    HStack(spacing: 6) {
+                        Image(systemName: "rectangle.on.rectangle.badge.plus")
+                        Text("New Session")
+                            .font(.system(size: 12, weight: .bold))
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 10)
+                    .frame(height: 30)
+                    .background(sessionManager.canCreateSession
+                                ? AppTheme.stroke
+                                : AppTheme.stroke.opacity(0.4))
+                    .cornerRadius(10)
                 }
                 .buttonStyle(.plain)
-                .disabled(state.tabs.count >= 5)
-                .opacity(state.tabs.count >= 5 ? 0.5 : 1)
+                .disabled(!sessionManager.canCreateSession)
+                .opacity(sessionManager.canCreateSession ? 1 : 0.6)
             }
             .padding(.horizontal, 10)
             .padding(.top, 10)
@@ -688,9 +748,6 @@ struct BrowserWindowView: View {
         }
         .frame(minWidth: 1000, minHeight: 700)
         .background(AppTheme.bg)
-
-        // ✅ This makes titles auto-renumber on close/open
-        .background(WindowTitleSetter(title: computedWindowTitle))
     }
 }
 
@@ -700,163 +757,43 @@ struct BrowserWindowView: View {
 struct ProxyBrowserApp: App {
 
     private let proxies: [AuthProxy] = [
-        AuthProxy.parse("151.145.144.63:9143:eagaO:jOJFcfzM"), // w1
-        AuthProxy.parse("151.145.144.62:9142:eagaO:jOJFcfzM"), // w2
-        AuthProxy.parse("151.145.144.61:9141:eagaO:jOJFcfzM"), // w3
-        AuthProxy.parse("151.145.156.73:12213:eagaO:jOJFcfzM"), // w4
-        AuthProxy.parse("151.145.156.72:12212:eagaO:jOJFcfzM"), // w5
-        AuthProxy.parse("151.145.156.71:12211:eagaO:jOJFcfzM"), // w6
-        AuthProxy.parse("151.145.156.70:12210:eagaO:jOJFcfzM"), // w7
-        AuthProxy.parse("151.145.156.69:12209:eagaO:jOJFcfzM"), // w8
-        AuthProxy.parse("151.145.156.68:12208:eagaO:jOJFcfzM"), // w9
-        AuthProxy.parse("151.145.156.67:12207:eagaO:jOJFcfzM")  // w10
+        AuthProxy.parse("151.145.144.181:9261:eagaO:jOJFcfzM"),  // vpn1 - 1
+        AuthProxy.parse("151.145.144.182:9262:eagaO:jOJFcfzM"),  // vpn1 - 2
+        AuthProxy.parse("151.145.156.219:12359:eagaO:jOJFcfzM"), // vpn1 - 3
+        AuthProxy.parse("151.145.156.220:12360:eagaO:jOJFcfzM"), // vpn1 - 4
+        AuthProxy.parse("151.145.156.221:12361:eagaO:jOJFcfzM"), // vpn1 - 5
+        AuthProxy.parse("151.145.156.227:12367:eagaO:jOJFcfzM"), // vpn1 - 6
+        AuthProxy.parse("151.145.144.198:9278:eagaO:jOJFcfzM"),  // vpn1 - 7
+        AuthProxy.parse("151.145.156.64:12204:eagaO:jOJFcfzM"),  // vpn1 - 8
+        AuthProxy.parse("151.145.156.65:12205:eagaO:jOJFcfzM"),  // vpn1 - 9
+        AuthProxy.parse("151.145.156.66:12206:eagaO:jOJFcfzM")   // vpn1 - 10
     ]
 
-    @StateObject private var appWindowState = AppWindowState()
+    @StateObject private var sessionManager = SessionManager()
 
     var body: some Scene {
-
-        // w1 opens on launch
-        WindowGroup("Proxy Browser", id: "w1") {
+        WindowGroup("Proxy Browser") {
             BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[0], userAgent: userAgentForSlot(0)),
-                showsNewWindowButton: true,
-                slotIndex: 0
+                state: BrowserWindowState(
+                    proxies: proxies,
+                    userAgent: nil,
+                    sessionManager: sessionManager
+                )
             )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(0, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(0, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w2") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[1], userAgent: userAgentForSlot(1)),
-                showsNewWindowButton: true,
-                slotIndex: 1
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(1, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(1, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w3") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[2], userAgent: userAgentForSlot(2)),
-                showsNewWindowButton: true,
-                slotIndex: 2
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(2, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(2, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w4") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[3], userAgent: userAgentForSlot(3)),
-                showsNewWindowButton: true,
-                slotIndex: 3
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(3, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(3, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w5") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[4], userAgent: userAgentForSlot(4)),
-                showsNewWindowButton: true,
-                slotIndex: 4
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(4, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(4, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w6") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[5], userAgent: userAgentForSlot(5)),
-                showsNewWindowButton: true,
-                slotIndex: 5
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(5, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(5, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w7") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[6], userAgent: userAgentForSlot(6)),
-                showsNewWindowButton: true,
-                slotIndex: 6
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(6, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(6, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w8") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[7], userAgent: userAgentForSlot(7)),
-                showsNewWindowButton: true,
-                slotIndex: 7
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(7, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(7, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w9") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[8], userAgent: userAgentForSlot(8)),
-                showsNewWindowButton: true,
-                slotIndex: 8
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(8, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(8, false) })
-        }
-
-        WindowGroup("Proxy Browser", id: "w10") {
-            BrowserWindowView(
-                state: BrowserWindowState(proxy: proxies[9], userAgent: userAgentForSlot(9)),
-                showsNewWindowButton: true,
-                slotIndex: 9
-            )
-            .environmentObject(appWindowState)
-            .onAppear { appWindowState.setOpen(9, true) }
-            .background(WindowCloseObserver { appWindowState.setOpen(9, false) })
-        }
-    }
-    
-    private func activeUserAgents() -> [String] {
-        guard AppConfig.isUserAgentEnabled else { return [] }
-
-        // Never exceed allowed windows
-        let maxWindows = 10
-        let allAgents = BrowserUserAgent.allCases.map { $0.rawValue }
-        return Array(allAgents.prefix(maxWindows))
-    }
-
-    private func userAgentForSlot(_ slot: Int) -> String? {
-        let agents = activeUserAgents()
-        guard !agents.isEmpty else { return nil }
-
-        // Round-robin assignment
-        return agents[slot % agents.count]
-    }
-}
-
-struct WindowTitleSetter: NSViewRepresentable {
-    let title: String
-
-    func makeNSView(context: Context) -> NSView {
-        NSView(frame: .zero)
-    }
-
-    func updateNSView(_ nsView: NSView, context: Context) {
-        DispatchQueue.main.async {
-            nsView.window?.title = title
+            .environmentObject(sessionManager)
         }
     }
 }
 
+
+
+//AuthProxy.parse("151.145.144.181:9261:eagaO:jOJFcfzM"),  // vpn1 - 1
+//AuthProxy.parse("151.145.144.182:9262:eagaO:jOJFcfzM"),  // vpn1 - 2
+//AuthProxy.parse("151.145.156.219:12359:eagaO:jOJFcfzM"),  // vpn1 - 3
+//AuthProxy.parse("151.145.156.220:12360:eagaO:jOJFcfzM"),  // vpn1 - 4
+//AuthProxy.parse("151.145.156.221:12361:eagaO:jOJFcfzM"),  // vpn1 - 5
+//AuthProxy.parse("151.145.156.227:12367:eagaO:jOJFcfzM"),  // vpn1 - 6
+//AuthProxy.parse("151.145.144.198:9278:eagaO:jOJFcfzM"),  // vpn1 - 7
+//AuthProxy.parse("151.145.156.64:12204:eagaO:jOJFcfzM"),  // vpn1 - 8
+//AuthProxy.parse("151.145.156.65:12205:eagaO:jOJFcfzM"),  // vpn1 - 9
+//AuthProxy.parse("151.145.156.66:12206:eagaO:jOJFcfzM")  // vpn1 - 10
