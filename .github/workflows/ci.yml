@@ -1,0 +1,51 @@
+name: BrowserJet macOS Build
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Resolve Swift Packages
+        run: |
+          xcodebuild \
+            -project browserjet-wkwebview.xcodeproj \
+            -scheme browserjet-wkwebview \
+            -resolvePackageDependencies
+
+      - name: Build (Debug)
+        run: |
+          xcodebuild \
+            -project browserjet-wkwebview.xcodeproj \
+            -scheme browserjet-wkwebview \
+            -configuration Debug \
+            -sdk macosx \
+            -destination 'platform=macOS' \
+            clean build \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Run SwiftLint (non-blocking for now)
+        run: |
+          if command -v swiftlint >/dev/null; then
+            swiftlint lint --config com.ezybusinessapplications.browserjet.swiftlint.yml || true
+          else
+            echo "SwiftLint not installed"
+          fi

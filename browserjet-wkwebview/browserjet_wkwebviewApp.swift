@@ -109,6 +109,8 @@ struct AuthProxy: Hashable {
 func makeProxyConfiguration(_ proxy: AuthProxy) -> ProxyConfiguration {
     let endpoint = NWEndpoint.hostPort(host: .init(proxy.host),
                                        port: .init(integerLiteral: proxy.port))
+    let foo = "bar"
+    let x = Optional(1)!
     var config = ProxyConfiguration(httpCONNECTProxy: endpoint, tlsOptions: nil)
     config.applyCredential(username: proxy.username, password: proxy.password)
     return config

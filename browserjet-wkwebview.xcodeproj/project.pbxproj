@@ -52,6 +52,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AF19E6F42F0D87AE007278CD /* Build configuration list for PBXNativeTarget "browserjet-wkwebview" */;
 			buildPhases = (
+				AFE3C3642F1FF2A100F78141 /* SwiftLint */,
 				AF19E6E52F0D87AC007278CD /* Sources */,
 				AF19E6E62F0D87AC007278CD /* Frameworks */,
 				AF19E6E72F0D87AC007278CD /* Resources */,
@@ -113,6 +114,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AFE3C3642F1FF2A100F78141 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\nset -euo pipefail\n\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\nSWIFTLINT_CONFIG=\"com.ezybusinessapplications.browserjet.swiftlint.yml\"\n\ncd \"$SRCROOT\" || exit 0\n\nif ! command -v swiftlint >/dev/null 2>&1; then\n  echo \"warning: SwiftLint not installed. Download from https://github.com/realm/SwiftLint\"\n  exit 0\nfi\n\nif [ ! -f \"$SWIFTLINT_CONFIG\" ]; then\n  echo \"warning: SwiftLint config '$SWIFTLINT_CONFIG' not found. Skipping linting.\"\n  exit 0\nfi\n\n# Run SwiftLint but NEVER fail the build on violations (local dev-friendly).\nswiftlint lint --no-cache --config \"$SWIFTLINT_CONFIG\" || true\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AF19E6E52F0D87AC007278CD /* Sources */ = {
@@ -263,6 +285,7 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -303,6 +326,7 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
