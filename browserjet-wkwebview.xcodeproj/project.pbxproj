@@ -52,6 +52,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AF19E6F42F0D87AE007278CD /* Build configuration list for PBXNativeTarget "browserjet-wkwebview" */;
 			buildPhases = (
+				AFE3C3642F1FF2A100F78141 /* SwiftLint */,
 				AF19E6E52F0D87AC007278CD /* Sources */,
 				AF19E6E62F0D87AC007278CD /* Frameworks */,
 				AF19E6E72F0D87AC007278CD /* Resources */,
@@ -113,6 +114,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AFE3C3642F1FF2A100F78141 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\ncd \"${SRCROOT}\"\n\nCONFIG=\"${SRCROOT}/com.ezybusinessapplications.browserjet.swiftlint.yml\"\n\nif which swiftlint >/dev/null; then\n  if [ -f \"$CONFIG\" ]; then\n    swiftlint lint --no-cache --config \"$CONFIG\" --reporter xcode\n  else\n    echo \"warning: SwiftLint config not found at $CONFIG\"\n  fi\nelse\n  echo \"warning: SwiftLint not installed\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AF19E6E52F0D87AC007278CD /* Sources */ = {
