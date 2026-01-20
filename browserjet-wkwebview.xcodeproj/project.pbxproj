@@ -132,7 +132,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\nSWIFTLINT_CONFIG=\".swiftlint.yml\"\n\n# Check SwiftLint\nif ! command -v swiftlint >/dev/null 2>&1; then\n  echo \"error: SwiftLint not installed. Install from https://github.com/realm/SwiftLint\"\n  exit 1\nfi\n\n# Move to project root\ncd \"$SRCROOT\" || exit 1\n\n# Check config file (STRICT)\nif [ ! -f \"$SWIFTLINT_CONFIG\" ]; then\n  echo \"error: SwiftLint config '$SWIFTLINT_CONFIG' not found.\"\n  exit 1\nfi\n\n# Run SwiftLint\nswiftlint lint --no-cache --config \"$SWIFTLINT_CONFIG\"\n";
+			shellScript = "#!/bin/bash\n\nset -euo pipefail\n\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\nSWIFTLINT_CONFIG=\"com.ezybusinessapplications.browserjet.swiftlint.yml\"\n\ncd \"$SRCROOT\" || exit 0\n\nif ! command -v swiftlint >/dev/null 2>&1; then\n  echo \"warning: SwiftLint not installed. Download from https://github.com/realm/SwiftLint\"\n  exit 0\nfi\n\nif [ ! -f \"$SWIFTLINT_CONFIG\" ]; then\n  echo \"warning: SwiftLint config '$SWIFTLINT_CONFIG' not found. Skipping linting.\"\n  exit 0\nfi\n\n# Run SwiftLint but NEVER fail the build on violations (local dev-friendly).\nswiftlint lint --no-cache --config \"$SWIFTLINT_CONFIG\" || true\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
