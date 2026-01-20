@@ -132,7 +132,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\ncd \"${SRCROOT}\"\n\nCONFIG=\"${SRCROOT}/com.ezybusinessapplications.browserjet.swiftlint.yml\"\n\nif which swiftlint >/dev/null; then\n  if [ -f \"$CONFIG\" ]; then\n    swiftlint lint --no-cache --config \"$CONFIG\" --reporter xcode\n  else\n    echo \"warning: SwiftLint config not found at $CONFIG\"\n  fi\nelse\n  echo \"warning: SwiftLint not installed\"\nfi\n";
+			shellScript = "#!/bin/bash\n\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\nSWIFTLINT_CONFIG=\".swiftlint.yml\"\n\n# Check SwiftLint\nif ! command -v swiftlint >/dev/null 2>&1; then\n  echo \"error: SwiftLint not installed. Install from https://github.com/realm/SwiftLint\"\n  exit 1\nfi\n\n# Move to project root\ncd \"$SRCROOT\" || exit 1\n\n# Check config file (STRICT)\nif [ ! -f \"$SWIFTLINT_CONFIG\" ]; then\n  echo \"error: SwiftLint config '$SWIFTLINT_CONFIG' not found.\"\n  exit 1\nfi\n\n# Run SwiftLint\nswiftlint lint --no-cache --config \"$SWIFTLINT_CONFIG\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -285,6 +285,7 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -325,6 +326,7 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
