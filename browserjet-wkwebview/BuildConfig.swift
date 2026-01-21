@@ -13,7 +13,7 @@ enum AppEnvironment: String, CaseIterable {
     case production  = "PRODUCTION"
 
     /// Reads from Info.plist key: `APP_ENVIRONMENT`
-    static var current: AppEnvironment = {
+    static let current: AppEnvironment = {
         let raw = Bundle.main.object(forInfoDictionaryKey: "APP_ENVIRONMENT") as? String
         let trimmed = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
 
