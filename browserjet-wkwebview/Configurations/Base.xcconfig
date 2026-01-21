@@ -1,0 +1,23 @@
+//
+//  Base.xcconfig
+//  browserjet-wkwebview
+//
+//  Created by Moiz Ul Hasan on 21/01/2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+MARKETING_VERSION = 4.0.0
+CURRENT_PROJECT_VERSION = 1
+SWIFT_VERSION = 6.0
+MACOSX_DEPLOYMENT_TARGET = 14.0
+
+APP_DISPLAY_NAME = BrowserJet
+APP_CONFIGURATION_NAME = Base
+
+INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026"
+
+// SwiftLint
+SWIFTLINT_ENABLED = YES
+SWIFTLINT_CONFIG_FILE = .swiftlint.yml

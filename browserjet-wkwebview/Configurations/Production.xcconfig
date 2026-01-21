@@ -1,0 +1,22 @@
+//
+//  Production.xcconfig
+//  browserjet-wkwebview
+//
+//  Created by Moiz Ul Hasan on 21/01/2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+#include "Base.xcconfig"
+
+APP_ENVIRONMENT = PRODUCTION
+APP_CONFIGURATION_NAME = Production
+APP_DISPLAY_NAME = BrowserJet
+
+PRODUCT_BUNDLE_IDENTIFIER = com.ezybusinessapplications.browserjet
+PRODUCT_NAME = BrowserJet
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+
+// SwiftLint
+SWIFTLINT_ENABLED = YES
