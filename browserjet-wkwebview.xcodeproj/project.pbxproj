@@ -16,6 +16,7 @@
 		AFF941C72F20228100749C5C /* Production.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AFF941C62F20228100749C5C /* Production.xcconfig */; };
 		AFF941CA2F2056F800749C5C /* BuildConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF941C92F2056F400749C5C /* BuildConfig.swift */; };
 		AFF941CC2F205A1400749C5C /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF941CB2F205A1300749C5C /* AppLogger.swift */; };
+		AFFD19F52F2159B600B5372D /* EnvironmentBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFD19F42F2159B500B5372D /* EnvironmentBadgeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		AFF941C82F203F1800749C5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AFF941C92F2056F400749C5C /* BuildConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildConfig.swift; sourceTree = "<group>"; };
 		AFF941CB2F205A1300749C5C /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
+		AFFD19F42F2159B500B5372D /* EnvironmentBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentBadgeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 		AFF941B92F2021BB00749C5C /* browserjet-wkwebview */ = {
 			isa = PBXGroup;
 			children = (
+				AFFD19F42F2159B500B5372D /* EnvironmentBadgeView.swift */,
 				AFF941CB2F205A1300749C5C /* AppLogger.swift */,
 				AFF941C92F2056F400749C5C /* BuildConfig.swift */,
 				AFF941C82F203F1800749C5C /* Info.plist */,
@@ -182,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AFFD19F52F2159B600B5372D /* EnvironmentBadgeView.swift in Sources */,
 				AFF941CA2F2056F800749C5C /* BuildConfig.swift in Sources */,
 				AFF941BB2F2021BB00749C5C /* browserjet_wkwebviewApp.swift in Sources */,
 				AFF941BC2F2021BB00749C5C /* ContentView.swift in Sources */,
