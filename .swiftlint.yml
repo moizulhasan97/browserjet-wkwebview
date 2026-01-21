@@ -61,6 +61,12 @@ custom_rules:
     message: "Use explicit type annotation when initializing empty arrays and dictionaries"
     severity: warning
 
+  no_print_statements:
+    name: "Disallowed print() usage"
+    regex: '\bprint\s*\('
+    message: "Use AppLogger instead of print()."
+    severity: error
+
 
 attributes:
   always_on_same_line:

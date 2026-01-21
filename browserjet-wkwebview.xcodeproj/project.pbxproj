@@ -15,6 +15,7 @@
 		AFF941C52F20227300749C5C /* Staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AFF941C42F20227300749C5C /* Staging.xcconfig */; };
 		AFF941C72F20228100749C5C /* Production.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AFF941C62F20228100749C5C /* Production.xcconfig */; };
 		AFF941CA2F2056F800749C5C /* BuildConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF941C92F2056F400749C5C /* BuildConfig.swift */; };
+		AFF941CC2F205A1400749C5C /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF941CB2F205A1300749C5C /* AppLogger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		AFF941C62F20228100749C5C /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		AFF941C82F203F1800749C5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AFF941C92F2056F400749C5C /* BuildConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildConfig.swift; sourceTree = "<group>"; };
+		AFF941CB2F205A1300749C5C /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		AFF941B92F2021BB00749C5C /* browserjet-wkwebview */ = {
 			isa = PBXGroup;
 			children = (
+				AFF941CB2F205A1300749C5C /* AppLogger.swift */,
 				AFF941C92F2056F400749C5C /* BuildConfig.swift */,
 				AFF941C82F203F1800749C5C /* Info.plist */,
 				AFF941BD2F2021C900749C5C /* Configurations */,
@@ -170,7 +173,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\nset -euo pipefail\n\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\nSWIFTLINT_CONFIG=\"com.ezybusinessapplications.browserjet.swiftlint.yml\"\n\ncd \"$SRCROOT\" || exit 0\n\nif ! command -v swiftlint >/dev/null 2>&1; then\n  echo \"warning: SwiftLint not installed. Download from https://github.com/realm/SwiftLint\"\n  exit 0\nfi\n\nif [ ! -f \"$SWIFTLINT_CONFIG\" ]; then\n  echo \"warning: SwiftLint config '$SWIFTLINT_CONFIG' not found. Skipping linting.\"\n  exit 0\nfi\n\n# Run SwiftLint but NEVER fail the build on violations (local dev-friendly).\nswiftlint lint --no-cache --config \"$SWIFTLINT_CONFIG\" || true\n";
+			shellScript = "#!/bin/bash\n\n# --------------------------------------------------\n# SwiftLint Run Script (xcconfig-driven)\n# --------------------------------------------------\n\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\ncd \"$SRCROOT\" || exit 0\n\n# Read from xcconfig\nSWIFTLINT_ENABLED=\"${SWIFTLINT_ENABLED}\"\nSWIFTLINT_CONFIG_FILE=\"${SWIFTLINT_CONFIG_FILE}\"\n\n# 1. Check if SwiftLint is enabled\nif [ \"$SWIFTLINT_ENABLED\" != \"YES\" ]; then\n  echo \"ℹ️ SwiftLint disabled for this configuration. Skipping.\"\n  exit 0\nfi\n\n# 2. Check SwiftLint installation\nif ! command -v swiftlint >/dev/null 2>&1; then\n  echo \"warning: SwiftLint not installed. Download from https://github.com/realm/SwiftLint\"\n  exit 0\nfi\n\n# 3. Validate config file\nif [ -z \"$SWIFTLINT_CONFIG_FILE\" ]; then\n  echo \"warning: SWIFTLINT_CONFIG_FILE not set. Skipping SwiftLint.\"\n  exit 0\nfi\n\nif [ ! -f \"$SWIFTLINT_CONFIG_FILE\" ]; then\n  echo \"warning: SwiftLint config '$SWIFTLINT_CONFIG_FILE' not found. Skipping.\"\n  exit 0\nfi\n\n# 4. Run SwiftLint\necho \"🔍 Running SwiftLint using config: $SWIFTLINT_CONFIG_FILE\"\nswiftlint lint --no-cache --config \"$SWIFTLINT_CONFIG_FILE\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -182,6 +185,7 @@
 				AFF941CA2F2056F800749C5C /* BuildConfig.swift in Sources */,
 				AFF941BB2F2021BB00749C5C /* browserjet_wkwebviewApp.swift in Sources */,
 				AFF941BC2F2021BB00749C5C /* ContentView.swift in Sources */,
+				AFF941CC2F205A1400749C5C /* AppLogger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
