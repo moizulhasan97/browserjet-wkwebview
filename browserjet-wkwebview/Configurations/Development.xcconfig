@@ -1,0 +1,22 @@
+//
+//  Development.xcconfig
+//  browserjet-wkwebview
+//
+//  Created by Moiz Ul Hasan on 21/01/2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+#include "Base.xcconfig"
+
+APP_ENVIRONMENT = DEVELOPMENT
+APP_CONFIGURATION_NAME = Development
+APP_DISPLAY_NAME = BrowserJet Dev
+
+PRODUCT_BUNDLE_IDENTIFIER = com.ezybusinessapplications.browserjet.dev
+PRODUCT_NAME = BrowserJet
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon-Dev
+
+FEATURE_DEBUG_MENU = YES
+FEATURE_VERBOSE_LOGGING = YES

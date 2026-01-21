@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AF19E6E82F0D87AC007278CD"
-               BuildableName = "browserjet-wkwebview.app"
+               BuildableName = "BrowserJet.app"
                BlueprintName = "browserjet-wkwebview"
                ReferencedContainer = "container:browserjet-wkwebview.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AF19E6E82F0D87AC007278CD"
-            BuildableName = "browserjet-wkwebview.app"
+            BuildableName = "BrowserJet.app"
             BlueprintName = "browserjet-wkwebview"
             ReferencedContainer = "container:browserjet-wkwebview.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AF19E6E82F0D87AC007278CD"
-            BuildableName = "browserjet-wkwebview.app"
+            BuildableName = "BrowserJet.app"
             BlueprintName = "browserjet-wkwebview"
             ReferencedContainer = "container:browserjet-wkwebview.xcodeproj">
          </BuildableReference>
