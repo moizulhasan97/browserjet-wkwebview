@@ -40,13 +40,13 @@ final class SessionManager: ObservableObject {
     
     // Tracks which session slots are in use. Index == session/proxy slot.
     private var slotInUse: [Bool] = Array(repeating: false, count: 10)
-
+    
     @Published private(set) var activeSessions: Int = 0
-
+    
     var canCreateSession: Bool {
         activeSessions < maxSessions
     }
-
+    
     /// Acquires the next available session slot (0...9). Returns nil if at capacity.
     func acquireSessionSlot() -> Int? {
         guard canCreateSession else { return nil }
@@ -54,7 +54,7 @@ final class SessionManager: ObservableObject {
         slotInUse[slot] = true
         return slot
     }
-
+    
     /// Releases a previously acquired session slot.
     func releaseSessionSlot(_ slot: Int) {
         guard slotInUse.indices.contains(slot) else { return }
@@ -147,24 +147,24 @@ final class TabModel: ObservableObject, Identifiable {
         self.proxy = proxy
         self.startedAsAboutBlank = (startURL.absoluteString == "about:blank")
         self.hasNavigatedAwayFromInitialBlank = !self.startedAsAboutBlank
-
+        
         let config = WKWebViewConfiguration()
         config.websiteDataStore = dataStore
-//        if proxyType == .proxy, let proxy {
-//            let dataStore = WKWebsiteDataStore(forIdentifier: UUID())
-//            dataStore.proxyConfigurations = [makeProxyConfiguration(proxy)]
-//            config.websiteDataStore = dataStore
-//        } else {
-//            // ✅ Local = use normal internet / system networking
-//            config.websiteDataStore = .default()
-//        }
-
+        //        if proxyType == .proxy, let proxy {
+        //            let dataStore = WKWebsiteDataStore(forIdentifier: UUID())
+        //            dataStore.proxyConfigurations = [makeProxyConfiguration(proxy)]
+        //            config.websiteDataStore = dataStore
+        //        } else {
+        //            // ✅ Local = use normal internet / system networking
+        //            config.websiteDataStore = .default()
+        //        }
+        
         self.webView = WKWebView(frame: .zero, configuration: config)
-
+        
         if let ua = userAgent {
             self.webView.customUserAgent = ua
         }
-
+        
         load(startURL)
     }
     
@@ -205,7 +205,7 @@ final class TabModel: ObservableObject, Identifiable {
 
 @MainActor
 final class BrowserWindowState: ObservableObject {
-
+    
     let proxyType: ProxyType
     let userAgent: String?
     private let isolationMode: SessionIsolationMode
@@ -213,17 +213,17 @@ final class BrowserWindowState: ObservableObject {
     //let proxy: AuthProxy?
     //private lazy var perWindowDataStore: WKWebsiteDataStore = makeNewDataStore()
     let proxies: [AuthProxy]
-
+    
     /// When using `.perWindow`, all tabs share this proxy (first proxy in the list).
     private lazy var perWindowProxy: AuthProxy? = {
         guard proxyType == .proxy else { return nil }
         return proxies.first
     }()
-
+    
     private lazy var perWindowDataStore: WKWebsiteDataStore = makeNewDataStore(proxy: perWindowProxy)
     @Published var tabs: [TabModel] = []
     @Published var selectedTabID: UUID?
-
+    
     init(
         proxies: [AuthProxy],
         userAgent: String?,
@@ -236,7 +236,7 @@ final class BrowserWindowState: ObservableObject {
         self.proxies = proxies
         addTab() // initial tab = 1 session
     }
-
+    
     private func makeNewDataStore(proxy: AuthProxy?) -> WKWebsiteDataStore {
         // A unique data store means unique cookies/storage (a separate “session”).
         let store = WKWebsiteDataStore(forIdentifier: UUID())
@@ -256,8 +256,8 @@ final class BrowserWindowState: ObservableObject {
             return makeNewDataStore(proxy: nil)
         }
     }
-
-
+    
+    
     func addTab(url: URL = URL(string: "about:blank")!) {
         guard let slot = sessionManager.acquireSessionSlot() else { return }
         let tabProxy: AuthProxy?
@@ -271,7 +271,7 @@ final class BrowserWindowState: ObservableObject {
         } else {
             tabProxy = nil
         }
-
+        
         let store: WKWebsiteDataStore
         switch isolationMode {
         case .perWindow:
@@ -279,8 +279,8 @@ final class BrowserWindowState: ObservableObject {
         case .perTab:
             store = makeNewDataStore(proxy: tabProxy)
         }
-
-
+        
+        
         let tab = TabModel(
             sessionSlot: slot,
             startURL: url,
@@ -288,28 +288,28 @@ final class BrowserWindowState: ObservableObject {
             proxy: tabProxy,
             userAgent: userAgent
         )
-
+        
         tabs.append(tab)
         selectedTabID = tab.id
     }
-
+    
     func closeTab(_ tabID: UUID) {
         guard let index = tabs.firstIndex(where: { $0.id == tabID }) else { return }
         let slot = tabs[index].sessionSlot
         tabs.remove(at: index)
         sessionManager.releaseSessionSlot(slot)
-
+        
         if tabs.isEmpty {
             addTab()
         } else {
             selectedTabID = tabs.last?.id
         }
     }
-
+    
     func select(_ tab: TabModel) {
         selectedTabID = tab.id
     }
-
+    
     var selectedTab: TabModel? {
         tabs.first(where: { $0.id == selectedTabID })
     }
@@ -342,30 +342,30 @@ struct WebViewContainer: NSViewRepresentable {
         private let onOpenInNewTab: (URL) -> Void
         private var titleObservation: NSKeyValueObservation?
         private var urlObservation: NSKeyValueObservation?
-
+        
         init(tab: TabModel, onOpenInNewTab: @escaping (URL) -> Void) {
             self.tab = tab
             self.onOpenInNewTab = onOpenInNewTab
-//        }
-//        
-//        override func observeValue(forKeyPath keyPath: String?,
-//                                   of object: Any?,
-//                                   change: [NSKeyValueChangeKey : Any]?,
-//                                   context: UnsafeMutableRawPointer?) {
-//            guard let tab else { return }
-//            
-//            if keyPath == "title" {
-//                let t = tab.webView.title?.trimmingCharacters(in: .whitespacesAndNewlines)
-//                if let t, !t.isEmpty { tab.title = t } else { tab.title = "New Tab" }
-//            } else if keyPath == "URL" {
-//                let newURLString = tab.webView.url?.absoluteString
-//                tab.addressText = newURLString ?? tab.addressText
-//                
-//                // Mark that we navigated away from the initial blank once URL is not about:blank
-//                if tab.hasNavigatedAwayFromInitialBlank == false,
-//                   let newURLString,
-//                   newURLString != "about:blank" {
-//                    tab.hasNavigatedAwayFromInitialBlank = true
+            //        }
+            //
+            //        override func observeValue(forKeyPath keyPath: String?,
+            //                                   of object: Any?,
+            //                                   change: [NSKeyValueChangeKey : Any]?,
+            //                                   context: UnsafeMutableRawPointer?) {
+            //            guard let tab else { return }
+            //
+            //            if keyPath == "title" {
+            //                let t = tab.webView.title?.trimmingCharacters(in: .whitespacesAndNewlines)
+            //                if let t, !t.isEmpty { tab.title = t } else { tab.title = "New Tab" }
+            //            } else if keyPath == "URL" {
+            //                let newURLString = tab.webView.url?.absoluteString
+            //                tab.addressText = newURLString ?? tab.addressText
+            //
+            //                // Mark that we navigated away from the initial blank once URL is not about:blank
+            //                if tab.hasNavigatedAwayFromInitialBlank == false,
+            //                   let newURLString,
+            //                   newURLString != "about:blank" {
+            //                    tab.hasNavigatedAwayFromInitialBlank = true
             
             // Safe KVO using observation tokens (auto-invalidated on deinit)
             titleObservation = tab.webView.observe(\.title, options: [.new]) { [weak tab] _, _ in
@@ -382,7 +382,7 @@ struct WebViewContainer: NSViewRepresentable {
                 DispatchQueue.main.async {
                     let newURLString = tab.webView.url?.absoluteString
                     tab.addressText = newURLString ?? tab.addressText
-
+                    
                     // Mark that we navigated away from the initial blank once URL is not about:blank
                     if tab.hasNavigatedAwayFromInitialBlank == false,
                        let newURLString,
@@ -394,14 +394,14 @@ struct WebViewContainer: NSViewRepresentable {
         }
         
         // MARK: - New-tab routing rules
-
+        
         private func isSeatGeekCheckoutURL(_ url: URL) -> Bool {
             guard let host = url.host?.lowercased() else { return false }
             // Accept both seatgeek.com and www.seatgeek.com
             guard host == "seatgeek.com" || host.hasSuffix(".seatgeek.com") else { return false }
             return url.path.lowercased().hasPrefix("/checkout")
         }
-
+        
         private func openInSameTab(_ url: URL, webView: WKWebView) {
             // Force navigation in the current tab instead of opening a new tab/window
             webView.load(URLRequest(url: url))
@@ -420,7 +420,7 @@ struct WebViewContainer: NSViewRepresentable {
                     decisionHandler(.cancel)
                     return
                 }
-
+                
                 // Default behavior: open in a new tab in the same window
                 onOpenInNewTab(url)
                 decisionHandler(.cancel)
@@ -428,7 +428,7 @@ struct WebViewContainer: NSViewRepresentable {
             }
             decisionHandler(.allow)
         }
-
+        
         func webView(_ webView: WKWebView,
                      createWebViewWith configuration: WKWebViewConfiguration,
                      for navigationAction: WKNavigationAction,
@@ -442,7 +442,7 @@ struct WebViewContainer: NSViewRepresentable {
                     openInSameTab(url, webView: webView)
                     return nil
                 }
-
+                
                 // Default behavior: open in a new tab in the same window
                 onOpenInNewTab(url)
             }
@@ -530,7 +530,7 @@ struct WebViewContainer: NSViewRepresentable {
                 completionHandler(.performDefaultHandling, nil)
                 return
             }
-
+            
             // Proxy auth challenges usually come through with a proxyType (HTTP/HTTPS).
             if let proxyType = challenge.protectionSpace.proxyType,
                proxyType == kCFProxyTypeHTTP as String || proxyType == kCFProxyTypeHTTPS as String {
@@ -538,14 +538,14 @@ struct WebViewContainer: NSViewRepresentable {
                     completionHandler(.performDefaultHandling, nil)
                     return
                 }
-
+                
                 let credential = URLCredential(user: proxy.username,
                                                password: proxy.password,
                                                persistence: .forSession)
                 completionHandler(.useCredential, credential)
                 return
             }
-
+            
             // Server/basic auth (not proxy) — let the system handle unless you want to customize.
             completionHandler(.performDefaultHandling, nil)
         }
@@ -668,27 +668,27 @@ struct AddressBar: View {
 struct BrowserWindowView: View {
     @StateObject var state: BrowserWindowState
     @EnvironmentObject private var sessionManager: SessionManager
-
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 10) {
-
+                
                 Text(
                     state.proxyType == .local
                     ? "Connection: Local"
                     : "Proxy: \(state.selectedTab?.proxy?.display ?? "—")"
                 )
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(AppTheme.text)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Color.white.opacity(0.75))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(AppTheme.stroke.opacity(0.35), lineWidth: 1)
-                    )
-                    .cornerRadius(10)
-
+                .font(.system(size: 12, weight: .bold))
+                .foregroundColor(AppTheme.text)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color.white.opacity(0.75))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(AppTheme.stroke.opacity(0.35), lineWidth: 1)
+                )
+                .cornerRadius(10)
+                
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(state.tabs) { tab in
@@ -702,7 +702,7 @@ struct BrowserWindowView: View {
                     }
                     .padding(.vertical, 6)
                 }
-
+                
                 // ✅ Add Tab button (max 5 tabs)
                 Button {
                     state.addTab()
@@ -729,7 +729,7 @@ struct BrowserWindowView: View {
             .padding(.bottom, 6)
             .background(AppTheme.chrome2)
             .overlay(Divider().opacity(0.4), alignment: .bottom)
-
+            
             if let tab = state.selectedTab {
                 AddressBar(tab: tab)
                 WebViewContainer(
@@ -750,6 +750,15 @@ struct BrowserWindowView: View {
         }
         .frame(minWidth: 1000, minHeight: 700)
         .background(AppTheme.bg)
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                HStack {
+                    Spacer()
+                    EnvironmentBadgeView(environment: AppEnvironment.current)
+                        .padding(.trailing, 8)
+                }
+            }
+        }
     }
 }
 
@@ -757,7 +766,7 @@ struct BrowserWindowView: View {
 
 @main
 struct ProxyBrowserApp: App {
-
+    
     private let proxies: [AuthProxy] = [
         AuthProxy.parse("151.145.144.181:9261:eagaO:jOJFcfzM"),  // vpn1 - 1
         AuthProxy.parse("151.145.144.182:9262:eagaO:jOJFcfzM"),  // vpn1 - 2
@@ -770,9 +779,9 @@ struct ProxyBrowserApp: App {
         AuthProxy.parse("151.145.156.65:12205:eagaO:jOJFcfzM"),  // vpn1 - 9
         AuthProxy.parse("151.145.156.66:12206:eagaO:jOJFcfzM")   // vpn1 - 10
     ]
-
+    
     @StateObject private var sessionManager = SessionManager()
-
+    
     var body: some Scene {
         WindowGroup("Proxy Browser") {
             BrowserWindowView(
