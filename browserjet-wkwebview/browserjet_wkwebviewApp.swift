@@ -73,15 +73,15 @@ enum BrowserUserAgent: String, CaseIterable {
 }
 
 // MARK: - Theme
-enum AppTheme {
-    static let bg = Color(red: 0.92, green: 0.97, blue: 1.00)         // very light blue
-    static let chrome = Color(red: 0.80, green: 0.91, blue: 1.00)     // light blue
-    static let chrome2 = Color(red: 0.67, green: 0.85, blue: 1.00)    // stronger blue
-    static let stroke = Color(red: 0.30, green: 0.55, blue: 0.75)     // dark-ish blue
-    static let text = Color(red: 0.05, green: 0.15, blue: 0.25)       // near navy
-    static let pill = Color.white.opacity(0.85)
-    static let danger = Color(red: 0.85, green: 0.20, blue: 0.20)
-}
+//enum AppTheme {
+//    static let bg = Color(red: 0.92, green: 0.97, blue: 1.00)         // very light blue
+//    static let chrome = Color(red: 0.80, green: 0.91, blue: 1.00)     // light blue
+//    static let chrome2 = Color(red: 0.67, green: 0.85, blue: 1.00)    // stronger blue
+//    static let stroke = Color(red: 0.30, green: 0.55, blue: 0.75)     // dark-ish blue
+//    static let text = Color(red: 0.05, green: 0.15, blue: 0.25)       // near navy
+//    static let pill = Color.white.opacity(0.85)
+//    static let danger = Color(red: 0.85, green: 0.20, blue: 0.20)
+//}
 
 // MARK: - Proxy Model
 
@@ -568,7 +568,7 @@ struct TabPill: View {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .controlSize(.small)
-                    .tint(AppTheme.text)
+                    .tint(Color(red: 0.05, green: 0.15, blue: 0.25))
                     .frame(width: 14, height: 14)
                     .background(
                         Circle()
@@ -583,29 +583,29 @@ struct TabPill: View {
                     .cornerRadius(3)
             } else {
                 RoundedRectangle(cornerRadius: 3)
-                    .fill(AppTheme.chrome2.opacity(0.7))
+                    .fill(Color(red: 0.67, green: 0.85, blue: 1.00).opacity(0.7))
                     .frame(width: 14, height: 14)
             }
             
             Text(tab.title)
                 .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(AppTheme.text)
+                .foregroundColor(Color(red: 0.05, green: 0.15, blue: 0.25))
                 .lineLimit(1)
                 .frame(maxWidth: 180, alignment: .leading)
             
             Button(action: onClose) {
                 Image(systemName: "xmark")
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(AppTheme.text.opacity(0.8))
+                    .foregroundColor(Color(red: 0.05, green: 0.15, blue: 0.25).opacity(0.8))
             }
             .buttonStyle(.plain)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 7)
-        .background(isSelected ? AppTheme.pill : AppTheme.pill.opacity(0.6))
+        .background(isSelected ? Color.white.opacity(0.85) : Color.white.opacity(0.85).opacity(0.6))
         .overlay(
             RoundedRectangle(cornerRadius: 14)
-                .stroke(isSelected ? AppTheme.stroke : AppTheme.stroke.opacity(0.35),
+                .stroke(isSelected ? Color(red: 0.30, green: 0.55, blue: 0.75) : Color(red: 0.30, green: 0.55, blue: 0.75).opacity(0.35),
                         lineWidth: isSelected ? 1.5 : 1)
         )
         .cornerRadius(14)
@@ -649,16 +649,16 @@ struct AddressBar: View {
                 .background(Color.white.opacity(0.92))
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(AppTheme.stroke.opacity(0.45), lineWidth: 1)
+                        .stroke(Color(red: 0.30, green: 0.55, blue: 0.75).opacity(0.45), lineWidth: 1)
                 )
                 .cornerRadius(10)
                 .onSubmit {
                     tab.load(tab.addressText)
                 }
         }
-        .foregroundColor(AppTheme.text)
+        .foregroundColor(Color(red: 0.05, green: 0.15, blue: 0.25))
         .padding(10)
-        .background(AppTheme.chrome)
+        .background(Color(red: 0.80, green: 0.91, blue: 1.00))
         .overlay(Divider().opacity(0.4), alignment: .bottom)
     }
 }
@@ -668,7 +668,19 @@ struct AddressBar: View {
 struct BrowserWindowView: View {
     @StateObject var state: BrowserWindowState
     @EnvironmentObject private var sessionManager: SessionManager
-    
+    @Environment(\.appTheme) private var theme
+
+//    var body: some View {
+//        VStack {
+//            Text("BrowserJet")
+//                .foregroundStyle(theme.textPrimary)
+//
+//            Text("Theme wired ✅")
+//                .foregroundStyle(theme.textSecondary)
+//        }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .background(theme.appBackground)
+//    }
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 10) {
@@ -679,13 +691,13 @@ struct BrowserWindowView: View {
                     : "Proxy: \(state.selectedTab?.proxy?.display ?? "—")"
                 )
                 .font(.system(size: 12, weight: .bold))
-                .foregroundColor(AppTheme.text)
+                .foregroundColor(Color(red: 0.05, green: 0.15, blue: 0.25))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
                 .background(Color.white.opacity(0.75))
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(AppTheme.stroke.opacity(0.35), lineWidth: 1)
+                        .stroke(Color(red: 0.30, green: 0.55, blue: 0.75).opacity(0.35), lineWidth: 1)
                 )
                 .cornerRadius(10)
                 
@@ -716,8 +728,8 @@ struct BrowserWindowView: View {
                     .padding(.horizontal, 10)
                     .frame(height: 30)
                     .background(sessionManager.canCreateSession
-                                ? AppTheme.stroke
-                                : AppTheme.stroke.opacity(0.4))
+                                ? Color(red: 0.30, green: 0.55, blue: 0.75)
+                                : Color(red: 0.30, green: 0.55, blue: 0.75).opacity(0.4))
                     .cornerRadius(10)
                 }
                 .buttonStyle(.plain)
@@ -727,7 +739,7 @@ struct BrowserWindowView: View {
             .padding(.horizontal, 10)
             .padding(.top, 10)
             .padding(.bottom, 6)
-            .background(AppTheme.chrome2)
+            .background(Color(red: 0.67, green: 0.85, blue: 1.00))
             .overlay(Divider().opacity(0.4), alignment: .bottom)
             
             if let tab = state.selectedTab {
@@ -740,16 +752,16 @@ struct BrowserWindowView: View {
                     }
                 )
                 .id(tab.id)
-                .background(AppTheme.bg)
+                .background(Color(red: 0.92, green: 0.97, blue: 1.00))
             } else {
                 Text("No tab selected")
-                    .foregroundColor(AppTheme.text)
+                    .foregroundColor(Color(red: 0.05, green: 0.15, blue: 0.25))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(AppTheme.bg)
+                    .background(Color(red: 0.92, green: 0.97, blue: 1.00))
             }
         }
         .frame(minWidth: 1000, minHeight: 700)
-        .background(AppTheme.bg)
+        .background(Color(red: 0.92, green: 0.97, blue: 1.00))
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 HStack {
@@ -767,6 +779,10 @@ struct BrowserWindowView: View {
 @main
 struct ProxyBrowserApp: App {
     
+    @StateObject private var themeManager = ThemeManager()
+        @Environment(\.colorScheme) private var colorScheme
+    @StateObject private var sessionManager = SessionManager()
+    
     private let proxies: [AuthProxy] = [
         AuthProxy.parse("151.145.144.181:9261:eagaO:jOJFcfzM"),  // vpn1 - 1
         AuthProxy.parse("151.145.144.182:9262:eagaO:jOJFcfzM"),  // vpn1 - 2
@@ -780,7 +796,7 @@ struct ProxyBrowserApp: App {
         AuthProxy.parse("151.145.156.66:12206:eagaO:jOJFcfzM")   // vpn1 - 10
     ]
     
-    @StateObject private var sessionManager = SessionManager()
+    
     
     var body: some Scene {
         WindowGroup("Proxy Browser") {
@@ -792,6 +808,8 @@ struct ProxyBrowserApp: App {
                 )
             )
             .environmentObject(sessionManager)
+            .environmentObject(themeManager)
+            .environment(\.appTheme, themeManager.theme(for: colorScheme))
         }
     }
 }

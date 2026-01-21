@@ -17,6 +17,10 @@
 		AFF941CA2F2056F800749C5C /* BuildConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF941C92F2056F400749C5C /* BuildConfig.swift */; };
 		AFF941CC2F205A1400749C5C /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF941CB2F205A1300749C5C /* AppLogger.swift */; };
 		AFFD19F52F2159B600B5372D /* EnvironmentBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFD19F42F2159B500B5372D /* EnvironmentBadgeView.swift */; };
+		AFFD1C202F217E8A00B5372D /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFD1C1C2F217E8A00B5372D /* AppTheme.swift */; };
+		AFFD1C212F217E8A00B5372D /* BrowserJetTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFD1C1D2F217E8A00B5372D /* BrowserJetTheme.swift */; };
+		AFFD1C222F217E8A00B5372D /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFD1C1E2F217E8A00B5372D /* ThemeManager.swift */; };
+		AFFD1C242F217E9200B5372D /* Theme+Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFD1C232F217E8E00B5372D /* Theme+Environment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,10 @@
 		AFF941C92F2056F400749C5C /* BuildConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildConfig.swift; sourceTree = "<group>"; };
 		AFF941CB2F205A1300749C5C /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 		AFFD19F42F2159B500B5372D /* EnvironmentBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentBadgeView.swift; sourceTree = "<group>"; };
+		AFFD1C1C2F217E8A00B5372D /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		AFFD1C1D2F217E8A00B5372D /* BrowserJetTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTheme.swift; sourceTree = "<group>"; };
+		AFFD1C1E2F217E8A00B5372D /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		AFFD1C232F217E8E00B5372D /* Theme+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+Environment.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +72,7 @@
 		AFF941B92F2021BB00749C5C /* browserjet-wkwebview */ = {
 			isa = PBXGroup;
 			children = (
+				AFFD1C112F217D8300B5372D /* DesignSystem */,
 				AFFD19F42F2159B500B5372D /* EnvironmentBadgeView.swift */,
 				AFF941CB2F205A1300749C5C /* AppLogger.swift */,
 				AFF941C92F2056F400749C5C /* BuildConfig.swift */,
@@ -85,6 +94,25 @@
 				AFF941C62F20228100749C5C /* Production.xcconfig */,
 			);
 			path = Configurations;
+			sourceTree = "<group>";
+		};
+		AFFD1C112F217D8300B5372D /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				AFFD1C1F2F217E8A00B5372D /* Theme */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		AFFD1C1F2F217E8A00B5372D /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				AFFD1C232F217E8E00B5372D /* Theme+Environment.swift */,
+				AFFD1C1C2F217E8A00B5372D /* AppTheme.swift */,
+				AFFD1C1D2F217E8A00B5372D /* BrowserJetTheme.swift */,
+				AFFD1C1E2F217E8A00B5372D /* ThemeManager.swift */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,9 +213,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AFFD1C202F217E8A00B5372D /* AppTheme.swift in Sources */,
+				AFFD1C212F217E8A00B5372D /* BrowserJetTheme.swift in Sources */,
+				AFFD1C222F217E8A00B5372D /* ThemeManager.swift in Sources */,
 				AFFD19F52F2159B600B5372D /* EnvironmentBadgeView.swift in Sources */,
 				AFF941CA2F2056F800749C5C /* BuildConfig.swift in Sources */,
 				AFF941BB2F2021BB00749C5C /* browserjet_wkwebviewApp.swift in Sources */,
+				AFFD1C242F217E9200B5372D /* Theme+Environment.swift in Sources */,
 				AFF941BC2F2021BB00749C5C /* ContentView.swift in Sources */,
 				AFF941CC2F205A1400749C5C /* AppLogger.swift in Sources */,
 			);
