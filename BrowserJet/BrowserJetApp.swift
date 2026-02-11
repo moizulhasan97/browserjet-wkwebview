@@ -2,7 +2,7 @@
 //  BrowserJetApp.swift
 //  BrowserJet
 //
-//  Created by Moiz Ul Hasan on 10/02/2026.
+//  Created by Moiz Ul Hasan on 11/02/2026.
 //
 
 import SwiftUI
@@ -10,7 +10,15 @@ import WebKit
 import Network
 import Combine
 
-// MARK: - ProxyType
+//@main
+//struct BrowserJetApp: App {
+//    var body: some Scene {
+//        WindowGroup {
+//            ContentView()
+//        }
+//    }
+//}
+
 enum ProxyType {
     case local
     case proxy
@@ -776,7 +784,7 @@ struct ProxyBrowserApp: App {
     
     private let proxies: [AuthProxy] = [
         AuthProxy.parse("142.173.48.152:23245:QhQKs:WrApdwRr"),  // vpn1 - 1
-        //AuthProxy.parse("151.145.144.182:9262:eagaO:jOJFcfzM"),  // vpn1 - 2
+        AuthProxy.parse("139.171.211.169:25929:cXRsB:IIiszCgd"),  // vpn1 - 2
         //AuthProxy.parse("151.145.156.219:12359:eagaO:jOJFcfzM"), // vpn1 - 3
         //AuthProxy.parse("151.145.156.220:12360:eagaO:jOJFcfzM"), // vpn1 - 4
         //AuthProxy.parse("151.145.156.221:12361:eagaO:jOJFcfzM"), // vpn1 - 5

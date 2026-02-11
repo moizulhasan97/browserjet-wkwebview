@@ -14,6 +14,14 @@ jobs:
   build:
     runs-on: macos-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        scheme:
+          - App-Development
+          - App-Staging
+          - App-Production
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,14 +33,14 @@ jobs:
         run: |
           xcodebuild \
             -project browserjet-wkwebview.xcodeproj \
-            -scheme browserjet-wkwebview \
+            -scheme "${{ matrix.scheme }}" \
             -resolvePackageDependencies
 
       - name: Build (Debug)
         run: |
           xcodebuild \
             -project browserjet-wkwebview.xcodeproj \
-            -scheme browserjet-wkwebview \
+            -scheme "${{ matrix.scheme }}" \
             -configuration Debug \
             -sdk macosx \
             -destination 'platform=macOS' \

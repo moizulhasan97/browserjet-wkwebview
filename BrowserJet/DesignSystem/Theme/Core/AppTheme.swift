@@ -7,23 +7,30 @@
 
 import SwiftUI
 
-/// Minimal token surface (start small; expand as designs demand)
 protocol AppTheme {
-    // Surfaces
-    var surfaceElevated: Color { get }
+    // MARK: - Surfaces (Glass)
+    var surfaceCard: Color { get }
+    var surfaceCardOverlay: Color { get }
+    var surfaceControl: Color { get }
+    var surfaceControlOverlay: Color { get }
 
-    // Text
+    // MARK: - Text
     var textPrimary: Color { get }
     var textSecondary: Color { get }
+    var textMuted: Color { get }
+    var textOnAccent: Color { get }
 
-    // Borders
-    var border: Color { get }
+    // MARK: - Strokes / Dividers
+    var strokeCard: Color { get }
+    var strokeControl: Color { get }
+    var divider: Color { get }
 
-    // Actions
+    // MARK: - Actions
     var accent: Color { get }
-    var destructive: Color { get }
+    var accentPressed: Color { get }
+    var accentDisabled: Color { get }
 
-    // Status
+    // MARK: - Badge
     var badgeBackground: Color { get }
     var badgeText: Color { get }
 }

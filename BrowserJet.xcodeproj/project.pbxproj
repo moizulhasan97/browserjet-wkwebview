@@ -7,55 +7,63 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AF1A41282F3B8BE8005F0AAA /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */; };
-		AF3F2A442F3B85DB00C4FDFB /* BrowserJetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A432F3B85DB00C4FDFB /* BrowserJetApp.swift */; };
-		AF3F2A462F3B85DB00C4FDFB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A452F3B85DB00C4FDFB /* ContentView.swift */; };
-		AF3F2A482F3B85DF00C4FDFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF3F2A472F3B85DF00C4FDFB /* Assets.xcassets */; };
-		AF3F2A6E2F3B863C00C4FDFB /* BodyStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A602F3B863C00C4FDFB /* BodyStyles.swift */; };
-		AF3F2A6F2F3B863C00C4FDFB /* LauncherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A502F3B863C00C4FDFB /* LauncherView.swift */; };
-		AF3F2A702F3B863C00C4FDFB /* BrowserJetDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A5C2F3B863C00C4FDFB /* BrowserJetDarkTheme.swift */; };
-		AF3F2A712F3B863C00C4FDFB /* AppTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A662F3B863C00C4FDFB /* AppTypography.swift */; };
-		AF3F2A722F3B863C00C4FDFB /* TitleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A612F3B863C00C4FDFB /* TitleStyles.swift */; };
-		AF3F2A732F3B863C00C4FDFB /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A652F3B863C00C4FDFB /* Typography.swift */; };
-		AF3F2A742F3B863C00C4FDFB /* TextTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A632F3B863C00C4FDFB /* TextTypography.swift */; };
-		AF3F2A752F3B863C00C4FDFB /* AppBackgroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A5A2F3B863C00C4FDFB /* AppBackgroundStyle.swift */; };
-		AF3F2A762F3B863C00C4FDFB /* Theme+Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A6A2F3B863C00C4FDFB /* Theme+Environment.swift */; };
-		AF3F2A772F3B863C00C4FDFB /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A5F2F3B863C00C4FDFB /* ButtonStyles.swift */; };
-		AF3F2A782F3B863C00C4FDFB /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A542F3B863C00C4FDFB /* AppLogger.swift */; };
-		AF3F2A792F3B863C00C4FDFB /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A552F3B863C00C4FDFB /* LogLevel.swift */; };
-		AF3F2A7A2F3B863C00C4FDFB /* FontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A642F3B863C00C4FDFB /* FontProvider.swift */; };
-		AF3F2A7B2F3B863C00C4FDFB /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A692F3B863C00C4FDFB /* ThemeManager.swift */; };
-		AF3F2A7C2F3B863C00C4FDFB /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A682F3B863C00C4FDFB /* AppTheme.swift */; };
-		AF3F2A7D2F3B863C00C4FDFB /* BrowserJetLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A5D2F3B863C00C4FDFB /* BrowserJetLightTheme.swift */; };
+		AFF3EAC92F3CAC3A00C6F08E /* BrowserJetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */; };
+		AFF3EACB2F3CAC3A00C6F08E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EACA2F3CAC3A00C6F08E /* ContentView.swift */; };
+		AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */; };
+		AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */; };
+		AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1A2F3CACB100C6F08E /* BrowserJetLightTheme.swift */; };
+		AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB222F3CACB100C6F08E /* Typography.swift */; };
+		AFF3EB2E2F3CACB100C6F08E /* TitleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1E2F3CACB100C6F08E /* TitleStyles.swift */; };
+		AFF3EB2F2F3CACB100C6F08E /* GlassControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB142F3CACB100C6F08E /* GlassControl.swift */; };
+		AFF3EB302F3CACB100C6F08E /* DesignSystemPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB132F3CACB100C6F08E /* DesignSystemPreviewView.swift */; };
+		AFF3EB312F3CACB100C6F08E /* AppBackgroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB172F3CACB100C6F08E /* AppBackgroundStyle.swift */; };
+		AFF3EB322F3CACB100C6F08E /* AppTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB232F3CACB100C6F08E /* AppTypography.swift */; };
+		AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB0D2F3CACB100C6F08E /* LogLevel.swift */; };
+		AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB212F3CACB100C6F08E /* FontProvider.swift */; };
+		AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB202F3CACB100C6F08E /* TextTypography.swift */; };
+		AFF3EB362F3CACB100C6F08E /* BrowserJetDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB192F3CACB100C6F08E /* BrowserJetDarkTheme.swift */; };
+		AFF3EB372F3CACB100C6F08E /* LauncherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB082F3CACB100C6F08E /* LauncherView.swift */; };
+		AFF3EB382F3CACB100C6F08E /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB0C2F3CACB100C6F08E /* AppLogger.swift */; };
+		AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */; };
+		AFF3EB3A2F3CACB100C6F08E /* GlassCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB152F3CACB100C6F08E /* GlassCard.swift */; };
+		AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1C2F3CACB100C6F08E /* ButtonStyles.swift */; };
+		AFF3EB3C2F3CACB100C6F08E /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB252F3CACB100C6F08E /* AppTheme.swift */; };
+		AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1D2F3CACB100C6F08E /* BodyStyles.swift */; };
+		AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB262F3CACB100C6F08E /* ThemeManager.swift */; };
+		AFF3EB3F2F3CACB100C6F08E /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
-		AF3F2A402F3B85DB00C4FDFB /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AF3F2A432F3B85DB00C4FDFB /* BrowserJetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetApp.swift; sourceTree = "<group>"; };
-		AF3F2A452F3B85DB00C4FDFB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		AF3F2A472F3B85DF00C4FDFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AF3F2A492F3B85DF00C4FDFB /* BrowserJet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BrowserJet.entitlements; sourceTree = "<group>"; };
-		AF3F2A502F3B863C00C4FDFB /* LauncherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherView.swift; sourceTree = "<group>"; };
-		AF3F2A542F3B863C00C4FDFB /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
-		AF3F2A552F3B863C00C4FDFB /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
-		AF3F2A5A2F3B863C00C4FDFB /* AppBackgroundStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundStyle.swift; sourceTree = "<group>"; };
-		AF3F2A5C2F3B863C00C4FDFB /* BrowserJetDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetDarkTheme.swift; sourceTree = "<group>"; };
-		AF3F2A5D2F3B863C00C4FDFB /* BrowserJetLightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetLightTheme.swift; sourceTree = "<group>"; };
-		AF3F2A5F2F3B863C00C4FDFB /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
-		AF3F2A602F3B863C00C4FDFB /* BodyStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyStyles.swift; sourceTree = "<group>"; };
-		AF3F2A612F3B863C00C4FDFB /* TitleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleStyles.swift; sourceTree = "<group>"; };
-		AF3F2A632F3B863C00C4FDFB /* TextTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTypography.swift; sourceTree = "<group>"; };
-		AF3F2A642F3B863C00C4FDFB /* FontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontProvider.swift; sourceTree = "<group>"; };
-		AF3F2A652F3B863C00C4FDFB /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
-		AF3F2A662F3B863C00C4FDFB /* AppTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTypography.swift; sourceTree = "<group>"; };
-		AF3F2A682F3B863C00C4FDFB /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
-		AF3F2A692F3B863C00C4FDFB /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
-		AF3F2A6A2F3B863C00C4FDFB /* Theme+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+Environment.swift"; sourceTree = "<group>"; };
+		AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetApp.swift; sourceTree = "<group>"; };
+		AFF3EACA2F3CAC3A00C6F08E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AFF3EACE2F3CAC3C00C6F08E /* BrowserJet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BrowserJet.entitlements; sourceTree = "<group>"; };
+		AFF3EB062F3CACB100C6F08E /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		AFF3EB082F3CACB100C6F08E /* LauncherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherView.swift; sourceTree = "<group>"; };
+		AFF3EB0C2F3CACB100C6F08E /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
+		AFF3EB0D2F3CACB100C6F08E /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
+		AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignMetrics.swift; sourceTree = "<group>"; };
+		AFF3EB132F3CACB100C6F08E /* DesignSystemPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystemPreviewView.swift; sourceTree = "<group>"; };
+		AFF3EB142F3CACB100C6F08E /* GlassControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassControl.swift; sourceTree = "<group>"; };
+		AFF3EB152F3CACB100C6F08E /* GlassCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCard.swift; sourceTree = "<group>"; };
+		AFF3EB172F3CACB100C6F08E /* AppBackgroundStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundStyle.swift; sourceTree = "<group>"; };
+		AFF3EB192F3CACB100C6F08E /* BrowserJetDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetDarkTheme.swift; sourceTree = "<group>"; };
+		AFF3EB1A2F3CACB100C6F08E /* BrowserJetLightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetLightTheme.swift; sourceTree = "<group>"; };
+		AFF3EB1C2F3CACB100C6F08E /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		AFF3EB1D2F3CACB100C6F08E /* BodyStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyStyles.swift; sourceTree = "<group>"; };
+		AFF3EB1E2F3CACB100C6F08E /* TitleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleStyles.swift; sourceTree = "<group>"; };
+		AFF3EB202F3CACB100C6F08E /* TextTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTypography.swift; sourceTree = "<group>"; };
+		AFF3EB212F3CACB100C6F08E /* FontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontProvider.swift; sourceTree = "<group>"; };
+		AFF3EB222F3CACB100C6F08E /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		AFF3EB232F3CACB100C6F08E /* AppTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTypography.swift; sourceTree = "<group>"; };
+		AFF3EB252F3CACB100C6F08E /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		AFF3EB262F3CACB100C6F08E /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+Environment.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		AF3F2A3D2F3B85DB00C4FDFB /* Frameworks */ = {
+		AFF3EAC22F3CAC3A00C6F08E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -65,166 +73,178 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AF1A41272F3B8BE8005F0AAA /* Configurations */ = {
+		AFF3EABC2F3CAC3A00C6F08E = {
 			isa = PBXGroup;
 			children = (
-				AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */,
-			);
-			path = Configurations;
-			sourceTree = "<group>";
-		};
-		AF3F2A372F3B85DB00C4FDFB = {
-			isa = PBXGroup;
-			children = (
-				AF3F2A4F2F3B85EC00C4FDFB /* BrowserJet */,
-				AF3F2A412F3B85DB00C4FDFB /* Products */,
+				AFF3EAD42F3CAC4800C6F08E /* BrowserJet */,
+				AFF3EAC62F3CAC3A00C6F08E /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		AF3F2A412F3B85DB00C4FDFB /* Products */ = {
+		AFF3EAC62F3CAC3A00C6F08E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A402F3B85DB00C4FDFB /* BrowserJet.app */,
+				AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AF3F2A4F2F3B85EC00C4FDFB /* BrowserJet */ = {
+		AFF3EAD42F3CAC4800C6F08E /* BrowserJet */ = {
 			isa = PBXGroup;
 			children = (
-				AF1A41272F3B8BE8005F0AAA /* Configurations */,
-				AF3F2A522F3B863C00C4FDFB /* Features */,
-				AF3F2A532F3B863C00C4FDFB /* Views */,
-				AF3F2A572F3B863C00C4FDFB /* AppFoundation */,
-				AF3F2A582F3B863C00C4FDFB /* Resources */,
-				AF3F2A6D2F3B863C00C4FDFB /* DesignSystem */,
-				AF3F2A472F3B85DF00C4FDFB /* Assets.xcassets */,
-				AF3F2A492F3B85DF00C4FDFB /* BrowserJet.entitlements */,
-				AF3F2A432F3B85DB00C4FDFB /* BrowserJetApp.swift */,
-				AF3F2A452F3B85DB00C4FDFB /* ContentView.swift */,
+				AFF3EB072F3CACB100C6F08E /* Configurations */,
+				AFF3EB0A2F3CACB100C6F08E /* Features */,
+				AFF3EB0B2F3CACB100C6F08E /* Views */,
+				AFF3EB0F2F3CACB100C6F08E /* AppFoundation */,
+				AFF3EB102F3CACB100C6F08E /* Resources */,
+				AFF3EB2A2F3CACB100C6F08E /* DesignSystem */,
+				AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */,
+				AFF3EACE2F3CAC3C00C6F08E /* BrowserJet.entitlements */,
+				AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */,
+				AFF3EACA2F3CAC3A00C6F08E /* ContentView.swift */,
 			);
 			path = BrowserJet;
 			sourceTree = "<group>";
 		};
-		AF3F2A512F3B863C00C4FDFB /* Launcher */ = {
+		AFF3EB072F3CACB100C6F08E /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A502F3B863C00C4FDFB /* LauncherView.swift */,
+				AFF3EB062F3CACB100C6F08E /* Base.xcconfig */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
+		};
+		AFF3EB092F3CACB100C6F08E /* Launcher */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB082F3CACB100C6F08E /* LauncherView.swift */,
 			);
 			path = Launcher;
 			sourceTree = "<group>";
 		};
-		AF3F2A522F3B863C00C4FDFB /* Features */ = {
+		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A512F3B863C00C4FDFB /* Launcher */,
+				AFF3EB092F3CACB100C6F08E /* Launcher */,
 			);
 			path = Features;
 			sourceTree = "<group>";
 		};
-		AF3F2A532F3B863C00C4FDFB /* Views */ = {
+		AFF3EB0B2F3CACB100C6F08E /* Views */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		AF3F2A562F3B863C00C4FDFB /* Logging */ = {
+		AFF3EB0E2F3CACB100C6F08E /* Logging */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A542F3B863C00C4FDFB /* AppLogger.swift */,
-				AF3F2A552F3B863C00C4FDFB /* LogLevel.swift */,
+				AFF3EB0C2F3CACB100C6F08E /* AppLogger.swift */,
+				AFF3EB0D2F3CACB100C6F08E /* LogLevel.swift */,
 			);
 			path = Logging;
 			sourceTree = "<group>";
 		};
-		AF3F2A572F3B863C00C4FDFB /* AppFoundation */ = {
+		AFF3EB0F2F3CACB100C6F08E /* AppFoundation */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A562F3B863C00C4FDFB /* Logging */,
+				AFF3EB0E2F3CACB100C6F08E /* Logging */,
 			);
 			path = AppFoundation;
 			sourceTree = "<group>";
 		};
-		AF3F2A582F3B863C00C4FDFB /* Resources */ = {
+		AFF3EB102F3CACB100C6F08E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		AF3F2A592F3B863C00C4FDFB /* Components */ = {
+		AFF3EB122F3CACB100C6F08E /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
+				AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */,
+			);
+			path = Metrics;
+			sourceTree = "<group>";
+		};
+		AFF3EB162F3CACB100C6F08E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB132F3CACB100C6F08E /* DesignSystemPreviewView.swift */,
+				AFF3EB142F3CACB100C6F08E /* GlassControl.swift */,
+				AFF3EB152F3CACB100C6F08E /* GlassCard.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
 		};
-		AF3F2A5B2F3B863C00C4FDFB /* Background */ = {
+		AFF3EB182F3CACB100C6F08E /* Background */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A5A2F3B863C00C4FDFB /* AppBackgroundStyle.swift */,
+				AFF3EB172F3CACB100C6F08E /* AppBackgroundStyle.swift */,
 			);
 			path = Background;
 			sourceTree = "<group>";
 		};
-		AF3F2A5E2F3B863C00C4FDFB /* Colors */ = {
+		AFF3EB1B2F3CACB100C6F08E /* Colors */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A5C2F3B863C00C4FDFB /* BrowserJetDarkTheme.swift */,
-				AF3F2A5D2F3B863C00C4FDFB /* BrowserJetLightTheme.swift */,
+				AFF3EB192F3CACB100C6F08E /* BrowserJetDarkTheme.swift */,
+				AFF3EB1A2F3CACB100C6F08E /* BrowserJetLightTheme.swift */,
 			);
 			path = Colors;
 			sourceTree = "<group>";
 		};
-		AF3F2A622F3B863C00C4FDFB /* Styles */ = {
+		AFF3EB1F2F3CACB100C6F08E /* Styles */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A5F2F3B863C00C4FDFB /* ButtonStyles.swift */,
-				AF3F2A602F3B863C00C4FDFB /* BodyStyles.swift */,
-				AF3F2A612F3B863C00C4FDFB /* TitleStyles.swift */,
+				AFF3EB1C2F3CACB100C6F08E /* ButtonStyles.swift */,
+				AFF3EB1D2F3CACB100C6F08E /* BodyStyles.swift */,
+				AFF3EB1E2F3CACB100C6F08E /* TitleStyles.swift */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
 		};
-		AF3F2A672F3B863C00C4FDFB /* Typography */ = {
+		AFF3EB242F3CACB100C6F08E /* Typography */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A622F3B863C00C4FDFB /* Styles */,
-				AF3F2A632F3B863C00C4FDFB /* TextTypography.swift */,
-				AF3F2A642F3B863C00C4FDFB /* FontProvider.swift */,
-				AF3F2A652F3B863C00C4FDFB /* Typography.swift */,
-				AF3F2A662F3B863C00C4FDFB /* AppTypography.swift */,
+				AFF3EB1F2F3CACB100C6F08E /* Styles */,
+				AFF3EB202F3CACB100C6F08E /* TextTypography.swift */,
+				AFF3EB212F3CACB100C6F08E /* FontProvider.swift */,
+				AFF3EB222F3CACB100C6F08E /* Typography.swift */,
+				AFF3EB232F3CACB100C6F08E /* AppTypography.swift */,
 			);
 			path = Typography;
 			sourceTree = "<group>";
 		};
-		AF3F2A6B2F3B863C00C4FDFB /* Core */ = {
+		AFF3EB282F3CACB100C6F08E /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A682F3B863C00C4FDFB /* AppTheme.swift */,
-				AF3F2A692F3B863C00C4FDFB /* ThemeManager.swift */,
-				AF3F2A6A2F3B863C00C4FDFB /* Theme+Environment.swift */,
+				AFF3EB252F3CACB100C6F08E /* AppTheme.swift */,
+				AFF3EB262F3CACB100C6F08E /* ThemeManager.swift */,
+				AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
 		};
-		AF3F2A6C2F3B863C00C4FDFB /* Theme */ = {
+		AFF3EB292F3CACB100C6F08E /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A592F3B863C00C4FDFB /* Components */,
-				AF3F2A5B2F3B863C00C4FDFB /* Background */,
-				AF3F2A5E2F3B863C00C4FDFB /* Colors */,
-				AF3F2A672F3B863C00C4FDFB /* Typography */,
-				AF3F2A6B2F3B863C00C4FDFB /* Core */,
+				AFF3EB122F3CACB100C6F08E /* Metrics */,
+				AFF3EB162F3CACB100C6F08E /* Components */,
+				AFF3EB182F3CACB100C6F08E /* Background */,
+				AFF3EB1B2F3CACB100C6F08E /* Colors */,
+				AFF3EB242F3CACB100C6F08E /* Typography */,
+				AFF3EB282F3CACB100C6F08E /* Core */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
 		};
-		AF3F2A6D2F3B863C00C4FDFB /* DesignSystem */ = {
+		AFF3EB2A2F3CACB100C6F08E /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
-				AF3F2A6C2F3B863C00C4FDFB /* Theme */,
+				AFF3EB292F3CACB100C6F08E /* Theme */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -232,14 +252,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AF3F2A3F2F3B85DB00C4FDFB /* BrowserJet */ = {
+		AFF3EAC42F3CAC3A00C6F08E /* BrowserJet */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AF3F2A4C2F3B85DF00C4FDFB /* Build configuration list for PBXNativeTarget "BrowserJet" */;
+			buildConfigurationList = AFF3EAD12F3CAC3C00C6F08E /* Build configuration list for PBXNativeTarget "BrowserJet" */;
 			buildPhases = (
-				AF1A41292F3B92F9005F0AAA /* SwiftLint */,
-				AF3F2A3C2F3B85DB00C4FDFB /* Sources */,
-				AF3F2A3D2F3B85DB00C4FDFB /* Frameworks */,
-				AF3F2A3E2F3B85DB00C4FDFB /* Resources */,
+				AFF3EB402F3CACD900C6F08E /* SwiftLint */,
+				AFF3EAC12F3CAC3A00C6F08E /* Sources */,
+				AFF3EAC22F3CAC3A00C6F08E /* Frameworks */,
+				AFF3EAC32F3CAC3A00C6F08E /* Resources */,
 			);
 			buildRules = (
 			);
@@ -249,57 +269,57 @@
 			packageProductDependencies = (
 			);
 			productName = BrowserJet;
-			productReference = AF3F2A402F3B85DB00C4FDFB /* BrowserJet.app */;
+			productReference = AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		AF3F2A382F3B85DB00C4FDFB /* Project object */ = {
+		AFF3EABD2F3CAC3A00C6F08E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
-					AF3F2A3F2F3B85DB00C4FDFB = {
+					AFF3EAC42F3CAC3A00C6F08E = {
 						CreatedOnToolsVersion = 16.4;
 					};
 				};
 			};
-			buildConfigurationList = AF3F2A3B2F3B85DB00C4FDFB /* Build configuration list for PBXProject "BrowserJet" */;
+			buildConfigurationList = AFF3EAC02F3CAC3A00C6F08E /* Build configuration list for PBXProject "BrowserJet" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = AF3F2A372F3B85DB00C4FDFB;
+			mainGroup = AFF3EABC2F3CAC3A00C6F08E;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = AF3F2A412F3B85DB00C4FDFB /* Products */;
+			productRefGroup = AFF3EAC62F3CAC3A00C6F08E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AF3F2A3F2F3B85DB00C4FDFB /* BrowserJet */,
+				AFF3EAC42F3CAC3A00C6F08E /* BrowserJet */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		AF3F2A3E2F3B85DB00C4FDFB /* Resources */ = {
+		AFF3EAC32F3CAC3A00C6F08E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF3F2A482F3B85DF00C4FDFB /* Assets.xcassets in Resources */,
-				AF1A41282F3B8BE8005F0AAA /* Base.xcconfig in Resources */,
+				AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */,
+				AFF3EB3F2F3CACB100C6F08E /* Base.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		AF1A41292F3B92F9005F0AAA /* SwiftLint */ = {
+		AFF3EB402F3CACD900C6F08E /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -320,37 +340,41 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		AF3F2A3C2F3B85DB00C4FDFB /* Sources */ = {
+		AFF3EAC12F3CAC3A00C6F08E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF3F2A462F3B85DB00C4FDFB /* ContentView.swift in Sources */,
-				AF3F2A6E2F3B863C00C4FDFB /* BodyStyles.swift in Sources */,
-				AF3F2A6F2F3B863C00C4FDFB /* LauncherView.swift in Sources */,
-				AF3F2A702F3B863C00C4FDFB /* BrowserJetDarkTheme.swift in Sources */,
-				AF3F2A712F3B863C00C4FDFB /* AppTypography.swift in Sources */,
-				AF3F2A722F3B863C00C4FDFB /* TitleStyles.swift in Sources */,
-				AF3F2A732F3B863C00C4FDFB /* Typography.swift in Sources */,
-				AF3F2A742F3B863C00C4FDFB /* TextTypography.swift in Sources */,
-				AF3F2A752F3B863C00C4FDFB /* AppBackgroundStyle.swift in Sources */,
-				AF3F2A762F3B863C00C4FDFB /* Theme+Environment.swift in Sources */,
-				AF3F2A772F3B863C00C4FDFB /* ButtonStyles.swift in Sources */,
-				AF3F2A782F3B863C00C4FDFB /* AppLogger.swift in Sources */,
-				AF3F2A792F3B863C00C4FDFB /* LogLevel.swift in Sources */,
-				AF3F2A7A2F3B863C00C4FDFB /* FontProvider.swift in Sources */,
-				AF3F2A7B2F3B863C00C4FDFB /* ThemeManager.swift in Sources */,
-				AF3F2A7C2F3B863C00C4FDFB /* AppTheme.swift in Sources */,
-				AF3F2A7D2F3B863C00C4FDFB /* BrowserJetLightTheme.swift in Sources */,
-				AF3F2A442F3B85DB00C4FDFB /* BrowserJetApp.swift in Sources */,
+				AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */,
+				AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */,
+				AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */,
+				AFF3EB2E2F3CACB100C6F08E /* TitleStyles.swift in Sources */,
+				AFF3EB2F2F3CACB100C6F08E /* GlassControl.swift in Sources */,
+				AFF3EB302F3CACB100C6F08E /* DesignSystemPreviewView.swift in Sources */,
+				AFF3EB312F3CACB100C6F08E /* AppBackgroundStyle.swift in Sources */,
+				AFF3EB322F3CACB100C6F08E /* AppTypography.swift in Sources */,
+				AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */,
+				AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */,
+				AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */,
+				AFF3EB362F3CACB100C6F08E /* BrowserJetDarkTheme.swift in Sources */,
+				AFF3EB372F3CACB100C6F08E /* LauncherView.swift in Sources */,
+				AFF3EB382F3CACB100C6F08E /* AppLogger.swift in Sources */,
+				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
+				AFF3EB3A2F3CACB100C6F08E /* GlassCard.swift in Sources */,
+				AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */,
+				AFF3EB3C2F3CACB100C6F08E /* AppTheme.swift in Sources */,
+				AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */,
+				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
+				AFF3EACB2F3CAC3A00C6F08E /* ContentView.swift in Sources */,
+				AFF3EAC92F3CAC3A00C6F08E /* BrowserJetApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		AF3F2A4A2F3B85DF00C4FDFB /* Debug */ = {
+		AFF3EACF2F3CAC3C00C6F08E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */;
+			baseConfigurationReference = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -386,7 +410,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -412,9 +436,9 @@
 			};
 			name = Debug;
 		};
-		AF3F2A4B2F3B85DF00C4FDFB /* Release */ = {
+		AFF3EAD02F3CAC3C00C6F08E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */;
+			baseConfigurationReference = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -450,7 +474,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -468,9 +492,8 @@
 			};
 			name = Release;
 		};
-		AF3F2A4D2F3B85DF00C4FDFB /* Debug */ = {
+		AFF3EAD22F3CAC3C00C6F08E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -479,14 +502,15 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_DISPLAY_NAME)";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "$(INFOPLIST_KEY_NSHumanReadableCopyright)";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_MODULE_NAME = "$(inherited)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.EBA.BrowserJet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -494,9 +518,8 @@
 			};
 			name = Debug;
 		};
-		AF3F2A4E2F3B85DF00C4FDFB /* Release */ = {
+		AFF3EAD32F3CAC3C00C6F08E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -505,14 +528,15 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_DISPLAY_NAME)";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "$(INFOPLIST_KEY_NSHumanReadableCopyright)";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_MODULE_NAME = "$(inherited)";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.EBA.BrowserJet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -523,25 +547,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AF3F2A3B2F3B85DB00C4FDFB /* Build configuration list for PBXProject "BrowserJet" */ = {
+		AFF3EAC02F3CAC3A00C6F08E /* Build configuration list for PBXProject "BrowserJet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AF3F2A4A2F3B85DF00C4FDFB /* Debug */,
-				AF3F2A4B2F3B85DF00C4FDFB /* Release */,
+				AFF3EACF2F3CAC3C00C6F08E /* Debug */,
+				AFF3EAD02F3CAC3C00C6F08E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AF3F2A4C2F3B85DF00C4FDFB /* Build configuration list for PBXNativeTarget "BrowserJet" */ = {
+		AFF3EAD12F3CAC3C00C6F08E /* Build configuration list for PBXNativeTarget "BrowserJet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AF3F2A4D2F3B85DF00C4FDFB /* Debug */,
-				AF3F2A4E2F3B85DF00C4FDFB /* Release */,
+				AFF3EAD22F3CAC3C00C6F08E /* Debug */,
+				AFF3EAD32F3CAC3C00C6F08E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = AF3F2A382F3B85DB00C4FDFB /* Project object */;
+	rootObject = AFF3EABD2F3CAC3A00C6F08E /* Project object */;
 }
