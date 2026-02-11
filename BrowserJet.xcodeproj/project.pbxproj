@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF1A41282F3B8BE8005F0AAA /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */; };
 		AF3F2A442F3B85DB00C4FDFB /* BrowserJetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A432F3B85DB00C4FDFB /* BrowserJetApp.swift */; };
 		AF3F2A462F3B85DB00C4FDFB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3F2A452F3B85DB00C4FDFB /* ContentView.swift */; };
 		AF3F2A482F3B85DF00C4FDFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF3F2A472F3B85DF00C4FDFB /* Assets.xcassets */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		AF3F2A402F3B85DB00C4FDFB /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF3F2A432F3B85DB00C4FDFB /* BrowserJetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetApp.swift; sourceTree = "<group>"; };
 		AF3F2A452F3B85DB00C4FDFB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -63,6 +65,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AF1A41272F3B8BE8005F0AAA /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
+		};
 		AF3F2A372F3B85DB00C4FDFB = {
 			isa = PBXGroup;
 			children = (
@@ -82,6 +92,7 @@
 		AF3F2A4F2F3B85EC00C4FDFB /* BrowserJet */ = {
 			isa = PBXGroup;
 			children = (
+				AF1A41272F3B8BE8005F0AAA /* Configurations */,
 				AF3F2A522F3B863C00C4FDFB /* Features */,
 				AF3F2A532F3B863C00C4FDFB /* Views */,
 				AF3F2A572F3B863C00C4FDFB /* AppFoundation */,
@@ -225,6 +236,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AF3F2A4C2F3B85DF00C4FDFB /* Build configuration list for PBXNativeTarget "BrowserJet" */;
 			buildPhases = (
+				AF1A41292F3B92F9005F0AAA /* SwiftLint */,
 				AF3F2A3C2F3B85DB00C4FDFB /* Sources */,
 				AF3F2A3D2F3B85DB00C4FDFB /* Frameworks */,
 				AF3F2A3E2F3B85DB00C4FDFB /* Resources */,
@@ -280,10 +292,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF3F2A482F3B85DF00C4FDFB /* Assets.xcassets in Resources */,
+				AF1A41282F3B8BE8005F0AAA /* Base.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AF1A41292F3B92F9005F0AAA /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n# --------------------------------------------------\n# SwiftLint Run Script (xcconfig-driven)\n# --------------------------------------------------\n\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\ncd \"$SRCROOT\" || exit 0\n\n# Read from xcconfig\nSWIFTLINT_ENABLED=\"${SWIFTLINT_ENABLED}\"\nSWIFTLINT_CONFIG_FILE=\"${SWIFTLINT_CONFIG_FILE}\"\n\n# 1. Check if SwiftLint is enabled\nif [ \"$SWIFTLINT_ENABLED\" != \"YES\" ]; then\n  echo \"ℹ️ SwiftLint disabled for this configuration. Skipping.\"\n  exit 0\nfi\n\n# 2. Check SwiftLint installation\nif ! command -v swiftlint >/dev/null 2>&1; then\n  echo \"warning: SwiftLint not installed. Download from https://github.com/realm/SwiftLint\"\n  exit 0\nfi\n\n# 3. Validate config file\nif [ -z \"$SWIFTLINT_CONFIG_FILE\" ]; then\n  echo \"warning: SWIFTLINT_CONFIG_FILE not set. Skipping SwiftLint.\"\n  exit 0\nfi\n\nif [ ! -f \"$SWIFTLINT_CONFIG_FILE\" ]; then\n  echo \"warning: SwiftLint config '$SWIFTLINT_CONFIG_FILE' not found. Skipping.\"\n  exit 0\nfi\n\n# 4. Run SwiftLint\necho \"🔍 Running SwiftLint using config: $SWIFTLINT_CONFIG_FILE\"\nswiftlint lint --no-cache --config \"$SWIFTLINT_CONFIG_FILE\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AF3F2A3C2F3B85DB00C4FDFB /* Sources */ = {
@@ -316,6 +350,7 @@
 /* Begin XCBuildConfiguration section */
 		AF3F2A4A2F3B85DF00C4FDFB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -351,7 +386,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -379,6 +414,7 @@
 		};
 		AF3F2A4B2F3B85DF00C4FDFB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -414,7 +450,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -434,6 +470,7 @@
 		};
 		AF3F2A4D2F3B85DF00C4FDFB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -443,13 +480,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_DISPLAY_NAME)";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "$(INFOPLIST_KEY_NSHumanReadableCopyright)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.EBA.BrowserJet;
+				PRODUCT_MODULE_NAME = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -459,6 +496,7 @@
 		};
 		AF3F2A4E2F3B85DF00C4FDFB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF1A41262F3B8BE8005F0AAA /* Base.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -468,13 +506,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_DISPLAY_NAME)";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "$(INFOPLIST_KEY_NSHumanReadableCopyright)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.EBA.BrowserJet;
+				PRODUCT_MODULE_NAME = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
