@@ -72,12 +72,10 @@ final class LauncherViewModel: ObservableObject {
     
     func didTapLaunch() {
         guard settings.isValid else { return }
-        print("DID TAP LAUNCH")
         // TODO: Implement launch logic
     }
     
     func didTapManageMyProxy() {
-        print("OPEN MANAGE MY PROXY")
         // TODO: Implement manage proxy logic
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 import WebKit
 import Network
 import Combine
-
+// swiftlint:disable all
 //@main
 //struct BrowserJetApp: App {
 //    var body: some Scene {
@@ -35,9 +35,7 @@ enum SessionIsolationMode {
 enum AppConfig {
     static let isUserAgentEnabled: Bool = false
     static let proxyType: ProxyType = .proxy
-    
-    /// Controls whether tabs share session storage within a window or each tab is isolated.
-    /// Default is `.perTab` to match current behavior.
+    static let defaultSearchAddress: String = "https://www.google.com/"
     static let sessionIsolationMode: SessionIsolationMode = .perTab
 }
 
@@ -775,7 +773,7 @@ struct BrowserWindowView: View {
 
 // MARK: - App Entry (two windows)
 
-@main
+//@main
 struct ProxyBrowserApp: App {
     
     @StateObject private var themeManager = ThemeManager()
@@ -799,16 +797,17 @@ struct ProxyBrowserApp: App {
     
     var body: some Scene {
         WindowGroup("Proxy Browser") {
-            BrowserWindowView(
-                state: BrowserWindowState(
-                    proxies: proxies,
-                    userAgent: nil,
-                    sessionManager: sessionManager
-                )
-            )
-            .environmentObject(sessionManager)
-            .environmentObject(themeManager)
-            .environment(\.appTheme, themeManager.theme(for: colorScheme))
+            LauncherView()
+//            BrowserWindowView(
+//                state: BrowserWindowState(
+//                    proxies: proxies,
+//                    userAgent: nil,
+//                    sessionManager: sessionManager
+//                )
+//            )
+            //.environmentObject(sessionManager)
+            //.environmentObject(themeManager)
+            //.environment(\.appTheme, themeManager.theme(for: colorScheme))
         }
     }
 }
