@@ -47,7 +47,15 @@ final class SessionManager: ObservableObject {
     // Tracks which session slots are in use. Index == session/proxy slot.
     private var slotInUse: [Bool] = Array(repeating: false, count: 10)
 
-    @Published private(set) var activeSessions: Int = 0
+    @Published private(set) var activeSessions: Int = 0 {
+        didSet {
+            AppLogger.debug("Active sessions changed to: \(activeSessions)/\(maxSessions)")
+        }
+    }
+
+    init() {
+        AppLogger.debug("SessionManager initialized - Max sessions: \(maxSessions)")
+    }
 
     var canCreateSession: Bool {
         activeSessions < maxSessions
@@ -55,18 +63,33 @@ final class SessionManager: ObservableObject {
 
     /// Acquires the next available session slot (0...9). Returns nil if at capacity.
     func acquireSessionSlot() -> Int? {
-        guard canCreateSession else { return nil }
-        guard let slot = slotInUse.firstIndex(where: { !$0 }) else { return nil }
+        guard canCreateSession else {
+            AppLogger.warning("Cannot acquire session slot - At capacity (\(activeSessions)/\(maxSessions))")
+            return nil
+        }
+        guard let slot = slotInUse.firstIndex(where: { !$0 }) else {
+            AppLogger.error("Failed to find available session slot despite canCreateSession being true")
+            return nil
+        }
         slotInUse[slot] = true
+        activeSessions += 1
+        AppLogger.info("Session slot \(slot) acquired - Active sessions: \(activeSessions)/\(maxSessions)")
         return slot
     }
 
     /// Releases a previously acquired session slot.
     func releaseSessionSlot(_ slot: Int) {
-        guard slotInUse.indices.contains(slot) else { return }
-        guard slotInUse[slot] else { return }
+        guard slotInUse.indices.contains(slot) else {
+            AppLogger.error("Attempted to release invalid session slot: \(slot)")
+            return
+        }
+        guard slotInUse[slot] else {
+            AppLogger.warning("Attempted to release session slot \(slot) that was not in use")
+            return
+        }
         slotInUse[slot] = false
         activeSessions = max(activeSessions - 1, 0)
+        AppLogger.info("Session slot \(slot) released - Active sessions: \(activeSessions)/\(maxSessions)")
     }
 }
 

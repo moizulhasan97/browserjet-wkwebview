@@ -28,19 +28,27 @@ struct AppConfiguration {
 }
 
 extension AppConfiguration {
-    static let production = AppConfiguration(
-        isUserAgentEnabled: false,
-        proxyType: .proxy,
-        defaultSearchAddress: "https://www.google.com/",
-        sessionIsolationMode: .perTab,
-        launcherTabPresets: LauncherTabPreset.allCases
-    )
+    static let production: AppConfiguration = {
+        let config = AppConfiguration(
+            isUserAgentEnabled: false,
+            proxyType: .proxy,
+            defaultSearchAddress: "https://www.google.com/",
+            sessionIsolationMode: .perTab,
+            launcherTabPresets: LauncherTabPreset.allCases
+        )
+        AppLogger.info("Production configuration initialized - Default address: \(config.defaultSearchAddress)")
+        return config
+    }()
 
-    static let development = AppConfiguration(
-        isUserAgentEnabled: false,
-        proxyType: .proxy,
-        defaultSearchAddress: "https://www.google.com/",
-        sessionIsolationMode: .perTab,
-        launcherTabPresets: LauncherTabPreset.allCases
-    )
+    static let development: AppConfiguration = {
+        let config = AppConfiguration(
+            isUserAgentEnabled: false,
+            proxyType: .proxy,
+            defaultSearchAddress: "https://www.google.com/",
+            sessionIsolationMode: .perTab,
+            launcherTabPresets: LauncherTabPreset.allCases
+        )
+        AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
+        return config
+    }()
 }

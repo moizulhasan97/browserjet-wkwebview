@@ -19,9 +19,12 @@ struct BrowserJet: App {
     }
 
     init() {
+        AppLogger.info("App initializing - Environment: \(AppEnvironment.current.displayName)")
         let themeManager = self.themeManager
         let sessionManager = self.sessionManager
+        AppLogger.debug("ThemeManager and SessionManager initialized")
         DispatchQueue.main.async {
+            AppLogger.info("Showing launcher window with development configuration")
             WindowManager.shared.showLauncher(
                 themeManager: themeManager,
                 sessionManager: sessionManager,

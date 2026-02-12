@@ -21,6 +21,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         resizable: Bool = false,
         cornerRadius: CGFloat = 16
     ) {
+        AppLogger.debug("Initializing BrowserJetWindowController - Size: \(size.width)x\(size.height), Resizable: \(resizable), CornerRadius: \(cornerRadius)")
         let hosting = NSHostingController(rootView: content)
 
         var styleMask: NSWindow.StyleMask = [
@@ -69,14 +70,17 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         window.center()
 
         self.init(window: window)
+        AppLogger.debug("BrowserJetWindowController initialized successfully")
     }
 
     func show() {
+        AppLogger.debug("Showing window")
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
 
         DispatchQueue.main.async {
             self.window?.makeFirstResponder(nil)
         }
+        AppLogger.info("Window activated and made key")
     }
 }

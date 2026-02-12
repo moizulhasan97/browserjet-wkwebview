@@ -54,10 +54,11 @@ struct LauncherView: View {
         .padding()
         .background(AppBackgroundStyle.browserJetGradient.makeView())
         .onAppear {
+            viewModel.onAppear()
+            // Initialize address only if empty
             if viewModel.settings.address.isEmpty {
                 viewModel.updateAddress(config.defaultSearchAddress)
             }
-            viewModel.onAppear()
         }
     }
 
