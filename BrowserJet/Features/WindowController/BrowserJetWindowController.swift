@@ -75,5 +75,9 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
     func show() {
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
+        
+        DispatchQueue.main.async {
+            self.window?.makeFirstResponder(nil)
+        }
     }
 }

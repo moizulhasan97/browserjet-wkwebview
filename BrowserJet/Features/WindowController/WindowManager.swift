@@ -30,7 +30,7 @@ final class WindowManager {
             
             launcherWC = BrowserJetWindowController(
                 content: rootView,
-                size: NSSize(width: 578, height: 639),
+                size: NSSize(width: 500, height: 639),
                 titleBarHidden: false,
                 resizable: false,
                 cornerRadius: 18

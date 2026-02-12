@@ -7,9 +7,22 @@
 
 import SwiftUI
 
+// MARK: - Constants
 fileprivate enum LauncherViewConstants {
-    static let interItemSpacing: CGFloat = 25.0,
-               launchButtonHeight: CGFloat = 48.0
+    // Layout
+    static let mainStackSpacing: CGFloat = 14.0
+    static let launchButtonTopPadding: CGFloat = 10.0
+    
+    // Cards
+    static let cardInterItemSpacing: CGFloat = 20.0
+    
+    // Buttons
+    static let launchButtonHeight: CGFloat = 48.0
+    
+    // Pickers
+    static let noOfTabsPickerWidth: CGFloat = 50.0
+    static let vpnPickerWidth: CGFloat = 70.0
+    static let regionPickerWidth: CGFloat = 50.0
 }
 
 struct LauncherView: View {
@@ -17,27 +30,33 @@ struct LauncherView: View {
     @Environment(\.designSystem) private var designSystem
     @Environment(\.appTheme) private var theme
     @Environment(\.appConfiguration) private var config
-    @State private var address: String = ""
-    @State private var VPNStatus: Bool = false
-    @State private var premiumProxyStatus: Bool = false
-    @State private var selectedVPN: VPNType = .vpn1
-    @State private var selectedRegion: RegionType = .uk
-    @State private var selectedPreset: LauncherTabPreset = .one
+    @StateObject private var viewModel: LauncherViewModel
+    
     private var presets: [LauncherTabPreset] {
         config.launcherTabPresets
     }
     private typealias K = LauncherViewConstants
     
+    init() {
+        _viewModel = StateObject(wrappedValue: LauncherViewModel(defaultSearchAddress: ""))
+    }
+    
     var body: some View {
-        VStack {
+        VStack (spacing: K.mainStackSpacing) {
             userNameLogo
             searchBarCard
             vpnCard
             launchButton
-                .padding(.top, 30)
+                .padding(.top, K.launchButtonTopPadding)
         }
         .padding()
         .background(AppBackgroundStyle.browserJetGradient.makeView())
+        .onAppear {
+            if viewModel.settings.address.isEmpty {
+                viewModel.updateAddress(config.defaultSearchAddress)
+            }
+            viewModel.onAppear()
+        }
     }
     
     private func getLabel(_ text: String) -> some View {
@@ -51,13 +70,9 @@ struct LauncherView: View {
             title: "Launch",
             type: .primaryLarge,
             height: K.launchButtonHeight,
-            isDisabled: false,
-            action: didTapLaunch
+            isDisabled: !viewModel.settings.isValid,
+            action: viewModel.didTapLaunch
         )
-    }
-    
-    func didTapLaunch() {
-        print("DID TAP LAUNCH")
     }
 }
 
@@ -69,7 +84,6 @@ private extension LauncherView {
             Spacer()
             logoDescription
         }
-        
     }
     
     private var username: some View {
@@ -87,12 +101,15 @@ private extension LauncherView {
 private extension LauncherView {
     // Upper card
     private var addressField: some View {
-        LauncherSearchField(text: $address)
+        LauncherSearchField(text: Binding(
+            get: { viewModel.settings.address },
+            set: { viewModel.updateAddress($0) }
+        ))
     }
     
     private var searchBarCard: some View {
         CardContainer {
-            VStack (spacing: K.interItemSpacing) {
+            VStack (spacing: K.cardInterItemSpacing) {
                 addressField
                 numberOfTabs
             }
@@ -105,9 +122,12 @@ private extension LauncherView {
             Spacer()
             BrowserJetMenuPicker(
                 options: presets,
-                selection: $selectedPreset,
+                selection: Binding(
+                    get: { viewModel.settings.numberOfTabs },
+                    set: { viewModel.updateNumberOfTabs($0) }
+                ),
                 isDisabled: false,
-                width: 70.0,
+                width: K.noOfTabsPickerWidth,
                 label: { $0.rawValue.toString }
             )
         }
@@ -116,7 +136,7 @@ private extension LauncherView {
     // Bottom card
     private var vpnCard: some View {
         CardContainer {
-            VStack (spacing: K.interItemSpacing) {
+            VStack (spacing: K.cardInterItemSpacing) {
                 HStack {
                     premiumProxyToggle
                     Spacer()
@@ -136,14 +156,20 @@ private extension LauncherView {
     
     private var premiumProxyToggle: some View {
         HStack {
-            GlassPillToggle(isOn: $premiumProxyStatus)
+            GlassPillToggle(
+                isOn: Binding(
+                    get: { viewModel.settings.isPremiumProxyEnabled },
+                    set: { viewModel.togglePremiumProxy($0) }
+                ),
+                isDisabled: !viewModel.settings.isVPNEnabled
+            )
             getLabel("Premium Proxy")
         }
     }
     
     private var manageMyProxyButton: some View {
         Button {
-            print("OPEN MANAGE MY PROXY")
+            viewModel.didTapManageMyProxy()
         } label: {
             HStack {
                 Image(systemName: "gearshape")
@@ -151,13 +177,18 @@ private extension LauncherView {
                     .foregroundStyle(theme.accent)
                 getLabel("Manage My Proxy")
             }
-            
         }
         .buttonStyle(.plain)
     }
     
     private var vpnToggle: some View {
-        GlassPillToggle(isOn: $VPNStatus)
+        GlassPillToggle(
+            isOn: Binding(
+                get: { viewModel.settings.isVPNEnabled },
+                set: { viewModel.toggleVPN($0) }
+            ),
+            isDisabled: false
+        )
     }
     
     private var selectVPN: some View {
@@ -166,9 +197,12 @@ private extension LauncherView {
             Spacer()
             BrowserJetMenuPicker(
                 options: VPNType.allCases,
-                selection: $selectedVPN,
-                isDisabled: false,
-                width: 70.0,
+                selection: Binding(
+                    get: { viewModel.settings.selectedVPN ?? .vpn1 },
+                    set: { viewModel.updateSelectedVPN($0) }
+                ),
+                isDisabled: !viewModel.settings.areVPNControlsEnabled,
+                width: K.vpnPickerWidth,
                 label: { $0.rawValue }
             )
         }
@@ -180,9 +214,12 @@ private extension LauncherView {
             Spacer()
             BrowserJetMenuPicker(
                 options: RegionType.allCases,
-                selection: $selectedRegion,
-                isDisabled: false,
-                width: 70.0,
+                selection: Binding(
+                    get: { viewModel.settings.selectedRegion ?? .uk },
+                    set: { viewModel.updateSelectedRegion($0) }
+                ),
+                isDisabled: !viewModel.settings.areRegionControlsEnabled,
+                width: K.regionPickerWidth,
                 label: { $0.rawValue }
             )
         }

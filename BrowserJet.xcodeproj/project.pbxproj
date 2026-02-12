@@ -36,6 +36,8 @@
 		AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */; };
 		AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF292F3E131100E49C58 /* VPNType.swift */; };
 		AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF2B2F3E131C00E49C58 /* RegionType.swift */; };
+		AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF2E2F3E327100E49C58 /* LauncherSettings.swift */; };
+		AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */; };
 		AFF3EAC92F3CAC3A00C6F08E /* BrowserJetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */; };
 		AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */; };
 		AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */; };
@@ -89,6 +91,8 @@
 		AF56EF282F3E0F1400E49C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AF56EF292F3E131100E49C58 /* VPNType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNType.swift; sourceTree = "<group>"; };
 		AF56EF2B2F3E131C00E49C58 /* RegionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionType.swift; sourceTree = "<group>"; };
+		AF56EF2E2F3E327100E49C58 /* LauncherSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherSettings.swift; sourceTree = "<group>"; };
+		AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherViewModel.swift; sourceTree = "<group>"; };
 		AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetApp.swift; sourceTree = "<group>"; };
 		AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -221,6 +225,14 @@
 			path = WindowController;
 			sourceTree = "<group>";
 		};
+		AF56EF2D2F3E326D00E49C58 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF2E2F3E327100E49C58 /* LauncherSettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		AFF3EABC2F3CAC3A00C6F08E = {
 			isa = PBXGroup;
 			children = (
@@ -266,6 +278,8 @@
 		AFF3EB092F3CACB100C6F08E /* Launcher */ = {
 			isa = PBXGroup;
 			children = (
+				AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */,
+				AF56EF2D2F3E326D00E49C58 /* Models */,
 				AF56EF2B2F3E131C00E49C58 /* RegionType.swift */,
 				AF56EF292F3E131100E49C58 /* VPNType.swift */,
 				AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */,
@@ -518,6 +532,7 @@
 				AF56EF132F3DFC9800E49C58 /* CornerRadiusModifier.swift in Sources */,
 				AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */,
 				AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */,
+				AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */,
 				AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
@@ -541,6 +556,7 @@
 				AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */,
 				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,
 				AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */,
+				AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */,
 				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
 				AF56EF002F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift in Sources */,
 				AF56EF1B2F3E02C900E49C58 /* BrowserJet.swift in Sources */,

@@ -8,7 +8,7 @@
 struct AppConfiguration {
     private let isUserAgentEnabled: Bool
     private let proxyType: ProxyType
-    private let defaultSearchAddress: String
+    let defaultSearchAddress: String
     private let sessionIsolationMode: SessionIsolationMode
     let launcherTabPresets: [LauncherTabPreset]
     

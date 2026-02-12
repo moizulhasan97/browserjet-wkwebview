@@ -32,10 +32,10 @@ struct ThemeButtonStyleProvider: ButtonStyleProvider {
                 borderWidth: 0,
                 font: typography.button.font,
                 backgroundColor: ._0088_FF,
-                backgroundDisabledColor: .gray,
+                backgroundDisabledColor: ._0088_FF.opacity(0.85),
                 backgroundHighlightedColor: ._0088_FF.opacity(0.85),
                 titleColor: .white,
-                titleDisabledColor: .gray,
+                titleDisabledColor: .white.opacity(0.85),
                 titleHighlightedColor: .white.opacity(0.85)
             )
         }

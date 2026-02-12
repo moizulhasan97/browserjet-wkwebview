@@ -17,7 +17,7 @@ enum DesignMetrics {
     
     // MARK: - Spacing / Padding
     static let screenPadding: CGFloat = 28
-    static let cardPadding: CGFloat = 28
+    static let cardPadding: CGFloat = 20
     static let sectionSpacing: CGFloat = 18
     static let rowSpacing: CGFloat = 14
     

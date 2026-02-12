@@ -11,8 +11,9 @@ struct LauncherSearchField: View {
     
     @Environment(\.designSystem) private var designSystem
     @Environment(\.appTheme) private var theme
+    @Environment(\.appConfiguration) private var config
     @Binding private var text: String
-    private let placeholder: String = AppConfig.defaultSearchAddress
+    private let placeholder: String = "Enter your address..."
     private let height: CGFloat = DesignMetrics.launcherAddressFieldHeight
     
     init(text: Binding<String>) {
