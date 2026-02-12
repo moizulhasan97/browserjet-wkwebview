@@ -1,0 +1,771 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */; };
+		AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE62F3CBB3200E49C58 /* AddressFieldBase.swift */; };
+		AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE82F3CC2D200E49C58 /* DesignSystem.swift */; };
+		AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEEA2F3CC30100E49C58 /* DesignSystem+Environment.swift */; };
+		AF56EEED2F3CC4B700E49C58 /* TextFieldStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEEC2F3CC4B500E49C58 /* TextFieldStyles.swift */; };
+		AF56EEEF2F3CC94100E49C58 /* LauncherSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEEE2F3CC93700E49C58 /* LauncherSearchField.swift */; };
+		AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEF32F3CCDB200E49C58 /* Color+Init.swift */; };
+		AF56EEF72F3CCE4900E49C58 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF56EEF62F3CCE4900E49C58 /* Colors.xcassets */; };
+		AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEF82F3CD8A200E49C58 /* GlassPillToggle.swift */; };
+		AF56EEFB2F3CFA8E00E49C58 /* BrowserJetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEFA2F3CFA8E00E49C58 /* BrowserJetDivider.swift */; };
+		AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEFC2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift */; };
+		AF56EF002F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEFF2F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift */; };
+		AF56EF032F3D0A4900E49C58 /* ViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF022F3D0A4700E49C58 /* ViewConfig.swift */; };
+		AF56EF052F3D0A7C00E49C58 /* BrowserJetViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF042F3D0A7B00E49C58 /* BrowserJetViewConfig.swift */; };
+		AF56EF072F3DEE3100E49C58 /* BrowserJetAppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF062F3DEE2300E49C58 /* BrowserJetAppButton.swift */; };
+		AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF082F3DF56200E49C58 /* ButtonStyleProvider.swift */; };
+		AF56EF0E2F3DF85000E49C58 /* CornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF0D2F3DF84F00E49C58 /* CornerRadius.swift */; };
+		AF56EF102F3DFC8400E49C58 /* CustomWidth.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF0F2F3DFC8300E49C58 /* CustomWidth.swift */; };
+		AF56EF132F3DFC9800E49C58 /* CornerRadiusModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF122F3DFC9800E49C58 /* CornerRadiusModifier.swift */; };
+		AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF152F3E01E500E49C58 /* AppConfiguration.swift */; };
+		AF56EF192F3E027000E49C58 /* AppConfiguration+Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF182F3E026E00E49C58 /* AppConfiguration+Environment.swift */; };
+		AF56EF1B2F3E02C900E49C58 /* BrowserJet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1A2F3E02C400E49C58 /* BrowserJet.swift */; };
+		AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */; };
+		AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */; };
+		AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */; };
+		AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF242F3E086A00E49C58 /* WindowManager.swift */; };
+		AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */; };
+		AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF292F3E131100E49C58 /* VPNType.swift */; };
+		AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF2B2F3E131C00E49C58 /* RegionType.swift */; };
+		AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF2E2F3E327100E49C58 /* LauncherSettings.swift */; };
+		AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */; };
+		AFF3EAC92F3CAC3A00C6F08E /* BrowserJetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */; };
+		AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */; };
+		AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */; };
+		AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1A2F3CACB100C6F08E /* BrowserJetLightTheme.swift */; };
+		AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB222F3CACB100C6F08E /* Typography.swift */; };
+		AFF3EB2E2F3CACB100C6F08E /* TitleStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1E2F3CACB100C6F08E /* TitleStyles.swift */; };
+		AFF3EB312F3CACB100C6F08E /* AppBackgroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB172F3CACB100C6F08E /* AppBackgroundStyle.swift */; };
+		AFF3EB322F3CACB100C6F08E /* AppTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB232F3CACB100C6F08E /* AppTypography.swift */; };
+		AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB0D2F3CACB100C6F08E /* LogLevel.swift */; };
+		AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB212F3CACB100C6F08E /* FontProvider.swift */; };
+		AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB202F3CACB100C6F08E /* TextTypography.swift */; };
+		AFF3EB362F3CACB100C6F08E /* BrowserJetDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB192F3CACB100C6F08E /* BrowserJetDarkTheme.swift */; };
+		AFF3EB372F3CACB100C6F08E /* LauncherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB082F3CACB100C6F08E /* LauncherView.swift */; };
+		AFF3EB382F3CACB100C6F08E /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB0C2F3CACB100C6F08E /* AppLogger.swift */; };
+		AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */; };
+		AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1C2F3CACB100C6F08E /* ButtonStyles.swift */; };
+		AFF3EB3C2F3CACB100C6F08E /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB252F3CACB100C6F08E /* AppTheme.swift */; };
+		AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1D2F3CACB100C6F08E /* BodyStyles.swift */; };
+		AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB262F3CACB100C6F08E /* ThemeManager.swift */; };
+		AFF3EB3F2F3CACB100C6F08E /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
+		AF56EEE62F3CBB3200E49C58 /* AddressFieldBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFieldBase.swift; sourceTree = "<group>"; };
+		AF56EEE82F3CC2D200E49C58 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		AF56EEEA2F3CC30100E49C58 /* DesignSystem+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignSystem+Environment.swift"; sourceTree = "<group>"; };
+		AF56EEEC2F3CC4B500E49C58 /* TextFieldStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStyles.swift; sourceTree = "<group>"; };
+		AF56EEEE2F3CC93700E49C58 /* LauncherSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherSearchField.swift; sourceTree = "<group>"; };
+		AF56EEF32F3CCDB200E49C58 /* Color+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Init.swift"; sourceTree = "<group>"; };
+		AF56EEF62F3CCE4900E49C58 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		AF56EEF82F3CD8A200E49C58 /* GlassPillToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassPillToggle.swift; sourceTree = "<group>"; };
+		AF56EEFA2F3CFA8E00E49C58 /* BrowserJetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetDivider.swift; sourceTree = "<group>"; };
+		AF56EEFC2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetMenuPicker.swift; sourceTree = "<group>"; };
+		AF56EEFF2F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetButtonStyleProtocol.swift; sourceTree = "<group>"; };
+		AF56EF022F3D0A4700E49C58 /* ViewConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConfig.swift; sourceTree = "<group>"; };
+		AF56EF042F3D0A7B00E49C58 /* BrowserJetViewConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetViewConfig.swift; sourceTree = "<group>"; };
+		AF56EF062F3DEE2300E49C58 /* BrowserJetAppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetAppButton.swift; sourceTree = "<group>"; };
+		AF56EF082F3DF56200E49C58 /* ButtonStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyleProvider.swift; sourceTree = "<group>"; };
+		AF56EF0D2F3DF84F00E49C58 /* CornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerRadius.swift; sourceTree = "<group>"; };
+		AF56EF0F2F3DFC8300E49C58 /* CustomWidth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWidth.swift; sourceTree = "<group>"; };
+		AF56EF122F3DFC9800E49C58 /* CornerRadiusModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerRadiusModifier.swift; sourceTree = "<group>"; };
+		AF56EF152F3E01E500E49C58 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+		AF56EF182F3E026E00E49C58 /* AppConfiguration+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppConfiguration+Environment.swift"; sourceTree = "<group>"; };
+		AF56EF1A2F3E02C400E49C58 /* BrowserJet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJet.swift; sourceTree = "<group>"; };
+		AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherTabPreset.swift; sourceTree = "<group>"; };
+		AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
+		AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetWindowController.swift; sourceTree = "<group>"; };
+		AF56EF242F3E086A00E49C58 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherRootView.swift; sourceTree = "<group>"; };
+		AF56EF282F3E0F1400E49C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AF56EF292F3E131100E49C58 /* VPNType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNType.swift; sourceTree = "<group>"; };
+		AF56EF2B2F3E131C00E49C58 /* RegionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionType.swift; sourceTree = "<group>"; };
+		AF56EF2E2F3E327100E49C58 /* LauncherSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherSettings.swift; sourceTree = "<group>"; };
+		AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherViewModel.swift; sourceTree = "<group>"; };
+		AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetApp.swift; sourceTree = "<group>"; };
+		AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AFF3EACE2F3CAC3C00C6F08E /* BrowserJet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BrowserJet.entitlements; sourceTree = "<group>"; };
+		AFF3EB062F3CACB100C6F08E /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		AFF3EB082F3CACB100C6F08E /* LauncherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherView.swift; sourceTree = "<group>"; };
+		AFF3EB0C2F3CACB100C6F08E /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
+		AFF3EB0D2F3CACB100C6F08E /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
+		AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignMetrics.swift; sourceTree = "<group>"; };
+		AFF3EB172F3CACB100C6F08E /* AppBackgroundStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundStyle.swift; sourceTree = "<group>"; };
+		AFF3EB192F3CACB100C6F08E /* BrowserJetDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetDarkTheme.swift; sourceTree = "<group>"; };
+		AFF3EB1A2F3CACB100C6F08E /* BrowserJetLightTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetLightTheme.swift; sourceTree = "<group>"; };
+		AFF3EB1C2F3CACB100C6F08E /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		AFF3EB1D2F3CACB100C6F08E /* BodyStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyStyles.swift; sourceTree = "<group>"; };
+		AFF3EB1E2F3CACB100C6F08E /* TitleStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleStyles.swift; sourceTree = "<group>"; };
+		AFF3EB202F3CACB100C6F08E /* TextTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTypography.swift; sourceTree = "<group>"; };
+		AFF3EB212F3CACB100C6F08E /* FontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontProvider.swift; sourceTree = "<group>"; };
+		AFF3EB222F3CACB100C6F08E /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		AFF3EB232F3CACB100C6F08E /* AppTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTypography.swift; sourceTree = "<group>"; };
+		AFF3EB252F3CACB100C6F08E /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		AFF3EB262F3CACB100C6F08E /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+Environment.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AFF3EAC22F3CAC3A00C6F08E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AF56EEF02F3CCDA100E49C58 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF112F3DFC8D00E49C58 /* Modifiers */,
+				AF56EF0C2F3DF84A00E49C58 /* Helpers */,
+				AF56EEF12F3CCDA900E49C58 /* Extensions */,
+				AFF3EB0E2F3CACB100C6F08E /* Logging */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		AF56EEF12F3CCDA900E49C58 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF1E2F3E061300E49C58 /* Int */,
+				AF56EEF22F3CCDAE00E49C58 /* Color */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		AF56EEF22F3CCDAE00E49C58 /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EEF32F3CCDB200E49C58 /* Color+Init.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		AF56EEFE2F3D086600E49C58 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF082F3DF56200E49C58 /* ButtonStyleProvider.swift */,
+				AF56EEFF2F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		AF56EF012F3D0A4200E49C58 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF042F3D0A7B00E49C58 /* BrowserJetViewConfig.swift */,
+				AF56EF022F3D0A4700E49C58 /* ViewConfig.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AF56EF0C2F3DF84A00E49C58 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF0F2F3DFC8300E49C58 /* CustomWidth.swift */,
+				AF56EF0D2F3DF84F00E49C58 /* CornerRadius.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		AF56EF112F3DFC8D00E49C58 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF122F3DFC9800E49C58 /* CornerRadiusModifier.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		AF56EF142F3E01E100E49C58 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF152F3E01E500E49C58 /* AppConfiguration.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AF56EF172F3E026800E49C58 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF1A2F3E02C400E49C58 /* BrowserJet.swift */,
+				AF56EF182F3E026E00E49C58 /* AppConfiguration+Environment.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		AF56EF1E2F3E061300E49C58 /* Int */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */,
+			);
+			path = Int;
+			sourceTree = "<group>";
+		};
+		AF56EF212F3E07A700E49C58 /* WindowController */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF242F3E086A00E49C58 /* WindowManager.swift */,
+				AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */,
+			);
+			path = WindowController;
+			sourceTree = "<group>";
+		};
+		AF56EF2D2F3E326D00E49C58 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF2E2F3E327100E49C58 /* LauncherSettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AFF3EABC2F3CAC3A00C6F08E = {
+			isa = PBXGroup;
+			children = (
+				AFF3EAD42F3CAC4800C6F08E /* BrowserJet */,
+				AFF3EAC62F3CAC3A00C6F08E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AFF3EAC62F3CAC3A00C6F08E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AFF3EAD42F3CAC4800C6F08E /* BrowserJet */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF282F3E0F1400E49C58 /* Info.plist */,
+				AF56EF172F3E026800E49C58 /* App */,
+				AF56EF142F3E01E100E49C58 /* Models */,
+				AF56EEF02F3CCDA100E49C58 /* Utils */,
+				AFF3EB072F3CACB100C6F08E /* Configurations */,
+				AFF3EB0A2F3CACB100C6F08E /* Features */,
+				AFF3EB0B2F3CACB100C6F08E /* Views */,
+				AFF3EB102F3CACB100C6F08E /* Resources */,
+				AFF3EB2A2F3CACB100C6F08E /* DesignSystem */,
+				AFF3EACE2F3CAC3C00C6F08E /* BrowserJet.entitlements */,
+				AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */,
+			);
+			path = BrowserJet;
+			sourceTree = "<group>";
+		};
+		AFF3EB072F3CACB100C6F08E /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB062F3CACB100C6F08E /* Base.xcconfig */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
+		};
+		AFF3EB092F3CACB100C6F08E /* Launcher */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */,
+				AF56EF2D2F3E326D00E49C58 /* Models */,
+				AF56EF2B2F3E131C00E49C58 /* RegionType.swift */,
+				AF56EF292F3E131100E49C58 /* VPNType.swift */,
+				AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */,
+				AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */,
+				AF56EEEE2F3CC93700E49C58 /* LauncherSearchField.swift */,
+				AFF3EB082F3CACB100C6F08E /* LauncherView.swift */,
+			);
+			path = Launcher;
+			sourceTree = "<group>";
+		};
+		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF212F3E07A700E49C58 /* WindowController */,
+				AFF3EB092F3CACB100C6F08E /* Launcher */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		AFF3EB0B2F3CACB100C6F08E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF062F3DEE2300E49C58 /* BrowserJetAppButton.swift */,
+				AF56EEFC2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift */,
+				AF56EEFA2F3CFA8E00E49C58 /* BrowserJetDivider.swift */,
+				AF56EEF82F3CD8A200E49C58 /* GlassPillToggle.swift */,
+				AF56EEE62F3CBB3200E49C58 /* AddressFieldBase.swift */,
+				AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AFF3EB0E2F3CACB100C6F08E /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB0C2F3CACB100C6F08E /* AppLogger.swift */,
+				AFF3EB0D2F3CACB100C6F08E /* LogLevel.swift */,
+			);
+			path = Logging;
+			sourceTree = "<group>";
+		};
+		AFF3EB102F3CACB100C6F08E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EEF62F3CCE4900E49C58 /* Colors.xcassets */,
+				AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		AFF3EB122F3CACB100C6F08E /* Metrics */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */,
+			);
+			path = Metrics;
+			sourceTree = "<group>";
+		};
+		AFF3EB162F3CACB100C6F08E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		AFF3EB182F3CACB100C6F08E /* Background */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB172F3CACB100C6F08E /* AppBackgroundStyle.swift */,
+			);
+			path = Background;
+			sourceTree = "<group>";
+		};
+		AFF3EB1B2F3CACB100C6F08E /* Colors */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB192F3CACB100C6F08E /* BrowserJetDarkTheme.swift */,
+				AFF3EB1A2F3CACB100C6F08E /* BrowserJetLightTheme.swift */,
+			);
+			path = Colors;
+			sourceTree = "<group>";
+		};
+		AFF3EB1F2F3CACB100C6F08E /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EEEC2F3CC4B500E49C58 /* TextFieldStyles.swift */,
+				AFF3EB1C2F3CACB100C6F08E /* ButtonStyles.swift */,
+				AFF3EB1D2F3CACB100C6F08E /* BodyStyles.swift */,
+				AFF3EB1E2F3CACB100C6F08E /* TitleStyles.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		AFF3EB242F3CACB100C6F08E /* Typography */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB1F2F3CACB100C6F08E /* Styles */,
+				AFF3EB202F3CACB100C6F08E /* TextTypography.swift */,
+				AFF3EB212F3CACB100C6F08E /* FontProvider.swift */,
+				AFF3EB222F3CACB100C6F08E /* Typography.swift */,
+				AFF3EB232F3CACB100C6F08E /* AppTypography.swift */,
+			);
+			path = Typography;
+			sourceTree = "<group>";
+		};
+		AFF3EB282F3CACB100C6F08E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EEEA2F3CC30100E49C58 /* DesignSystem+Environment.swift */,
+				AF56EEE82F3CC2D200E49C58 /* DesignSystem.swift */,
+				AFF3EB252F3CACB100C6F08E /* AppTheme.swift */,
+				AFF3EB262F3CACB100C6F08E /* ThemeManager.swift */,
+				AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		AFF3EB292F3CACB100C6F08E /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				AF56EF012F3D0A4200E49C58 /* View */,
+				AF56EEFE2F3D086600E49C58 /* Buttons */,
+				AFF3EB122F3CACB100C6F08E /* Metrics */,
+				AFF3EB162F3CACB100C6F08E /* Components */,
+				AFF3EB182F3CACB100C6F08E /* Background */,
+				AFF3EB1B2F3CACB100C6F08E /* Colors */,
+				AFF3EB242F3CACB100C6F08E /* Typography */,
+				AFF3EB282F3CACB100C6F08E /* Core */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		AFF3EB2A2F3CACB100C6F08E /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				AFF3EB292F3CACB100C6F08E /* Theme */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AFF3EAC42F3CAC3A00C6F08E /* BrowserJet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AFF3EAD12F3CAC3C00C6F08E /* Build configuration list for PBXNativeTarget "BrowserJet" */;
+			buildPhases = (
+				AFF3EB402F3CACD900C6F08E /* SwiftLint */,
+				AFF3EAC12F3CAC3A00C6F08E /* Sources */,
+				AFF3EAC22F3CAC3A00C6F08E /* Frameworks */,
+				AFF3EAC32F3CAC3A00C6F08E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BrowserJet;
+			packageProductDependencies = (
+			);
+			productName = BrowserJet;
+			productReference = AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AFF3EABD2F3CAC3A00C6F08E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					AFF3EAC42F3CAC3A00C6F08E = {
+						CreatedOnToolsVersion = 16.4;
+					};
+				};
+			};
+			buildConfigurationList = AFF3EAC02F3CAC3A00C6F08E /* Build configuration list for PBXProject "BrowserJet" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AFF3EABC2F3CAC3A00C6F08E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AFF3EAC62F3CAC3A00C6F08E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AFF3EAC42F3CAC3A00C6F08E /* BrowserJet */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AFF3EAC32F3CAC3A00C6F08E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF56EEF72F3CCE4900E49C58 /* Colors.xcassets in Resources */,
+				AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */,
+				AFF3EB3F2F3CACB100C6F08E /* Base.xcconfig in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AFF3EB402F3CACD900C6F08E /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n# --------------------------------------------------\n# SwiftLint Run Script (xcconfig-driven)\n# --------------------------------------------------\n\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\ncd \"$SRCROOT\" || exit 0\n\n# Read from xcconfig\nSWIFTLINT_ENABLED=\"${SWIFTLINT_ENABLED}\"\nSWIFTLINT_CONFIG_FILE=\"${SWIFTLINT_CONFIG_FILE}\"\n\n# 1. Check if SwiftLint is enabled\nif [ \"$SWIFTLINT_ENABLED\" != \"YES\" ]; then\n  echo \"ℹ️ SwiftLint disabled for this configuration. Skipping.\"\n  exit 0\nfi\n\n# 2. Check SwiftLint installation\nif ! command -v swiftlint >/dev/null 2>&1; then\n  echo \"warning: SwiftLint not installed. Download from https://github.com/realm/SwiftLint\"\n  exit 0\nfi\n\n# 3. Validate config file\nif [ -z \"$SWIFTLINT_CONFIG_FILE\" ]; then\n  echo \"warning: SWIFTLINT_CONFIG_FILE not set. Skipping SwiftLint.\"\n  exit 0\nfi\n\nif [ ! -f \"$SWIFTLINT_CONFIG_FILE\" ]; then\n  echo \"warning: SwiftLint config '$SWIFTLINT_CONFIG_FILE' not found. Skipping.\"\n  exit 0\nfi\n\n# 4. Run SwiftLint\necho \"🔍 Running SwiftLint using config: $SWIFTLINT_CONFIG_FILE\"\nswiftlint lint --no-cache --config \"$SWIFTLINT_CONFIG_FILE\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AFF3EAC12F3CAC3A00C6F08E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */,
+				AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */,
+				AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */,
+				AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */,
+				AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */,
+				AFF3EB2E2F3CACB100C6F08E /* TitleStyles.swift in Sources */,
+				AFF3EB312F3CACB100C6F08E /* AppBackgroundStyle.swift in Sources */,
+				AFF3EB322F3CACB100C6F08E /* AppTypography.swift in Sources */,
+				AF56EF032F3D0A4900E49C58 /* ViewConfig.swift in Sources */,
+				AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */,
+				AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */,
+				AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */,
+				AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */,
+				AF56EF132F3DFC9800E49C58 /* CornerRadiusModifier.swift in Sources */,
+				AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */,
+				AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */,
+				AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */,
+				AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */,
+				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
+				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
+				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,
+				AFF3EB362F3CACB100C6F08E /* BrowserJetDarkTheme.swift in Sources */,
+				AFF3EB372F3CACB100C6F08E /* LauncherView.swift in Sources */,
+				AF56EEED2F3CC4B700E49C58 /* TextFieldStyles.swift in Sources */,
+				AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */,
+				AFF3EB382F3CACB100C6F08E /* AppLogger.swift in Sources */,
+				AF56EEEF2F3CC94100E49C58 /* LauncherSearchField.swift in Sources */,
+				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
+				AF56EF0E2F3DF85000E49C58 /* CornerRadius.swift in Sources */,
+				AF56EF102F3DFC8400E49C58 /* CustomWidth.swift in Sources */,
+				AF56EF192F3E027000E49C58 /* AppConfiguration+Environment.swift in Sources */,
+				AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */,
+				AFF3EB3C2F3CACB100C6F08E /* AppTheme.swift in Sources */,
+				AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */,
+				AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */,
+				AF56EF072F3DEE3100E49C58 /* BrowserJetAppButton.swift in Sources */,
+				AF56EEFB2F3CFA8E00E49C58 /* BrowserJetDivider.swift in Sources */,
+				AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */,
+				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,
+				AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */,
+				AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */,
+				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
+				AF56EF002F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift in Sources */,
+				AF56EF1B2F3E02C900E49C58 /* BrowserJet.swift in Sources */,
+				AFF3EAC92F3CAC3A00C6F08E /* BrowserJetApp.swift in Sources */,
+				AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */,
+				AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */,
+				AF56EF052F3D0A7C00E49C58 /* BrowserJetViewConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AFF3EACF2F3CAC3C00C6F08E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AFF3EAD02F3CAC3C00C6F08E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		AFF3EAD22F3CAC3C00C6F08E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BrowserJet/BrowserJet.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BrowserJet/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.EBA.BrowserJet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AFF3EAD32F3CAC3C00C6F08E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BrowserJet/BrowserJet.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BrowserJet/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.EBA.BrowserJet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AFF3EAC02F3CAC3A00C6F08E /* Build configuration list for PBXProject "BrowserJet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AFF3EACF2F3CAC3C00C6F08E /* Debug */,
+				AFF3EAD02F3CAC3C00C6F08E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AFF3EAD12F3CAC3C00C6F08E /* Build configuration list for PBXNativeTarget "BrowserJet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AFF3EAD22F3CAC3C00C6F08E /* Debug */,
+				AFF3EAD32F3CAC3C00C6F08E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AFF3EABD2F3CAC3A00C6F08E /* Project object */;
+}

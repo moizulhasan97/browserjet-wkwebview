@@ -14,14 +14,6 @@ jobs:
   build:
     runs-on: macos-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        scheme:
-          - App-Development
-          - App-Staging
-          - App-Production
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,25 +24,25 @@ jobs:
       - name: Resolve Swift Packages
         run: |
           xcodebuild \
-            -project browserjet-wkwebview.xcodeproj \
-            -scheme "${{ matrix.scheme }}" \
+            -project BrowserJet.xcodeproj \
+            -scheme BrowserJet \
             -resolvePackageDependencies
 
       - name: Build (Debug)
         run: |
           xcodebuild \
-            -project browserjet-wkwebview.xcodeproj \
-            -scheme "${{ matrix.scheme }}" \
+            -project BrowserJet.xcodeproj \
+            -scheme BrowserJet \
             -configuration Debug \
             -sdk macosx \
             -destination 'platform=macOS' \
             clean build \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: Run SwiftLint (non-blocking for now)
+      - name: Run SwiftLint
         run: |
           if command -v swiftlint >/dev/null; then
-            swiftlint lint --config .swiftlint.yml || true
+            swiftlint lint --config .swiftlint.yml
           else
-            echo "SwiftLint not installed"
+            echo "SwiftLint not installed, skipping..."
           fi
