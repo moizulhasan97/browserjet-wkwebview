@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CornerRadiusModifier: ViewModifier {
     let cornerRadius: CornerRadius
-    
+
     func body(content: Content) -> some View {
         switch cornerRadius {
         case .fixed(let radius):

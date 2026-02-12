@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct CardContainer<Content: View>: View {
-    
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
     private let padding: CGFloat
     private let content: Content
-    
+
     init(
         padding: CGFloat = DesignMetrics.cardPadding,
         @ViewBuilder content: () -> Content
@@ -20,7 +20,7 @@ struct CardContainer<Content: View>: View {
         self.padding = padding
         self.content = content()
     }
-    
+
     var body: some View {
         content
             .padding(padding)
@@ -45,7 +45,6 @@ struct CardContainer<Content: View>: View {
                 x: 0,
                 y: DesignMetrics.cardShadowY
             )
-        
     }
 }
 
@@ -54,7 +53,7 @@ struct CardContainer<Content: View>: View {
         VStack {
             Text("Hello world")
                 .foregroundStyle(.orange)
-            
+
             Text("Hello world")
                 .foregroundStyle(.black)
         }

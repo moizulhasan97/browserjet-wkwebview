@@ -11,11 +11,11 @@ struct BrowserJetViewConfig: ViewConfig {
     var viewCornerRadius: CGFloat {
         8
     }
-    
+
     var textFieldCornerRadius: CGFloat {
         8
     }
-    
+
     var buttonCornerRadius: CornerRadius {
         .capsule
     }

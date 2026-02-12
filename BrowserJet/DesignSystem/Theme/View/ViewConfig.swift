@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ViewConfig {
-    var viewCornerRadius : CGFloat { get }
+    var viewCornerRadius: CGFloat { get }
     var textFieldCornerRadius: CGFloat { get }
     var buttonCornerRadius: CornerRadius { get }
 }

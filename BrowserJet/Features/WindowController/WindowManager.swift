@@ -10,14 +10,13 @@ import AppKit
 import SwiftUI
 
 final class WindowManager {
-    
     static let shared = WindowManager()
-    
+
     private var launcherWC: (any ShowableWindowController)?
-    //private var proxyWC: BrowserJetWindowController<ProxyManagerView>?
-    
+    // private var proxyWC: BrowserJetWindowController<ProxyManagerView>?
+
     private init() {}
-    
+
     func showLauncher(
         themeManager: ThemeManager,
         sessionManager: SessionManager,
@@ -27,7 +26,7 @@ final class WindowManager {
             let rootView = LauncherRootView(appConfiguration: appConfiguration)
                 .environmentObject(themeManager)
                 .environmentObject(sessionManager) // TODO: - Check we if need this
-            
+
             launcherWC = BrowserJetWindowController(
                 content: rootView,
                 size: NSSize(width: 500, height: 639),
@@ -38,7 +37,7 @@ final class WindowManager {
         }
         launcherWC?.show()
     }
-    
+
     //    func showProxyManager() {
     //        if proxyWC == nil {
     //            proxyWC = BrowserJetWindowController(

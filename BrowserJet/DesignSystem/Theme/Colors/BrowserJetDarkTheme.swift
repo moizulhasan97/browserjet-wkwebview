@@ -17,19 +17,19 @@ struct BrowserJetDarkTheme: AppTheme {
     var divider: Color = .red
     var accentPressed: Color = .red
     var accentDisabled: Color = .red
-    
-    let appBackground: Color = Color(nsColor: .windowBackgroundColor)
-    let surfaceElevated: Color = Color(nsColor: .controlBackgroundColor)
-    let webBackground: Color = Color(nsColor: .textBackgroundColor)
-    
-    let textPrimary: Color = .primary
-    let textFieldSecondary: Color = .secondary
-    
-    let border: Color = Color(nsColor: .separatorColor)
-    
-    let accent: Color = .blue
-    let destructive: Color = .red
-    
-    let badgeBackground: Color = Color.white.opacity(0.12)
-    let badgeText: Color = .white
+
+    let appBackground = Color(nsColor: .windowBackgroundColor)
+    let surfaceElevated = Color(nsColor: .controlBackgroundColor)
+    let webBackground = Color(nsColor: .textBackgroundColor)
+
+    let textPrimary = Color.primary
+    let textFieldSecondary = Color.secondary
+
+    let border = Color(nsColor: .separatorColor)
+
+    let accent = Color.blue
+    let destructive = Color.red
+
+    let badgeBackground = Color.white.opacity(0.12)
+    let badgeText = Color.white
 }

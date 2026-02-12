@@ -6,8 +6,8 @@
 //
 
 enum RegionType: String,
-                 CaseIterable,
-                 Hashable {
+    CaseIterable,
+    Hashable {
     case uk = "UK"
     case us = "US"
     case ca = "CA"

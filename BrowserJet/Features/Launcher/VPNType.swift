@@ -6,8 +6,8 @@
 //
 
 enum VPNType: String,
-              CaseIterable,
-              Hashable {
+    CaseIterable,
+    Hashable {
     case vpn1 = "VPN 1"
     case vpn2 = "VPN 2"
     case vpn3 = "VPN 3"

@@ -9,7 +9,7 @@ struct DesignSystem {
     let typography: any AppTypography
     let viewConfig: any ViewConfig
     let buttonStyle: any ButtonStyleProvider
-    
+
     init(
         typography: any AppTypography = TextTypography(),
         viewConfig: any ViewConfig = BrowserJetViewConfig(),

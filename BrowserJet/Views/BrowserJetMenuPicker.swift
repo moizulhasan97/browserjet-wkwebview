@@ -9,15 +9,16 @@
 import SwiftUI
 
 struct BrowserJetMenuPicker<Option: Hashable>: View {
-    
-    @Environment(\.appTheme) private var theme
-    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.isEnabled)
+    private var isEnabled
     @Binding private var selection: Option
     private let options: [Option]
     private let isDisabled: Bool
     private let width: CGFloat?
     private let label: (Option) -> String
-    
+
     init(
         options: [Option],
         selection: Binding<Option>,
@@ -31,14 +32,13 @@ struct BrowserJetMenuPicker<Option: Hashable>: View {
         self.width = width
         self.label = label
     }
-    
+
     var body: some View {
         Picker("", selection: $selection) {
             ForEach(options, id: \.self) { option in
                 Text(label(option))
                     .foregroundStyle(theme.textPrimary)
                     .tag(option)
-                
             }
         }
         .labelsHidden()
@@ -54,7 +54,6 @@ struct BrowserJetMenuPicker<Option: Hashable>: View {
         options: VPNType.allCases,
         selection: .constant(.vpn1),
         isDisabled: false,
-        width: 110,
-        label: { $0.rawValue }
-    )
+        width: 110
+    ) { $0.rawValue }
 }

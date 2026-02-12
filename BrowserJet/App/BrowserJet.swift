@@ -9,16 +9,15 @@ import SwiftUI
 
 @main
 struct BrowserJet: App {
-    
     private let themeManager = ThemeManager()
     private let sessionManager = SessionManager()
-    
+
     var body: some Scene {
         Settings {
             EmptyView()
         }
     }
-    
+
     init() {
         let themeManager = self.themeManager
         let sessionManager = self.sessionManager

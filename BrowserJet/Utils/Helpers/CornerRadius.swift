@@ -10,7 +10,7 @@ import SwiftUI
 enum CornerRadius {
     case fixed(CGFloat)
     case capsule
-    
+
     func apply(to view: some View) -> some View {
         switch self {
         case .fixed(let radius):

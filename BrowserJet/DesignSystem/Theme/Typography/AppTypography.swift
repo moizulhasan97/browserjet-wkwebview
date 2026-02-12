@@ -8,13 +8,13 @@
 protocol AppTypography {
     // Title
     var title1: Typography { get } // Welcome Gabriel
-    
+
     // Body
     var textBody1: Typography { get } // No Of Tabs
-    
+
     // UI / Buttons
     var button: Typography { get }
-    
+
     // textfield (launcher)
     var launcherField: Typography { get }
 }

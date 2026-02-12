@@ -29,7 +29,6 @@ enum AppEnvironment: String {
 }
 
 enum AppLogger {
-
     // MARK: - Configuration
 
     private static var minimumLogLevel: LogLevel {
@@ -46,36 +45,46 @@ enum AppLogger {
 
     // MARK: - Public API
 
-    static func debug(_ message: @autoclosure () -> String,
-                      file: String = #fileID,
-                      line: Int = #line) {
+    static func debug(
+        _ message: @autoclosure () -> String,
+        file: String = #fileID,
+        line: Int = #line
+    ) {
         log(.debug, message(), file: file, line: line)
     }
 
-    static func info(_ message: @autoclosure () -> String,
-                     file: String = #fileID,
-                     line: Int = #line) {
+    static func info(
+        _ message: @autoclosure () -> String,
+        file: String = #fileID,
+        line: Int = #line
+    ) {
         log(.info, message(), file: file, line: line)
     }
 
-    static func warning(_ message: @autoclosure () -> String,
-                        file: String = #fileID,
-                        line: Int = #line) {
+    static func warning(
+        _ message: @autoclosure () -> String,
+        file: String = #fileID,
+        line: Int = #line
+    ) {
         log(.warning, message(), file: file, line: line)
     }
 
-    static func error(_ message: @autoclosure () -> String,
-                      file: String = #fileID,
-                      line: Int = #line) {
+    static func error(
+        _ message: @autoclosure () -> String,
+        file: String = #fileID,
+        line: Int = #line
+    ) {
         log(.error, message(), file: file, line: line)
     }
 
     // MARK: - Core logger
 
-    private static func log(_ level: LogLevel,
-                            _ message: String,
-                            file: String,
-                            line: Int) {
+    private static func log(
+        _ level: LogLevel,
+        _ message: String,
+        file: String,
+        line: Int
+    ) {
         guard level >= minimumLogLevel else { return }
 
         let composed = "\(level.emoji) [\(file):\(line)] \(message)"

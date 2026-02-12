@@ -21,7 +21,6 @@ struct ThemeButtonStyleProvider: ButtonStyleProvider {
         typography: any AppTypography,
         viewConfig: any ViewConfig
     ) -> any BrowserJetButtonStyleProtocol {
-        
         switch type {
         case .primaryLarge:
             BrowserJetPrimaryLargeButtonStyle(
@@ -43,19 +42,18 @@ struct ThemeButtonStyleProvider: ButtonStyleProvider {
 }
 
 struct BrowserJetPrimaryLargeButtonStyle: BrowserJetButtonStyleProtocol {
-    
     let cornerRadius: CornerRadius
     let borderColor: Color
     let borderDisabledColor: Color
     let borderHighlightedColor: Color
     let borderWidth: CGFloat
-    
+
     let font: Font
-    
+
     let backgroundColor: Color
     let backgroundDisabledColor: Color
     let backgroundHighlightedColor: Color
-    
+
     let titleColor: Color
     let titleDisabledColor: Color
     let titleHighlightedColor: Color

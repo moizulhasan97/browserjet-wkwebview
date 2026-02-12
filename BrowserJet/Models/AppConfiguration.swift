@@ -11,7 +11,7 @@ struct AppConfiguration {
     let defaultSearchAddress: String
     private let sessionIsolationMode: SessionIsolationMode
     let launcherTabPresets: [LauncherTabPreset]
-    
+
     init(
         isUserAgentEnabled: Bool,
         proxyType: ProxyType,
@@ -35,7 +35,7 @@ extension AppConfiguration {
         sessionIsolationMode: .perTab,
         launcherTabPresets: LauncherTabPreset.allCases
     )
-    
+
     static let development = AppConfiguration(
         isUserAgentEnabled: false,
         proxyType: .proxy,

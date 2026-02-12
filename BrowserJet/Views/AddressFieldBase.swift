@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct AddressFieldBase<Left: View, Right: View>: View {
-    
-    @Environment(\.appTheme) private var theme
-    @Environment(\.designSystem) private var designSystem
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.designSystem)
+    private var designSystem
     @FocusState private var isFocused: Bool
     private let text: Binding<String>
     private let placeholder: String
@@ -19,7 +20,7 @@ struct AddressFieldBase<Left: View, Right: View>: View {
     private let fontColor: Color
     private let left: Left
     private let right: Right
-    
+
     init(
         text: Binding<String>,
         placeholder: String,
@@ -37,13 +38,13 @@ struct AddressFieldBase<Left: View, Right: View>: View {
         self.left = left()
         self.right = right()
     }
-    
+
     var body: some View {
         HStack {
             left // icon
-            
+
             textField
-            
+
             right
         }
         .padding(.horizontal)
@@ -55,7 +56,8 @@ struct AddressFieldBase<Left: View, Right: View>: View {
                 style: .continuous
             )
             .stroke(
-                isFocused ? theme.accent.opacity(0.35) : theme.strokeControl, lineWidth: DesignMetrics.controlStrokeWidth
+                isFocused ? theme.accent.opacity(0.35) : theme.strokeControl,
+                lineWidth: DesignMetrics.controlStrokeWidth
             )
         )
         .clipShape(
@@ -65,7 +67,7 @@ struct AddressFieldBase<Left: View, Right: View>: View {
             )
         )
     }
-    
+
     private var textField: some View {
         ZStack(alignment: .leading) {
             if text.wrappedValue.isEmpty {
@@ -90,8 +92,6 @@ struct AddressFieldBase<Left: View, Right: View>: View {
         font: .system(size: 16, weight: .light),
         fontColor: .gray
     ) {
-        
     } right: {
-        
     }
 }

@@ -8,17 +8,17 @@
 import SwiftUI
 
 // MARK: - Constants
-fileprivate enum LauncherViewConstants {
+private enum LauncherViewConstants {
     // Layout
     static let mainStackSpacing: CGFloat = 14.0
     static let launchButtonTopPadding: CGFloat = 10.0
-    
+
     // Cards
     static let cardInterItemSpacing: CGFloat = 20.0
-    
+
     // Buttons
     static let launchButtonHeight: CGFloat = 48.0
-    
+
     // Pickers
     static let noOfTabsPickerWidth: CGFloat = 50.0
     static let vpnPickerWidth: CGFloat = 70.0
@@ -26,28 +26,30 @@ fileprivate enum LauncherViewConstants {
 }
 
 struct LauncherView: View {
-    
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
-    @Environment(\.appConfiguration) private var config
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.appConfiguration)
+    private var config
     @StateObject private var viewModel: LauncherViewModel
-    
+
     private var presets: [LauncherTabPreset] {
         config.launcherTabPresets
     }
-    private typealias K = LauncherViewConstants
-    
+    private typealias Constants = LauncherViewConstants
+
     init() {
         _viewModel = StateObject(wrappedValue: LauncherViewModel(defaultSearchAddress: ""))
     }
-    
+
     var body: some View {
-        VStack (spacing: K.mainStackSpacing) {
+        VStack(spacing: Constants.mainStackSpacing) {
             userNameLogo
             searchBarCard
             vpnCard
             launchButton
-                .padding(.top, K.launchButtonTopPadding)
+                .padding(.top, Constants.launchButtonTopPadding)
         }
         .padding()
         .background(AppBackgroundStyle.browserJetGradient.makeView())
@@ -58,18 +60,18 @@ struct LauncherView: View {
             viewModel.onAppear()
         }
     }
-    
+
     private func getLabel(_ text: String) -> some View {
         Text(text)
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.textBody1.font)
     }
-    
+
     private var launchButton: some View {
         BrowserJetAppButton(
             title: "Launch",
             type: .primaryLarge,
-            height: K.launchButtonHeight,
+            height: Constants.launchButtonHeight,
             isDisabled: !viewModel.settings.isValid,
             action: viewModel.didTapLaunch
         )
@@ -85,13 +87,13 @@ private extension LauncherView {
             logoDescription
         }
     }
-    
+
     private var username: some View {
         Text("Welcome Gabriel")
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.title1.font)
     }
-    
+
     private var logoDescription: some View {
         Image(.icLogoDescription)
     }
@@ -106,16 +108,16 @@ private extension LauncherView {
             set: { viewModel.updateAddress($0) }
         ))
     }
-    
+
     private var searchBarCard: some View {
         CardContainer {
-            VStack (spacing: K.cardInterItemSpacing) {
+            VStack(spacing: Constants.cardInterItemSpacing) {
                 addressField
                 numberOfTabs
             }
         }
     }
-    
+
     private var numberOfTabs: some View {
         HStack {
             getLabel("No. of Tabs")
@@ -127,16 +129,15 @@ private extension LauncherView {
                     set: { viewModel.updateNumberOfTabs($0) }
                 ),
                 isDisabled: false,
-                width: K.noOfTabsPickerWidth,
-                label: { $0.rawValue.toString }
-            )
+                width: Constants.noOfTabsPickerWidth
+            ) { $0.rawValue.toString }
         }
     }
-    
+
     // Bottom card
     private var vpnCard: some View {
         CardContainer {
-            VStack (spacing: K.cardInterItemSpacing) {
+            VStack(spacing: Constants.cardInterItemSpacing) {
                 HStack {
                     premiumProxyToggle
                     Spacer()
@@ -153,7 +154,7 @@ private extension LauncherView {
             }
         }
     }
-    
+
     private var premiumProxyToggle: some View {
         HStack {
             GlassPillToggle(
@@ -166,7 +167,7 @@ private extension LauncherView {
             getLabel("Premium Proxy")
         }
     }
-    
+
     private var manageMyProxyButton: some View {
         Button {
             viewModel.didTapManageMyProxy()
@@ -180,7 +181,7 @@ private extension LauncherView {
         }
         .buttonStyle(.plain)
     }
-    
+
     private var vpnToggle: some View {
         GlassPillToggle(
             isOn: Binding(
@@ -190,7 +191,7 @@ private extension LauncherView {
             isDisabled: false
         )
     }
-    
+
     private var selectVPN: some View {
         HStack {
             getLabel("Select VPN")
@@ -202,12 +203,11 @@ private extension LauncherView {
                     set: { viewModel.updateSelectedVPN($0) }
                 ),
                 isDisabled: !viewModel.settings.areVPNControlsEnabled,
-                width: K.vpnPickerWidth,
-                label: { $0.rawValue }
-            )
+                width: Constants.vpnPickerWidth
+            ) { $0.rawValue }
         }
     }
-    
+
     private var selectionRegion: some View {
         HStack {
             getLabel("Select Region")
@@ -219,9 +219,8 @@ private extension LauncherView {
                     set: { viewModel.updateSelectedRegion($0) }
                 ),
                 isDisabled: !viewModel.settings.areRegionControlsEnabled,
-                width: K.regionPickerWidth,
-                label: { $0.rawValue }
-            )
+                width: Constants.regionPickerWidth
+            ) { $0.rawValue }
         }
     }
 }

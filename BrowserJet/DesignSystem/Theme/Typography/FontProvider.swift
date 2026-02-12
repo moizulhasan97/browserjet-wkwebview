@@ -18,7 +18,7 @@ enum FontProvider {
         case bold         // 700
         case heavy        // 800
         case black        // 900
-        
+
         var swiftWeight: Font.Weight {
             switch self {
             case .ultraLight: return .ultraLight
@@ -33,9 +33,9 @@ enum FontProvider {
             }
         }
     }
-    
+
     case sfPro(weight: Weight)
-    
+
     func font(size: CGFloat) -> Font {
         switch self {
         case .sfPro(let weight):

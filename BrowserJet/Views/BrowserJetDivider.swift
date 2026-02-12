@@ -9,15 +9,16 @@
 import SwiftUI
 
 struct BrowserJetDivider: View {
-    
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
-    
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
+
     private let thickness: CGFloat
     private let opacity: Double
     private let horizontalPadding: CGFloat
     private let verticalPadding: CGFloat
-    
+
     init(
         thickness: CGFloat = 1,
         opacity: Double = 0.15,
@@ -29,7 +30,7 @@ struct BrowserJetDivider: View {
         self.horizontalPadding = horizontalPadding
         self.verticalPadding = verticalPadding
     }
-    
+
     var body: some View {
         Rectangle()
             .fill(theme.divider)

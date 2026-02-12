@@ -26,7 +26,7 @@ extension AppBackgroundStyle {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            
+
         case .solid(let color):
             color
         }

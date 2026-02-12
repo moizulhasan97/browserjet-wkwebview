@@ -9,11 +9,12 @@
 import SwiftUI
 
 struct LauncherRootView: View {
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorScheme)
+    private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
-    
+
     let appConfiguration: AppConfiguration
-    
+
     var body: some View {
         LauncherView()
             .environment(\.appTheme, themeManager.theme(for: colorScheme))

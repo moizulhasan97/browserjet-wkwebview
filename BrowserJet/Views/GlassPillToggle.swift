@@ -11,7 +11,7 @@ struct GlassPillToggle: View {
     @Binding var isOn: Bool
     var isDisabled: Bool = false
     let outerCircleColor: Color = .C_6_C_6_C_6
-    
+
     var body: some View {
         Capsule(style: .continuous)
             .fill(backgroundColor)
@@ -36,7 +36,7 @@ struct GlassPillToggle: View {
                 }
             }
     }
-    
+
     // Computed properties for colors based on state
     private var backgroundColor: Color {
         if isDisabled {
@@ -44,21 +44,21 @@ struct GlassPillToggle: View {
         }
         return isOn ? ._0088_FF : outerCircleColor.opacity(0.2)
     }
-    
+
     private var strokeColor: Color {
         if isDisabled {
             return Color.black.opacity(0.09)  // Lighter stroke when disabled
         }
         return Color.black.opacity(0.06)
     }
-    
+
     private var circleColor: Color {
         if isDisabled {
             return Color.white.opacity(0.7)  // More transparent when disabled
         }
         return Color.white
     }
-    
+
     private var shadowColor: Color {
         if isDisabled {
             return Color.black.opacity(0.06)  // Lighter shadow when disabled
@@ -75,7 +75,6 @@ struct GlassPillToggle: View {
             isOn: .constant(false),
             isDisabled: true
         )
-        
     }
     .padding()
     .background(Color(nsColor: .windowBackgroundColor))
