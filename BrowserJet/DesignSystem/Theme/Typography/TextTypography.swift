@@ -9,4 +9,5 @@ struct TextTypography: AppTypography {
     let title1: any Typography = Title1()
     let textBody1: any Typography = TextBody1()
     let button: any Typography = Button1()
+    let launcherField: any Typography = LauncherField()
 }

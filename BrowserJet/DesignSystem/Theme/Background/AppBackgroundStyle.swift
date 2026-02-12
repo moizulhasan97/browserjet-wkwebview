@@ -9,26 +9,26 @@ import SwiftUI
 
 enum AppBackgroundStyle {
     case browserJetGradient
-        case solid(Color)
+    case solid(Color)
 }
 
 extension AppBackgroundStyle {
     @ViewBuilder
-       func makeView() -> some View {
-           switch self {
-           case .browserJetGradient:
-               LinearGradient(
-                   colors: [
-                       Color(red: 0.74, green: 0.91, blue: 1.0),
-                       Color(red: 0.47, green: 0.78, blue: 1.0),
-                       Color(red: 0.12, green: 0.56, blue: 0.98)
-                   ],
-                   startPoint: .topLeading,
-                   endPoint: .bottomTrailing
-               )
-
-           case .solid(let color):
-               color
-           }
-       }
+    func makeView() -> some View {
+        switch self {
+        case .browserJetGradient:
+            LinearGradient(
+                colors: [
+                    Color(red: 0.92, green: 0.96, blue: 1.00),
+                    Color(red: 0.84, green: 0.92, blue: 1.00),
+                    Color(red: 0.76, green: 0.88, blue: 1.00)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            
+        case .solid(let color):
+            color
+        }
+    }
 }

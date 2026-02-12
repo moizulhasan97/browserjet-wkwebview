@@ -7,31 +7,29 @@
 
 import SwiftUI
 
-/// Light-only for now. Dark can come later from designer.
+
 struct BrowserJetLightTheme: AppTheme {
-    // MARK: - Surfaces (Glass)
-    let surfaceCard: Color = Color.white.opacity(0.55)
-    let surfaceCardOverlay: Color = Color.white.opacity(0.18)
-
-    let surfaceControl: Color = Color.white.opacity(0.75)
-    let surfaceControlOverlay: Color = Color.white.opacity(0.22)
-
+    // MARK: - Surfaces (Solid)
+    let surfaceCard: Color = Color.white.opacity(0.96)
+    let surfaceCardOverlay: Color = Color.clear
+    
+    let surfaceControl: Color = Color(red: 0.96, green: 0.98, blue: 0.99)
+    let surfaceControlOverlay: Color = Color.clear
+    
     // MARK: - Text
     let textPrimary: Color = Color.black.opacity(0.88)
-    let textSecondary: Color = Color.black.opacity(0.60)
-    let textMuted: Color = Color.black.opacity(0.42)
-    let textOnAccent: Color = Color.white.opacity(0.95)
-
+    let textFieldSecondary: Color = ._4_C_4_C_4_C
+    
     // MARK: - Strokes / Dividers
-    let strokeCard: Color = Color.white.opacity(0.55)
-    let strokeControl: Color = Color.black.opacity(0.10)
+    let strokeCard: Color = Color(red: 0.90, green: 0.94, blue: 0.97)
+    let strokeControl: Color = Color(red: 0.85, green: 0.90, blue: 0.96)
     let divider: Color = Color.black.opacity(0.08)
-
+    
     // MARK: - Actions
-    let accent: Color = Color(red: 0.21, green: 0.52, blue: 0.96)          // launch button blue
+    let accent: Color = Color(red: 0.21, green: 0.52, blue: 0.96)
     let accentPressed: Color = Color(red: 0.15, green: 0.44, blue: 0.90)
     let accentDisabled: Color = Color(red: 0.21, green: 0.52, blue: 0.96).opacity(0.40)
-
+    
     // MARK: - Badge
     let badgeBackground: Color = Color.black.opacity(0.70)
     let badgeText: Color = Color.white
