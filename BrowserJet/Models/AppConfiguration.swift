@@ -31,7 +31,7 @@ extension AppConfiguration {
     static let production: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
-            proxyType: .proxy,
+            proxyType: .local,
             defaultSearchAddress: "https://www.google.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases
@@ -43,7 +43,7 @@ extension AppConfiguration {
     static let development: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
-            proxyType: .proxy,
+            proxyType: .local,
             defaultSearchAddress: "https://www.google.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases

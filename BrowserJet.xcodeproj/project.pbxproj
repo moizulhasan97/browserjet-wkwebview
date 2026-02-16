@@ -38,6 +38,21 @@
 		AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF2B2F3E131C00E49C58 /* RegionType.swift */; };
 		AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF2E2F3E327100E49C58 /* LauncherSettings.swift */; };
 		AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */; };
+		AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5AC2F43713000B33610 /* BrowserMenuBuilder.swift */; };
+		AF69F5B02F43716300B33610 /* BrowserToolbarAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5AF2F43716300B33610 /* BrowserToolbarAction.swift */; };
+		AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5B42F43729700B33610 /* BrowserTabItem.swift */; };
+		AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5B82F4372CB00B33610 /* BrowserConnectionBadgeView.swift */; };
+		AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5BB2F43744200B33610 /* BrowserTabPillView.swift */; };
+		AF69F5C12F43747800B33610 /* BrowserToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5C02F43747800B33610 /* BrowserToolbarView.swift */; };
+		AF69F5C32F43748800B33610 /* BrowserChromeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5C22F43748800B33610 /* BrowserChromeView.swift */; };
+		AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5C42F43751E00B33610 /* SessionIsolationMode.swift */; };
+		AF69F5C92F43763B00B33610 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5C82F43763B00B33610 /* SessionManager.swift */; };
+		AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CC2F4376A200B33610 /* AuthProxy.swift */; };
+		AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CE2F4376C000B33610 /* TabModel.swift */; };
+		AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */; };
+		AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */; };
+		AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */; };
+		AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */; };
 		AFF3EAC92F3CAC3A00C6F08E /* BrowserJetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */; };
 		AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */; };
 		AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */; };
@@ -93,6 +108,21 @@
 		AF56EF2B2F3E131C00E49C58 /* RegionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionType.swift; sourceTree = "<group>"; };
 		AF56EF2E2F3E327100E49C58 /* LauncherSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherSettings.swift; sourceTree = "<group>"; };
 		AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherViewModel.swift; sourceTree = "<group>"; };
+		AF69F5AC2F43713000B33610 /* BrowserMenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMenuBuilder.swift; sourceTree = "<group>"; };
+		AF69F5AF2F43716300B33610 /* BrowserToolbarAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarAction.swift; sourceTree = "<group>"; };
+		AF69F5B42F43729700B33610 /* BrowserTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabItem.swift; sourceTree = "<group>"; };
+		AF69F5B82F4372CB00B33610 /* BrowserConnectionBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserConnectionBadgeView.swift; sourceTree = "<group>"; };
+		AF69F5BB2F43744200B33610 /* BrowserTabPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabPillView.swift; sourceTree = "<group>"; };
+		AF69F5C02F43747800B33610 /* BrowserToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarView.swift; sourceTree = "<group>"; };
+		AF69F5C22F43748800B33610 /* BrowserChromeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserChromeView.swift; sourceTree = "<group>"; };
+		AF69F5C42F43751E00B33610 /* SessionIsolationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionIsolationMode.swift; sourceTree = "<group>"; };
+		AF69F5C82F43763B00B33610 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		AF69F5CC2F4376A200B33610 /* AuthProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProxy.swift; sourceTree = "<group>"; };
+		AF69F5CE2F4376C000B33610 /* TabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabModel.swift; sourceTree = "<group>"; };
+		AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWindowState.swift; sourceTree = "<group>"; };
+		AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyConfigurationFactory.swift; sourceTree = "<group>"; };
+		AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabsStripView.swift; sourceTree = "<group>"; };
+		AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyType.swift; sourceTree = "<group>"; };
 		AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetApp.swift; sourceTree = "<group>"; };
 		AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -177,6 +207,8 @@
 		AF56EF0C2F3DF84A00E49C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				AF69F5C42F43751E00B33610 /* SessionIsolationMode.swift */,
+				AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */,
 				AF56EF0F2F3DFC8300E49C58 /* CustomWidth.swift */,
 				AF56EF0D2F3DF84F00E49C58 /* CornerRadius.swift */,
 			);
@@ -233,6 +265,137 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		AF69F5AA2F4370BF00B33610 /* Browser */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5D02F437A3100B33610 /* State */,
+				AF69F5B62F4372BA00B33610 /* Components */,
+				AF69F5B12F4371FC00B33610 /* Views */,
+				AF69F5AE2F43715B00B33610 /* Models */,
+				AF69F5AB2F43712700B33610 /* Menu */,
+			);
+			path = Browser;
+			sourceTree = "<group>";
+		};
+		AF69F5AB2F43712700B33610 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5AC2F43713000B33610 /* BrowserMenuBuilder.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		AF69F5AE2F43715B00B33610 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5B42F43729700B33610 /* BrowserTabItem.swift */,
+				AF69F5AF2F43716300B33610 /* BrowserToolbarAction.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AF69F5B12F4371FC00B33610 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5D72F437B6A00B33610 /* TopBar */,
+				AF69F5C22F43748800B33610 /* BrowserChromeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AF69F5B62F4372BA00B33610 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5BF2F43747000B33610 /* Toolbar */,
+				AF69F5BA2F43743E00B33610 /* TabStrip */,
+				AF69F5B72F4372C100B33610 /* Connection */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		AF69F5B72F4372C100B33610 /* Connection */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5B82F4372CB00B33610 /* BrowserConnectionBadgeView.swift */,
+			);
+			path = Connection;
+			sourceTree = "<group>";
+		};
+		AF69F5BA2F43743E00B33610 /* TabStrip */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5BB2F43744200B33610 /* BrowserTabPillView.swift */,
+			);
+			path = TabStrip;
+			sourceTree = "<group>";
+		};
+		AF69F5BF2F43747000B33610 /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5C02F43747800B33610 /* BrowserToolbarView.swift */,
+			);
+			path = Toolbar;
+			sourceTree = "<group>";
+		};
+		AF69F5C62F43762400B33610 /* AppFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5D32F437A8200B33610 /* Networking */,
+				AF69F5C72F43762B00B33610 /* Session */,
+			);
+			path = AppFoundation;
+			sourceTree = "<group>";
+		};
+		AF69F5C72F43762B00B33610 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5C82F43763B00B33610 /* SessionManager.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
+		AF69F5CB2F43769200B33610 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5CE2F4376C000B33610 /* TabModel.swift */,
+				AF69F5CC2F4376A200B33610 /* AuthProxy.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AF69F5D02F437A3100B33610 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */,
+			);
+			path = State;
+			sourceTree = "<group>";
+		};
+		AF69F5D32F437A8200B33610 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5D42F437A8C00B33610 /* Proxy */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		AF69F5D42F437A8C00B33610 /* Proxy */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */,
+				AF69F5CB2F43769200B33610 /* Model */,
+			);
+			path = Proxy;
+			sourceTree = "<group>";
+		};
+		AF69F5D72F437B6A00B33610 /* TopBar */ = {
+			isa = PBXGroup;
+			children = (
+				AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */,
+			);
+			path = TopBar;
+			sourceTree = "<group>";
+		};
 		AFF3EABC2F3CAC3A00C6F08E = {
 			isa = PBXGroup;
 			children = (
@@ -252,6 +415,7 @@
 		AFF3EAD42F3CAC4800C6F08E /* BrowserJet */ = {
 			isa = PBXGroup;
 			children = (
+				AF69F5C62F43762400B33610 /* AppFoundation */,
 				AF56EF282F3E0F1400E49C58 /* Info.plist */,
 				AF56EF172F3E026800E49C58 /* App */,
 				AF56EF142F3E01E100E49C58 /* Models */,
@@ -293,6 +457,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AF69F5AA2F4370BF00B33610 /* Browser */,
 				AF56EF212F3E07A700E49C58 /* WindowController */,
 				AFF3EB092F3CACB100C6F08E /* Launcher */,
 			);
@@ -517,9 +682,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */,
+				AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */,
 				AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */,
 				AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */,
+				AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */,
 				AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */,
+				AF69F5C92F43763B00B33610 /* SessionManager.swift in Sources */,
 				AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */,
 				AFF3EB2E2F3CACB100C6F08E /* TitleStyles.swift in Sources */,
 				AFF3EB312F3CACB100C6F08E /* AppBackgroundStyle.swift in Sources */,
@@ -534,6 +702,10 @@
 				AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */,
 				AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */,
 				AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */,
+				AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */,
+				AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */,
+				AF69F5C32F43748800B33610 /* BrowserChromeView.swift in Sources */,
+				AF69F5B02F43716300B33610 /* BrowserToolbarAction.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
 				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,
@@ -544,6 +716,10 @@
 				AFF3EB382F3CACB100C6F08E /* AppLogger.swift in Sources */,
 				AF56EEEF2F3CC94100E49C58 /* LauncherSearchField.swift in Sources */,
 				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
+				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
+				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,
+				AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */,
+				AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */,
 				AF56EF0E2F3DF85000E49C58 /* CornerRadius.swift in Sources */,
 				AF56EF102F3DFC8400E49C58 /* CustomWidth.swift in Sources */,
 				AF56EF192F3E027000E49C58 /* AppConfiguration+Environment.swift in Sources */,
@@ -557,12 +733,16 @@
 				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,
 				AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */,
 				AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */,
+				AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */,
+				AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */,
 				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
 				AF56EF002F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift in Sources */,
 				AF56EF1B2F3E02C900E49C58 /* BrowserJet.swift in Sources */,
 				AFF3EAC92F3CAC3A00C6F08E /* BrowserJetApp.swift in Sources */,
 				AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */,
 				AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */,
+				AF69F5C12F43747800B33610 /* BrowserToolbarView.swift in Sources */,
+				AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */,
 				AF56EF052F3D0A7C00E49C58 /* BrowserJetViewConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

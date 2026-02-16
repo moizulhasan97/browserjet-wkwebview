@@ -45,16 +45,4 @@ final class WindowManager {
         launcherWC?.show()
         AppLogger.info("Launcher window shown")
     }
-
-    //    func showProxyManager() {
-    //        if proxyWC == nil {
-    //            proxyWC = BrowserJetWindowController(
-    //                content: ProxyManagerView(),
-    //                size: NSSize(width: 900, height: 600),
-    //                resizable: false,
-    //                cornerRadius: 18
-    //            )
-    //        }
-    //        proxyWC?.show()
-    //    }
 }
