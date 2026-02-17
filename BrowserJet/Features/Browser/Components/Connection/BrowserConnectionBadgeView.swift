@@ -10,32 +10,35 @@ import SwiftUI
 
 struct BrowserConnectionBadgeView: View {
     @Environment(\.appTheme) private var theme
-
-    let title: String
-
+    @Environment(\.designSystem) private var designSystem
+    
+    let proxyType: ProxyType
+    
     var body: some View {
-        Text(title)
-            .font(.system(size: 12, weight: .semibold))
-            .foregroundStyle(theme.textPrimary)
+        Text(proxyType.statusTitle)
+            .font(designSystem.typography.heading1.font)
+            .foregroundStyle(textColor)
+            .frame(height: 34.0)
             .padding(.horizontal, 10)
-            .padding(.vertical, 6)
             .background(theme.surfaceControl)
             .overlay(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                RoundedRectangle(cornerRadius: 4, style: .continuous)
                     .stroke(theme.strokeControl, lineWidth: 1)
             )
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-            .accessibilityLabel("Connection: \(title)")
+    }
+    
+    private var textColor: Color {
+        proxyType.isLocal ? theme.textPrimary : theme.vpnConnection
     }
 }
 
 #Preview {
     VStack(spacing: 12) {
-        BrowserConnectionBadgeView(title: "Local")
-        BrowserConnectionBadgeView(title: "On VPN")
-        BrowserConnectionBadgeView(title: "Premium")
-        BrowserConnectionBadgeView(title: "Custom")
+        BrowserConnectionBadgeView(proxyType: .local)
+        BrowserConnectionBadgeView(proxyType: .proxy(.custom))
     }
     .padding()
     .environment(\.appTheme, BrowserJetLightTheme())
+    .environment(\.designSystem, DesignSystem())
 }

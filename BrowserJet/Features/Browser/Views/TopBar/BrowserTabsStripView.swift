@@ -8,28 +8,28 @@
 import SwiftUI
 
 struct BrowserTabsStripView: View {
-
+    
     @ObservedObject var state: BrowserWindowState
     @EnvironmentObject private var sessionManager: SessionManager
     @Environment(\.appTheme) private var theme
-
+    
     // MARK: - Layout Constants
     private let horizontalPadding: CGFloat = 10
     private let spacing: CGFloat = 8
     private let minTabWidth: CGFloat = 110
     private let maxTabWidth: CGFloat = 220
-    private let addButtonWidth: CGFloat = 110
+    //private let addButtonWidth: CGFloat = 110
     private let stripHeight: CGFloat = 42
-
+    
     var body: some View {
         GeometryReader { geometry in
-            let availableWidth = max(0, geometry.size.width - addButtonWidth - (horizontalPadding * 2))
+            let availableWidth = max(0, geometry.size.width - (horizontalPadding * 2))
             let tabCount = max(state.tabItems.count, 1)
-
+            
             // Chrome-ish: tabs shrink as count increases
             let rawWidth = availableWidth / CGFloat(tabCount)
             let calculatedWidth = min(maxTabWidth, max(minTabWidth, rawWidth))
-
+            
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: spacing) {
@@ -61,8 +61,6 @@ struct BrowserTabsStripView: View {
                                 removal: .opacity.combined(with: .scale(scale: 0.92))
                             ))
                         }
-
-                        addTabButton(proxy: proxy)
                     }
                     .padding(.horizontal, horizontalPadding)
                     .padding(.vertical, 6)
@@ -79,36 +77,36 @@ struct BrowserTabsStripView: View {
             alignment: .bottom
         )
     }
+}
 
-    // MARK: - Add Tab Button
-    private func addTabButton(proxy: ScrollViewProxy) -> some View {
-        Button {
-            guard sessionManager.canCreateSession else { return }
-            withAnimation(.easeInOut(duration: 0.22)) {
-                state.addTab()
-            }
-            if let id = state.selectedTabID {
-                withAnimation(.easeInOut(duration: 0.22)) {
-                    proxy.scrollTo(id, anchor: .center)
-                }
-            }
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: "plus")
-                Text("New Session")
-                    .font(.system(size: 12, weight: .semibold))
-            }
-            .foregroundStyle(theme.textPrimary)
-            .frame(width: addButtonWidth, height: 30)
-            .background(theme.surfaceControl)
-            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(theme.strokeControl.opacity(0.7), lineWidth: 1)
-            )
-        }
-        .buttonStyle(.plain)
-        .disabled(!sessionManager.canCreateSession)
-        .opacity(sessionManager.canCreateSession ? 1 : 0.5)
-    }
+#Preview("BrowserTabsStripView") {
+    let themeManager = ThemeManager()
+    let sessionManager = SessionManager(maxSessions: 10)
+    
+    // Fake a BrowserWindowState with a few tabs
+    let state = BrowserWindowState(
+        proxyType: .local,
+        isolationMode: .perTab,
+        proxies: [],
+        userAgent: nil,
+        sessionManager: sessionManager
+    )
+    
+    // Add a few more tabs so we can see shrinking behavior
+    state.addTab(url: URL(string: "https://www.google.com")!)
+    state.addTab(url: URL(string: "https://seatgeek.com")!)
+    state.addTab(url: URL(string: "https://ticketmaster.com")!)
+    state.addTab(url: URL(string: "https://apple.com")!)
+    state.addTab(url: URL(string: "https://github.com")!)
+    
+    // Optional: set a selected tab
+    state.selectedTabID = state.tabs.first?.id
+    
+    return BrowserTabsStripView(state: state)
+        .frame(width: 900, height: 42)
+        .padding()
+        .background(AppBackgroundStyle.browserJetGradient.makeView())
+        .environmentObject(sessionManager)
+        .environmentObject(themeManager)
+        .environment(\.appTheme, BrowserJetLightTheme())
 }

@@ -11,14 +11,14 @@ import SwiftUI
 
 final class WindowManager {
     static let shared = WindowManager()
-
+    
     private var launcherWC: (any ShowableWindowController)?
-    // private var proxyWC: BrowserJetWindowController<ProxyManagerView>?
-
+    private var browserWC: (any ShowableWindowController)?
+    
     private init() {
         AppLogger.debug("WindowManager singleton initialized")
     }
-
+    
     func showLauncher(
         themeManager: ThemeManager,
         sessionManager: SessionManager,
@@ -29,8 +29,8 @@ final class WindowManager {
             AppLogger.info("Creating new launcher window - Size: 500x639, Corner radius: 18")
             let rootView = LauncherRootView(appConfiguration: appConfiguration)
                 .environmentObject(themeManager)
-                .environmentObject(sessionManager) // TODO: - Check we if need this
-
+                .environmentObject(sessionManager)
+            
             launcherWC = BrowserJetWindowController(
                 content: rootView,
                 size: NSSize(width: 500, height: 639),
@@ -39,10 +39,57 @@ final class WindowManager {
                 cornerRadius: 18
             )
             AppLogger.debug("Launcher window controller created successfully")
-        } else {
-            AppLogger.debug("Launcher window already exists, reusing existing window")
         }
         launcherWC?.show()
         AppLogger.info("Launcher window shown")
+    }
+    
+    @MainActor
+    func showBrowser(
+        request: LaunchRequest,
+        proxies: [AuthProxy],
+        themeManager: ThemeManager,
+        sessionManager: SessionManager,
+        appConfiguration: AppConfiguration
+    ) {
+        AppLogger.info("showBrowser called - tabs: \(request.numberOfTabs), proxy: \(request.proxyType.statusTitle), address: \(request.address)")
+        
+        let state = BrowserWindowState(
+            proxyType: request.proxyType,
+            isolationMode: request.isolationMode,
+            proxies: proxies,
+            userAgent: request.userAgent,
+            sessionManager: sessionManager
+        )
+        
+        // Load the initial URL into the first tab
+        let initialURL = URL(string: request.address) ?? URL(string: appConfiguration.defaultSearchAddress)!
+        state.selectedTab?.load(initialURL)
+        
+        // Create remaining tabs (first tab already exists)
+        if request.numberOfTabs > 1 {
+            for _ in 1..<request.numberOfTabs {
+                state.addTab(url: initialURL)
+            }
+        }
+        
+        let rootView = BrowserRootView(
+            state: state,
+            menu: .default
+        )
+            .environmentObject(themeManager)
+            .environmentObject(sessionManager)
+        //.environment(\.appTheme, themeManager.theme(for: .light)) // optional; your LauncherRootView already does this
+        
+        browserWC = BrowserJetWindowController(
+            content: rootView,
+            size: NSSize(width: 1200, height: 780),
+            titleBarHidden: false,
+            resizable: true,
+            cornerRadius: 18
+        )
+        
+        browserWC?.show()
+        AppLogger.info("Browser window shown")
     }
 }

@@ -5,6 +5,8 @@
 //  Created by Moiz Ul Hasan on 13/02/2026.
 //
 
+import Foundation
+
 enum ProxyType: Hashable {
     case local
     case proxy(ProxySource)
@@ -17,6 +19,11 @@ enum ProxySource: Hashable {
 }
 
 extension ProxyType {
+    var isLocal: Bool {
+        if case .local = self { return true }
+        return false
+    }
+    
     /// For browser window UI.
     var statusTitle: String {
         switch self {
@@ -29,7 +36,7 @@ extension ProxyType {
             }
         }
     }
-
+    
     /// Temporary resolver (until API + storage exists).
     /// - For now: local => nil, proxy => pick proxies[slot] else first proxy.
     func resolveAuthProxy(slot: Int, proxies: [AuthProxy]) -> AuthProxy? {
