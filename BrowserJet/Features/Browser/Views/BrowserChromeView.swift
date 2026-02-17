@@ -62,7 +62,9 @@ struct BrowserChromeView: View {
         isolationMode: .perTab,
         proxies: [],
         userAgent: nil,
-        sessionManager: sessionManager
+        sessionManager: sessionManager,
+        initialURL: URL(string: "https://google.com")!,
+        initialTabCount: 2
     )
     
     // Add some sample tabs for preview
@@ -130,7 +132,9 @@ struct BrowserChromeView: View {
         isolationMode: request.isolationMode,
         proxies: proxies,
         userAgent: request.userAgent,
-        sessionManager: sessionManager
+        sessionManager: sessionManager,
+        initialURL: URL(string: "https://www.google.com")!,
+        initialTabCount: 2
     )
     
     return BrowserWindowView(state: state, request: request)

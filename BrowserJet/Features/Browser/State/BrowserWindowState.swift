@@ -11,39 +11,44 @@ import WebKit
 
 @MainActor
 final class BrowserWindowState: ObservableObject {
-
+    
     let proxyType: ProxyType
     let userAgent: String?
     private let isolationMode: SessionIsolationMode
     private let sessionManager: SessionManager
     let proxies: [AuthProxy]
-
+    
     // For `.perWindow`: share a single store and a single proxy (if needed)
     private lazy var perWindowProxy: AuthProxy? = {
         proxyType.resolveAuthProxy(slot: 0, proxies: proxies)
     }()
-
+    
     private lazy var perWindowDataStore: WKWebsiteDataStore = {
         makeNewDataStore(proxy: perWindowProxy)
     }()
-
+    
     @Published var tabs: [TabModel] = []
     @Published var selectedTabID: UUID?
-
+    
     init(
         proxyType: ProxyType,
         isolationMode: SessionIsolationMode,
         proxies: [AuthProxy],
         userAgent: String?,
-        sessionManager: SessionManager
+        sessionManager: SessionManager,
+        initialURL: URL,
+        initialTabCount: Int
     ) {
         self.proxyType = proxyType
         self.isolationMode = isolationMode
         self.proxies = proxies
         self.userAgent = userAgent
         self.sessionManager = sessionManager
-
-        addTab()
+        
+        let count = max(1, initialTabCount)
+        for _ in 0..<count {
+            addTab(url: initialURL)
+        }
     }
     
     var tabItems: [BrowserTabItem] {
@@ -56,17 +61,17 @@ final class BrowserWindowState: ObservableObject {
             )
         }
     }
-
+    
     private func makeNewDataStore(proxy: AuthProxy?) -> WKWebsiteDataStore {
         let store = WKWebsiteDataStore(forIdentifier: UUID())
-
+        
         // NOTE: only apply proxy when we actually have one.
         if let proxy {
             store.proxyConfigurations = [ProxyConfigurationFactory.makeProxyConfiguration(proxy)]
         }
         return store
     }
-
+    
     private func dataStoreForNewTab(proxy: AuthProxy?) -> WKWebsiteDataStore {
         switch isolationMode {
         case .perWindow:
@@ -75,10 +80,10 @@ final class BrowserWindowState: ObservableObject {
             return makeNewDataStore(proxy: proxy)
         }
     }
-
+    
     func addTab(url: URL = URL(string: "about:blank")!) {
         guard let slot = sessionManager.acquireSessionSlot() else { return }
-
+        
         let tabProxy: AuthProxy?
         switch isolationMode {
         case .perWindow:
@@ -86,43 +91,46 @@ final class BrowserWindowState: ObservableObject {
         case .perTab:
             tabProxy = proxyType.resolveAuthProxy(slot: slot, proxies: proxies)
         }
-
+        
         let store = dataStoreForNewTab(proxy: tabProxy)
-
+        
         let tab = TabModel(
             sessionSlot: slot,
             startURL: url,
             dataStore: store,
             proxyType: proxyType,
             authProxy: tabProxy,
-            userAgent: userAgent
+            userAgent: userAgent,
+            onOpenInNewTab: { [weak self] newURL in
+                self?.addTab(url: newURL)
+            }
         )
-
+        
         tabs.append(tab)
         selectedTabID = tab.id
     }
-
+    
     func closeTab(_ tabID: UUID) {
         guard let index = tabs.firstIndex(where: { $0.id == tabID }) else { return }
         let slot = tabs[index].sessionSlot
         tabs.remove(at: index)
         sessionManager.releaseSessionSlot(slot)
-
+        
         if tabs.isEmpty {
             addTab()
         } else {
             selectedTabID = tabs.last?.id
         }
     }
-
+    
     func select(_ tab: TabModel) {
         selectedTabID = tab.id
     }
-
+    
     var selectedTab: TabModel? {
         tabs.first(where: { $0.id == selectedTabID })
     }
-
+    
     /// For UI label: Local / On VPN / Premium / Custom
     var connectionStatusTitle: String {
         proxyType.statusTitle

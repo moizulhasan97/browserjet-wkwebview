@@ -15,7 +15,7 @@ import SwiftUI
 //
 //    let appConfiguration: AppConfiguration
 //    let request: LaunchRequest
-//    let proxies: [AuthProxy] 
+//    let proxies: [AuthProxy]
 //
 //    var body: some View {
 //        let _ = AppLogger.debug("BrowserRootView body computed - ColorScheme: \(colorScheme == .dark ? "dark" : "light")")
@@ -112,7 +112,9 @@ struct BrowserRootView: View {
         isolationMode: .perTab,
         proxies: [],
         userAgent: nil,
-        sessionManager: sessionManager
+        sessionManager: sessionManager,
+        initialURL: URL(string: "https://www.google.com")!,
+        initialTabCount: 2
     )
     
     state.addTab()

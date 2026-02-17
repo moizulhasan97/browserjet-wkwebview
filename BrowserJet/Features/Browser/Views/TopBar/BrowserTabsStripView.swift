@@ -89,7 +89,9 @@ struct BrowserTabsStripView: View {
         isolationMode: .perTab,
         proxies: [],
         userAgent: nil,
-        sessionManager: sessionManager
+        sessionManager: sessionManager,
+        initialURL: URL(string: "https://www.google.com")!,
+        initialTabCount: 2
     )
     
     // Add a few more tabs so we can see shrinking behavior

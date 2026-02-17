@@ -54,24 +54,18 @@ final class WindowManager {
     ) {
         AppLogger.info("showBrowser called - tabs: \(request.numberOfTabs), proxy: \(request.proxyType.statusTitle), address: \(request.address)")
         
+        let initialURL = URL(string: request.address)
+        ?? URL(string: appConfiguration.defaultSearchAddress)!
+        
         let state = BrowserWindowState(
             proxyType: request.proxyType,
             isolationMode: request.isolationMode,
             proxies: proxies,
             userAgent: request.userAgent,
-            sessionManager: sessionManager
+            sessionManager: sessionManager,
+            initialURL: initialURL,
+            initialTabCount: request.numberOfTabs
         )
-        
-        // Load the initial URL into the first tab
-        let initialURL = URL(string: request.address) ?? URL(string: appConfiguration.defaultSearchAddress)!
-        state.selectedTab?.load(initialURL)
-        
-        // Create remaining tabs (first tab already exists)
-        if request.numberOfTabs > 1 {
-            for _ in 1..<request.numberOfTabs {
-                state.addTab(url: initialURL)
-            }
-        }
         
         let rootView = BrowserRootView(
             state: state,
@@ -79,7 +73,6 @@ final class WindowManager {
         )
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
-        //.environment(\.appTheme, themeManager.theme(for: .light)) // optional; your LauncherRootView already does this
         
         browserWC = BrowserJetWindowController(
             content: rootView,
