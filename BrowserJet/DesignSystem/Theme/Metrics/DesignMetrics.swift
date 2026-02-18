@@ -31,5 +31,6 @@ enum DesignMetrics {
 
     // MARK: - Control sizing
     static let launcherAddressFieldHeight: CGFloat = 42 // launcher search bar
+    static let browserAddressFieldHeight: CGFloat = 34 // launcher search bar
     static let buttonHeight: CGFloat = 64
 }

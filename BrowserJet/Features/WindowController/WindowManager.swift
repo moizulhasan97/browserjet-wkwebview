@@ -13,7 +13,7 @@ final class WindowManager {
     static let shared = WindowManager()
 
     private var launcherWC: (any ShowableWindowController)?
-    // private var proxyWC: BrowserJetWindowController<ProxyManagerView>?
+    private var browserWC: (any ShowableWindowController)?
 
     private init() {
         AppLogger.debug("WindowManager singleton initialized")
@@ -29,7 +29,7 @@ final class WindowManager {
             AppLogger.info("Creating new launcher window - Size: 500x639, Corner radius: 18")
             let rootView = LauncherRootView(appConfiguration: appConfiguration)
                 .environmentObject(themeManager)
-                .environmentObject(sessionManager) // TODO: - Check we if need this
+                .environmentObject(sessionManager)
 
             launcherWC = BrowserJetWindowController(
                 content: rootView,
@@ -39,22 +39,54 @@ final class WindowManager {
                 cornerRadius: 18
             )
             AppLogger.debug("Launcher window controller created successfully")
-        } else {
-            AppLogger.debug("Launcher window already exists, reusing existing window")
         }
         launcherWC?.show()
         AppLogger.info("Launcher window shown")
     }
 
-    //    func showProxyManager() {
-    //        if proxyWC == nil {
-    //            proxyWC = BrowserJetWindowController(
-    //                content: ProxyManagerView(),
-    //                size: NSSize(width: 900, height: 600),
-    //                resizable: false,
-    //                cornerRadius: 18
-    //            )
-    //        }
-    //        proxyWC?.show()
-    //    }
+    @MainActor
+    func showBrowser(
+        request: LaunchRequest,
+        proxies: [AuthProxy],
+        themeManager: ThemeManager,
+        sessionManager: SessionManager,
+        appConfiguration: AppConfiguration
+    ) {
+        // swiftlint:disable:next line_length
+        AppLogger.info("showBrowser called - tabs: \(request.numberOfTabs), proxy: \(request.proxyType.statusTitle), address: \(request.address)")
+
+        let initialURL = URL(string: request.address)
+            ?? URL(string: appConfiguration.defaultSearchAddress)
+            ?? URL(string: "https://www.google.com")
+            ?? URL(string: "about:blank")
+            ?? URL(string: "about:blank")!
+
+        let state = BrowserWindowState(
+            proxyType: request.proxyType,
+            isolationMode: request.isolationMode,
+            proxies: proxies,
+            userAgent: request.userAgent,
+            sessionManager: sessionManager,
+            initialURL: initialURL,
+            initialTabCount: request.numberOfTabs
+        )
+
+        let rootView = BrowserRootView(
+            state: state,
+            menu: .default
+        )
+            .environmentObject(themeManager)
+            .environmentObject(sessionManager)
+
+        browserWC = BrowserJetWindowController(
+            content: rootView,
+            size: NSSize(width: 1200, height: 780),
+            titleBarHidden: false,
+            resizable: true,
+            cornerRadius: 18
+        )
+
+        browserWC?.show()
+        AppLogger.info("Browser window shown")
+    }
 }

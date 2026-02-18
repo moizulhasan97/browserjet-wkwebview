@@ -24,6 +24,7 @@ struct BrowserJetDarkTheme: AppTheme {
 
     let textPrimary = Color.primary
     let textFieldSecondary = Color.secondary
+    let vpnConnection: Color = ._12_BF_2_C
 
     let border = Color(nsColor: .separatorColor)
 

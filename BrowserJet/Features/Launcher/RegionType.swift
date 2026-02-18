@@ -8,7 +8,10 @@
 enum RegionType: String,
     CaseIterable,
     Hashable {
+    // swiftlint:disable:next identifier_name
     case uk = "UK"
+    // swiftlint:disable:next identifier_name
     case us = "US"
+    // swiftlint:disable:next identifier_name
     case ca = "CA"
 }

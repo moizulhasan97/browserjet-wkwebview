@@ -16,7 +16,7 @@ struct LauncherRootView: View {
     let appConfiguration: AppConfiguration
 
     var body: some View {
-        let _ = AppLogger.debug("LauncherRootView body computed - ColorScheme: \(colorScheme == .dark ? "dark" : "light")")
+        AppLogger.debug("LauncherRootView body computed - ColorScheme: \(colorScheme == .dark ? "dark" : "light")")
         return LauncherView()
             .environment(\.appTheme, themeManager.theme(for: colorScheme))
             .environment(\.appConfiguration, appConfiguration)

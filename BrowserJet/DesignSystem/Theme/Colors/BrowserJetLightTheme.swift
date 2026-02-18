@@ -19,6 +19,7 @@ struct BrowserJetLightTheme: AppTheme {
     // MARK: - Text
     let textPrimary: Color = .black.opacity(0.88)
     let textFieldSecondary: Color = ._4_C_4_C_4_C
+    let vpnConnection: Color = ._12_BF_2_C
 
     // MARK: - Strokes / Dividers
     let strokeCard: Color = .init(red: 0.90, green: 0.94, blue: 0.97)

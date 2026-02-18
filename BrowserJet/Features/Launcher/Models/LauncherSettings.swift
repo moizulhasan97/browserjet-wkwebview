@@ -35,3 +35,19 @@ struct LauncherSettings {
         isVPNEnabled && !isPremiumProxyEnabled
     }
 }
+
+extension LauncherSettings {
+    func resolvedProxyType() -> ProxyType {
+        guard isVPNEnabled else { return .local }
+
+        if isPremiumProxyEnabled, let region = selectedRegion, let vpn = selectedVPN {
+            return .proxy(.premium(vpn: vpn, region: region))
+        }
+
+        if let vpn = selectedVPN, let region = selectedRegion {
+            return .proxy(.builtIn(vpn: vpn, region: region))
+        }
+
+        return .local
+    }
+}

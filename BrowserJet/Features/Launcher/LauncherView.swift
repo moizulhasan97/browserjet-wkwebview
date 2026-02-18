@@ -28,12 +28,15 @@ private enum LauncherViewConstants {
 struct LauncherView: View {
     @Environment(\.designSystem)
     private var designSystem
+
     @Environment(\.appTheme)
     private var theme
+
     @Environment(\.appConfiguration)
     private var config
     @StateObject private var viewModel: LauncherViewModel
-
+    @EnvironmentObject private var themeManager: ThemeManager
+    @EnvironmentObject private var sessionManager: SessionManager
     private var presets: [LauncherTabPreset] {
         config.launcherTabPresets
     }
@@ -74,7 +77,19 @@ struct LauncherView: View {
             type: .primaryLarge,
             height: Constants.launchButtonHeight,
             isDisabled: !viewModel.settings.isValid,
-            action: viewModel.didTapLaunch
+            action: showBrowser
+        )
+    }
+
+    private func showBrowser() {
+        let request = viewModel.settings.makeLaunchRequest(appConfiguration: config)
+        let proxies: [AuthProxy] = []
+        WindowManager.shared.showBrowser(
+            request: request,
+            proxies: proxies,
+            themeManager: themeManager,
+            sessionManager: sessionManager,
+            appConfiguration: config
         )
     }
 }

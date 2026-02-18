@@ -18,6 +18,8 @@ protocol AppTheme {
     var textPrimary: Color { get }
     // TextFields
     var textFieldSecondary: Color { get }
+    // Connection
+    var vpnConnection: Color { get }
 
     // MARK: - Strokes / Dividers
     var strokeCard: Color { get }

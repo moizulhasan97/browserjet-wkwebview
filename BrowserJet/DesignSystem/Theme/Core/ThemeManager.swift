@@ -45,6 +45,7 @@ final class ThemeManager: ObservableObject {
         case .dark:
             resolvedTheme = "dark"
         }
+        // swiftlint:disable:next line_length
         AppLogger.debug("Theme resolved: \(resolvedTheme) (system colorScheme: \(colorScheme == .dark ? "dark" : "light"))")
         switch mode {
         case .system:

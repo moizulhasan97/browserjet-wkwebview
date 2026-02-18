@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 12/02/2026.
 //
 
-import SwiftUI
 import Combine
 
 @MainActor
@@ -74,15 +73,14 @@ final class LauncherViewModel: ObservableObject {
         settings.selectedRegion = region
     }
 
-    func didTapLaunch() {
-        guard settings.isValid else {
-            AppLogger.warning("Launch attempted with invalid settings - Address: '\(settings.address)'")
-            return
-        }
-        // swiftlint:disable:next line_length
-        AppLogger.info("Launch button tapped - Address: '\(settings.address)', Tabs: \(settings.numberOfTabs.rawValue), VPN: \(settings.isVPNEnabled), Premium Proxy: \(settings.isPremiumProxyEnabled), VPN Type: \(settings.selectedVPN?.rawValue ?? "none"), Region: \(settings.selectedRegion?.rawValue ?? "none")")
-        // TODO: Implement launch logic
-    }
+    //    func didTapLaunch() {
+    //        guard settings.isValid else {
+    //            AppLogger.warning("Launch attempted with invalid settings - Address: '\(settings.address)'")
+    //            return
+    //        }
+    //        AppLogger.info("Launch button tapped - Address: '\(settings.address)', Tabs: \(settings.numberOfTabs.rawValue), VPN: \(settings.isVPNEnabled), Premium Proxy: \(settings.isPremiumProxyEnabled), VPN Type: \(settings.selectedVPN?.rawValue ?? "none"), Region: \(settings.selectedRegion?.rawValue ?? "none")")
+    //        // TODO: Implement launch logic
+    //    }
 
     func didTapManageMyProxy() {
         AppLogger.info("Manage My Proxy button tapped")

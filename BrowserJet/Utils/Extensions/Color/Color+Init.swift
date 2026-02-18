@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+// swiftlint:disable:next blanket_disable_command
 // swiftlint:disable all
 extension Color {
     init(hex: String) {
