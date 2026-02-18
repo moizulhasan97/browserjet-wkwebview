@@ -77,7 +77,11 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         AppLogger.debug("Showing window")
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
-
+        
+        if let window {
+            window.zoom(nil)
+        }
+        
         DispatchQueue.main.async {
             self.window?.makeFirstResponder(nil)
         }
