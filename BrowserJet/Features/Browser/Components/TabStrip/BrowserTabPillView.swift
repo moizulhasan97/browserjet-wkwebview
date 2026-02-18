@@ -11,11 +11,11 @@ import SwiftUI
 // Type eraser for Shape protocol to allow conditional shape returns
 struct AnyShape: Shape {
     private let _path: (CGRect) -> Path
-    
+
     init<S: Shape>(_ shape: S) {
         _path = shape.path(in:)
     }
-    
+
     func path(in rect: CGRect) -> Path {
         _path(rect)
     }
@@ -25,48 +25,48 @@ struct AnyShape: Shape {
 struct SelectedTabShape: Shape {
     var topCornerRadius: CGFloat
     var bottomCornerRadius: CGFloat
-    
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let topRadius = min(topCornerRadius, rect.width / 2, rect.height / 2)
         let bottomRadius = min(bottomCornerRadius, rect.width / 2, rect.height / 2)
-        
+
         // Start from left side, just below top-left corner
         path.move(to: CGPoint(x: rect.minX, y: rect.minY + topRadius))
-        
+
         // Top-left rounded corner
         path.addQuadCurve(
             to: CGPoint(x: rect.minX + topRadius, y: rect.minY),
             control: CGPoint(x: rect.minX, y: rect.minY)
         )
-        
+
         // Top edge
         path.addLine(to: CGPoint(x: rect.maxX - topRadius, y: rect.minY))
-        
+
         // Top-right rounded corner
         path.addQuadCurve(
             to: CGPoint(x: rect.maxX, y: rect.minY + topRadius),
             control: CGPoint(x: rect.maxX, y: rect.minY)
         )
-        
+
         // Right edge (straight down to bottom-right corner)
         path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - bottomRadius))
-        
+
         // Bottom-right rounded corner (for blend effect)
         path.addQuadCurve(
             to: CGPoint(x: rect.maxX - bottomRadius, y: rect.maxY),
             control: CGPoint(x: rect.maxX, y: rect.maxY)
         )
-        
+
         // Bottom edge
         path.addLine(to: CGPoint(x: rect.minX + bottomRadius, y: rect.maxY))
-        
+
         // Bottom-left rounded corner (for blend effect)
         path.addQuadCurve(
             to: CGPoint(x: rect.minX, y: rect.maxY - bottomRadius),
             control: CGPoint(x: rect.minX, y: rect.maxY)
         )
-        
+
         // Left edge (closes the path)
         path.closeSubpath()
         return path
@@ -77,37 +77,37 @@ struct SelectedTabShape: Shape {
 struct SelectedTabBorderShape: Shape {
     var topCornerRadius: CGFloat
     var bottomCornerRadius: CGFloat
-    
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let topRadius = min(topCornerRadius, rect.width / 2, rect.height / 2)
         let bottomRadius = min(bottomCornerRadius, rect.width / 2, rect.height / 2)
         let lineWidth: CGFloat = 0.5
-        
+
         // Start from left side, just below top-left corner
         path.move(to: CGPoint(x: rect.minX, y: rect.minY + topRadius))
-        
+
         // Top-left rounded corner
         path.addQuadCurve(
             to: CGPoint(x: rect.minX + topRadius, y: rect.minY),
             control: CGPoint(x: rect.minX, y: rect.minY)
         )
-        
+
         // Top edge
         path.addLine(to: CGPoint(x: rect.maxX - topRadius, y: rect.minY))
-        
+
         // Top-right rounded corner
         path.addQuadCurve(
             to: CGPoint(x: rect.maxX, y: rect.minY + topRadius),
             control: CGPoint(x: rect.maxX, y: rect.minY)
         )
-        
+
         // Right edge (straight down, but stop before bottom to avoid bottom border)
         path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - bottomRadius - lineWidth))
-        
+
         // Left edge (straight up from bottom, connecting back to start)
         path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY - bottomRadius - lineWidth))
-        
+
         return path
     }
 }
@@ -186,12 +186,12 @@ struct BrowserTabPillView: View {
         }
         return isHovering || isSelected
     }
-    
+
     private var tabClipShape: AnyShape {
         // All tabs use the same rounded rectangle shape
         AnyShape(RoundedRectangle(cornerRadius: pillCornerRadius, style: .continuous))
     }
-    
+
     private var selectedIndicator: some View {
         Group {
             if isSelected {
@@ -217,7 +217,7 @@ struct BrowserTabPillView: View {
     }
 
     // MARK: - Styling
-    
+
     private var titleColor: Color {
         if isSelected {
             return theme.textPrimary.opacity(0.95)
@@ -233,7 +233,7 @@ struct BrowserTabPillView: View {
                 ZStack {
                     // Base glass effect
                     theme.surfaceCard.opacity(0.85)
-                    
+
                     // Subtle gradient overlay for depth
                     LinearGradient(
                         colors: [
@@ -248,7 +248,7 @@ struct BrowserTabPillView: View {
                 // Inactive tabs: subtle background with hover effect
                 ZStack {
                     theme.surfaceCard.opacity(0.4)
-                    
+
                     if isHovering {
                         LinearGradient(
                             colors: [
@@ -264,7 +264,7 @@ struct BrowserTabPillView: View {
             }
         }
     }
-    
+
     private var glowEffect: some View {
         Group {
             if isSelected {
@@ -287,7 +287,7 @@ struct BrowserTabPillView: View {
             }
         }
     }
-    
+
     private var shadowColor: Color {
         if isSelected {
             return theme.accent.opacity(0.12)
@@ -297,7 +297,7 @@ struct BrowserTabPillView: View {
             return .black.opacity(0.04)
         }
     }
-    
+
     private var shadowRadius: CGFloat {
         if isSelected {
             return 8
@@ -307,7 +307,7 @@ struct BrowserTabPillView: View {
             return 2
         }
     }
-    
+
     private var shadowOffset: CGFloat {
         if isSelected {
             return 2
@@ -361,7 +361,7 @@ struct BrowserTabPillView: View {
         .buttonStyle(.plain)
         .accessibilityLabel("Close tab \(tab.title)")
     }
-    
+
     private var closeButtonColor: Color {
         if isSelected {
             return theme.textPrimary.opacity(isHovering ? 0.9 : 0.7)
@@ -369,7 +369,7 @@ struct BrowserTabPillView: View {
             return theme.textPrimary.opacity(isHovering ? 0.8 : 0.6)
         }
     }
-    
+
     private var closeButtonBackground: some View {
         Group {
             if isHovering {

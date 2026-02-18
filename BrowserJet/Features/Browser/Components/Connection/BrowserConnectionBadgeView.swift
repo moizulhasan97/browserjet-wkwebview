@@ -9,11 +9,13 @@
 import SwiftUI
 
 struct BrowserConnectionBadgeView: View {
-    @Environment(\.appTheme) private var theme
-    @Environment(\.designSystem) private var designSystem
-    
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.designSystem)
+    private var designSystem
+
     let proxyType: ProxyType
-    
+
     var body: some View {
         Text(proxyType.statusTitle)
             .font(designSystem.typography.heading1.font)
@@ -27,7 +29,7 @@ struct BrowserConnectionBadgeView: View {
             )
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
-    
+
     private var textColor: Color {
         proxyType.isLocal ? theme.textPrimary : theme.vpnConnection
     }

@@ -21,6 +21,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         resizable: Bool = false,
         cornerRadius: CGFloat = 16
     ) {
+        // swiftlint:disable:next line_length
         AppLogger.debug("Initializing BrowserJetWindowController - Size: \(size.width)x\(size.height), Resizable: \(resizable), CornerRadius: \(cornerRadius)")
         let hosting = NSHostingController(rootView: content)
 
@@ -77,11 +78,11 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         AppLogger.debug("Showing window")
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
-        
+
         if let window {
             window.zoom(nil)
         }
-        
+
         DispatchQueue.main.async {
             self.window?.makeFirstResponder(nil)
         }

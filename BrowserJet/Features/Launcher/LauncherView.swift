@@ -12,13 +12,13 @@ private enum LauncherViewConstants {
     // Layout
     static let mainStackSpacing: CGFloat = 14.0
     static let launchButtonTopPadding: CGFloat = 10.0
-    
+
     // Cards
     static let cardInterItemSpacing: CGFloat = 20.0
-    
+
     // Buttons
     static let launchButtonHeight: CGFloat = 48.0
-    
+
     // Pickers
     static let noOfTabsPickerWidth: CGFloat = 50.0
     static let vpnPickerWidth: CGFloat = 70.0
@@ -28,10 +28,10 @@ private enum LauncherViewConstants {
 struct LauncherView: View {
     @Environment(\.designSystem)
     private var designSystem
-    
+
     @Environment(\.appTheme)
     private var theme
-    
+
     @Environment(\.appConfiguration)
     private var config
     @StateObject private var viewModel: LauncherViewModel
@@ -41,11 +41,11 @@ struct LauncherView: View {
         config.launcherTabPresets
     }
     private typealias Constants = LauncherViewConstants
-    
+
     init() {
         _viewModel = StateObject(wrappedValue: LauncherViewModel(defaultSearchAddress: ""))
     }
-    
+
     var body: some View {
         VStack(spacing: Constants.mainStackSpacing) {
             userNameLogo
@@ -64,13 +64,13 @@ struct LauncherView: View {
             }
         }
     }
-    
+
     private func getLabel(_ text: String) -> some View {
         Text(text)
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.textBody1.font)
     }
-    
+
     private var launchButton: some View {
         BrowserJetAppButton(
             title: "Launch",
@@ -80,7 +80,7 @@ struct LauncherView: View {
             action: showBrowser
         )
     }
-    
+
     private func showBrowser() {
         let request = viewModel.settings.makeLaunchRequest(appConfiguration: config)
         let proxies: [AuthProxy] = []
@@ -103,13 +103,13 @@ private extension LauncherView {
             logoDescription
         }
     }
-    
+
     private var username: some View {
         Text("Welcome Gabriel")
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.title1.font)
     }
-    
+
     private var logoDescription: some View {
         Image(.icLogoDescription)
     }
@@ -124,7 +124,7 @@ private extension LauncherView {
             set: { viewModel.updateAddress($0) }
         ))
     }
-    
+
     private var searchBarCard: some View {
         CardContainer {
             VStack(spacing: Constants.cardInterItemSpacing) {
@@ -133,7 +133,7 @@ private extension LauncherView {
             }
         }
     }
-    
+
     private var numberOfTabs: some View {
         HStack {
             getLabel("No. of Tabs")
@@ -149,7 +149,7 @@ private extension LauncherView {
             ) { $0.rawValue.toString }
         }
     }
-    
+
     // Bottom card
     private var vpnCard: some View {
         CardContainer {
@@ -170,7 +170,7 @@ private extension LauncherView {
             }
         }
     }
-    
+
     private var premiumProxyToggle: some View {
         HStack {
             GlassPillToggle(
@@ -183,7 +183,7 @@ private extension LauncherView {
             getLabel("Premium Proxy")
         }
     }
-    
+
     private var manageMyProxyButton: some View {
         Button {
             viewModel.didTapManageMyProxy()
@@ -197,7 +197,7 @@ private extension LauncherView {
         }
         .buttonStyle(.plain)
     }
-    
+
     private var vpnToggle: some View {
         GlassPillToggle(
             isOn: Binding(
@@ -207,7 +207,7 @@ private extension LauncherView {
             isDisabled: false
         )
     }
-    
+
     private var selectVPN: some View {
         HStack {
             getLabel("Select VPN")
@@ -223,7 +223,7 @@ private extension LauncherView {
             ) { $0.rawValue }
         }
     }
-    
+
     private var selectionRegion: some View {
         HStack {
             getLabel("Select Region")

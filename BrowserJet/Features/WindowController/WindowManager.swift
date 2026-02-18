@@ -11,14 +11,14 @@ import SwiftUI
 
 final class WindowManager {
     static let shared = WindowManager()
-    
+
     private var launcherWC: (any ShowableWindowController)?
     private var browserWC: (any ShowableWindowController)?
-    
+
     private init() {
         AppLogger.debug("WindowManager singleton initialized")
     }
-    
+
     func showLauncher(
         themeManager: ThemeManager,
         sessionManager: SessionManager,
@@ -30,7 +30,7 @@ final class WindowManager {
             let rootView = LauncherRootView(appConfiguration: appConfiguration)
                 .environmentObject(themeManager)
                 .environmentObject(sessionManager)
-            
+
             launcherWC = BrowserJetWindowController(
                 content: rootView,
                 size: NSSize(width: 500, height: 639),
@@ -43,7 +43,7 @@ final class WindowManager {
         launcherWC?.show()
         AppLogger.info("Launcher window shown")
     }
-    
+
     @MainActor
     func showBrowser(
         request: LaunchRequest,
@@ -52,11 +52,13 @@ final class WindowManager {
         sessionManager: SessionManager,
         appConfiguration: AppConfiguration
     ) {
+        // swiftlint:disable:next line_length
         AppLogger.info("showBrowser called - tabs: \(request.numberOfTabs), proxy: \(request.proxyType.statusTitle), address: \(request.address)")
-        
+
         let initialURL = URL(string: request.address)
-        ?? URL(string: appConfiguration.defaultSearchAddress)!
-        
+            ?? URL(string: appConfiguration.defaultSearchAddress)
+            ?? URL(string: "https://www.google.com") ?? URL(string: "about:blank")!
+
         let state = BrowserWindowState(
             proxyType: request.proxyType,
             isolationMode: request.isolationMode,
@@ -66,14 +68,14 @@ final class WindowManager {
             initialURL: initialURL,
             initialTabCount: request.numberOfTabs
         )
-        
+
         let rootView = BrowserRootView(
             state: state,
             menu: .default
         )
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
-        
+
         browserWC = BrowserJetWindowController(
             content: rootView,
             size: NSSize(width: 1200, height: 780),
@@ -81,7 +83,7 @@ final class WindowManager {
             resizable: true,
             cornerRadius: 18
         )
-        
+
         browserWC?.show()
         AppLogger.info("Browser window shown")
     }

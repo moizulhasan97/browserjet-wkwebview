@@ -9,7 +9,8 @@
 import SwiftUI
 
 struct BrowserToolbarView: View {
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
 
     let actions: [BrowserToolbarAction]
     let onAction: (BrowserToolbarAction) -> Void

@@ -29,4 +29,3 @@ enum ProxyConfigurationFactory {
         return config
     }
 }
-

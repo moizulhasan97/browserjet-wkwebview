@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct BrowserTabsStripView: View {
-    
     @ObservedObject var state: BrowserWindowState
     @EnvironmentObject private var sessionManager: SessionManager
     @Environment(\.appTheme) private var theme
-    
+
     @State private var canScrollLeft: Bool = false
     @State private var canScrollRight: Bool = false
     @State private var scrollOffset: CGFloat = 0
-    
+
     // MARK: - Layout Constants
     private let horizontalPadding: CGFloat = 12
     private let spacing: CGFloat = 6
@@ -24,16 +23,16 @@ struct BrowserTabsStripView: View {
     private let maxTabWidth: CGFloat = 240
     private let stripHeight: CGFloat = 44
     private let fadeGradientWidth: CGFloat = 40
-    
+
     var body: some View {
         GeometryReader { geometry in
             let availableWidth = max(0, geometry.size.width - (horizontalPadding * 2))
             let tabCount = max(state.tabItems.count, 1)
-            
+
             // Smart tab sizing: tabs shrink as count increases
             let rawWidth = availableWidth / CGFloat(tabCount)
             let calculatedWidth = min(maxTabWidth, max(minTabWidth, rawWidth))
-            
+
             ZStack(alignment: .leading) {
                 // Main scrollable tab area
                 ScrollViewReader { proxy in
@@ -102,7 +101,7 @@ struct BrowserTabsStripView: View {
                     }
                     .animation(.spring(response: 0.4, dampingFraction: 0.8), value: state.tabItems)
                 }
-                
+
                 // Left fade gradient for overflow
 //                if canScrollLeft {
 //                    LinearGradient(
@@ -165,13 +164,13 @@ struct BrowserTabsStripView: View {
 //                ),
 //            alignment: .bottom
 //        )
-        //.shadow(color: .red, radius: 20, y: 1)
+        // .shadow(color: .red, radius: 20, y: 1)
     }
-    
+
     private func updateScrollIndicators(geometry: GeometryProxy, contentWidth: CGFloat) {
         let scrollViewWidth = geometry.size.width
         let canScroll = contentWidth > scrollViewWidth
-        
+
         withAnimation(.easeOut(duration: 0.2)) {
             canScrollLeft = canScroll && scrollOffset < -horizontalPadding + 10
             canScrollRight = canScroll && (scrollOffset + contentWidth) > (scrollViewWidth - horizontalPadding - 10)
@@ -198,7 +197,7 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
 #Preview("BrowserTabsStripView") {
     let themeManager = ThemeManager()
     let sessionManager = SessionManager(maxSessions: 10)
-    
+
     // Fake a BrowserWindowState with a few tabs
     let state = BrowserWindowState(
         proxyType: .local,
@@ -209,17 +208,17 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
         initialURL: URL(string: "https://www.google.com")!,
         initialTabCount: 2
     )
-    
+
     // Add a few more tabs so we can see shrinking behavior
     state.addTab(url: URL(string: "https://www.google.com")!)
     state.addTab(url: URL(string: "https://seatgeek.com")!)
     state.addTab(url: URL(string: "https://ticketmaster.com")!)
     state.addTab(url: URL(string: "https://apple.com")!)
     state.addTab(url: URL(string: "https://github.com")!)
-    
+
     // Optional: set a selected tab
     state.selectedTabID = state.tabs.first?.id
-    
+
     return BrowserTabsStripView(state: state)
         .frame(width: 900, height: 42)
         .padding()

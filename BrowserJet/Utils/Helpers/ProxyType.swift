@@ -23,7 +23,7 @@ extension ProxyType {
         if case .local = self { return true }
         return false
     }
-    
+
     /// For browser window UI.
     var statusTitle: String {
         switch self {
@@ -36,7 +36,7 @@ extension ProxyType {
             }
         }
     }
-    
+
     /// Temporary resolver (until API + storage exists).
     /// - For now: local => nil, proxy => pick proxies[slot] else first proxy.
     func resolveAuthProxy(slot: Int, proxies: [AuthProxy]) -> AuthProxy? {

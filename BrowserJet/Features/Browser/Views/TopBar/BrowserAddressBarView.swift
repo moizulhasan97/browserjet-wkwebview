@@ -11,26 +11,26 @@ import WebKit
 struct BrowserAddressBarView: View {
     @Environment(\.designSystem) private var designSystem
     @Environment(\.appTheme) private var theme
-    
+
     @ObservedObject var tab: TabModel
-    
+
     private let height: CGFloat = DesignMetrics.browserAddressFieldHeight
-    
+
     @State private var isHovering: Bool = false
     @FocusState private var isFocused: Bool
-    
+
     private var leftIconName: String {
         if let url = tab.webView.url, let scheme = url.scheme?.lowercased() {
             return iconName(forScheme: scheme)
         }
-        
+
         if let typedURL = URL(string: tab.addressText), let scheme = typedURL.scheme?.lowercased() {
             return iconName(forScheme: scheme)
         }
-        
+
         return "globe"
     }
-    
+
     private func iconName(forScheme scheme: String) -> String {
         switch scheme {
         case "https": return "lock.fill"
@@ -38,11 +38,11 @@ struct BrowserAddressBarView: View {
         default:      return "globe"
         }
     }
-    
+
     private var shouldShowClear: Bool {
         isFocused && !tab.addressText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-    
+
     var body: some View {
         AddressFieldBase(
             text: Binding(
@@ -70,15 +70,15 @@ struct BrowserAddressBarView: View {
             tab.load(tab.addressText)
         }
     }
-    
+
     private var leftIcon: some View {
         Image(systemName: leftIconName)
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(theme.textPrimary.opacity(0.8))
             .frame(width: 18, height: 18)
-        //.padding(.leading, 2)
+        // .padding(.leading, 2)
     }
-    
+
     @ViewBuilder
     private var rightClearButton: some View {
         if shouldShowClear {
@@ -96,7 +96,7 @@ struct BrowserAddressBarView: View {
             EmptyView()
         }
     }
-    
+
     private var pillBorder: some View {
         Capsule()
             .stroke(
@@ -116,12 +116,12 @@ struct BrowserAddressBarView: View {
 
 private struct BrowserAddressBarViewPreviewHost: View {
     @StateObject private var tab = MockTabModel()
-    
+
     var body: some View {
         VStack(spacing: 16) {
             BrowserAddressBarView(tab: tab.asTabModel)
                 .frame(maxWidth: 900)
-            
+
             // quick controls to simulate editing
             HStack {
                 Button("Set https") { tab.setAddress("https://www.google.com") }
@@ -138,15 +138,15 @@ private final class MockTabModel: ObservableObject {
     @Published var addressText: String = "https://www.google.com"
     @Published var title: String = "Google"
     @Published var isLoading: Bool = false
-    @Published var favicon: NSImage? = nil
-    
+    @Published var favicon: NSImage?
+
     // Provide a real WKWebView instance (it exists in preview, but may not navigate).
-    let webView: WKWebView = WKWebView()
-    
+    let webView = WKWebView()
+
     func setAddress(_ text: String) {
         addressText = text
     }
-    
+
     var asTabModel: TabModel {
         TabModel.preview(
             addressText: addressText,

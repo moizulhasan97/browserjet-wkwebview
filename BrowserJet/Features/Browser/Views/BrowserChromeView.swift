@@ -9,41 +9,40 @@
 import SwiftUI
 
 struct BrowserChromeView: View {
-    
     @ObservedObject var state: BrowserWindowState
     let menu: BrowserMenuBuilder
     let onToolbarAction: (BrowserToolbarAction) -> Void
-    
+
     @Environment(\.appTheme) private var theme
-    
+
     private var stateBackground: some View {
         // keep it consistent with your chrome background
         Color.clear
     }
-    
+
     var body: some View {
         HStack(spacing: 10) {
             BrowserToolbarView(
                 actions: menu.leading,
                 onAction: onToolbarAction
             )
-            
+
             if let tab = state.selectedTab {
                 BrowserAddressBarView(tab: tab)
                     .background(stateBackground)
                     .frame(maxWidth: .infinity)
             }
-            
+
             BrowserConnectionBadgeView(proxyType: state.proxyType)
-            
+
             BrowserToolbarView(
                 actions: menu.trailing,
                 onAction: onToolbarAction
             )
         }
-        //.padding(.horizontal, 12)
+        // .padding(.horizontal, 12)
         .padding(.vertical, 4)
-        //.background(theme.surfaceCard.opacity(0.65))
+        // .background(theme.surfaceCard.opacity(0.65))
         //        .overlay(
         //            Rectangle()
         //                .frame(height: 1)
@@ -54,9 +53,8 @@ struct BrowserChromeView: View {
 }
 
 #Preview("Browser Chrome – Light") {
-    
     let sessionManager = SessionManager()
-    
+
     let state = BrowserWindowState(
         proxyType: .local,
         isolationMode: .perTab,
@@ -66,7 +64,7 @@ struct BrowserChromeView: View {
         initialURL: URL(string: "https://google.com")!,
         initialTabCount: 2
     )
-    
+
     // Add some sample tabs for preview
     state.tabs = [
         TabModel(
@@ -94,16 +92,15 @@ struct BrowserChromeView: View {
             userAgent: nil
         )
     ]
-    
+
     state.selectedTabID = state.tabs.first?.id
-    
+
     return BrowserChromeView(
         state: state,
-        menu: .default,
-        onToolbarAction: { _ in }
-    )
-    //.frame(width: 900, height: 80)
-    //.padding()
+        menu: .default
+    )        { _ in }
+    // .frame(width: 900, height: 80)
+    // .padding()
     .background(AppBackgroundStyle.browserJetGradient.makeView())
     .environmentObject(sessionManager)
     .environment(\.appTheme, BrowserJetLightTheme())
@@ -112,7 +109,7 @@ struct BrowserChromeView: View {
 #Preview {
     let sessionManager = SessionManager()
     let themeManager = ThemeManager()
-    
+
     // Fake request
     let request = LaunchRequest(
         address: "https://www.google.com",
@@ -121,12 +118,12 @@ struct BrowserChromeView: View {
         isolationMode: .perTab,
         userAgent: nil
     )
-    
+
     // Fake proxies
     let proxies: [AuthProxy] = [
         AuthProxy(host: "127.0.0.1", port: 8080, username: "u", password: "p")
     ]
-    
+
     let state = BrowserWindowState(
         proxyType: request.proxyType,
         isolationMode: request.isolationMode,
@@ -136,11 +133,11 @@ struct BrowserChromeView: View {
         initialURL: URL(string: "https://www.google.com")!,
         initialTabCount: 2
     )
-    
+
     return BrowserWindowView(state: state, request: request)
         .environmentObject(sessionManager)
         .environmentObject(themeManager)
         .environment(\.appTheme, BrowserJetLightTheme())
-    //.padding()
+    // .padding()
         .background(AppBackgroundStyle.browserJetGradient.makeView())
 }

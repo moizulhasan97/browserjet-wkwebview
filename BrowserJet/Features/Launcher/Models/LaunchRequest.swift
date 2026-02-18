@@ -14,7 +14,7 @@ struct LaunchRequest: Hashable {
     let proxyType: ProxyType
     let isolationMode: SessionIsolationMode
     let userAgent: String?
-    
+
     init(
         address: String,
         numberOfTabs: Int,

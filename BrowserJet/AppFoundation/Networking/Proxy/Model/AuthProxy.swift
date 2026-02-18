@@ -24,17 +24,16 @@ struct AuthProxy: Hashable, Identifiable {
 // MARK: - Parsing
 
 extension AuthProxy {
-    
     static func parse(_ raw: String) -> AuthProxy {
-            // format: ip:port:user:pass
-            let parts = raw.split(separator: ":").map(String.init)
-            precondition(parts.count == 4, "Invalid proxy format. Expected ip:port:user:pass")
+        // format: ip:port:user:pass
+        let parts = raw.split(separator: ":").map(String.init)
+        precondition(parts.count == 4, "Invalid proxy format. Expected ip:port:user:pass")
 
-            return AuthProxy(
-                host: parts[0],
-                port: UInt16(parts[1]) ?? 0,
-                username: parts[2],
-                password: parts[3]
-            )
-        }
+        return AuthProxy(
+            host: parts[0],
+            port: UInt16(parts[1]) ?? 0,
+            username: parts[2],
+            password: parts[3]
+        )
+    }
 }

@@ -11,7 +11,7 @@ struct AppConfiguration {
     let defaultSearchAddress: String
     private let sessionIsolationMode: SessionIsolationMode
     let launcherTabPresets: [LauncherTabPreset]
-    
+
     init(
         isUserAgentEnabled: Bool,
         proxyType: ProxyType,
@@ -31,12 +31,12 @@ extension AppConfiguration {
     var sessionIsolationModeValue: SessionIsolationMode {
         sessionIsolationMode
     }
-    
+
     var userAgentValue: String? {
         guard isUserAgentEnabled else { return nil }
         return nil
     }
-    
+
     var defaultProxyTypeValue: ProxyType {
         proxyType
     }
@@ -54,7 +54,7 @@ extension AppConfiguration {
         AppLogger.info("Production configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config
     }()
-    
+
     static let development: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
