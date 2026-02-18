@@ -47,14 +47,21 @@ final class WindowManager {
     @MainActor
     func showBrowser(
         request: LaunchRequest,
-        proxies: [AuthProxy],
         themeManager: ThemeManager,
         sessionManager: SessionManager,
         appConfiguration: AppConfiguration
     ) {
         // swiftlint:disable:next line_length
         AppLogger.info("showBrowser called - tabs: \(request.numberOfTabs), proxy: \(request.proxyType.statusTitle), address: \(request.address)")
-
+        let vpnProvider = VPNProvider(configurations: appConfiguration.vpnConfigurations)
+        let generatedProxies: [AuthProxy]
+            
+        if let vpnID = request.selectedVPN?.rawValue {
+            generatedProxies = vpnProvider.generateProxies(for: vpnID)
+        } else {
+            generatedProxies = []
+        }
+        
         let initialURL = URL(string: request.address)
             ?? URL(string: appConfiguration.defaultSearchAddress)
             ?? URL(string: "https://www.google.com")
@@ -64,7 +71,7 @@ final class WindowManager {
         let state = BrowserWindowState(
             proxyType: request.proxyType,
             isolationMode: request.isolationMode,
-            proxies: proxies,
+            proxies: generatedProxies,
             userAgent: request.userAgent,
             sessionManager: sessionManager,
             initialURL: initialURL,
@@ -85,6 +92,11 @@ final class WindowManager {
             resizable: true,
             cornerRadius: 18
         )
+
+        // Close launcher window before showing browser
+        launcherWC?.close()
+        launcherWC = nil
+        AppLogger.info("Launcher window closed")
 
         browserWC?.show()
         AppLogger.info("Browser window shown")

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */; };
+		AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DE2F4653D300A12964 /* VPNProvider.swift */; };
+		AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */; };
+		AF0A09E32F4653FC00A12964 /* IPGenerationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09E22F4653FB00A12964 /* IPGenerationConfig.swift */; };
 		AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */; };
 		AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE62F3CBB3200E49C58 /* AddressFieldBase.swift */; };
 		AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE82F3CC2D200E49C58 /* DesignSystem.swift */; };
@@ -83,6 +87,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNConfiguration.swift; sourceTree = "<group>"; };
+		AF0A09DE2F4653D300A12964 /* VPNProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNProvider.swift; sourceTree = "<group>"; };
+		AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameGenerator.swift; sourceTree = "<group>"; };
+		AF0A09E22F4653FB00A12964 /* IPGenerationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPGenerationConfig.swift; sourceTree = "<group>"; };
 		AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
 		AF56EEE62F3CBB3200E49C58 /* AddressFieldBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFieldBase.swift; sourceTree = "<group>"; };
 		AF56EEE82F3CC2D200E49C58 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
@@ -172,6 +180,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AF0A09DB2F4653B100A12964 /* VPN */ = {
+			isa = PBXGroup;
+			children = (
+				AF0A09E22F4653FB00A12964 /* IPGenerationConfig.swift */,
+				AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */,
+				AF0A09DE2F4653D300A12964 /* VPNProvider.swift */,
+				AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */,
+			);
+			path = VPN;
+			sourceTree = "<group>";
+		};
 		AF56EEF02F3CCDA100E49C58 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -393,6 +412,7 @@
 		AF69F5D32F437A8200B33610 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				AF0A09DB2F4653B100A12964 /* VPN */,
 				AF69F5D42F437A8C00B33610 /* Proxy */,
 			);
 			path = Networking;
@@ -715,7 +735,9 @@
 				AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */,
 				AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */,
 				AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */,
+				AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */,
 				AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */,
+				AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */,
 				AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */,
 				AF69F5C92F43763B00B33610 /* SessionManager.swift in Sources */,
 				AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */,
@@ -736,6 +758,7 @@
 				AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */,
 				AF69F5C32F43748800B33610 /* BrowserChromeView.swift in Sources */,
 				AF69F5B02F43716300B33610 /* BrowserToolbarAction.swift in Sources */,
+				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
 				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,
@@ -761,6 +784,7 @@
 				AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */,
 				AF56EF072F3DEE3100E49C58 /* BrowserJetAppButton.swift in Sources */,
 				AF56EEFB2F3CFA8E00E49C58 /* BrowserJetDivider.swift in Sources */,
+				AF0A09E32F4653FC00A12964 /* IPGenerationConfig.swift in Sources */,
 				AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */,
 				AF69F5E52F43A3B200B33610 /* BrowserRootView.swift in Sources */,
 				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,

@@ -93,6 +93,15 @@ final class BrowserWindowState: ObservableObject {
             tabProxy = proxyType.resolveAuthProxy(slot: slot, proxies: proxies)
         }
 
+        // Log VPN details for the tab
+        if let proxy = tabProxy {
+            AppLogger.info(
+                "Tab assigned VPN - Slot: \(slot), IP: \(proxy.host), Port: \(proxy.port), Username: \(proxy.username), Password: \(proxy.password)"
+            )
+        } else {
+            AppLogger.info("Tab assigned - Slot: \(slot), Proxy: None (Local connection)")
+        }
+
         let store = dataStoreForNewTab(proxy: tabProxy)
 
         let tab = TabModel(

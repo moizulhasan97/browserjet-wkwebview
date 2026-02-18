@@ -32,8 +32,7 @@ struct LauncherView: View {
     @Environment(\.appTheme)
     private var theme
 
-    @Environment(\.appConfiguration)
-    private var config
+    private let config: AppConfiguration
     @StateObject private var viewModel: LauncherViewModel
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
@@ -42,9 +41,15 @@ struct LauncherView: View {
     }
     private typealias Constants = LauncherViewConstants
 
-    init() {
-        _viewModel = StateObject(wrappedValue: LauncherViewModel(defaultSearchAddress: ""))
-    }
+    init(appConfiguration: AppConfiguration) {
+            self.config = appConfiguration
+            _viewModel = StateObject(
+                wrappedValue: LauncherViewModel(
+                    defaultSearchAddress: appConfiguration.defaultSearchAddress,
+                    appConfiguration: appConfiguration
+                )
+            )
+        }
 
     var body: some View {
         VStack(spacing: Constants.mainStackSpacing) {
@@ -86,7 +91,6 @@ struct LauncherView: View {
         let proxies: [AuthProxy] = []
         WindowManager.shared.showBrowser(
             request: request,
-            proxies: proxies,
             themeManager: themeManager,
             sessionManager: sessionManager,
             appConfiguration: config
@@ -213,7 +217,7 @@ private extension LauncherView {
             getLabel("Select VPN")
             Spacer()
             BrowserJetMenuPicker(
-                options: VPNType.allCases,
+                options: viewModel.availableVPNs,
                 selection: Binding(
                     get: { viewModel.settings.selectedVPN ?? .vpn1 },
                     set: { viewModel.updateSelectedVPN($0) }
@@ -242,5 +246,5 @@ private extension LauncherView {
 }
 
 #Preview {
-    LauncherView()
+    LauncherView(appConfiguration: .development)
 }

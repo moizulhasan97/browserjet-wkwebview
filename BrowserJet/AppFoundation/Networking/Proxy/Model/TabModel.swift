@@ -53,6 +53,15 @@ final class TabModel: ObservableObject, Identifiable {
         self.proxyType = proxyType
         self.authProxy = authProxy
 
+        // Log VPN details when tab is initialized
+        if let proxy = authProxy {
+            AppLogger.info(
+                "TabModel initialized with VPN - Tab ID: \(id), Slot: \(sessionSlot), IP: \(proxy.host), Port: \(proxy.port), Username: \(proxy.username), Password: \(proxy.password)"
+            )
+        } else {
+            AppLogger.info("TabModel initialized - Tab ID: \(id), Slot: \(sessionSlot), Proxy: None (Local connection)")
+        }
+
         self.startedAsAboutBlank = (startURL.absoluteString == "about:blank")
         self.hasNavigatedAwayFromInitialBlank = !self.startedAsAboutBlank
 
