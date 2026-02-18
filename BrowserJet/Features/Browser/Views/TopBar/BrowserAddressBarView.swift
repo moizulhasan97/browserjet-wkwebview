@@ -9,8 +9,10 @@ import SwiftUI
 import WebKit
 
 struct BrowserAddressBarView: View {
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
 
     @ObservedObject var tab: TabModel
 

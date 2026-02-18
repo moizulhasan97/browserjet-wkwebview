@@ -16,7 +16,7 @@ enum ProxyConfigurationFactory {
             port: .init(integerLiteral: proxy.port)
         )
 
-        var config = ProxyConfiguration(
+        let config = ProxyConfiguration(
             httpCONNECTProxy: endpoint,
             tlsOptions: nil
         )

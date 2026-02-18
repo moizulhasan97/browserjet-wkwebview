@@ -66,9 +66,9 @@ struct BrowserRootView: View {
             if let tab = state.selectedTab {
                 WebViewContainer(
                     tab: tab
-                )                    { url in
-                        state.addTab(url: url)
-                    }
+                ) { url in
+                    state.addTab(url: url)
+                }
                 .id(tab.id) // important for WKWebView switching
             } else {
                 EmptyView()
@@ -112,6 +112,7 @@ struct BrowserRootView: View {
         proxies: [],
         userAgent: nil,
         sessionManager: sessionManager,
+        // swiftlint:disable:next force_unwrapping
         initialURL: URL(string: "https://www.google.com")!,
         initialTabCount: 2
     )
@@ -130,7 +131,7 @@ struct BrowserRootView: View {
         BrowserChromeView(
             state: state,
             menu: .default
-        )            { _ in }
+        ) { _ in }
 
         //        if let tab = state.selectedTab {
         //            BrowserAddressBarView(tab: tab)

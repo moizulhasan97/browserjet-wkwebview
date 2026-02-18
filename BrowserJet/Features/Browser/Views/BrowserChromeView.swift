@@ -13,7 +13,8 @@ struct BrowserChromeView: View {
     let menu: BrowserMenuBuilder
     let onToolbarAction: (BrowserToolbarAction) -> Void
 
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
 
     private var stateBackground: some View {
         // keep it consistent with your chrome background
@@ -52,6 +53,7 @@ struct BrowserChromeView: View {
     }
 }
 
+// swiftlint:disable all
 #Preview("Browser Chrome – Light") {
     let sessionManager = SessionManager()
 
@@ -61,6 +63,7 @@ struct BrowserChromeView: View {
         proxies: [],
         userAgent: nil,
         sessionManager: sessionManager,
+        // swiftlint:disable:next force_unwrapping
         initialURL: URL(string: "https://google.com")!,
         initialTabCount: 2
     )
@@ -98,7 +101,7 @@ struct BrowserChromeView: View {
     return BrowserChromeView(
         state: state,
         menu: .default
-    )        { _ in }
+    ) { _ in }
     // .frame(width: 900, height: 80)
     // .padding()
     .background(AppBackgroundStyle.browserJetGradient.makeView())

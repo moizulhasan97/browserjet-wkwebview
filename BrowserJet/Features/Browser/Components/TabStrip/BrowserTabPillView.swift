@@ -113,7 +113,8 @@ struct SelectedTabBorderShape: Shape {
 }
 
 struct BrowserTabPillView: View {
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
 
     let tab: BrowserTabItem
     let isSelected: Bool
@@ -345,19 +346,22 @@ struct BrowserTabPillView: View {
     }
 
     private var closeButton: some View {
-        Button(action: {
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
-                onClose()
-            }
-        }) {
-            Image(systemName: "xmark")
+        Button(
+            action: {
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
+                    onClose()
+                }
+            },
+            label: {
+                Image(systemName: "xmark")
                 .font(.system(size: 9, weight: .semibold))
                 .foregroundStyle(closeButtonColor)
                 .frame(width: 16, height: 16)
                 .background(closeButtonBackground)
                 .clipShape(Circle())
                 .scaleEffect(isHovering ? 1.1 : 1.0)
-        }
+            }
+        )
         .buttonStyle(.plain)
         .accessibilityLabel("Close tab \(tab.title)")
     }

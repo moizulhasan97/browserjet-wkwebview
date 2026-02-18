@@ -10,7 +10,8 @@ import SwiftUI
 struct BrowserTabsStripView: View {
     @ObservedObject var state: BrowserWindowState
     @EnvironmentObject private var sessionManager: SessionManager
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
 
     @State private var canScrollLeft: Bool = false
     @State private var canScrollRight: Bool = false
@@ -60,7 +61,9 @@ struct BrowserTabsStripView: View {
                                 )
                                 .id(tab.id)
                                 .transition(.asymmetric(
-                                    insertion: .opacity.combined(with: .move(edge: .trailing)).combined(with: .scale(scale: 0.9)),
+                                    insertion: .opacity
+                                        .combined(with: .move(edge: .trailing))
+                                        .combined(with: .scale(scale: 0.9)),
                                     removal: .opacity.combined(with: .scale(scale: 0.85))
                                 ))
                             }
@@ -193,7 +196,7 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
     }
 }
 
-
+// swiftlint:disable all
 #Preview("BrowserTabsStripView") {
     let themeManager = ThemeManager()
     let sessionManager = SessionManager(maxSessions: 10)
@@ -210,10 +213,15 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
     )
 
     // Add a few more tabs so we can see shrinking behavior
+    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://www.google.com")!)
+    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://seatgeek.com")!)
+    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://ticketmaster.com")!)
+    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://apple.com")!)
+    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://github.com")!)
 
     // Optional: set a selected tab

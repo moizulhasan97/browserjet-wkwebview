@@ -159,6 +159,7 @@ private final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         urlObservation = nil
     }
 
+    // swiftlint:disable:next implicitly_unwrapped_optional
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         Task { @MainActor [weak self] in
             guard let tab = self?.tab else { return }
@@ -181,6 +182,7 @@ private final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
+    // swiftlint:disable:next implicitly_unwrapped_optional
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         Task { @MainActor [weak self] in
             guard let tab = self?.tab else { return }
@@ -193,6 +195,7 @@ private final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
+    // swiftlint:disable:next implicitly_unwrapped_optional
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         loadingTimeoutTask?.cancel()
         loadingTimeoutTask = nil
@@ -243,6 +246,7 @@ private final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
+    // swiftlint:disable:next implicitly_unwrapped_optional
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         loadingTimeoutTask?.cancel()
         loadingTimeoutTask = nil
@@ -256,6 +260,7 @@ private final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         }
     }
 
+    // swiftlint:disable:next implicitly_unwrapped_optional
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         loadingTimeoutTask?.cancel()
         loadingTimeoutTask = nil
@@ -341,6 +346,7 @@ extension TabModel {
         webView: WKWebView = WKWebView()
     ) -> TabModel {
         let store = WKWebsiteDataStore.nonPersistent()
+        // swiftlint:disable:next force_unwrapping
         let blankURL = URL(string: "about:blank") ?? URL(string: "about:blank")!
         let tab = TabModel(
             sessionSlot: 0,

@@ -57,7 +57,9 @@ final class WindowManager {
 
         let initialURL = URL(string: request.address)
             ?? URL(string: appConfiguration.defaultSearchAddress)
-            ?? URL(string: "https://www.google.com") ?? URL(string: "about:blank")!
+            ?? URL(string: "https://www.google.com")
+            ?? URL(string: "about:blank")
+            ?? URL(string: "about:blank")!
 
         let state = BrowserWindowState(
             proxyType: request.proxyType,

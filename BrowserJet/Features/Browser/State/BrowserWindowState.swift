@@ -81,6 +81,7 @@ final class BrowserWindowState: ObservableObject {
     }
 
     func addTab(url: URL? = nil) {
+        // swiftlint:disable:next force_unwrapping
         let tabURL = url ?? URL(string: "about:blank") ?? URL(string: "about:blank")!
         guard let slot = sessionManager.acquireSessionSlot() else { return }
 
