@@ -42,8 +42,8 @@ struct BrowserChromeView: View {
             )
         }
         //.padding(.horizontal, 12)
-        //.padding(.vertical, 10)
-        .background(theme.surfaceCard.opacity(0.65))
+        .padding(.vertical, 4)
+        //.background(theme.surfaceCard.opacity(0.65))
         //        .overlay(
         //            Rectangle()
         //                .frame(height: 1)

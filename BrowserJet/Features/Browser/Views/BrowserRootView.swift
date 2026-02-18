@@ -48,12 +48,14 @@ struct BrowserRootView: View {
             
             BrowserTabsStripView(state: state)
                 .frame(maxWidth: .infinity)
+                //.background(AppBackgroundStyle.browserJetGradient.makeView())
             
             BrowserChromeView(
                 state: state,
                 menu: menu,
                 onToolbarAction: handleToolbarAction
             )
+//            .padding(.vertical)
             
             // Row 2: address bar (uses selected tab)
             //            if let tab = state.selectedTab {
@@ -76,6 +78,7 @@ struct BrowserRootView: View {
                 EmptyView()
             }
         }
+        .background(AppBackgroundStyle.browserJetGradient.makeView())
     }
     
     private var stateBackground: some View {

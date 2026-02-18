@@ -13,71 +13,187 @@ struct BrowserTabsStripView: View {
     @EnvironmentObject private var sessionManager: SessionManager
     @Environment(\.appTheme) private var theme
     
+    @State private var canScrollLeft: Bool = false
+    @State private var canScrollRight: Bool = false
+    @State private var scrollOffset: CGFloat = 0
+    
     // MARK: - Layout Constants
-    private let horizontalPadding: CGFloat = 10
-    private let spacing: CGFloat = 8
-    private let minTabWidth: CGFloat = 110
-    private let maxTabWidth: CGFloat = 220
-    //private let addButtonWidth: CGFloat = 110
-    private let stripHeight: CGFloat = 42
+    private let horizontalPadding: CGFloat = 12
+    private let spacing: CGFloat = 6
+    private let minTabWidth: CGFloat = 120
+    private let maxTabWidth: CGFloat = 240
+    private let stripHeight: CGFloat = 44
+    private let fadeGradientWidth: CGFloat = 40
     
     var body: some View {
         GeometryReader { geometry in
             let availableWidth = max(0, geometry.size.width - (horizontalPadding * 2))
             let tabCount = max(state.tabItems.count, 1)
             
-            // Chrome-ish: tabs shrink as count increases
+            // Smart tab sizing: tabs shrink as count increases
             let rawWidth = availableWidth / CGFloat(tabCount)
             let calculatedWidth = min(maxTabWidth, max(minTabWidth, rawWidth))
             
-            ScrollViewReader { proxy in
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: spacing) {
-                        ForEach(state.tabItems) { tab in
-                            BrowserTabPillView(
-                                tab: tab,
-                                isSelected: tab.id == state.selectedTabID,
-                                width: calculatedWidth,
-                                onSelect: {
-                                    withAnimation(.easeInOut(duration: 0.18)) {
-                                        state.selectedTabID = tab.id
+            ZStack(alignment: .leading) {
+                // Main scrollable tab area
+                ScrollViewReader { proxy in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: spacing) {
+                            ForEach(state.tabItems) { tab in
+                                BrowserTabPillView(
+                                    tab: tab,
+                                    isSelected: tab.id == state.selectedTabID,
+                                    width: calculatedWidth,
+                                    onSelect: {
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                            state.selectedTabID = tab.id
+                                        }
+                                        // Auto-scroll selected tab into view
+                                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                            proxy.scrollTo(tab.id, anchor: .center)
+                                        }
+                                    },
+                                    onClose: {
+                                        withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+                                            state.closeTab(tab.id)
+                                        }
                                     }
-                                    // Optional: auto-scroll selected tab into view
-                                    withAnimation(.easeInOut(duration: 0.22)) {
-                                        proxy.scrollTo(tab.id, anchor: .center)
-                                    }
-                                },
-                                onClose: {
-                                    withAnimation(.easeInOut(duration: 0.20)) {
-                                        state.closeTab(tab.id)
-                                    }
+                                )
+                                .id(tab.id)
+                                .transition(.asymmetric(
+                                    insertion: .opacity.combined(with: .move(edge: .trailing)).combined(with: .scale(scale: 0.9)),
+                                    removal: .opacity.combined(with: .scale(scale: 0.85))
+                                ))
+                            }
+                        }
+                        .padding(.horizontal, horizontalPadding)
+                        .padding(.vertical, 8)
+                        .background(
+                            GeometryReader { contentGeometry in
+                                Color.clear
+                                    .preference(
+                                        key: ContentWidthPreferenceKey.self,
+                                        value: contentGeometry.size.width
+                                    )
+                                    .preference(
+                                        key: ContentOffsetPreferenceKey.self,
+                                        value: contentGeometry.frame(in: .named("scrollView")).minX
+                                    )
+                            }
+                        )
+                    }
+                    .onPreferenceChange(ContentWidthPreferenceKey.self) { contentWidth in
+                        updateScrollIndicators(geometry: geometry, contentWidth: contentWidth)
+                    }
+                    .onPreferenceChange(ContentOffsetPreferenceKey.self) { offset in
+                        scrollOffset = offset
+                        let contentWidth = calculatedWidth * CGFloat(tabCount) + horizontalPadding * 2
+                        updateScrollIndicators(geometry: geometry, contentWidth: contentWidth)
+                    }
+                    .onChange(of: state.tabItems.count) { _ in
+                        // Auto-scroll to selected tab when tabs change
+                        if let selectedID = state.selectedTabID {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                    proxy.scrollTo(selectedID, anchor: .center)
                                 }
-                            )
-                            .id(tab.id)
-                            // Smooth width changes + selection transitions
-                            .animation(.easeInOut(duration: 0.18), value: calculatedWidth)
-                            .transition(.asymmetric(
-                                insertion: .opacity.combined(with: .move(edge: .trailing)),
-                                removal: .opacity.combined(with: .scale(scale: 0.92))
-                            ))
+                            }
                         }
                     }
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.vertical, 6)
+                    .animation(.spring(response: 0.4, dampingFraction: 0.8), value: state.tabItems)
                 }
-                .animation(.easeInOut(duration: 0.22), value: state.tabItems)
+                
+                // Left fade gradient for overflow
+//                if canScrollLeft {
+//                    LinearGradient(
+//                        colors: [
+//                            theme.surfaceCard.opacity(0.8),
+//                            Color.clear
+//                        ],
+//                        startPoint: .leading,
+//                        endPoint: .trailing
+//                    )
+//                    .frame(width: fadeGradientWidth)
+//                    .allowsHitTesting(false)
+//                }
+//                
+//                // Right fade gradient for overflow
+//                if canScrollRight {
+//                    LinearGradient(
+//                        colors: [
+//                            Color.clear,
+//                            theme.surfaceCard.opacity(0.8)
+//                        ],
+//                        startPoint: .leading,
+//                        endPoint: .trailing
+//                    )
+//                    .frame(width: fadeGradientWidth)
+//                    .frame(maxWidth: .infinity, alignment: .trailing)
+//                    .allowsHitTesting(false)
+//                }
             }
         }
         .frame(height: stripHeight)
-        .background(theme.surfaceCard)
-        .overlay(
-            Rectangle()
-                .frame(height: 1)
-                .foregroundStyle(theme.divider),
-            alignment: .bottom
-        )
+//        .background(
+//            // Modern glass morphism background
+//            ZStack {
+//                theme.surfaceCard.opacity(0.75)
+//                
+//                LinearGradient(
+//                    colors: [
+//                        theme.surfaceCard.opacity(0.85),
+//                        theme.surfaceCard.opacity(0.65)
+//                    ],
+//                    startPoint: .top,
+//                    endPoint: .bottom
+//                )
+//            }
+//        )
+//        .overlay(
+//            // Elegant separator line at bottom
+//            Rectangle()
+//                .frame(height: 1)
+//                .foregroundStyle(
+//                    LinearGradient(
+//                        colors: [
+//                            theme.divider.opacity(0.3),
+//                            theme.divider.opacity(0.15)
+//                        ],
+//                        startPoint: .leading,
+//                        endPoint: .trailing
+//                    )
+//                ),
+//            alignment: .bottom
+//        )
+        //.shadow(color: .red, radius: 20, y: 1)
+    }
+    
+    private func updateScrollIndicators(geometry: GeometryProxy, contentWidth: CGFloat) {
+        let scrollViewWidth = geometry.size.width
+        let canScroll = contentWidth > scrollViewWidth
+        
+        withAnimation(.easeOut(duration: 0.2)) {
+            canScrollLeft = canScroll && scrollOffset < -horizontalPadding + 10
+            canScrollRight = canScroll && (scrollOffset + contentWidth) > (scrollViewWidth - horizontalPadding - 10)
+        }
     }
 }
+
+// Preference keys for tracking scroll state
+struct ContentWidthPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
+    }
+}
+
+struct ContentOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
 
 #Preview("BrowserTabsStripView") {
     let themeManager = ThemeManager()
