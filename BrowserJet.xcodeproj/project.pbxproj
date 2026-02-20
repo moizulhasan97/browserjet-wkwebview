@@ -63,6 +63,10 @@
 		AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */; };
 		AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */; };
 		AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */; };
+		AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */; };
+		AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */; };
+		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
+		AFA2C7DB2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */; };
 		AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */; };
 		AFF3EAC92F3CAC3A00C6F08E /* BrowserJetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */; };
 		AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */; };
@@ -144,6 +148,10 @@
 		AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContainer.swift; sourceTree = "<group>"; };
 		AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserAddressBarView.swift; sourceTree = "<group>"; };
 		AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingStyles.swift; sourceTree = "<group>"; };
+		AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabsPopoverView.swift; sourceTree = "<group>"; };
+		AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuItem.swift; sourceTree = "<group>"; };
+		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
+		AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarIconButtonStyle.swift; sourceTree = "<group>"; };
 		AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyType.swift; sourceTree = "<group>"; };
 		AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFF3EAC82F3CAC3A00C6F08E /* BrowserJetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetApp.swift; sourceTree = "<group>"; };
@@ -315,6 +323,7 @@
 		AF69F5AB2F43712700B33610 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */,
 				AF69F5AC2F43713000B33610 /* BrowserMenuBuilder.swift */,
 			);
 			path = Menu;
@@ -370,6 +379,9 @@
 		AF69F5BF2F43747000B33610 /* Toolbar */ = {
 			isa = PBXGroup;
 			children = (
+				AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */,
+				AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */,
+				AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */,
 				AF69F5C02F43747800B33610 /* BrowserToolbarView.swift */,
 			);
 			path = Toolbar;
@@ -731,6 +743,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */,
+				AFA2C7DB2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift in Sources */,
 				AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */,
 				AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */,
 				AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */,
@@ -748,6 +761,7 @@
 				AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */,
 				AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */,
 				AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */,
+				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
 				AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */,
 				AF56EF132F3DFC9800E49C58 /* CornerRadiusModifier.swift in Sources */,
 				AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */,
@@ -762,12 +776,14 @@
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
 				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,
+				AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */,
 				AFF3EB362F3CACB100C6F08E /* BrowserJetDarkTheme.swift in Sources */,
 				AFF3EB372F3CACB100C6F08E /* LauncherView.swift in Sources */,
 				AF56EEED2F3CC4B700E49C58 /* TextFieldStyles.swift in Sources */,
 				AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */,
 				AFF3EB382F3CACB100C6F08E /* AppLogger.swift in Sources */,
 				AF56EEEF2F3CC94100E49C58 /* LauncherSearchField.swift in Sources */,
+				AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */,
 				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
 				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
 				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,

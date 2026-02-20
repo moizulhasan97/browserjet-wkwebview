@@ -95,8 +95,27 @@ struct BrowserRootView: View {
 
         case .newTab:
             state.addTab()
+            
+        case .burnProxyAndReload:
+            print("Burn proxy + reload pressed")
+            
+        case .duplicateToTabsMenu:
+            print("Duplicate tabs menu pressed") // the popover will print count already
+
+        case .refreshAllTabs:
+            print("Refresh ALL tabs pressed")
+            
+        case .accountManager:
+            print("Account manager pressed")
+
+        case .screenshot:
+            print("Screenshot pressed")
+
+//        case .moreMenu:
+//            print("More menu pressed")
+            
         default:
-            break
+            print("Toolbar action:", action)
         }
     }
 }

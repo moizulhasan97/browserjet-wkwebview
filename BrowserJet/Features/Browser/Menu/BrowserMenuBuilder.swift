@@ -11,9 +11,11 @@ import Foundation
 struct BrowserMenuBuilder {
     var leading: [BrowserToolbarAction]
     var trailing: [BrowserToolbarAction]
-
+    var moreMenuItems: [BrowserMoreMenuItem]
+    
     static let `default` = BrowserMenuBuilder(
         leading: [.back, .forward, .reload],
-        trailing: [.vpnIndicator, .favorites, .newTab, .downloads, .history, .settings]
+        trailing: [.newTab, .burnProxyAndReload, .duplicateToTabsMenu, .refreshAllTabs, .accountManager, .screenshot], //, .moreMenu],
+        moreMenuItems: [.paymentCard, .buyLicenses, .contactUs, .changeKey, .about, .twitter]
     )
 }

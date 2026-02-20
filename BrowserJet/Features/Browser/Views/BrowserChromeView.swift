@@ -36,10 +36,19 @@ struct BrowserChromeView: View {
 
             BrowserConnectionBadgeView(proxyType: state.proxyType)
 
-            BrowserToolbarView(
-                actions: menu.trailing,
-                onAction: onToolbarAction
-            )
+
+            
+            HStack(spacing: 10) {
+                // If you still want other trailing buttons later, keep them here
+                // For now, show only the menu dropdown:
+                            BrowserToolbarView(
+                                actions: menu.trailing,
+                                onAction: onToolbarAction
+                            )
+                BrowserMoreMenuView(items: menu.moreMenuItems) { item in
+                    onMoreMenuItem(item)
+                }
+            }
         }
         // .padding(.horizontal, 12)
         .padding(.vertical, 4)
@@ -50,6 +59,10 @@ struct BrowserChromeView: View {
         //                .foregroundStyle(theme.divider),
         //            alignment: .bottom
         //        )
+    }
+    
+    private func onMoreMenuItem(_ item: BrowserMoreMenuItem) {
+        print("More menu item selected:", item.title)
     }
 }
 
