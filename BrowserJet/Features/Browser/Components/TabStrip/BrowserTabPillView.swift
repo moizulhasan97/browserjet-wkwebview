@@ -116,7 +116,7 @@ struct BrowserTabPillView: View {
     @Environment(\.appTheme)
     private var theme
 
-    let tab: BrowserTabItem
+    @ObservedObject var tab: TabModel
     let isSelected: Bool
     let width: CGFloat
     let onSelect: () -> Void

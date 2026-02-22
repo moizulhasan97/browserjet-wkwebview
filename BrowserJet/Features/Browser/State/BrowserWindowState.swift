@@ -60,17 +60,6 @@ final class BrowserWindowState: ObservableObject {
         }
     }
 
-    var tabItems: [BrowserTabItem] {
-        tabs.map {
-            BrowserTabItem(
-                id: $0.id,
-                title: $0.title,
-                isLoading: $0.isLoading,
-                favicon: $0.favicon
-            )
-        }
-    }
-
     private func makeNewDataStore(proxy: AuthProxy?) -> WKWebsiteDataStore {
         let store = WKWebsiteDataStore(forIdentifier: UUID())
 
