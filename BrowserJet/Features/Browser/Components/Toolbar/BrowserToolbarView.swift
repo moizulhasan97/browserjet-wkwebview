@@ -13,6 +13,8 @@ struct BrowserToolbarView: View {
     @State private var showingDuplicatePopover = false
     let actions: [BrowserToolbarAction]
     let onAction: (BrowserToolbarAction) -> Void
+    /// Called when the user confirms a duplicate-tabs count from the popover.
+    var onDuplicateTabs: ((Int) -> Void)? = nil
 
     @State private var hovering: BrowserToolbarAction?
 
@@ -20,46 +22,32 @@ struct BrowserToolbarView: View {
         HStack(spacing: 10) {
             ForEach(actions, id: \.self) { action in
                 Button {
-                    onAction(action)
-//                    if action == .duplicateToTabsMenu {
-//                            showingDuplicatePopover.toggle()
-//                        } else {
-//                            onAction(action)
-//                        }
+                    if action == .duplicateToTabsMenu {
+                        showingDuplicatePopover.toggle()
+                    } else {
+                        onAction(action)
+                    }
                 } label: {
-//                    Image(systemName: action.systemImageName)
-//                        .font(.system(size: 14, weight: .semibold))
-//                        .foregroundStyle(theme.textPrimary)
-//                        .frame(width: 28, height: 28)
-//                        .background(background(for: action))
-//                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-//                        .overlay(
-//                            RoundedRectangle(cornerRadius: 8, style: .continuous)
-//                                .stroke(border(for: action), lineWidth: 1)
-//                        )
                     BrowserToolbarIconButtonStyle(
                         systemImageName: action.systemImageName,
                         tooltip: action.accessibilityTitle
                     )
                 }
                 .buttonStyle(.plain)
-//                .popover(
-//                    isPresented: Binding(
-//                        get: { showingDuplicatePopover && action == .duplicateToTabsMenu },
-//                        set: { showingDuplicatePopover = $0 }
-//                    ),
-//                    arrowEdge: .bottom
-//                ) {
-//                    DuplicateTabsPopoverView(
-//                        maxCount: 10,
-//                        onConfirm: { count in
-//                            print("Duplicate tab count selected:", count)
-//                            onAction(.duplicateToTabsMenu)
-//                        }
-//                    )
-//                }
+                .popover(
+                    isPresented: Binding(
+                        get: { showingDuplicatePopover && action == .duplicateToTabsMenu },
+                        set: { showingDuplicatePopover = $0 }
+                    ),
+                    arrowEdge: .bottom
+                ) {
+                    DuplicateTabsPopoverView { count in
+                        showingDuplicatePopover = false
+                        onDuplicateTabs?(count)
+                    }
+                }
                 .accessibilityLabel(action.accessibilityTitle)
-                .help(action.tooltip) // ✅ tooltip on hover (macOS)
+                .help(action.tooltip)
                 .onHover { isHovering in
                     withAnimation(.easeInOut(duration: 0.12)) {
                         hovering = isHovering ? action : (hovering == action ? nil : hovering)

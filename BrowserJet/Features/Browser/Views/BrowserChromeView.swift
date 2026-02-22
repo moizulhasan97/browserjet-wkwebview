@@ -13,6 +13,7 @@ struct BrowserChromeView: View {
     let menu: BrowserMenuBuilder
     let onToolbarAction: (BrowserToolbarAction) -> Void
     let onMoreMenuSelect: (BrowserMoreMenuItem) -> Void
+    var onDuplicateTabs: ((Int) -> Void)? = nil
     
     @Environment(\.appTheme)
     private var theme
@@ -39,10 +40,11 @@ struct BrowserChromeView: View {
 
             
             HStack(spacing: 10) {
-                            BrowserToolbarView(
-                                actions: menu.trailing,
-                                onAction: onToolbarAction
-                            )
+                BrowserToolbarView(
+                    actions: menu.trailing,
+                    onAction: onToolbarAction,
+                    onDuplicateTabs: onDuplicateTabs
+                )
                 BrowserMoreMenuView(items: menu.moreMenuItems) { item in
                     onMoreMenuSelect(item)
                 }

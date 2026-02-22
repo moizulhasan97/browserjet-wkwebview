@@ -12,7 +12,6 @@ import WebKit
 struct BrowserRootView: View {
     @StateObject var state: BrowserWindowState
     let menu: BrowserMenuBuilder
-    @State private var isDuplicatePopoverPresented = false
     @Environment(\.appConfiguration) private var config
     @EnvironmentObject private var sessionManager: SessionManager
     
@@ -26,14 +25,9 @@ struct BrowserRootView: View {
                 state: state,
                 menu: menu,
                 onToolbarAction: handleToolbarAction,
-                onMoreMenuSelect: handleMoreMenuItem
+                onMoreMenuSelect: handleMoreMenuItem,
+                onDuplicateTabs: duplicateSelectedTab
             )
-            .popover(isPresented: $isDuplicatePopoverPresented, arrowEdge: .top) {
-                            DuplicateTabsPopoverView { count in
-                                isDuplicatePopoverPresented = false
-                                duplicateSelectedTab(count: count)
-                            }
-                        }
 //            .padding(.vertical)
 
             // Row 2: address bar (uses selected tab)
@@ -81,9 +75,6 @@ struct BrowserRootView: View {
         case .burnProxyAndReload:
             state.burnProxyAndReloadSelectedTab()
             
-        case .duplicateToTabsMenu:
-            isDuplicatePopoverPresented = true
-
         case .refreshAllTabs:
             refreshAllTabs()
             
