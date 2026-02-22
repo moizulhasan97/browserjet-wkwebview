@@ -5,6 +5,8 @@
 //  Created by Moiz Ul Hasan on 12/02/2026.
 //
 
+import Foundation
+
 struct AppConfiguration {
     private let isUserAgentEnabled: Bool
     private let proxyType: ProxyType
@@ -12,6 +14,13 @@ struct AppConfiguration {
     private let sessionIsolationMode: SessionIsolationMode
     let launcherTabPresets: [LauncherTabPreset]
     let vpnConfigurations: [VPNConfiguration]
+    let duplicateTabCounts: [Int]
+    let maxBrowserTabs: Int
+    // More-menu URLs
+        let paymentCardURL: URL
+        let buyLicensesURL: URL
+        let contactUsURL: URL
+        let twitterURL: URL
     
     init(
         isUserAgentEnabled: Bool,
@@ -19,7 +28,13 @@ struct AppConfiguration {
         defaultSearchAddress: String,
         sessionIsolationMode: SessionIsolationMode,
         launcherTabPresets: [LauncherTabPreset],
-        vpnConfigurations: [VPNConfiguration]
+        vpnConfigurations: [VPNConfiguration],
+        duplicateTabCounts: [Int],
+        maxBrowserTabs: Int,
+        paymentCardURL: URL,
+        buyLicensesURL: URL,
+        contactUsURL: URL,
+        twitterURL: URL
     ) {
         self.isUserAgentEnabled = isUserAgentEnabled
         self.proxyType = proxyType
@@ -27,6 +42,12 @@ struct AppConfiguration {
         self.sessionIsolationMode = sessionIsolationMode
         self.launcherTabPresets = launcherTabPresets
         self.vpnConfigurations = vpnConfigurations
+        self.duplicateTabCounts = duplicateTabCounts
+        self.maxBrowserTabs = maxBrowserTabs
+        self.paymentCardURL = paymentCardURL
+        self.buyLicensesURL = buyLicensesURL
+        self.contactUsURL = contactUsURL
+        self.twitterURL = twitterURL
     }
 }
 
@@ -100,7 +121,13 @@ extension AppConfiguration {
                         count: 4
                     )
                 )
-            ]
+            ],
+            duplicateTabCounts: Array(1...10),
+            maxBrowserTabs: 5,
+            paymentCardURL: URL(string: "https://www.google.com/payment")!,
+            buyLicensesURL: URL(string: "https://www.google.com/buy")!,
+            contactUsURL: URL(string: "https://browserjet.com/contact")!,
+            twitterURL: URL(string: "https://twitter.com/browserjet")!,
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config
@@ -160,7 +187,13 @@ extension AppConfiguration {
                         count: 4
                     )
                 )
-            ]
+            ],
+            duplicateTabCounts: Array(1...10),
+            maxBrowserTabs: 5,
+            paymentCardURL: URL(string: "https://www.google.com/payment")!,
+            buyLicensesURL: URL(string: "https://www.google.com/buy")!,
+            contactUsURL: URL(string: "https://browserjet.com/contact")!,
+            twitterURL: URL(string: "https://twitter.com/browserjet")!,
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config

@@ -20,11 +20,12 @@ struct BrowserToolbarView: View {
         HStack(spacing: 10) {
             ForEach(actions, id: \.self) { action in
                 Button {
-                    if action == .duplicateToTabsMenu {
-                            showingDuplicatePopover.toggle()
-                        } else {
-                            onAction(action)
-                        }
+                    onAction(action)
+//                    if action == .duplicateToTabsMenu {
+//                            showingDuplicatePopover.toggle()
+//                        } else {
+//                            onAction(action)
+//                        }
                 } label: {
 //                    Image(systemName: action.systemImageName)
 //                        .font(.system(size: 14, weight: .semibold))
@@ -42,21 +43,21 @@ struct BrowserToolbarView: View {
                     )
                 }
                 .buttonStyle(.plain)
-                .popover(
-                    isPresented: Binding(
-                        get: { showingDuplicatePopover && action == .duplicateToTabsMenu },
-                        set: { showingDuplicatePopover = $0 }
-                    ),
-                    arrowEdge: .bottom
-                ) {
-                    DuplicateTabsPopoverView(
-                        maxCount: 10,
-                        onConfirm: { count in
-                            print("Duplicate tab count selected:", count)
-                            onAction(.duplicateToTabsMenu)
-                        }
-                    )
-                }
+//                .popover(
+//                    isPresented: Binding(
+//                        get: { showingDuplicatePopover && action == .duplicateToTabsMenu },
+//                        set: { showingDuplicatePopover = $0 }
+//                    ),
+//                    arrowEdge: .bottom
+//                ) {
+//                    DuplicateTabsPopoverView(
+//                        maxCount: 10,
+//                        onConfirm: { count in
+//                            print("Duplicate tab count selected:", count)
+//                            onAction(.duplicateToTabsMenu)
+//                        }
+//                    )
+//                }
                 .accessibilityLabel(action.accessibilityTitle)
                 .help(action.tooltip) // ✅ tooltip on hover (macOS)
                 .onHover { isHovering in

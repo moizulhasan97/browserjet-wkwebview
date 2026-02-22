@@ -7,40 +7,15 @@
 
 
 import SwiftUI
-
-// struct BrowserRootView: View {
-//    @Environment(\.colorScheme) private var colorScheme
-//    @EnvironmentObject private var themeManager: ThemeManager
-//    @EnvironmentObject private var sessionManager: SessionManager
-//
-//    let appConfiguration: AppConfiguration
-//    let request: LaunchRequest
-//    let proxies: [AuthProxy]
-//
-//    var body: some View {
-//        let _ = AppLogger.debug("BrowserRootView body computed - ColorScheme: \(colorScheme == .dark ? "dark" : "light")")
-//
-//        let state = BrowserWindowState(
-//            proxyType: request.proxyType,
-//            isolationMode: request.isolationMode,
-//            proxies: proxies,
-//            userAgent: request.userAgent,
-//            sessionManager: sessionManager
-//        )
-//
-//        return BrowserWindowView(
-//            state: state,
-//            request: request
-//        )
-//        .environment(\.appTheme, themeManager.theme(for: colorScheme))
-//        .environment(\.appConfiguration, appConfiguration)
-//    }
-// }
+import WebKit
 
 struct BrowserRootView: View {
     @StateObject var state: BrowserWindowState
     let menu: BrowserMenuBuilder
-
+    @State private var isDuplicatePopoverPresented = false
+    @Environment(\.appConfiguration) private var config
+    @EnvironmentObject private var sessionManager: SessionManager
+    
     var body: some View {
         VStack(spacing: 0) {
             BrowserTabsStripView(state: state)
@@ -50,8 +25,15 @@ struct BrowserRootView: View {
             BrowserChromeView(
                 state: state,
                 menu: menu,
-                onToolbarAction: handleToolbarAction
+                onToolbarAction: handleToolbarAction,
+                onMoreMenuSelect: handleMoreMenuItem
             )
+            .popover(isPresented: $isDuplicatePopoverPresented, arrowEdge: .top) {
+                            DuplicateTabsPopoverView { count in
+                                isDuplicatePopoverPresented = false
+                                duplicateSelectedTab(count: count)
+                            }
+                        }
 //            .padding(.vertical)
 
             // Row 2: address bar (uses selected tab)
@@ -101,15 +83,16 @@ struct BrowserRootView: View {
             
         case .duplicateToTabsMenu:
             print("Duplicate tabs menu pressed") // the popover will print count already
+            isDuplicatePopoverPresented = true
 
         case .refreshAllTabs:
-            print("Refresh ALL tabs pressed")
+            refreshAllTabs()
             
         case .accountManager:
             print("Account manager pressed")
 
         case .screenshot:
-            print("Screenshot pressed")
+            takeScreenshotOfSelectedTab()
 
 //        case .moreMenu:
 //            print("More menu pressed")
@@ -118,6 +101,89 @@ struct BrowserRootView: View {
             print("Toolbar action:", action)
         }
     }
+    
+    private func handleMoreMenuItem(_ item: BrowserMoreMenuItem) {
+        switch item {
+        case .paymentCard:
+            open(config.paymentCardURL)
+        case .buyLicenses:
+            open(config.buyLicensesURL)
+        case .contactUs:
+            open(config.contactUsURL)
+        case .twitter:
+            open(config.twitterURL)
+            
+        case .changeKey:
+            print("MoreMenu: Change Key")
+            
+        case .about:
+            print("MoreMenu: About Browser Jet")
+        }
+    }
+    
+    private func open(_ url: URL) {
+            // "can open new tab?" rule:
+            // - sessionManager can create
+            // - AND max tabs not exceeded
+            if sessionManager.canCreateSession && state.tabs.count < config.maxBrowserTabs {
+                state.addTab(url: url)
+            } else {
+                state.selectedTab?.load(url)
+            }
+        }
+    
+    private func refreshAllTabs() {
+            for tab in state.tabs {
+                tab.webView.reload()
+            }
+            print("Refresh all tabs: \(state.tabs.count)")
+        }
+    
+    private func duplicateSelectedTab(count: Int) {
+            guard let selected = state.selectedTab else { return }
+            let url = selected.webView.url ?? URL(string: selected.addressText) ?? URL(string: "about:blank")!
+
+            // duplicate current tab URL N times
+            for _ in 0..<count {
+                state.addTab(url: url)
+            }
+            print("Duplicated tab \(count)x -> \(url.absoluteString)")
+        }
+    
+    private func takeScreenshotOfSelectedTab() {
+            guard let tab = state.selectedTab else { return }
+
+            let config = WKSnapshotConfiguration()
+            tab.webView.takeSnapshot(with: config) { image, error in
+                if let error {
+                    print("Screenshot failed: \(error.localizedDescription)")
+                    return
+                }
+                guard let image else {
+                    print("Screenshot failed: no image")
+                    return
+                }
+
+                // Simple MVP: save to Desktop
+                guard let tiff = image.tiffRepresentation,
+                      let rep = NSBitmapImageRep(data: tiff),
+                      let png = rep.representation(using: .png, properties: [:]) else {
+                    print("Screenshot failed: could not encode PNG")
+                    return
+                }
+
+                let fileName = "BrowserJet-\(Int(Date().timeIntervalSince1970)).png"
+                let desktop = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!
+                let url = desktop.appendingPathComponent(fileName)
+
+                do {
+                    try png.write(to: url)
+                    print("Screenshot saved: \(url.path)")
+                } catch {
+                    print("Screenshot save failed: \(error.localizedDescription)")
+                }
+            }
+        }
 }
 
 #Preview("BrowserRootView (Safe Preview)") {
@@ -147,10 +213,12 @@ struct BrowserRootView: View {
         BrowserTabsStripView(state: state)
             .frame(maxWidth: .infinity)
 
-        BrowserChromeView(
+        return BrowserChromeView(
             state: state,
-            menu: .default
-        ) { _ in }
+            menu: .default,
+            onToolbarAction: {_ in},
+            onMoreMenuSelect: {_ in}
+        )
 
         //        if let tab = state.selectedTab {
         //            BrowserAddressBarView(tab: tab)

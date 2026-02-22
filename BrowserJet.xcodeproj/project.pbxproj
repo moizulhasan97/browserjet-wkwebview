@@ -59,7 +59,6 @@
 		AF69F5E12F43A30A00B33610 /* LaunchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E02F43A30A00B33610 /* LaunchRequest.swift */; };
 		AF69F5E32F43A32100B33610 /* LauncherSettings+LaunchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E22F43A31C00B33610 /* LauncherSettings+LaunchRequest.swift */; };
 		AF69F5E52F43A3B200B33610 /* BrowserRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E42F43A3B200B33610 /* BrowserRootView.swift */; };
-		AF69F5E72F43A3CB00B33610 /* BrowserWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E62F43A3CB00B33610 /* BrowserWindowView.swift */; };
 		AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */; };
 		AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */; };
 		AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */; };
@@ -144,7 +143,6 @@
 		AF69F5E02F43A30A00B33610 /* LaunchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRequest.swift; sourceTree = "<group>"; };
 		AF69F5E22F43A31C00B33610 /* LauncherSettings+LaunchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LauncherSettings+LaunchRequest.swift"; sourceTree = "<group>"; };
 		AF69F5E42F43A3B200B33610 /* BrowserRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserRootView.swift; sourceTree = "<group>"; };
-		AF69F5E62F43A3CB00B33610 /* BrowserWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWindowView.swift; sourceTree = "<group>"; };
 		AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContainer.swift; sourceTree = "<group>"; };
 		AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserAddressBarView.swift; sourceTree = "<group>"; };
 		AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingStyles.swift; sourceTree = "<group>"; };
@@ -341,7 +339,6 @@
 		AF69F5B12F4371FC00B33610 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				AF69F5E62F43A3CB00B33610 /* BrowserWindowView.swift */,
 				AF69F5E42F43A3B200B33610 /* BrowserRootView.swift */,
 				AF69F5D72F437B6A00B33610 /* TopBar */,
 				AF69F5C22F43748800B33610 /* BrowserChromeView.swift */,
@@ -787,7 +784,6 @@
 				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
 				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
 				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,
-				AF69F5E72F43A3CB00B33610 /* BrowserWindowView.swift in Sources */,
 				AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */,
 				AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */,
 				AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */,

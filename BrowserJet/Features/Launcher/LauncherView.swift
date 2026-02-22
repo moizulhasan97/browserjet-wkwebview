@@ -37,7 +37,7 @@ struct LauncherView: View {
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
     private var presets: [LauncherTabPreset] {
-        config.launcherTabPresets
+        config.launcherTabPresets.filter { $0.rawValue <= config.maxBrowserTabs }
     }
     private typealias Constants = LauncherViewConstants
 
