@@ -36,23 +36,15 @@ final class ThemeManager: ObservableObject {
     }
 
     func theme(for colorScheme: ColorScheme) -> any AppTheme {
-        let resolvedTheme: String
         switch mode {
         case .system:
-            resolvedTheme = colorScheme == .dark ? "dark" : "light"
-        case .light:
-            resolvedTheme = "light"
-        case .dark:
-            resolvedTheme = "dark"
-        }
-        // swiftlint:disable:next line_length
-        AppLogger.debug("Theme resolved: \(resolvedTheme) (system colorScheme: \(colorScheme == .dark ? "dark" : "light"))")
-        switch mode {
-        case .system:
+            AppLogger.debug("Theme resolved: \(colorScheme == .dark ? "dark" : "light") (system)")
             return colorScheme == .dark ? darkTheme : lightTheme
         case .light:
+            AppLogger.debug("Theme resolved: light (forced)")
             return lightTheme
         case .dark:
+            AppLogger.debug("Theme resolved: dark (forced)")
             return darkTheme
         }
     }

@@ -8,7 +8,6 @@
 enum VPNType: String, Hashable, CaseIterable {
     case vpn1 = "vpn1"
     case vpn2 = "vpn2"
-    case vpn3 = "vpn3"
     
     // Make it configurable
     static func from(configurations: [VPNConfiguration]) -> [VPNType] {

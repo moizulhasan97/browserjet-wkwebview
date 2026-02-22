@@ -49,11 +49,9 @@ final class BrowserWindowState: ObservableObject {
         self.initialURL = initialURL
         
         if !proxyType.isLocal {
-                proxyPool.configure(provider: StaticAuthProxyProvider(proxies: proxies), rotation: rotation)
-            }
+            proxyPool.configure(provider: StaticAuthProxyProvider(proxies: proxies), rotation: rotation)
+        }
 
-        addTab(url: initialURL)
-        
         let count = max(1, initialTabCount)
         for _ in 0..<count {
             addTab(url: initialURL)

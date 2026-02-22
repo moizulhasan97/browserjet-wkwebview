@@ -25,8 +25,7 @@ struct BrowserMoreMenuView: View {
                 tooltip: "More"
             )
         }
-        //.menuStyle(.borderlessButton) // important for macOS look
-        .buttonStyle(.plain)          // makes it match your toolbar buttons
+        .buttonStyle(.plain)
         .accessibilityLabel("More")
     }
 }

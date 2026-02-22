@@ -19,7 +19,6 @@ struct BrowserRootView: View {
         VStack(spacing: 0) {
             BrowserTabsStripView(state: state)
                 .frame(maxWidth: .infinity)
-                // .background(AppBackgroundStyle.browserJetGradient.makeView())
 
             BrowserChromeView(
                 state: state,
@@ -28,17 +27,8 @@ struct BrowserRootView: View {
                 onMoreMenuSelect: handleMoreMenuItem,
                 onDuplicateTabs: duplicateSelectedTab
             )
-//            .padding(.vertical)
 
-            // Row 2: address bar (uses selected tab)
-            //            if let tab = state.selectedTab {
-            //                BrowserAddressBarView(tab: tab)
-            //                    .padding(.horizontal, 12)
-            //                    .padding(.vertical, 8)
-            //                    .background(stateBackground)
-            //            }
-
-            // Glass: web content
+            // Web content
             if let tab = state.selectedTab {
                 WebViewContainer(
                     tab: tab
@@ -51,11 +41,6 @@ struct BrowserRootView: View {
             }
         }
         .background(AppBackgroundStyle.browserJetGradient.makeView())
-    }
-
-    private var stateBackground: some View {
-        // keep it consistent with your chrome background
-        Color.clear
     }
 
     private func handleToolbarAction(_ action: BrowserToolbarAction) {
@@ -209,13 +194,6 @@ struct BrowserRootView: View {
             onToolbarAction: {_ in},
             onMoreMenuSelect: {_ in}
         )
-
-        //        if let tab = state.selectedTab {
-        //            BrowserAddressBarView(tab: tab)
-        //                .padding(.horizontal, 12)
-        //                .padding(.vertical, 8)
-        //                .background(Color.clear)
-        //        }
 
         // Placeholder "glass"
         Rectangle()

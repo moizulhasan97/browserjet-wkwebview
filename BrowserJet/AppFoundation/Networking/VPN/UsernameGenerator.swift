@@ -20,9 +20,9 @@ struct StaticUsernameGenerator: UsernameGenerator {
 struct SequentialUsernameGenerator: UsernameGenerator {
     let base: String
     let startIndex: Int
-    
+
     func generateUsername(for index: Int) -> String {
-        return base
+        return "\(base)\(startIndex + index)"
     }
 }
 

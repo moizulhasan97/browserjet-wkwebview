@@ -18,10 +18,6 @@ struct BrowserChromeView: View {
     @Environment(\.appTheme)
     private var theme
 
-    private var stateBackground: some View {
-        Color.clear
-    }
-
     var body: some View {
         HStack(spacing: 10) {
             BrowserToolbarView(
@@ -31,7 +27,6 @@ struct BrowserChromeView: View {
 
             if let tab = state.selectedTab {
                 BrowserAddressBarView(tab: tab)
-                    .background(stateBackground)
                     .frame(maxWidth: .infinity)
             }
 

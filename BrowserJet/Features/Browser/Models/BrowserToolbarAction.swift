@@ -18,7 +18,6 @@ enum BrowserToolbarAction: Hashable {
     case refreshAllTabs
     case accountManager
     case screenshot
-    //case moreMenu
 }
 
 extension BrowserToolbarAction {
@@ -33,7 +32,6 @@ extension BrowserToolbarAction {
         case .refreshAllTabs:      return "arrow.clockwise"
         case .accountManager:      return "person.2"
         case .screenshot:          return "viewfinder"
-        //case .moreMenu:            return "slider.horizontal.3"
         }
     }
     
@@ -48,7 +46,6 @@ extension BrowserToolbarAction {
         case .refreshAllTabs:      return "Refresh all tabs"
         case .accountManager:      return "Account manager"
         case .screenshot:          return "Screenshot"
-        //case .moreMenu:            return "More"
         }
     }
     
