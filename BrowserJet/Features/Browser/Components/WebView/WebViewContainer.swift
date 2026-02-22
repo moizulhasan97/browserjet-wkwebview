@@ -27,8 +27,11 @@ struct WebViewContainer: NSViewRepresentable {
     func updateNSView(_ nsView: WKWebView, context: Context) {
         // Update coordinator's tab reference when tab changes
         context.coordinator.updateTab(tab)
-        // Ensure UI delegate is still set
-        nsView.uiDelegate = context.coordinator
+        // Always point the UI delegate at the live web view
+        // (nsView == tab.webView in normal flow; after a burn SwiftUI
+        //  recreates the container via .id(tab.webViewID) so makeNSView
+        //  is called instead, but this guard keeps things consistent.)
+        tab.webView.uiDelegate = context.coordinator
     }
 
     final class Coordinator: NSObject, WKUIDelegate {

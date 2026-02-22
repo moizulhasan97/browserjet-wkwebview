@@ -15,7 +15,7 @@ final class TabModel: ObservableObject, Identifiable {
     let sessionSlot: Int
 
     /// The actual resolved proxy credentials for this tab (nil for local).
-    let authProxy: AuthProxy?
+    @Published private(set) var authProxy: AuthProxy?
 
     /// The window-level selection (Local / On VPN / Premium / Custom)
     let proxyType: ProxyType
@@ -35,7 +35,8 @@ final class TabModel: ObservableObject, Identifiable {
         startedAsAboutBlank && !hasNavigatedAwayFromInitialBlank && favicon == nil
     }
 
-    let webView: WKWebView
+    @Published private(set) var webView: WKWebView
+    @Published private(set) var webViewID: UUID = UUID()
 
     // Keep it alive for the lifetime of the tab
     private var navigationDelegate: TabNavigationDelegate?
@@ -119,6 +120,12 @@ extension TabModel {
     }
 }
 
+extension TabModel {
+    func updateAuthProxy(_ newProxy: AuthProxy?) {
+        self.authProxy = newProxy
+    }
+}
+
 // MARK: - Tab Navigation Delegate
 private final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
     private weak var tab: TabModel?
@@ -136,6 +143,24 @@ private final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
 
     func setOnOpenInNewTab(_ callback: @escaping (URL) -> Void) {
         self.onOpenInNewTab = callback
+    }
+
+    /// Tear down KVO on the old WKWebView and re-attach everything to `newWebView`.
+    func rebindWebView(to newWebView: WKWebView) {
+        // 1. Tear down old KVO observations
+        titleObservation = nil
+        urlObservation = nil
+
+        // 2. Cancel any in-flight timeout
+        loadingTimeoutTask?.cancel()
+        loadingTimeoutTask = nil
+
+        // 3. Re-attach self as navigation delegate on the new web view
+        newWebView.navigationDelegate = self
+
+        // 4. Re-setup KVO observations against the new web view
+        guard let tab else { return }
+        setupObservations(for: tab)
     }
 
     private func setupObservations(for tab: TabModel) {
@@ -342,6 +367,51 @@ private final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
 
     private func openInSameTab(_ url: URL, webView: WKWebView) {
         webView.load(URLRequest(url: url))
+    }
+}
+
+// MARK: - Burn (proxy replacement)
+extension TabModel {
+    func replaceWebView(
+        newStore: WKWebsiteDataStore,
+        url: URL,
+        userAgent: String?
+    ) {
+        // 1. Build the new WKWebView
+        let config = WKWebViewConfiguration()
+        config.websiteDataStore = newStore
+        let newWebView = WKWebView(frame: .zero, configuration: config)
+
+        if let userAgent {
+            newWebView.customUserAgent = userAgent
+        }
+
+        // 2. Swap the web view on self BEFORE rebinding the delegate,
+        //    so that KVO closures that read tab.webView get the new instance.
+        webView = newWebView
+
+        // 3. Re-attach the navigation delegate (tears down old KVO, sets up new)
+        navigationDelegate?.rebindWebView(to: newWebView)
+
+        // 4. Re-attach the UI delegate (WebViewContainer.Coordinator).
+        //    It will be re-set by updateNSView after SwiftUI re-renders,
+        //    but set it now so nothing is missed during the load.
+        // (uiDelegate is intentionally left — WebViewContainer handles it)
+
+        // 5. Reset nav state
+        canGoBack = false
+        canGoForward = false
+        favicon = nil
+        isLoading = false
+
+        // 6. Bump the ID so SwiftUI recreates WebViewContainer
+        webViewID = UUID()
+
+        // 7. Load the URL
+        addressText = url.absoluteString
+        newWebView.load(URLRequest(url: url))
+
+        AppLogger.info("TabModel web view replaced - Tab ID: \(id), URL: \(url.absoluteString)")
     }
 }
 

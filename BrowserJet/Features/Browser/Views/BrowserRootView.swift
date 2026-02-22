@@ -51,7 +51,7 @@ struct BrowserRootView: View {
                 ) { url in
                     state.addTab(url: url)
                 }
-                .id(tab.id) // important for WKWebView switching
+                .id(tab.webViewID) // important for WKWebView switching
             } else {
                 EmptyView()
             }
@@ -79,10 +79,9 @@ struct BrowserRootView: View {
             state.addTab()
             
         case .burnProxyAndReload:
-            print("Burn proxy + reload pressed")
+            state.burnProxyAndReloadSelectedTab()
             
         case .duplicateToTabsMenu:
-            print("Duplicate tabs menu pressed") // the popover will print count already
             isDuplicatePopoverPresented = true
 
         case .refreshAllTabs:

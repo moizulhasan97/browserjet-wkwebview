@@ -16,7 +16,10 @@ final class BrowserWindowState: ObservableObject {
     private let isolationMode: SessionIsolationMode
     private let sessionManager: SessionManager
     let proxies: [AuthProxy]
-
+    private let proxyPool = ProxyPoolService()
+    private let rotation: ProxyRotationType = .linear // for now; later derive from launcher
+    private let initialURL: URL
+    
     // For `.perWindow`: share a single store and a single proxy (if needed)
     private lazy var perWindowProxy: AuthProxy? = {
         proxyType.resolveAuthProxy(slot: 0, proxies: proxies)
@@ -43,7 +46,14 @@ final class BrowserWindowState: ObservableObject {
         self.proxies = proxies
         self.userAgent = userAgent
         self.sessionManager = sessionManager
+        self.initialURL = initialURL
+        
+        if !proxyType.isLocal {
+                proxyPool.configure(provider: StaticAuthProxyProvider(proxies: proxies), rotation: rotation)
+            }
 
+        addTab(url: initialURL)
+        
         let count = max(1, initialTabCount)
         for _ in 0..<count {
             addTab(url: initialURL)
@@ -82,7 +92,7 @@ final class BrowserWindowState: ObservableObject {
 
     func addTab(url: URL? = nil) {
         // swiftlint:disable:next force_unwrapping
-        let tabURL = url ?? URL(string: "about:blank") ?? URL(string: "about:blank")!
+        let tabURL = url ?? URL(string: "about:blank")!
         guard let slot = sessionManager.acquireSessionSlot() else { return }
 
         let tabProxy: AuthProxy?
@@ -90,7 +100,7 @@ final class BrowserWindowState: ObservableObject {
         case .perWindow:
             tabProxy = perWindowProxy
         case .perTab:
-            tabProxy = proxyType.resolveAuthProxy(slot: slot, proxies: proxies)
+            tabProxy = proxyType.isLocal ? nil : proxyPool.getProxy(for: slot)
         }
 
         // Log VPN details for the tab
@@ -125,8 +135,12 @@ final class BrowserWindowState: ObservableObject {
         tabs.remove(at: index)
         sessionManager.releaseSessionSlot(slot)
 
+        if !proxyType.isLocal {
+            proxyPool.removeProxy(for: slot)
+        }
+
         if tabs.isEmpty {
-            addTab()
+            addTab(url: initialURL)
         } else {
             selectedTabID = tabs.last?.id
         }
@@ -143,5 +157,46 @@ final class BrowserWindowState: ObservableObject {
     /// For UI label: Local / On VPN / Premium / Custom
     var connectionStatusTitle: String {
         proxyType.statusTitle
+    }
+    
+    @MainActor
+    private func burnProxyAndReload(tabID: UUID) {
+        guard !proxyType.isLocal else {
+            AppLogger.info("Burn ignored: Local mode")
+            return
+        }
+        guard isolationMode == .perTab else {
+            AppLogger.info("Burn ignored: not perTab isolation mode")
+            return
+        }
+        guard let tab = tabs.first(where: { $0.id == tabID }) else { return }
+
+        let slot = tab.sessionSlot
+        guard let newProxy = proxyPool.burnProxy(for: slot) else {
+            AppLogger.warning("Burn failed: no proxies available")
+            return
+        }
+
+        // Capture the current URL before replacing the web view
+        let currentURL = tab.webView.url
+            ?? URL(string: tab.addressText)
+            ?? initialURL
+
+        // Build a fresh data store with the new proxy baked in
+        let newStore = makeNewDataStore(proxy: newProxy)
+
+        // Update the in-memory credential (for auth challenge handler)
+        tab.updateAuthProxy(newProxy)
+
+        // Replace the WKWebView entirely — this is the real burn
+        tab.replaceWebView(newStore: newStore, url: currentURL, userAgent: userAgent)
+
+        AppLogger.info("Burned proxy for slot \(slot). New proxy: \(newProxy.host):\(newProxy.port). URL: \(currentURL.absoluteString)")
+    }
+
+    @MainActor
+    func burnProxyAndReloadSelectedTab() {
+        guard let id = selectedTabID else { return }
+        burnProxyAndReload(tabID: id)
     }
 }
