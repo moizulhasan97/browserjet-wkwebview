@@ -12,16 +12,18 @@ final class LauncherViewModel: ObservableObject {
     @Published var settings: LauncherSettings
 
     private let defaultSearchAddress: String
-
-    init(defaultSearchAddress: String) {
+    let availableVPNs: [VPNType]
+    
+    init(defaultSearchAddress: String, appConfiguration: AppConfiguration) {
         AppLogger.debug("LauncherViewModel initializing with default address: \(defaultSearchAddress)")
+        self.availableVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
         self.defaultSearchAddress = defaultSearchAddress
         self.settings = LauncherSettings(
             address: "",
             numberOfTabs: .one,
             isVPNEnabled: false,
             isPremiumProxyEnabled: false,
-            selectedVPN: .vpn1,
+            selectedVPN: availableVPNs.first,
             selectedRegion: .uk
         )
         AppLogger.debug("LauncherViewModel initialized with default settings")

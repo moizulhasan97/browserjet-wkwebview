@@ -28,7 +28,7 @@ struct BrowserTabsStripView: View {
     var body: some View {
         GeometryReader { geometry in
             let availableWidth = max(0, geometry.size.width - (horizontalPadding * 2))
-            let tabCount = max(state.tabItems.count, 1)
+            let tabCount = max(state.tabs.count, 1)
 
             // Smart tab sizing: tabs shrink as count increases
             let rawWidth = availableWidth / CGFloat(tabCount)
@@ -39,7 +39,7 @@ struct BrowserTabsStripView: View {
                 ScrollViewReader { proxy in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: spacing) {
-                            ForEach(state.tabItems) { tab in
+                            ForEach(state.tabs) { tab in
                                 BrowserTabPillView(
                                     tab: tab,
                                     isSelected: tab.id == state.selectedTabID,
@@ -92,7 +92,7 @@ struct BrowserTabsStripView: View {
                         let contentWidth = calculatedWidth * CGFloat(tabCount) + horizontalPadding * 2
                         updateScrollIndicators(geometry: geometry, contentWidth: contentWidth)
                     }
-                    .onChange(of: state.tabItems.count) { _ in
+                    .onChange(of: state.tabs.count) { _ in
                         // Auto-scroll to selected tab when tabs change
                         if let selectedID = state.selectedTabID {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -102,7 +102,7 @@ struct BrowserTabsStripView: View {
                             }
                         }
                     }
-                    .animation(.spring(response: 0.4, dampingFraction: 0.8), value: state.tabItems)
+                    .animation(.spring(response: 0.4, dampingFraction: 0.8), value: state.tabs.count)
                 }
 
                 // Left fade gradient for overflow

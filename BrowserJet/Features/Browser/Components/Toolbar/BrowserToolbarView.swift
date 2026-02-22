@@ -9,62 +9,61 @@
 import SwiftUI
 
 struct BrowserToolbarView: View {
-    @Environment(\.appTheme)
-    private var theme
-
+    @Environment(\.appTheme) private var theme
+    @State private var showingDuplicatePopover = false
     let actions: [BrowserToolbarAction]
     let onAction: (BrowserToolbarAction) -> Void
+    /// Called when the user confirms a duplicate-tabs count from the popover.
+    var onDuplicateTabs: ((Int) -> Void)? = nil
+
+    @State private var hovering: BrowserToolbarAction?
 
     var body: some View {
         HStack(spacing: 10) {
             ForEach(actions, id: \.self) { action in
                 Button {
-                    onAction(action)
+                    if action == .duplicateToTabsMenu {
+                        showingDuplicatePopover.toggle()
+                    } else {
+                        onAction(action)
+                    }
                 } label: {
-                    Image(systemName: action.systemImageName)
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(theme.textPrimary)
-                        .frame(width: 28, height: 28)
-                        .background(theme.surfaceControl.opacity(0.7))
-                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .stroke(theme.strokeControl.opacity(0.8), lineWidth: 1)
-                        )
+                    BrowserToolbarIconButtonStyle(
+                        systemImageName: action.systemImageName,
+                        tooltip: action.accessibilityTitle
+                    )
                 }
                 .buttonStyle(.plain)
+                .popover(
+                    isPresented: Binding(
+                        get: { showingDuplicatePopover && action == .duplicateToTabsMenu },
+                        set: { showingDuplicatePopover = $0 }
+                    ),
+                    arrowEdge: .bottom
+                ) {
+                    DuplicateTabsPopoverView { count in
+                        showingDuplicatePopover = false
+                        onDuplicateTabs?(count)
+                    }
+                }
                 .accessibilityLabel(action.accessibilityTitle)
+                .help(action.tooltip)
+                .onHover { isHovering in
+                    withAnimation(.easeInOut(duration: 0.12)) {
+                        hovering = isHovering ? action : (hovering == action ? nil : hovering)
+                    }
+                }
             }
         }
     }
-}
 
-private extension BrowserToolbarAction {
-    var systemImageName: String {
-        switch self {
-        case .back: return "chevron.left"
-        case .forward: return "chevron.right"
-        case .reload: return "arrow.clockwise"
-        case .vpnIndicator: return "shield"
-        case .favorites: return "star"
-        case .newTab: return "plus.square.on.square"
-        case .downloads: return "arrow.down.circle"
-        case .history: return "clock"
-        case .settings: return "slider.horizontal.3"
-        }
+    private func background(for action: BrowserToolbarAction) -> Color {
+        let isHover = hovering == action
+        return theme.surfaceControl.opacity(isHover ? 0.95 : 0.7)
     }
 
-    var accessibilityTitle: String {
-        switch self {
-        case .back: return "Back"
-        case .forward: return "Forward"
-        case .reload: return "Reload"
-        case .vpnIndicator: return "Connection"
-        case .favorites: return "Favorites"
-        case .newTab: return "New Tab"
-        case .downloads: return "Downloads"
-        case .history: return "History"
-        case .settings: return "Settings"
-        }
+    private func border(for action: BrowserToolbarAction) -> Color {
+        let isHover = hovering == action
+        return theme.strokeControl.opacity(isHover ? 1.0 : 0.8)
     }
 }

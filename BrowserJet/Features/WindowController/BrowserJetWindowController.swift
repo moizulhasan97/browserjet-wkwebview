@@ -11,6 +11,7 @@ import SwiftUI
 
 protocol ShowableWindowController: AnyObject {
     func show()
+    func close()
 }
 
 final class BrowserJetWindowController<Content: View>: NSWindowController, ShowableWindowController {
@@ -87,5 +88,11 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
             self.window?.makeFirstResponder(nil)
         }
         AppLogger.info("Window activated and made key")
+    }
+
+    override func close() {
+        AppLogger.debug("Closing window")
+        window?.close()
+        AppLogger.info("Window closed")
     }
 }

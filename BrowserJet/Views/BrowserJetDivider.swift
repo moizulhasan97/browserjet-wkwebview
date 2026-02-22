@@ -15,18 +15,15 @@ struct BrowserJetDivider: View {
     private var theme
 
     private let thickness: CGFloat
-    private let opacity: Double
     private let horizontalPadding: CGFloat
     private let verticalPadding: CGFloat
 
     init(
         thickness: CGFloat = 1,
-        opacity: Double = 0.15,
         horizontalPadding: CGFloat = 0,
         verticalPadding: CGFloat = 0
     ) {
         self.thickness = thickness
-        self.opacity = opacity
         self.horizontalPadding = horizontalPadding
         self.verticalPadding = verticalPadding
     }
@@ -43,7 +40,6 @@ struct BrowserJetDivider: View {
 #Preview {
     BrowserJetDivider(
         thickness: 1,
-        opacity: 0.15,
         horizontalPadding: 0,
         verticalPadding: 8
     )

@@ -23,10 +23,6 @@ struct LauncherSettings {
         !address.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    var canTogglePremiumProxy: Bool {
-        isVPNEnabled && !isPremiumProxyEnabled
-    }
-
     var areVPNControlsEnabled: Bool {
         isVPNEnabled && !isPremiumProxyEnabled
     }

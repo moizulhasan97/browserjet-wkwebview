@@ -12,14 +12,11 @@ struct BrowserChromeView: View {
     @ObservedObject var state: BrowserWindowState
     let menu: BrowserMenuBuilder
     let onToolbarAction: (BrowserToolbarAction) -> Void
-
+    let onMoreMenuSelect: (BrowserMoreMenuItem) -> Void
+    var onDuplicateTabs: ((Int) -> Void)? = nil
+    
     @Environment(\.appTheme)
     private var theme
-
-    private var stateBackground: some View {
-        // keep it consistent with your chrome background
-        Color.clear
-    }
 
     var body: some View {
         HStack(spacing: 10) {
@@ -30,26 +27,25 @@ struct BrowserChromeView: View {
 
             if let tab = state.selectedTab {
                 BrowserAddressBarView(tab: tab)
-                    .background(stateBackground)
                     .frame(maxWidth: .infinity)
             }
 
             BrowserConnectionBadgeView(proxyType: state.proxyType)
 
-            BrowserToolbarView(
-                actions: menu.trailing,
-                onAction: onToolbarAction
-            )
+
+            
+            HStack(spacing: 10) {
+                BrowserToolbarView(
+                    actions: menu.trailing,
+                    onAction: onToolbarAction,
+                    onDuplicateTabs: onDuplicateTabs
+                )
+                BrowserMoreMenuView(items: menu.moreMenuItems) { item in
+                    onMoreMenuSelect(item)
+                }
+            }
         }
-        // .padding(.horizontal, 12)
         .padding(.vertical, 4)
-        // .background(theme.surfaceCard.opacity(0.65))
-        //        .overlay(
-        //            Rectangle()
-        //                .frame(height: 1)
-        //                .foregroundStyle(theme.divider),
-        //            alignment: .bottom
-        //        )
     }
 }
 
@@ -97,50 +93,13 @@ struct BrowserChromeView: View {
     ]
 
     state.selectedTabID = state.tabs.first?.id
-
     return BrowserChromeView(
         state: state,
-        menu: .default
-    ) { _ in }
-    // .frame(width: 900, height: 80)
-    // .padding()
+        menu: .default,
+        onToolbarAction: {_ in},
+        onMoreMenuSelect: {_ in}
+    )
     .background(AppBackgroundStyle.browserJetGradient.makeView())
     .environmentObject(sessionManager)
     .environment(\.appTheme, BrowserJetLightTheme())
-}
-
-#Preview {
-    let sessionManager = SessionManager()
-    let themeManager = ThemeManager()
-
-    // Fake request
-    let request = LaunchRequest(
-        address: "https://www.google.com",
-        numberOfTabs: 3,
-        proxyType: .proxy(.builtIn(vpn: .vpn1, region: .uk)),
-        isolationMode: .perTab,
-        userAgent: nil
-    )
-
-    // Fake proxies
-    let proxies: [AuthProxy] = [
-        AuthProxy(host: "127.0.0.1", port: 8080, username: "u", password: "p")
-    ]
-
-    let state = BrowserWindowState(
-        proxyType: request.proxyType,
-        isolationMode: request.isolationMode,
-        proxies: proxies,
-        userAgent: request.userAgent,
-        sessionManager: sessionManager,
-        initialURL: URL(string: "https://www.google.com")!,
-        initialTabCount: 2
-    )
-
-    return BrowserWindowView(state: state, request: request)
-        .environmentObject(sessionManager)
-        .environmentObject(themeManager)
-        .environment(\.appTheme, BrowserJetLightTheme())
-    // .padding()
-        .background(AppBackgroundStyle.browserJetGradient.makeView())
 }

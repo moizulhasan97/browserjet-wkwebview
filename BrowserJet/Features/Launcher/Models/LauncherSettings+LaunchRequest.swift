@@ -14,7 +14,8 @@ extension LauncherSettings {
             numberOfTabs: numberOfTabs.rawValue,
             proxyType: resolvedProxyType(),
             isolationMode: appConfiguration.sessionIsolationModeValue,
-            userAgent: appConfiguration.userAgentValue
+            userAgent: appConfiguration.userAgentValue,
+            selectedVPN: selectedVPN
         )
     }
 }

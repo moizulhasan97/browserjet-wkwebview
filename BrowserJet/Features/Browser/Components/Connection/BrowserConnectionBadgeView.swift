@@ -24,7 +24,7 @@ struct BrowserConnectionBadgeView: View {
             .padding(.horizontal, 10)
             .background(theme.surfaceControl)
             .overlay(
-                RoundedRectangle(cornerRadius: 4, style: .continuous)
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .stroke(theme.strokeControl, lineWidth: 1)
             )
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
