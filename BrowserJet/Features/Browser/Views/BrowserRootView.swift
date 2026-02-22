@@ -9,6 +9,19 @@
 import SwiftUI
 import WebKit
 
+/// Thin wrapper that holds an `@ObservedObject` reference to the currently
+/// selected tab so that `BrowserRootView` re-renders whenever any `@Published`
+/// property on the tab changes — including `webViewID` after a burn.
+private struct SelectedTabWebView: View {
+    @ObservedObject var tab: TabModel
+    let onOpenInNewTab: (URL) -> Void
+
+    var body: some View {
+        WebViewContainer(tab: tab, onOpenInNewTab: onOpenInNewTab)
+            .id(tab.webViewID)
+    }
+}
+
 struct BrowserRootView: View {
     @StateObject var state: BrowserWindowState
     let menu: BrowserMenuBuilder
@@ -28,14 +41,13 @@ struct BrowserRootView: View {
                 onDuplicateTabs: duplicateSelectedTab
             )
 
-            // Web content
+            // Web content — SelectedTabWebView holds an @ObservedObject on the
+            // active tab so SwiftUI re-renders (and re-evaluates .id) whenever
+            // webViewID changes after a burn.
             if let tab = state.selectedTab {
-                WebViewContainer(
-                    tab: tab
-                ) { url in
+                SelectedTabWebView(tab: tab) { url in
                     state.addTab(url: url)
                 }
-                .id(tab.webViewID) // important for WKWebView switching
             } else {
                 EmptyView()
             }

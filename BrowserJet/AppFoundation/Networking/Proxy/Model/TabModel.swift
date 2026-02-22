@@ -38,6 +38,10 @@ final class TabModel: ObservableObject, Identifiable {
     @Published private(set) var webView: WKWebView
     @Published private(set) var webViewID: UUID = UUID()
 
+    /// Set by replaceWebView; consumed by WebViewContainer.makeNSView once the
+    /// new WKWebView is in the window and has a real frame.
+    var pendingURL: URL? = nil
+
     // Keep it alive for the lifetime of the tab
     private var navigationDelegate: TabNavigationDelegate?
 
@@ -404,12 +408,16 @@ extension TabModel {
         favicon = nil
         isLoading = false
 
-        // 6. Bump the ID so SwiftUI recreates WebViewContainer
-        webViewID = UUID()
-
-        // 7. Load the URL
+        // 6. Store the URL for WebViewContainer.makeNSView to load AFTER the new
+        //    WKWebView is placed into the window with a real frame. Loading before
+        //    that causes WebKit to stall rendering on the zero-frame, windowless view,
+        //    so the page content only appears when a tab switch forces a re-render.
         addressText = url.absoluteString
-        newWebView.load(URLRequest(url: url))
+        pendingURL = url
+
+        // 7. Bump the ID so SwiftUI destroys the old WebViewContainer and calls
+        //    makeNSView on a fresh one — that's where the load is triggered.
+        webViewID = UUID()
 
         AppLogger.info("TabModel web view replaced - Tab ID: \(id), URL: \(url.absoluteString)")
     }

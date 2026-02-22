@@ -71,7 +71,7 @@ extension AppConfiguration {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
             proxyType: .local,
-            defaultSearchAddress: "https://www.google.com/",
+            defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
             vpnConfigurations: [
@@ -137,7 +137,7 @@ extension AppConfiguration {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
             proxyType: .local,
-            defaultSearchAddress: "https://www.google.com/",
+            defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
             vpnConfigurations: [

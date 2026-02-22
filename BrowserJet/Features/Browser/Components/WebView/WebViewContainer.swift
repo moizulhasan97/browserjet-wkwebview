@@ -18,10 +18,21 @@ struct WebViewContainer: NSViewRepresentable {
     }
 
     func makeNSView(context: Context) -> WKWebView {
-        // TabModel already has its own navigationDelegate for state updates
-        // Coordinator only handles UI-specific actions (opening new tabs)
-        tab.webView.uiDelegate = context.coordinator
-        return tab.webView
+        let webView = tab.webView
+        webView.uiDelegate = context.coordinator
+
+        // If a burn just happened, pendingURL holds the URL to load. We defer
+        // by one run-loop tick so AppKit has finished sizing the view and adding
+        // it to the window before WebKit starts rendering — this prevents the
+        // "content only appears after switching tabs" stall.
+        if let url = tab.pendingURL {
+            tab.pendingURL = nil
+            DispatchQueue.main.async {
+                webView.load(URLRequest(url: url))
+            }
+        }
+
+        return webView
     }
 
     func updateNSView(_ nsView: WKWebView, context: Context) {
