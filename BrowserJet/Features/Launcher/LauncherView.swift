@@ -224,7 +224,7 @@ private extension LauncherView {
                 ),
                 isDisabled: !viewModel.settings.areVPNControlsEnabled,
                 width: Constants.vpnPickerWidth
-            ) { $0.rawValue }
+            ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
         }
     }
 
