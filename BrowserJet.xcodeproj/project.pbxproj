@@ -14,6 +14,8 @@
 		AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */; };
 		AF401AA42F4CD89D00EF265C /* BrowserJetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */; };
 		AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA52F4CEABD00EF265C /* ValidationRule.swift */; };
+		AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */; };
+		AF401AAA2F4CF18B00EF265C /* LoadingOverlayModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA92F4CF18B00EF265C /* LoadingOverlayModifier.swift */; };
 		AF498D2F2F4AB8AD004C03B3 /* ProxyPoolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */; };
 		AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */; };
 		AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */; };
@@ -104,6 +106,8 @@
 		AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStyleProvider.swift; sourceTree = "<group>"; };
 		AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextField.swift; sourceTree = "<group>"; };
 		AF401AA52F4CEABD00EF265C /* ValidationRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationRule.swift; sourceTree = "<group>"; };
+		AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlayView.swift; sourceTree = "<group>"; };
+		AF401AA92F4CF18B00EF265C /* LoadingOverlayModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlayModifier.swift; sourceTree = "<group>"; };
 		AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyPoolService.swift; sourceTree = "<group>"; };
 		AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticAuthProxyProvider.swift; sourceTree = "<group>"; };
 		AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationRootView.swift; sourceTree = "<group>"; };
@@ -289,6 +293,7 @@
 		AF56EF112F3DFC8D00E49C58 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
+				AF401AA92F4CF18B00EF265C /* LoadingOverlayModifier.swift */,
 				AF56EF122F3DFC9800E49C58 /* CornerRadiusModifier.swift */,
 			);
 			path = Modifiers;
@@ -558,6 +563,7 @@
 		AFF3EB0B2F3CACB100C6F08E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */,
 				AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */,
 				AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */,
 				AF56EF062F3DEE2300E49C58 /* BrowserJetAppButton.swift */,
@@ -812,6 +818,7 @@
 				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
+				AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */,
 				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,
 				AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */,
 				AFF3EB362F3CACB100C6F08E /* BrowserJetDarkTheme.swift in Sources */,
@@ -833,6 +840,7 @@
 				AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */,
 				AF56EF102F3DFC8400E49C58 /* CustomWidth.swift in Sources */,
 				AF56EF192F3E027000E49C58 /* AppConfiguration+Environment.swift in Sources */,
+				AF401AAA2F4CF18B00EF265C /* LoadingOverlayModifier.swift in Sources */,
 				AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */,
 				AFF3EB3C2F3CACB100C6F08E /* AppTheme.swift in Sources */,
 				AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */,

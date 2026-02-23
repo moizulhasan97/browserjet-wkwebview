@@ -47,6 +47,7 @@ struct ActivationRootView: View {
         }
         .padding()
         .background(AppBackgroundStyle.browserJetGradient.makeView())
+        .loadingOverlay(isLoading: viewModel.isLoading)
     }
 
     private var header: some View {
