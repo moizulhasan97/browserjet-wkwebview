@@ -33,4 +33,6 @@ struct BrowserJetDarkTheme: AppTheme {
 
     let badgeBackground = Color.white.opacity(0.12)
     let badgeText = Color.white
+    
+    let danger: Color = .E_5484_D
 }
