@@ -18,6 +18,7 @@ struct AddressFieldBase<Left: View, Right: View>: View {
     private let height: CGFloat
     private let font: Font
     private let fontColor: Color
+    private let isSecure: Bool
     private let left: Left
     private let right: Right
 
@@ -27,6 +28,7 @@ struct AddressFieldBase<Left: View, Right: View>: View {
         height: CGFloat = DesignMetrics.launcherAddressFieldHeight,
         font: Font,
         fontColor: Color,
+        isSecure: Bool = false,
         @ViewBuilder left: () -> Left,
         @ViewBuilder right: () -> Right
     ) {
@@ -35,15 +37,16 @@ struct AddressFieldBase<Left: View, Right: View>: View {
         self.height = height
         self.font = font
         self.fontColor = fontColor
+        self.isSecure = isSecure
         self.left = left()
         self.right = right()
     }
 
     var body: some View {
         HStack {
-            left // icon
+            left
 
-            textField
+            inputField
 
             right
         }
@@ -68,18 +71,27 @@ struct AddressFieldBase<Left: View, Right: View>: View {
         )
     }
 
-    private var textField: some View {
+    @ViewBuilder
+    private var inputField: some View {
         ZStack(alignment: .leading) {
             if text.wrappedValue.isEmpty {
                 Text(placeholder)
                     .foregroundStyle(theme.textFieldSecondary)
                     .font(font)
             }
-            TextField("", text: text)
-                .textFieldStyle(.plain)
-                .font(font)
-                .foregroundStyle(fontColor)
-                .focused($isFocused)
+            if isSecure {
+                SecureField("", text: text)
+                    .textFieldStyle(.plain)
+                    .font(font)
+                    .foregroundStyle(fontColor)
+                    .focused($isFocused)
+            } else {
+                TextField("", text: text)
+                    .textFieldStyle(.plain)
+                    .font(font)
+                    .foregroundStyle(fontColor)
+                    .focused($isFocused)
+            }
         }
     }
 }

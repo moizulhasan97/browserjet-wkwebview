@@ -34,4 +34,7 @@ struct BrowserJetLightTheme: AppTheme {
     // MARK: - Badge
     let badgeBackground: Color = .black.opacity(0.70)
     let badgeText: Color = .white
+    
+    // MARK: - Error
+    let danger: Color = .E_5484_D
 }

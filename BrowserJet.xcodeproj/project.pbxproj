@@ -10,8 +10,17 @@
 		AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */; };
 		AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DE2F4653D300A12964 /* VPNProvider.swift */; };
 		AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */; };
+		AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */; };
+		AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */; };
+		AF401AA42F4CD89D00EF265C /* BrowserJetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */; };
+		AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA52F4CEABD00EF265C /* ValidationRule.swift */; };
+		AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */; };
+		AF401AAA2F4CF18B00EF265C /* LoadingOverlayModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA92F4CF18B00EF265C /* LoadingOverlayModifier.swift */; };
 		AF498D2F2F4AB8AD004C03B3 /* ProxyPoolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */; };
 		AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */; };
+		AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */; };
+		AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */; };
+		AF498D3A2F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */; };
 		AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */; };
 		AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE62F3CBB3200E49C58 /* AddressFieldBase.swift */; };
 		AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE82F3CC2D200E49C58 /* DesignSystem.swift */; };
@@ -93,8 +102,17 @@
 		AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNConfiguration.swift; sourceTree = "<group>"; };
 		AF0A09DE2F4653D300A12964 /* VPNProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNProvider.swift; sourceTree = "<group>"; };
 		AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameGenerator.swift; sourceTree = "<group>"; };
+		AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextfieldStyleProtocol.swift; sourceTree = "<group>"; };
+		AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStyleProvider.swift; sourceTree = "<group>"; };
+		AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextField.swift; sourceTree = "<group>"; };
+		AF401AA52F4CEABD00EF265C /* ValidationRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationRule.swift; sourceTree = "<group>"; };
+		AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlayView.swift; sourceTree = "<group>"; };
+		AF401AA92F4CF18B00EF265C /* LoadingOverlayModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlayModifier.swift; sourceTree = "<group>"; };
 		AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyPoolService.swift; sourceTree = "<group>"; };
 		AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticAuthProxyProvider.swift; sourceTree = "<group>"; };
+		AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationRootView.swift; sourceTree = "<group>"; };
+		AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationViewModel.swift; sourceTree = "<group>"; };
+		AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetSegmentedPicker.swift; sourceTree = "<group>"; };
 		AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
 		AF56EEE62F3CBB3200E49C58 /* AddressFieldBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFieldBase.swift; sourceTree = "<group>"; };
 		AF56EEE82F3CC2D200E49C58 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
@@ -196,6 +214,24 @@
 			path = VPN;
 			sourceTree = "<group>";
 		};
+		AF401A9E2F4CC73F00EF265C /* TextFields */ = {
+			isa = PBXGroup;
+			children = (
+				AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */,
+				AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */,
+			);
+			path = TextFields;
+			sourceTree = "<group>";
+		};
+		AF498D322F4B6D52004C03B3 /* Activation */ = {
+			isa = PBXGroup;
+			children = (
+				AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */,
+				AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */,
+			);
+			path = Activation;
+			sourceTree = "<group>";
+		};
 		AF56EEF02F3CCDA100E49C58 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +281,7 @@
 		AF56EF0C2F3DF84A00E49C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				AF401AA52F4CEABD00EF265C /* ValidationRule.swift */,
 				AF69F5C42F43751E00B33610 /* SessionIsolationMode.swift */,
 				AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */,
 				AF56EF0F2F3DFC8300E49C58 /* CustomWidth.swift */,
@@ -256,6 +293,7 @@
 		AF56EF112F3DFC8D00E49C58 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
+				AF401AA92F4CF18B00EF265C /* LoadingOverlayModifier.swift */,
 				AF56EF122F3DFC9800E49C58 /* CornerRadiusModifier.swift */,
 			);
 			path = Modifiers;
@@ -514,6 +552,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AF498D322F4B6D52004C03B3 /* Activation */,
 				AF69F5AA2F4370BF00B33610 /* Browser */,
 				AF56EF212F3E07A700E49C58 /* WindowController */,
 				AFF3EB092F3CACB100C6F08E /* Launcher */,
@@ -524,6 +563,9 @@
 		AFF3EB0B2F3CACB100C6F08E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */,
+				AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */,
+				AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */,
 				AF56EF062F3DEE2300E49C58 /* BrowserJetAppButton.swift */,
 				AF56EEFC2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift */,
 				AF56EEFA2F3CFA8E00E49C58 /* BrowserJetDivider.swift */,
@@ -623,6 +665,7 @@
 		AFF3EB292F3CACB100C6F08E /* Theme */ = {
 			isa = PBXGroup;
 			children = (
+				AF401A9E2F4CC73F00EF265C /* TextFields */,
 				AF56EF012F3D0A4200E49C58 /* View */,
 				AF56EEFE2F3D086600E49C58 /* Buttons */,
 				AFF3EB122F3CACB100C6F08E /* Metrics */,
@@ -755,11 +798,13 @@
 				AFF3EB2E2F3CACB100C6F08E /* TitleStyles.swift in Sources */,
 				AFF3EB312F3CACB100C6F08E /* AppBackgroundStyle.swift in Sources */,
 				AFF3EB322F3CACB100C6F08E /* AppTypography.swift in Sources */,
+				AF401AA42F4CD89D00EF265C /* BrowserJetTextField.swift in Sources */,
 				AF56EF032F3D0A4900E49C58 /* ViewConfig.swift in Sources */,
 				AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */,
 				AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */,
 				AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */,
 				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
+				AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */,
 				AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */,
 				AF56EF132F3DFC9800E49C58 /* CornerRadiusModifier.swift in Sources */,
 				AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */,
@@ -773,10 +818,12 @@
 				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
+				AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */,
 				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,
 				AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */,
 				AFF3EB362F3CACB100C6F08E /* BrowserJetDarkTheme.swift in Sources */,
 				AFF3EB372F3CACB100C6F08E /* LauncherView.swift in Sources */,
+				AF498D3A2F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift in Sources */,
 				AF56EEED2F3CC4B700E49C58 /* TextFieldStyles.swift in Sources */,
 				AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */,
 				AFF3EB382F3CACB100C6F08E /* AppLogger.swift in Sources */,
@@ -785,6 +832,7 @@
 				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
 				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
 				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,
+				AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */,
 				AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */,
 				AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */,
 				AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */,
@@ -792,13 +840,16 @@
 				AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */,
 				AF56EF102F3DFC8400E49C58 /* CustomWidth.swift in Sources */,
 				AF56EF192F3E027000E49C58 /* AppConfiguration+Environment.swift in Sources */,
+				AF401AAA2F4CF18B00EF265C /* LoadingOverlayModifier.swift in Sources */,
 				AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */,
 				AFF3EB3C2F3CACB100C6F08E /* AppTheme.swift in Sources */,
 				AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */,
 				AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */,
 				AF56EF072F3DEE3100E49C58 /* BrowserJetAppButton.swift in Sources */,
+				AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */,
 				AF56EEFB2F3CFA8E00E49C58 /* BrowserJetDivider.swift in Sources */,
 				AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */,
+				AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */,
 				AF69F5E52F43A3B200B33610 /* BrowserRootView.swift in Sources */,
 				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,
 				AF69F5E12F43A30A00B33610 /* LaunchRequest.swift in Sources */,
@@ -815,6 +866,7 @@
 				AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */,
 				AF69F5C12F43747800B33610 /* BrowserToolbarView.swift in Sources */,
 				AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */,
+				AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */,
 				AF56EF052F3D0A7C00E49C58 /* BrowserJetViewConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -21,13 +21,11 @@ struct LauncherSearchField: View {
     }
 
     var body: some View {
-        AddressFieldBase(
+        BrowserJetTextField(
+            type: .launcherAddress,
             text: $text,
-            placeholder: placeholder,
-            height: height,
-            font: designSystem.typography.launcherField.font,
-            fontColor: theme.textPrimary,
-            left: { searchIcon },
+            placeholder: "Enter your address...",
+            left: { Image(.icSearch) },
             right: { EmptyView() }
         )
     }

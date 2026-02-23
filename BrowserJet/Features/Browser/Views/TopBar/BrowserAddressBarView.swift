@@ -16,8 +16,6 @@ struct BrowserAddressBarView: View {
 
     @ObservedObject var tab: TabModel
 
-    private let height: CGFloat = DesignMetrics.browserAddressFieldHeight
-
     @State private var isHovering: Bool = false
     @FocusState private var isFocused: Bool
 
@@ -46,15 +44,10 @@ struct BrowserAddressBarView: View {
     }
 
     var body: some View {
-        AddressFieldBase(
-            text: Binding(
-                get: { tab.addressText },
-                set: { tab.addressText = $0 }
-            ),
+        BrowserJetTextField(
+            type: .browserAddress,
+            text: Binding(get: { tab.addressText }, set: { tab.addressText = $0 }),
             placeholder: "Search or enter website",
-            height: height,
-            font: designSystem.typography.launcherField.font,
-            fontColor: theme.textPrimary,
             left: { leftIcon },
             right: { rightClearButton }
         )
@@ -78,7 +71,6 @@ struct BrowserAddressBarView: View {
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(theme.textPrimary.opacity(0.8))
             .frame(width: 18, height: 18)
-        // .padding(.leading, 2)
     }
 
     @ViewBuilder
@@ -116,46 +108,33 @@ struct BrowserAddressBarView: View {
         .environment(\.designSystem, DesignSystem())
 }
 
-private struct BrowserAddressBarViewPreviewHost: View {
-    @StateObject private var tab = MockTabModel()
+@MainActor
+private final class PreviewTabHolder: ObservableObject {
+    let tab: TabModel = TabModel.preview(
+        addressText: "https://www.google.com",
+        title: "Google",
+        isLoading: false,
+        favicon: nil
+    )
 
-    var body: some View {
-        VStack(spacing: 16) {
-            BrowserAddressBarView(tab: tab.asTabModel)
-                .frame(maxWidth: 900)
-
-            // quick controls to simulate editing
-            HStack {
-                Button("Set https") { tab.setAddress("https://www.google.com") }
-                Button("Set http") { tab.setAddress("http://example.com") }
-                Button("Set query") { tab.setAddress("ticketmaster queue") }
-            }
-        }
+    func setAddress(_ text: String) {
+        tab.addressText = text
     }
 }
 
-/// A tiny preview helper so we don’t rely on a live WKWebView in Preview.
-@MainActor
-private final class MockTabModel: ObservableObject {
-    @Published var addressText: String = "https://www.google.com"
-    @Published var title: String = "Google"
-    @Published var isLoading: Bool = false
-    @Published var favicon: NSImage?
+private struct BrowserAddressBarViewPreviewHost: View {
+    @StateObject private var holder = PreviewTabHolder()
 
-    // Provide a real WKWebView instance (it exists in preview, but may not navigate).
-    let webView = WKWebView()
+    var body: some View {
+        VStack(spacing: 16) {
+            BrowserAddressBarView(tab: holder.tab)
+                .frame(maxWidth: 900)
 
-    func setAddress(_ text: String) {
-        addressText = text
-    }
-
-    var asTabModel: TabModel {
-        TabModel.preview(
-            addressText: addressText,
-            title: title,
-            isLoading: isLoading,
-            favicon: favicon,
-            webView: webView
-        )
+            HStack {
+                Button("Set https") { holder.setAddress("https://www.google.com") }
+                Button("Set http")  { holder.setAddress("http://example.com") }
+                Button("Set query") { holder.setAddress("ticketmaster queue") }
+            }
+        }
     }
 }
