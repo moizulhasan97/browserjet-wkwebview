@@ -16,6 +16,22 @@
 		AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA52F4CEABD00EF265C /* ValidationRule.swift */; };
 		AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */; };
 		AF401AAA2F4CF18B00EF265C /* LoadingOverlayModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA92F4CF18B00EF265C /* LoadingOverlayModifier.swift */; };
+		AF401AAD2F4D1A2200EF265C /* APIEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AAC2F4D1A2200EF265C /* APIEnvironment.swift */; };
+		AF401AAF2F4D1A5B00EF265C /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AAE2F4D1A5B00EF265C /* APIError.swift */; };
+		AF401AB12F4D1A7D00EF265C /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AB02F4D1A7D00EF265C /* APIClient.swift */; };
+		AF401AB42F4D1A9B00EF265C /* EndpointProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AB32F4D1A9B00EF265C /* EndpointProtocol.swift */; };
+		AF401AB72F4D1AE300EF265C /* LicenseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AB62F4D1AE300EF265C /* LicenseService.swift */; };
+		AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AB82F4D1B0400EF265C /* ProxyService.swift */; };
+		AF401ABB2F4D1B1100EF265C /* AppUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401ABA2F4D1B1100EF265C /* AppUpdateService.swift */; };
+		AF401ABD2F4D1BC800EF265C /* LicenseEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401ABC2F4D1BC800EF265C /* LicenseEndpoint.swift */; };
+		AF401ABF2F4D1BE900EF265C /* ProxyEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401ABE2F4D1BE900EF265C /* ProxyEndpoint.swift */; };
+		AF401AC12F4D1C3000EF265C /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AC02F4D1C3000EF265C /* HTTPMethod.swift */; };
+		AF401AC32F4D1C5B00EF265C /* AppUpdateEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AC22F4D1C5B00EF265C /* AppUpdateEndpoint.swift */; };
+		AF401AC52F4D2BE800EF265C /* DateFormatterProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AC42F4D2BE700EF265C /* DateFormatterProvider.swift */; };
+		AF401AC82F4D2C1600EF265C /* LicenseEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AC72F4D2C1500EF265C /* LicenseEnums.swift */; };
+		AF401ACA2F4D2C3F00EF265C /* VerifyKeyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AC92F4D2C3F00EF265C /* VerifyKeyResponse.swift */; };
+		AF401ACC2F4D2C8400EF265C /* PersistedLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401ACB2F4D2C8400EF265C /* PersistedLicense.swift */; };
+		AF401ACF2F4D2CA700EF265C /* LicenseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401ACE2F4D2CA700EF265C /* LicenseStore.swift */; };
 		AF498D2F2F4AB8AD004C03B3 /* ProxyPoolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */; };
 		AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */; };
 		AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */; };
@@ -108,6 +124,22 @@
 		AF401AA52F4CEABD00EF265C /* ValidationRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationRule.swift; sourceTree = "<group>"; };
 		AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlayView.swift; sourceTree = "<group>"; };
 		AF401AA92F4CF18B00EF265C /* LoadingOverlayModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlayModifier.swift; sourceTree = "<group>"; };
+		AF401AAC2F4D1A2200EF265C /* APIEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEnvironment.swift; sourceTree = "<group>"; };
+		AF401AAE2F4D1A5B00EF265C /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		AF401AB02F4D1A7D00EF265C /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		AF401AB32F4D1A9B00EF265C /* EndpointProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointProtocol.swift; sourceTree = "<group>"; };
+		AF401AB62F4D1AE300EF265C /* LicenseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseService.swift; sourceTree = "<group>"; };
+		AF401AB82F4D1B0400EF265C /* ProxyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyService.swift; sourceTree = "<group>"; };
+		AF401ABA2F4D1B1100EF265C /* AppUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateService.swift; sourceTree = "<group>"; };
+		AF401ABC2F4D1BC800EF265C /* LicenseEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseEndpoint.swift; sourceTree = "<group>"; };
+		AF401ABE2F4D1BE900EF265C /* ProxyEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyEndpoint.swift; sourceTree = "<group>"; };
+		AF401AC02F4D1C3000EF265C /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		AF401AC22F4D1C5B00EF265C /* AppUpdateEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateEndpoint.swift; sourceTree = "<group>"; };
+		AF401AC42F4D2BE700EF265C /* DateFormatterProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterProvider.swift; sourceTree = "<group>"; };
+		AF401AC72F4D2C1500EF265C /* LicenseEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseEnums.swift; sourceTree = "<group>"; };
+		AF401AC92F4D2C3F00EF265C /* VerifyKeyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyKeyResponse.swift; sourceTree = "<group>"; };
+		AF401ACB2F4D2C8400EF265C /* PersistedLicense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedLicense.swift; sourceTree = "<group>"; };
+		AF401ACE2F4D2CA700EF265C /* LicenseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseStore.swift; sourceTree = "<group>"; };
 		AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyPoolService.swift; sourceTree = "<group>"; };
 		AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticAuthProxyProvider.swift; sourceTree = "<group>"; };
 		AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationRootView.swift; sourceTree = "<group>"; };
@@ -223,6 +255,57 @@
 			path = TextFields;
 			sourceTree = "<group>";
 		};
+		AF401AAB2F4D1A1700EF265C /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				AF401AB02F4D1A7D00EF265C /* APIClient.swift */,
+				AF401AAE2F4D1A5B00EF265C /* APIError.swift */,
+				AF401AAC2F4D1A2200EF265C /* APIEnvironment.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		AF401AB22F4D1A9700EF265C /* Endpoint */ = {
+			isa = PBXGroup;
+			children = (
+				AF401AC22F4D1C5B00EF265C /* AppUpdateEndpoint.swift */,
+				AF401AC02F4D1C3000EF265C /* HTTPMethod.swift */,
+				AF401ABE2F4D1BE900EF265C /* ProxyEndpoint.swift */,
+				AF401ABC2F4D1BC800EF265C /* LicenseEndpoint.swift */,
+				AF401AB32F4D1A9B00EF265C /* EndpointProtocol.swift */,
+			);
+			path = Endpoint;
+			sourceTree = "<group>";
+		};
+		AF401AB52F4D1ADC00EF265C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AF401AC62F4D2C0B00EF265C /* Models */,
+				AF401ABA2F4D1B1100EF265C /* AppUpdateService.swift */,
+				AF401AB82F4D1B0400EF265C /* ProxyService.swift */,
+				AF401AB62F4D1AE300EF265C /* LicenseService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AF401AC62F4D2C0B00EF265C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AF401ACB2F4D2C8400EF265C /* PersistedLicense.swift */,
+				AF401AC92F4D2C3F00EF265C /* VerifyKeyResponse.swift */,
+				AF401AC72F4D2C1500EF265C /* LicenseEnums.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AF401ACD2F4D2CA100EF265C /* Userdefaults */ = {
+			isa = PBXGroup;
+			children = (
+				AF401ACE2F4D2CA700EF265C /* LicenseStore.swift */,
+			);
+			path = Userdefaults;
+			sourceTree = "<group>";
+		};
 		AF498D322F4B6D52004C03B3 /* Activation */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,6 +364,8 @@
 		AF56EF0C2F3DF84A00E49C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				AF401ACD2F4D2CA100EF265C /* Userdefaults */,
+				AF401AC42F4D2BE700EF265C /* DateFormatterProvider.swift */,
 				AF401AA52F4CEABD00EF265C /* ValidationRule.swift */,
 				AF69F5C42F43751E00B33610 /* SessionIsolationMode.swift */,
 				AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */,
@@ -458,6 +543,9 @@
 		AF69F5D32F437A8200B33610 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				AF401AB52F4D1ADC00EF265C /* Services */,
+				AF401AB22F4D1A9700EF265C /* Endpoint */,
+				AF401AAB2F4D1A1700EF265C /* Core */,
 				AF0A09DB2F4653B100A12964 /* VPN */,
 				AF69F5D42F437A8C00B33610 /* Proxy */,
 			);
@@ -794,25 +882,34 @@
 				AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */,
 				AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */,
 				AF69F5C92F43763B00B33610 /* SessionManager.swift in Sources */,
+				AF401AB42F4D1A9B00EF265C /* EndpointProtocol.swift in Sources */,
 				AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */,
 				AFF3EB2E2F3CACB100C6F08E /* TitleStyles.swift in Sources */,
 				AFF3EB312F3CACB100C6F08E /* AppBackgroundStyle.swift in Sources */,
 				AFF3EB322F3CACB100C6F08E /* AppTypography.swift in Sources */,
 				AF401AA42F4CD89D00EF265C /* BrowserJetTextField.swift in Sources */,
 				AF56EF032F3D0A4900E49C58 /* ViewConfig.swift in Sources */,
+				AF401ACF2F4D2CA700EF265C /* LicenseStore.swift in Sources */,
 				AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */,
+				AF401AC32F4D1C5B00EF265C /* AppUpdateEndpoint.swift in Sources */,
+				AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */,
+				AF401AC82F4D2C1600EF265C /* LicenseEnums.swift in Sources */,
 				AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */,
 				AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */,
+				AF401AAF2F4D1A5B00EF265C /* APIError.swift in Sources */,
 				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
 				AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */,
 				AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */,
 				AF56EF132F3DFC9800E49C58 /* CornerRadiusModifier.swift in Sources */,
+				AF401ABF2F4D1BE900EF265C /* ProxyEndpoint.swift in Sources */,
 				AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */,
+				AF401ABB2F4D1B1100EF265C /* AppUpdateService.swift in Sources */,
 				AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */,
 				AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */,
 				AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */,
 				AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */,
 				AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */,
+				AF401AC52F4D2BE800EF265C /* DateFormatterProvider.swift in Sources */,
 				AF69F5C32F43748800B33610 /* BrowserChromeView.swift in Sources */,
 				AF69F5B02F43716300B33610 /* BrowserToolbarAction.swift in Sources */,
 				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
@@ -821,9 +918,12 @@
 				AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */,
 				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,
 				AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */,
+				AF401ACA2F4D2C3F00EF265C /* VerifyKeyResponse.swift in Sources */,
+				AF401AC12F4D1C3000EF265C /* HTTPMethod.swift in Sources */,
 				AFF3EB362F3CACB100C6F08E /* BrowserJetDarkTheme.swift in Sources */,
 				AFF3EB372F3CACB100C6F08E /* LauncherView.swift in Sources */,
 				AF498D3A2F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift in Sources */,
+				AF401AB72F4D1AE300EF265C /* LicenseService.swift in Sources */,
 				AF56EEED2F3CC4B700E49C58 /* TextFieldStyles.swift in Sources */,
 				AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */,
 				AFF3EB382F3CACB100C6F08E /* AppLogger.swift in Sources */,
@@ -840,6 +940,7 @@
 				AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */,
 				AF56EF102F3DFC8400E49C58 /* CustomWidth.swift in Sources */,
 				AF56EF192F3E027000E49C58 /* AppConfiguration+Environment.swift in Sources */,
+				AF401AB12F4D1A7D00EF265C /* APIClient.swift in Sources */,
 				AF401AAA2F4CF18B00EF265C /* LoadingOverlayModifier.swift in Sources */,
 				AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */,
 				AFF3EB3C2F3CACB100C6F08E /* AppTheme.swift in Sources */,
@@ -850,9 +951,12 @@
 				AF56EEFB2F3CFA8E00E49C58 /* BrowserJetDivider.swift in Sources */,
 				AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */,
 				AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */,
+				AF401ABD2F4D1BC800EF265C /* LicenseEndpoint.swift in Sources */,
 				AF69F5E52F43A3B200B33610 /* BrowserRootView.swift in Sources */,
+				AF401ACC2F4D2C8400EF265C /* PersistedLicense.swift in Sources */,
 				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,
 				AF69F5E12F43A30A00B33610 /* LaunchRequest.swift in Sources */,
+				AF401AAD2F4D1A2200EF265C /* APIEnvironment.swift in Sources */,
 				AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */,
 				AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */,
 				AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */,

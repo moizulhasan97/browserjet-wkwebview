@@ -24,6 +24,16 @@ final class ActivationViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Dependencies
+
+    private let licenseService: LicenseService
+
+    init(licenseService: LicenseService = LicenseService()) {
+        self.licenseService = licenseService
+    }
+
+    // MARK: - State
+
     @Published var mode: Mode = .activate
 
     // Activate
@@ -55,15 +65,23 @@ final class ActivationViewModel: ObservableObject {
     // MARK: - Actions
 
     func submit() {
-        errorMessage = nil
+        Task {
+            isLoading = true
+            errorMessage = nil
+            defer { isLoading = false }
 
-        switch mode {
-        case .activate:
-            // TODO: integrate verification API
-            print("✅ Verify key:", licenseKey)
-        case .register:
-            // TODO: integrate create key API
-            print("✅ Register with:", email, password)
+            do {
+                switch mode {
+                case .activate:
+                    let result = try await licenseService.verifyKey(licenseKey)
+                    // handle result
+                case .register:
+                    let key = try await licenseService.generateKey(email: email, password: password)
+                    // handle key
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 
