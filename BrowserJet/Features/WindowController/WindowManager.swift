@@ -19,6 +19,26 @@ final class WindowManager {
         AppLogger.debug("WindowManager singleton initialized")
     }
 
+    func showActivation(themeManager: ThemeManager) {
+        AppLogger.info("showActivation called")
+        if launcherWC == nil {
+            AppLogger.info("Creating activation window - Size: 500x560, Corner radius: 18")
+            let rootView = ActivationWindowRoot()
+                .environmentObject(themeManager)
+
+            launcherWC = BrowserJetWindowController(
+                content: rootView,
+                size: NSSize(width: 500, height: 900),
+                titleBarHidden: false,
+                resizable: false,
+                cornerRadius: 18
+            )
+            AppLogger.debug("Activation window controller created successfully")
+        }
+        launcherWC?.show()
+        AppLogger.info("Activation window shown")
+    }
+
     func showLauncher(
         themeManager: ThemeManager,
         sessionManager: SessionManager,

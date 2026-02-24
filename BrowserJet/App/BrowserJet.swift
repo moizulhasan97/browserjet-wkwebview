@@ -22,14 +22,15 @@ struct BrowserJet: App {
         AppLogger.info("App initializing - Environment: \(AppEnvironment.current.displayName)")
         let themeManager = self.themeManager
         let sessionManager = self.sessionManager
-        AppLogger.debug("ThemeManager and SessionManager initialized")
+        AppLogger.debug("ThemeManager initialized")
         DispatchQueue.main.async {
-            AppLogger.info("Showing launcher window with development configuration")
-            WindowManager.shared.showLauncher(
-                themeManager: themeManager,
-                sessionManager: sessionManager,
-                appConfiguration: .development
-            )
+            AppLogger.info("Showing activation window")
+//            WindowManager.shared.showLauncher(
+//                themeManager: themeManager,
+//                sessionManager: sessionManager,
+//                appConfiguration: .development
+//            )
+            WindowManager.shared.showActivation(themeManager: themeManager)
         }
     }
 }

@@ -7,6 +7,20 @@
 
 import SwiftUI
 
+// MARK: - Window Root (theme bridge)
+
+struct ActivationWindowRoot: View {
+    @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject private var themeManager: ThemeManager
+
+    var body: some View {
+        ActivationRootView()
+            .environment(\.appTheme, themeManager.theme(for: colorScheme))
+    }
+}
+
+// MARK: - Constants
+
 private enum ActivationRootViewConstants {
     static let mainVStackSpacing: CGFloat = 14.0
     static let cardVStackSpacing: CGFloat = 16.0
