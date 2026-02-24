@@ -53,8 +53,8 @@ extension ValidationRule {
 
     /// `XXXX-XXXX-XXXX` where X is an uppercase letter or digit.
     static let licenseKey = ValidationRule(
-        #"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$"#,
-        defaultMessage: "Format must be XXXX-XXXX-XXXX"
+        #"^[A-Z0-9]{24}$"#,
+        defaultMessage: "Must be 24 uppercase letters and numbers"
     )
 
     /// Standard email address.
