@@ -32,6 +32,7 @@
 		AF401ACA2F4D2C3F00EF265C /* VerifyKeyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AC92F4D2C3F00EF265C /* VerifyKeyResponse.swift */; };
 		AF401ACC2F4D2C8400EF265C /* PersistedLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401ACB2F4D2C8400EF265C /* PersistedLicense.swift */; };
 		AF401ACF2F4D2CA700EF265C /* LicenseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401ACE2F4D2CA700EF265C /* LicenseStore.swift */; };
+		AF401AD12F4D37E500EF265C /* SystemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AD02F4D37E500EF265C /* SystemInfo.swift */; };
 		AF498D2F2F4AB8AD004C03B3 /* ProxyPoolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */; };
 		AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */; };
 		AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */; };
@@ -88,6 +89,10 @@
 		AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */; };
 		AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */; };
 		AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */; };
+		AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B42F4E71810064B8FD /* UserSession.swift */; };
+		AF80C5B72F4E724B0064B8FD /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B62F4E72480064B8FD /* Data+Extensions.swift */; };
+		AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */; };
+		AF80C5BD2F4E750E0064B8FD /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5BC2F4E750E0064B8FD /* AppError.swift */; };
 		AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */; };
 		AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */; };
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
@@ -140,6 +145,7 @@
 		AF401AC92F4D2C3F00EF265C /* VerifyKeyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyKeyResponse.swift; sourceTree = "<group>"; };
 		AF401ACB2F4D2C8400EF265C /* PersistedLicense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedLicense.swift; sourceTree = "<group>"; };
 		AF401ACE2F4D2CA700EF265C /* LicenseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseStore.swift; sourceTree = "<group>"; };
+		AF401AD02F4D37E500EF265C /* SystemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemInfo.swift; sourceTree = "<group>"; };
 		AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyPoolService.swift; sourceTree = "<group>"; };
 		AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticAuthProxyProvider.swift; sourceTree = "<group>"; };
 		AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationRootView.swift; sourceTree = "<group>"; };
@@ -197,6 +203,10 @@
 		AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContainer.swift; sourceTree = "<group>"; };
 		AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserAddressBarView.swift; sourceTree = "<group>"; };
 		AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingStyles.swift; sourceTree = "<group>"; };
+		AF80C5B42F4E71810064B8FD /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
+		AF80C5B62F4E72480064B8FD /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
+		AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeyValueStore.swift; sourceTree = "<group>"; };
+		AF80C5BC2F4E750E0064B8FD /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabsPopoverView.swift; sourceTree = "<group>"; };
 		AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuItem.swift; sourceTree = "<group>"; };
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
@@ -301,6 +311,7 @@
 		AF401ACD2F4D2CA100EF265C /* Userdefaults */ = {
 			isa = PBXGroup;
 			children = (
+				AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */,
 				AF401ACE2F4D2CA700EF265C /* LicenseStore.swift */,
 			);
 			path = Userdefaults;
@@ -329,6 +340,7 @@
 		AF56EEF12F3CCDA900E49C58 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				AF80C5B62F4E72480064B8FD /* Data+Extensions.swift */,
 				AF56EF1E2F3E061300E49C58 /* Int */,
 				AF56EEF22F3CCDAE00E49C58 /* Color */,
 			);
@@ -364,6 +376,7 @@
 		AF56EF0C2F3DF84A00E49C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				AF401AD02F4D37E500EF265C /* SystemInfo.swift */,
 				AF401ACD2F4D2CA100EF265C /* Userdefaults */,
 				AF401AC42F4D2BE700EF265C /* DateFormatterProvider.swift */,
 				AF401AA52F4CEABD00EF265C /* ValidationRule.swift */,
@@ -387,6 +400,7 @@
 		AF56EF142F3E01E100E49C58 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AF80C5B42F4E71810064B8FD /* UserSession.swift */,
 				AF56EF152F3E01E500E49C58 /* AppConfiguration.swift */,
 			);
 			path = Models;
@@ -395,6 +409,7 @@
 		AF56EF172F3E026800E49C58 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				AF80C5BA2F4E74FE0064B8FD /* Core */,
 				AF56EF1A2F3E02C400E49C58 /* BrowserJet.swift */,
 				AF56EF182F3E026E00E49C58 /* AppConfiguration+Environment.swift */,
 			);
@@ -578,6 +593,22 @@
 				AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */,
 			);
 			path = WebView;
+			sourceTree = "<group>";
+		};
+		AF80C5BA2F4E74FE0064B8FD /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				AF80C5BB2F4E75040064B8FD /* Errors */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		AF80C5BB2F4E75040064B8FD /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				AF80C5BC2F4E750E0064B8FD /* AppError.swift */,
+			);
+			path = Errors;
 			sourceTree = "<group>";
 		};
 		AFF3EABC2F3CAC3A00C6F08E = {
@@ -911,6 +942,7 @@
 				AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */,
 				AF401AC52F4D2BE800EF265C /* DateFormatterProvider.swift in Sources */,
 				AF69F5C32F43748800B33610 /* BrowserChromeView.swift in Sources */,
+				AF80C5BD2F4E750E0064B8FD /* AppError.swift in Sources */,
 				AF69F5B02F43716300B33610 /* BrowserToolbarAction.swift in Sources */,
 				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
@@ -933,6 +965,7 @@
 				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
 				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,
 				AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */,
+				AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */,
 				AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */,
 				AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */,
 				AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */,
@@ -968,9 +1001,12 @@
 				AF56EF1B2F3E02C900E49C58 /* BrowserJet.swift in Sources */,
 				AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */,
 				AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */,
+				AF80C5B72F4E724B0064B8FD /* Data+Extensions.swift in Sources */,
 				AF69F5C12F43747800B33610 /* BrowserToolbarView.swift in Sources */,
 				AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */,
+				AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */,
 				AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */,
+				AF401AD12F4D37E500EF265C /* SystemInfo.swift in Sources */,
 				AF56EF052F3D0A7C00E49C58 /* BrowserJetViewConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
