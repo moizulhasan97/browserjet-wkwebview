@@ -9,7 +9,7 @@ import Foundation
 
 enum LicenseEndpoint: EndpointProtocol {
 
-    case verifyKey(String)
+    case verifyKey(key: String, pcName: String, macAddress: String)
     case generateKey(email: String, password: String)
     case checkExpiry(String)
 
@@ -21,9 +21,11 @@ enum LicenseEndpoint: EndpointProtocol {
 
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .verifyKey(let key):
+        case .verifyKey(let key, let pcName, let macAddress):
             return [
-                .init(name: "Method", value: "VerifyKey"),
+                .init(name: "pcname", value: pcName),
+                .init(name: "MAC", value: macAddress),
+                .init(name: "MethodName", value: "VerifyKey"),
                 .init(name: "Key", value: key)
             ]
         case .generateKey(let email, let password):
