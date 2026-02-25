@@ -17,9 +17,13 @@ final class LicenseService {
     func verifyKey(_ key: String) async throws -> VerifyKeyResponse {
         AppLogger.info("LicenseService: verifying key '\(key)'")
         do {
-            let data = try await client.requestData(LicenseEndpoint.verifyKey(key))
+            let pcName = SystemInfo.currentComputerName()
+            let mac = SystemInfo.macSerialNumber()
+            let data = try await client.requestData(LicenseEndpoint.verifyKey(key: key, pcName: pcName, macAddress: mac))
+            let rawCSV = String(decoding: data, as: UTF8.self)
+            AppLogger.info("LicenseService: raw CSV response → \(rawCSV)")
             let response = VerifyKeyResponse(csvData: data)
-            AppLogger.info("LicenseService: key verified - status: \(response.authenticationType.rawValue), email: \(response.userEmail)")
+            AppLogger.info("LicenseService: parsed response → auth: \(response.authenticationType.rawValue) | email: \(response.userEmail) | kind: \(response.userKind.rawValue) | status: \(response.userStatus.rawValue) | expiry: \(response.userExpiryDate) | licenses: \(response.numberOfLicenses)")
             return response
         } catch {
             AppLogger.error("LicenseService: verifyKey failed - \(error.localizedDescription)")

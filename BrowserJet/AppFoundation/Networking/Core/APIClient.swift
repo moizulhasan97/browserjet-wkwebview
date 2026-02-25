@@ -17,10 +17,9 @@ final class APIClient {
 
     func request<T: Decodable>(_ endpoint: some EndpointProtocol, as type: T.Type) async throws -> T {
         let request = try endpoint.asURLRequest()
-        AppLogger.info("APIClient [\(request.httpMethod ?? "?")] \(request.url?.absoluteString ?? "unknown URL")")
+        logRequest(request)
         let (data, response) = try await session.data(for: request)
-        try validate(response)
-        AppLogger.debug("APIClient response received - decoding as \(T.self)")
+        try validate(response, data: data)
         do {
             let decoded = try JSONDecoder().decode(T.self, from: data)
             AppLogger.info("APIClient decode success - \(T.self)")
@@ -33,30 +32,60 @@ final class APIClient {
 
     func requestText(_ endpoint: some EndpointProtocol) async throws -> String {
         let request = try endpoint.asURLRequest()
-        AppLogger.info("APIClient [\(request.httpMethod ?? "?")] \(request.url?.absoluteString ?? "unknown URL") → text")
+        logRequest(request)
         let (data, response) = try await session.data(for: request)
-        try validate(response)
+        try validate(response, data: data)
         let text = String(decoding: data, as: UTF8.self)
             .trimmingCharacters(in: .whitespacesAndNewlines)
-        AppLogger.debug("APIClient text response: \"\(text)\"")
         return text
     }
 
     func requestData(_ endpoint: some EndpointProtocol) async throws -> Data {
         let request = try endpoint.asURLRequest()
-        AppLogger.info("APIClient [\(request.httpMethod ?? "?")] \(request.url?.absoluteString ?? "unknown URL") → data")
+        logRequest(request)
         let (data, response) = try await session.data(for: request)
-        try validate(response)
-        AppLogger.debug("APIClient data response - \(data.count) bytes")
+        try validate(response, data: data)
         return data
     }
 
-    private func validate(_ response: URLResponse) throws {
+    // MARK: - Logging
+
+    private func logRequest(_ request: URLRequest) {
+        var lines: [String] = []
+        lines.append("◆ REQUEST")
+        lines.append("  Method  : \(request.httpMethod ?? "?")")
+        lines.append("  URL     : \(request.url?.absoluteString ?? "unknown")")
+        if let headers = request.allHTTPHeaderFields, !headers.isEmpty {
+            lines.append("  Headers : \(headers)")
+        }
+        if let body = request.httpBody, let bodyString = String(data: body, encoding: .utf8) {
+            lines.append("  Body    : \(bodyString)")
+        }
+        AppLogger.info(separator() + "\n" + lines.joined(separator: "\n"))
+    }
+
+    private func logResponse(statusCode: Int, body: String) {
+        var lines: [String] = []
+        lines.append("◆ RESPONSE")
+        lines.append("  Status  : \(statusCode)")
+        lines.append("  Body    : \(body.isEmpty ? "<empty>" : body)")
+        AppLogger.info(lines.joined(separator: "\n") + "\n" + separator())
+    }
+
+    private func separator() -> String {
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    }
+
+    // MARK: - Validation
+
+    private func validate(_ response: URLResponse, data: Data) throws {
         guard let http = response as? HTTPURLResponse else {
             AppLogger.error("APIClient invalid response - not an HTTPURLResponse")
             throw APIError.invalidResponse
         }
-        AppLogger.debug("APIClient HTTP status: \(http.statusCode)")
+        let body = String(decoding: data, as: UTF8.self)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        logResponse(statusCode: http.statusCode, body: body)
         switch http.statusCode {
         case 200...299:
             return
