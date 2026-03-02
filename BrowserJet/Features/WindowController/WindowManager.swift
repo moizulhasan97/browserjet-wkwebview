@@ -15,16 +15,26 @@ final class WindowManager {
     private var launcherWC: (any ShowableWindowController)?
     private var browserWC: (any ShowableWindowController)?
 
+    /// Same size and behavior as launcher-opened browser (show() calls zoom for maximize).
+    private let browserWindowSize = NSSize(width: 1200, height: 780)
+    private let browserCornerRadius: CGFloat = 18
+
     private init() {
         AppLogger.debug("WindowManager singleton initialized")
     }
 
-    func showActivation(themeManager: ThemeManager) {
+    func showActivation(
+        themeManager: ThemeManager,
+        sessionManager: SessionManager,
+        appConfiguration: AppConfiguration
+    ) {
         AppLogger.info("showActivation called")
         if launcherWC == nil {
             AppLogger.info("Creating activation window - Size: 500x560, Corner radius: 18")
             let rootView = ActivationWindowRoot()
                 .environmentObject(themeManager)
+                .environmentObject(sessionManager)
+                .environment(\.appConfiguration, appConfiguration)
 
             launcherWC = BrowserJetWindowController(
                 content: rootView,
@@ -62,6 +72,18 @@ final class WindowManager {
         }
         launcherWC?.show()
         AppLogger.info("Launcher window shown")
+    }
+
+    /// Close activation window and show the launcher (e.g. after successful activation).
+    func dismissActivationAndShowLauncher(
+        themeManager: ThemeManager,
+        sessionManager: SessionManager,
+        appConfiguration: AppConfiguration
+    ) {
+        launcherWC?.close()
+        launcherWC = nil
+        AppLogger.info("Activation window closed")
+        showLauncher(themeManager: themeManager, sessionManager: sessionManager, appConfiguration: appConfiguration)
     }
 
     @MainActor
@@ -107,10 +129,10 @@ final class WindowManager {
 
         browserWC = BrowserJetWindowController(
             content: rootView,
-            size: NSSize(width: 1200, height: 780),
+            size: browserWindowSize,
             titleBarHidden: false,
             resizable: true,
-            cornerRadius: 18
+            cornerRadius: browserCornerRadius
         )
 
         // Close launcher window before showing browser
@@ -120,5 +142,47 @@ final class WindowManager {
 
         browserWC?.show()
         AppLogger.info("Browser window shown")
+    }
+
+    /// When trial or license is expired: open browser with full chrome (same look as launcher). Single tab, payment URL; address bar and non-refresh actions disabled.
+    @MainActor
+    func showBrowserForTrialExpired(
+        paymentURL: URL,
+        themeManager: ThemeManager,
+        sessionManager: SessionManager,
+        appConfiguration: AppConfiguration
+    ) {
+        AppLogger.info("showBrowserForTrialExpired - URL: \(paymentURL.absoluteString)")
+        let state = BrowserWindowState(
+            proxyType: .local,
+            isolationMode: appConfiguration.sessionIsolationModeValue,
+            proxies: [],
+            userAgent: appConfiguration.userAgentValue,
+            sessionManager: sessionManager,
+            initialURL: paymentURL,
+            initialTabCount: 1,
+            isTrialLockActive: true
+        )
+        let rootView = BrowserRootView(
+            state: state,
+            menu: .default
+        )
+        .environmentObject(themeManager)
+        .environmentObject(sessionManager)
+        .environment(\.appConfiguration, appConfiguration)
+
+        launcherWC?.close()
+        launcherWC = nil
+        AppLogger.info("Activation window closed")
+
+        browserWC = BrowserJetWindowController(
+            content: rootView,
+            size: browserWindowSize,
+            titleBarHidden: false,
+            resizable: true,
+            cornerRadius: browserCornerRadius
+        )
+        browserWC?.show()
+        AppLogger.info("Browser window shown (payment only)")
     }
 }

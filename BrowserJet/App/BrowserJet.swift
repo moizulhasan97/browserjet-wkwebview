@@ -30,7 +30,11 @@ struct BrowserJet: App {
 //                sessionManager: sessionManager,
 //                appConfiguration: .development
 //            )
-            WindowManager.shared.showActivation(themeManager: themeManager)
+            WindowManager.shared.showActivation(
+                themeManager: themeManager,
+                sessionManager: sessionManager,
+                appConfiguration: .development
+            )
         }
     }
 }

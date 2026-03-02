@@ -19,6 +19,15 @@ struct ActivationWindowRoot: View {
     }
 }
 
+// MARK: - Payment alert (trial / license expired)
+
+private struct PaymentAlertItem: Identifiable {
+    let id = UUID()
+    let title: String
+    let message: String
+    let url: URL
+}
+
 // MARK: - Constants
 
 private enum ActivationRootViewConstants {
@@ -30,8 +39,16 @@ private enum ActivationRootViewConstants {
 struct ActivationRootView: View {
     @Environment(\.designSystem) private var designSystem
     @Environment(\.appTheme) private var theme
+    @EnvironmentObject private var themeManager: ThemeManager
+    @EnvironmentObject private var sessionManager: SessionManager
+    @Environment(\.appConfiguration) private var appConfiguration: AppConfiguration
 
     @StateObject private var viewModel = ActivationViewModel()
+    @State private var shiftSheetKey: String = ""
+    @State private var shiftSheetEmail: String = ""
+    @State private var showShiftSuccessAlert: Bool = false
+    @State private var showVerificationSuccessAlert: Bool = false
+    @State private var paymentAlert: PaymentAlertItem?
     private typealias Constants = ActivationRootViewConstants
 
     var body: some View {
@@ -62,15 +79,99 @@ struct ActivationRootView: View {
         .padding()
         .background(AppBackgroundStyle.browserJetGradient.makeView())
         .loadingOverlay(isLoading: viewModel.isLoading)
+        .onChange(of: viewModel.verifyOutcome) { _, outcome in
+            if case .shiftRequired(let key, let email) = outcome {
+                shiftSheetKey = key
+                shiftSheetEmail = email
+            }
+            if case .success = outcome {
+                viewModel.verifyOutcome = nil
+                showVerificationSuccessAlert = true
+            }
+            if case .trialExpired(let url) = outcome {
+                viewModel.verifyOutcome = nil
+                paymentAlert = PaymentAlertItem(
+                    title: ActivationMessages.TrialExpired.title,
+                    message: ActivationMessages.TrialExpired.message,
+                    url: url
+                )
+            }
+            if case .licenseExpired(let url) = outcome {
+                viewModel.verifyOutcome = nil
+                paymentAlert = PaymentAlertItem(
+                    title: ActivationMessages.LicenseExpired.title,
+                    message: ActivationMessages.LicenseExpired.message,
+                    url: url
+                )
+            }
+        }
+        .sheet(isPresented: Binding(
+            get: {
+                if case .shiftRequired = viewModel.verifyOutcome { return true }
+                return false
+            },
+            set: { if !$0 { viewModel.verifyOutcome = nil } }
+        )) {
+            ShiftLicenseView(
+                key: shiftSheetKey,
+                email: shiftSheetEmail,
+                onShiftSucceeded: {
+                    viewModel.verifyOutcome = nil
+                    showShiftSuccessAlert = true
+                }
+            )
+        }
+        .sheet(isPresented: $showShiftSuccessAlert) {
+            InfoAlertView(
+                title: ActivationMessages.ShiftSuccess.title,
+                message: ActivationMessages.ShiftSuccess.message,
+                buttonTitle: ActivationMessages.okButtonTitle,
+                onDismiss: {
+                    showShiftSuccessAlert = false
+                    viewModel.completeShiftAndRetryVerify(key: shiftSheetKey)
+                }
+            )
+        }
+        .sheet(isPresented: $showVerificationSuccessAlert) {
+            InfoAlertView(
+                title: ActivationMessages.VerificationSuccess.title,
+                message: ActivationMessages.VerificationSuccess.message,
+                buttonTitle: ActivationMessages.okButtonTitle,
+                onDismiss: {
+                    showVerificationSuccessAlert = false
+                    WindowManager.shared.dismissActivationAndShowLauncher(
+                        themeManager: themeManager,
+                        sessionManager: sessionManager,
+                        appConfiguration: appConfiguration
+                    )
+                }
+            )
+        }
+        .sheet(item: $paymentAlert) { alert in
+            InfoAlertView(
+                title: alert.title,
+                message: alert.message,
+                buttonTitle: ActivationMessages.okButtonTitle,
+                onDismiss: {
+                    paymentAlert = nil
+                    WindowManager.shared.showBrowserForTrialExpired(
+                        paymentURL: alert.url,
+                        themeManager: themeManager,
+                        sessionManager: sessionManager,
+                        appConfiguration: appConfiguration
+                    )
+                }
+            )
+        }
     }
 
     private var header: some View {
         VStack(alignment: .leading, spacing: Constants.titleSubtitleVStackSpacing) {
-            Text("Welcome to Browser Jet")
+            Text(ActivationMessages.welcomeTitle)
                 .foregroundStyle(theme.textPrimary)
                 .font(designSystem.typography.title1.font)
 
-            Text("Activate your license to continue")
+            Text(ActivationMessages.activateSubtitle)
                 .foregroundStyle(theme.textFieldSecondary)
                 .font(designSystem.typography.textBody1.font)
         }
@@ -82,7 +183,7 @@ struct ActivationRootView: View {
             options: ActivationViewModel.Mode.allCases,
             selection: $viewModel.mode,
             isDisabled: false,
-            label: { $0.rawValue }
+            label: { $0.displayLabel }
         )
     }
 
@@ -92,9 +193,9 @@ struct ActivationRootView: View {
         case .activate:
             BrowserJetTextField(
                 type: .activationField,
-                title: "Enter Your Key",
+                title: ActivationMessages.enterYourKeyTitle,
                 text: $viewModel.licenseKey,
-                placeholder: "XXXXXXXXXXXX",
+                placeholder: ActivationMessages.licenseKeyPlaceholder,
                 rule: .licenseKey,
                 validationState: $viewModel.licenseKeyValidation
             )
@@ -103,18 +204,18 @@ struct ActivationRootView: View {
             VStack(spacing: 14) {
                 BrowserJetTextField(
                     type: .activationField,
-                    title: "Email Address",
+                    title: ActivationMessages.emailAddressTitle,
                     text: $viewModel.email,
-                    placeholder: "you@example.com",
-                    rule: .email.message("Enter a valid email"),
+                    placeholder: ActivationMessages.emailPlaceholder,
+                    rule: .email.message(ActivationMessages.emailValidationMessage),
                     validationState: $viewModel.emailValidation
                 )
 
                 BrowserJetTextField(
                     type: .activationField,
-                    title: "Password",
+                    title: ActivationMessages.passwordTitle,
                     text: $viewModel.password,
-                    placeholder: "Enter password",
+                    placeholder: ActivationMessages.passwordPlaceholder,
                     isSecure: true,
                     rule: .password,
                     validationState: $viewModel.passwordValidation
@@ -138,7 +239,7 @@ struct ActivationRootView: View {
         Button {
             viewModel.forgotPasswordTapped()
         } label: {
-            Text("Forgot password?")
+            Text(ActivationMessages.forgotPasswordLink)
                 .underline()
                 .foregroundStyle(theme.accent)
                 .font(designSystem.typography.textBody1.font)
@@ -153,5 +254,8 @@ struct ActivationRootView: View {
     ActivationRootView()
         .environment(\.appTheme, BrowserJetLightTheme())
         .environment(\.designSystem, DesignSystem())
+        .environmentObject(ThemeManager())
+        .environmentObject(SessionManager())
+        .environment(\.appConfiguration, AppConfiguration.development)
         .frame(width: 520, height: 640)
 }

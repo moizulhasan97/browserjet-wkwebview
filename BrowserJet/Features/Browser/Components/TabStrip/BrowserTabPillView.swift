@@ -119,6 +119,9 @@ struct BrowserTabPillView: View {
     @ObservedObject var tab: TabModel
     let isSelected: Bool
     let width: CGFloat
+    let showCloseButton: Bool
+    /// When true, close button is visible but disabled (grayed, no action).
+    var isCloseDisabled: Bool = false
     let onSelect: () -> Void
     let onClose: () -> Void
 
@@ -179,13 +182,14 @@ struct BrowserTabPillView: View {
     }
 
     private var shouldShowClose: Bool {
+        guard showCloseButton else { return false }
         // Chrome-ish:
         // - if very small -> only show close on selected tab (optional)
         // - otherwise show close on hover or if selected
         if width < showCloseThreshold {
-            return isSelected && isHovering
+            return isSelected && (isHovering || isCloseDisabled)
         }
-        return isHovering || isSelected
+        return isHovering || isSelected || isCloseDisabled
     }
 
     private var tabClipShape: AnyShape {
@@ -348,6 +352,7 @@ struct BrowserTabPillView: View {
     private var closeButton: some View {
         Button(
             action: {
+                guard !isCloseDisabled else { return }
                 withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
                     onClose()
                 }
@@ -359,14 +364,19 @@ struct BrowserTabPillView: View {
                 .frame(width: 16, height: 16)
                 .background(closeButtonBackground)
                 .clipShape(Circle())
-                .scaleEffect(isHovering ? 1.1 : 1.0)
+                .scaleEffect(isHovering && !isCloseDisabled ? 1.1 : 1.0)
             }
         )
         .buttonStyle(.plain)
+        .disabled(isCloseDisabled)
+        .opacity(isCloseDisabled ? 0.5 : 1)
         .accessibilityLabel("Close tab \(tab.title)")
     }
 
     private var closeButtonColor: Color {
+        if isCloseDisabled {
+            return theme.textPrimary.opacity(0.45)
+        }
         if isSelected {
             return theme.textPrimary.opacity(isHovering ? 0.9 : 0.7)
         } else {
@@ -376,7 +386,9 @@ struct BrowserTabPillView: View {
 
     private var closeButtonBackground: some View {
         Group {
-            if isHovering {
+            if isCloseDisabled {
+                Color.clear
+            } else if isHovering {
                 theme.accent.opacity(0.15)
             } else {
                 Color.clear

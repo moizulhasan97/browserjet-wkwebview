@@ -98,6 +98,10 @@
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
 		AFA2C7DB2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */; };
 		AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */; };
+		AFE9764C2F5530AC00D270C8 /* ShiftLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE9764A2F5530AC00D270C8 /* ShiftLicenseView.swift */; };
+		AFE976502F55343100D270C8 /* ShiftViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */; };
+		AFE976522F5543CB00D270C8 /* InfoAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE976512F5543C800D270C8 /* InfoAlertView.swift */; };
+		AFE976562F55586D00D270C8 /* ActivationMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE976552F55586D00D270C8 /* ActivationMessages.swift */; };
 		AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */; };
 		AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */; };
 		AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1A2F3CACB100C6F08E /* BrowserJetLightTheme.swift */; };
@@ -212,6 +216,10 @@
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
 		AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarIconButtonStyle.swift; sourceTree = "<group>"; };
 		AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyType.swift; sourceTree = "<group>"; };
+		AFE9764A2F5530AC00D270C8 /* ShiftLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftLicenseView.swift; sourceTree = "<group>"; };
+		AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftViewModel.swift; sourceTree = "<group>"; };
+		AFE976512F5543C800D270C8 /* InfoAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAlertView.swift; sourceTree = "<group>"; };
+		AFE976552F55586D00D270C8 /* ActivationMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationMessages.swift; sourceTree = "<group>"; };
 		AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFF3EACE2F3CAC3C00C6F08E /* BrowserJet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BrowserJet.entitlements; sourceTree = "<group>"; };
@@ -322,6 +330,7 @@
 			children = (
 				AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */,
 				AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */,
+				AFE976552F55586D00D270C8 /* ActivationMessages.swift */,
 			);
 			path = Activation;
 			sourceTree = "<group>";
@@ -611,6 +620,15 @@
 			path = Errors;
 			sourceTree = "<group>";
 		};
+		AFE9764B2F5530AC00D270C8 /* ShiftLicense */ = {
+			isa = PBXGroup;
+			children = (
+				AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */,
+				AFE9764A2F5530AC00D270C8 /* ShiftLicenseView.swift */,
+			);
+			path = ShiftLicense;
+			sourceTree = "<group>";
+		};
 		AFF3EABC2F3CAC3A00C6F08E = {
 			isa = PBXGroup;
 			children = (
@@ -671,6 +689,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AFE9764B2F5530AC00D270C8 /* ShiftLicense */,
 				AF498D322F4B6D52004C03B3 /* Activation */,
 				AF69F5AA2F4370BF00B33610 /* Browser */,
 				AF56EF212F3E07A700E49C58 /* WindowController */,
@@ -682,6 +701,7 @@
 		AFF3EB0B2F3CACB100C6F08E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AFE976512F5543C800D270C8 /* InfoAlertView.swift */,
 				AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */,
 				AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */,
 				AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */,
@@ -909,11 +929,14 @@
 				AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */,
 				AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */,
 				AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */,
+				AFE976502F55343100D270C8 /* ShiftViewModel.swift in Sources */,
 				AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */,
 				AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */,
+				AFE976522F5543CB00D270C8 /* InfoAlertView.swift in Sources */,
 				AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */,
 				AF69F5C92F43763B00B33610 /* SessionManager.swift in Sources */,
 				AF401AB42F4D1A9B00EF265C /* EndpointProtocol.swift in Sources */,
+				AFE976562F55586D00D270C8 /* ActivationMessages.swift in Sources */,
 				AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */,
 				AFF3EB2E2F3CACB100C6F08E /* TitleStyles.swift in Sources */,
 				AFF3EB312F3CACB100C6F08E /* AppBackgroundStyle.swift in Sources */,
@@ -922,6 +945,7 @@
 				AF56EF032F3D0A4900E49C58 /* ViewConfig.swift in Sources */,
 				AF401ACF2F4D2CA700EF265C /* LicenseStore.swift in Sources */,
 				AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */,
+				AFE9764C2F5530AC00D270C8 /* ShiftLicenseView.swift in Sources */,
 				AF401AC32F4D1C5B00EF265C /* AppUpdateEndpoint.swift in Sources */,
 				AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */,
 				AF401AC82F4D2C1600EF265C /* LicenseEnums.swift in Sources */,

@@ -14,7 +14,7 @@ enum APIError: LocalizedError {
     case serverError             // 501–599
     case duplicateEmail          // domain-specific
     case invalidResponse
-    case underlying(Error)
+    case custom(String)
 
     var errorDescription: String? {
         switch self {
@@ -24,7 +24,7 @@ enum APIError: LocalizedError {
         case .serverError:      return "Server error. Try again later."
         case .duplicateEmail:   return "This email is already registered."
         case .invalidResponse:  return "Unexpected server response."
-        case .underlying(let error): return error.localizedDescription
+        case .custom(let message): return message
         }
     }
 }

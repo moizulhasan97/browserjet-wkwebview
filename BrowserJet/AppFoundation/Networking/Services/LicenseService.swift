@@ -9,11 +9,11 @@ import Foundation
 
 final class LicenseService {
     private let client: APIClient
-
+    
     init(client: APIClient = .shared) {
         self.client = client
     }
-
+    
     func verifyKey(_ key: String) async throws -> VerifyKeyResponse {
         AppLogger.info("LicenseService: verifying key '\(key)'")
         do {
@@ -30,7 +30,7 @@ final class LicenseService {
             throw error
         }
     }
-
+    
     func generateKey(email: String, password: String) async throws -> String {
         AppLogger.info("LicenseService: generating key for email '\(email)'")
         do {
@@ -46,7 +46,7 @@ final class LicenseService {
             throw error
         }
     }
-
+    
     func checkKeyExpiry(_ key: String) async throws -> Bool {
         AppLogger.info("LicenseService: checking expiry for key '\(key)'")
         do {
@@ -58,5 +58,45 @@ final class LicenseService {
             AppLogger.error("LicenseService: checkKeyExpiry failed - \(error.localizedDescription)")
             throw error
         }
+    }
+    
+    func getPCDetails(key: String) async throws -> String {
+        let raw = try await client.requestText(LicenseEndpoint.getOldPCDetails(key))
+        let pcName = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedPcName = String(pcName.dropLast())
+        return trimmedPcName
+    }
+    
+    private func updateUserMachine(oldPcName: String, key: String, email: String) async throws {
+        let newPcName = SystemInfo.currentComputerName()
+        let newMacAddress = SystemInfo.macSerialNumber()
+        let raw = try await client.requestText(LicenseEndpoint.shiftLicenseKey(
+            key: key,
+            newPcName: newPcName,
+            newMacAddress: newMacAddress,
+            email: email,
+            oldPcName: oldPcName
+        ))
+        let response = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if response != "shited" {
+            throw APIError.custom("Shift failed: \(raw)")
+        }
+    }
+    
+    private func sendEmailToUser(oldPcName: String, key: String, email: String) async throws {
+        let newPcName = SystemInfo.currentComputerName()
+        let newMacAddress = SystemInfo.macSerialNumber()
+        _ = try await client.requestText(LicenseEndpoint.sendEmailToUser(
+            key: key,
+            newPcName: newPcName,
+            newMacAddress: newMacAddress,
+            email: email,
+            oldPcName: oldPcName
+        ))
+    }
+    
+    func shiftKey(from oldPcName: String, key: String, email: String) async throws {
+        try await updateUserMachine(oldPcName: oldPcName, key: key, email: email)
+        try await sendEmailToUser(oldPcName: oldPcName, key: key, email: email)
     }
 }

@@ -18,29 +18,38 @@ struct BrowserChromeView: View {
     @Environment(\.appTheme)
     private var theme
 
+    private var enabledToolbarActions: Set<BrowserToolbarAction>? {
+        state.isTrialLockActive ? [.reload] : nil
+    }
+
     var body: some View {
         HStack(spacing: 10) {
             BrowserToolbarView(
                 actions: menu.leading,
+                enabledActions: enabledToolbarActions,
                 onAction: onToolbarAction
             )
 
             if let tab = state.selectedTab {
-                BrowserAddressBarView(tab: tab)
+                BrowserAddressBarView(tab: tab, isLocked: state.isTrialLockActive)
                     .frame(maxWidth: .infinity)
             }
 
             BrowserConnectionBadgeView(proxyType: state.proxyType)
+                .opacity(state.isTrialLockActive ? 0.6 : 1)
+                .allowsHitTesting(false)
 
-
-            
             HStack(spacing: 10) {
                 BrowserToolbarView(
                     actions: menu.trailing,
+                    enabledActions: enabledToolbarActions,
                     onAction: onToolbarAction,
                     onDuplicateTabs: onDuplicateTabs
                 )
-                BrowserMoreMenuView(items: menu.moreMenuItems) { item in
+                BrowserMoreMenuView(
+                    items: menu.moreMenuItems,
+                    isDisabled: state.isTrialLockActive
+                ) { item in
                     onMoreMenuSelect(item)
                 }
             }
