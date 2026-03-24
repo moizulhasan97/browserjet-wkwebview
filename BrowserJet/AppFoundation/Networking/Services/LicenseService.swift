@@ -31,6 +31,30 @@ final class LicenseService {
         }
     }
     
+    /// `UpdateToMac` — same rules as legacy `shouldUpdateKey`: run unless stored value is `true`.
+    /// Non-fatal: on failure stores `false` so the next verify retries.
+    func updateKeyInBackendIfNeeded(key: String, keyValueStore: KeyValueStoring) async {
+        guard Self.shouldRunUpdateToMac(store: keyValueStore) else {
+            AppLogger.debug("LicenseService: skipping UpdateToMac (already succeeded for this cycle)")
+            return
+        }
+        do {
+            _ = try await client.requestData(LicenseEndpoint.updateToDatabase(key: key))
+            keyValueStore.set(true, forKey: StorageKeys.updateKeyInDatabase)
+            AppLogger.info("LicenseService: UpdateToMac completed successfully")
+        } catch {
+            keyValueStore.set(false, forKey: StorageKeys.updateKeyInDatabase)
+            AppLogger.warning("LicenseService: UpdateToMac failed (non-fatal) — \(error.localizedDescription)")
+        }
+    }
+
+    private static func shouldRunUpdateToMac(store: KeyValueStoring) -> Bool {
+        guard let succeeded = store.object(forKey: StorageKeys.updateKeyInDatabase) as? Bool else {
+            return true
+        }
+        return !succeeded
+    }
+
     func generateKey(email: String, password: String) async throws -> String {
         AppLogger.info("LicenseService: generating key for email '\(email)'")
         do {

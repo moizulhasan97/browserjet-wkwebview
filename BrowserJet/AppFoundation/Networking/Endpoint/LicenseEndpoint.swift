@@ -15,6 +15,7 @@ enum LicenseEndpoint: EndpointProtocol {
     case getOldPCDetails(String)
     case shiftLicenseKey(key: String, newPcName: String, newMacAddress: String, email: String, oldPcName: String)
     case sendEmailToUser(key: String, newPcName: String, newMacAddress: String, email: String, oldPcName: String)
+    case updateToDatabase(key: String)
     
     var baseURL: URL { APIEnvironment.current.baseURL }
 
@@ -65,6 +66,12 @@ enum LicenseEndpoint: EndpointProtocol {
                 .init(name: "MacAddress", value: newMacAddress),
                 .init(name: "Email", value: email),
                 .init(name: "machine", value: oldPcName),
+            ]
+        
+        case .updateToDatabase(let key):
+            return [
+                .init(name: "MethodName", value: "UpdateToMac"),
+                .init(name: "UserKey", value: key),
             ]
         }
     }
