@@ -35,7 +35,7 @@ enum LicenseEndpoint: EndpointProtocol {
             ]
         case .generateKey(let email, let password):
             return [
-                .init(name: "MethodName", value: "CreateKey"),
+                .init(name: "MethodName", value: "UserRegistration"),
                 .init(name: "Email", value: email),
                 .init(name: "Password", value: password)
             ]

@@ -70,7 +70,7 @@ final class LicenseService {
         AppLogger.info("LicenseService: generating key for email '\(email)'")
         do {
             let raw = try await client.requestText(LicenseEndpoint.generateKey(email: email, password: password))
-            if raw.lowercased().trimmingCharacters(in: .whitespaces) == "duplicateemail" {
+            if raw.lowercased().trimmingCharacters(in: .whitespacesAndNewlines).filter({!$0.isWhitespace}) == "duplicateemail" {
                 AppLogger.warning("LicenseService: generateKey rejected - duplicate email '\(email)'")
                 throw APIError.duplicateEmail
             }

@@ -203,7 +203,7 @@ struct ActivationRootView: View {
                     title: ActivationMessages.emailAddressTitle,
                     text: $viewModel.email,
                     placeholder: ActivationMessages.emailPlaceholder,
-                    rule: .email.message(ActivationMessages.emailValidationMessage),
+                    rule: ValidationRule.email,
                     validationState: $viewModel.emailValidation
                 )
                 
@@ -213,7 +213,7 @@ struct ActivationRootView: View {
                     text: $viewModel.password,
                     placeholder: ActivationMessages.passwordPlaceholder,
                     isSecure: true,
-                    rule: .password,
+                    rule: ValidationRule.password,
                     validationState: $viewModel.passwordValidation
                 )
             }
