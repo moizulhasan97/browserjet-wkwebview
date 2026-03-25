@@ -30,10 +30,8 @@ extension UserSession {
         store: KeyValueStoring
     ) throws {
         let now = Date().toLocalTime()
-        hasLicenseExpired = !(now <= responseModel.userExpiryDate)
         userStatus = responseModel.userStatus
         userKind = responseModel.userKind
-        trialExpired = responseModel.trialExpired
         isPremiumProxyAllowed = false
 
         switch responseModel.authenticationType {
@@ -42,10 +40,12 @@ extension UserSession {
             switch responseModel.userStatus {
 
             case .rejected:
-                // SHIFT PC flow – state already set above
                 break
-
+                
             case .active:
+                hasLicenseExpired = responseModel.isUserLicenseExpired(referenceNow: now)
+                trialExpired = responseModel.isTrialAccessExpiredByProxyDate(referenceNow: now)
+
                 if hasLicenseExpired {
                     break
                 }
@@ -64,6 +64,7 @@ extension UserSession {
                 throw AppError.notVerified
             case true:
                 hasLicenseExpired = true
+                trialExpired = false
             }
         }
     }

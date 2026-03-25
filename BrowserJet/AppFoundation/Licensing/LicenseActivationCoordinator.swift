@@ -35,11 +35,11 @@ final class LicenseActivationCoordinator {
             keyValueStore.removeObject(forKey: StorageKeys.updateKeyInDatabase)
         }
 
+        let userSession = try UserSession(responseModel: response, store: keyValueStore)
+        
         licenseStore.save(response)
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
-
-        let userSession = try UserSession(responseModel: response, store: keyValueStore)
 
         await licenseService.updateKeyInBackendIfNeeded(key: key, keyValueStore: keyValueStore)
 

@@ -89,6 +89,26 @@ struct VerifyKeyResponse {
     }
 }
 
+// MARK: - Derived expiry (client-side; do not use raw API `trialExpired` for routing)
+
+extension VerifyKeyResponse {
+
+    /// For paid users, compare license expiry
+    func isUserLicenseExpired(referenceNow: Date) -> Bool {
+        !(referenceNow <= userExpiryDate)
+    }
+
+    /// For trial users, compare prixy expiry
+    func isTrialAccessExpiredByProxyDate(referenceNow: Date) -> Bool {
+        switch userKind {
+        case .paid:
+            return false
+        case .trial:
+            return !(referenceNow <= proxyExpiryDate)
+        }
+    }
+}
+
 // MARK: - Field Index Map
 private extension VerifyKeyResponse {
 

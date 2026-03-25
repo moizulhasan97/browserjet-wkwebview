@@ -22,6 +22,7 @@ struct PersistedLicense: Codable {
     let secondNotificationMessage: String
 
     init(_ response: VerifyKeyResponse) {
+        let now = Date().toLocalTime()
         userEmail = response.userEmail
         authenticationType = response.authenticationType.rawValue
         userExpiryDate = response.userExpiryDate
@@ -30,7 +31,7 @@ struct PersistedLicense: Codable {
         username = response.username
         proxyPackage = response.proxyPackage
         userKind = response.userKind.rawValue
-        trialExpired = response.trialExpired
+        trialExpired = response.isTrialAccessExpiredByProxyDate(referenceNow: now)
         userStatus = response.userStatus.rawValue
         firstNotificationMessage = response.firstNotificationMessage
         secondNotificationMessage = response.secondNotificationMessage
