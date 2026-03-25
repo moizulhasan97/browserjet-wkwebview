@@ -94,3 +94,56 @@ struct BrowserJetSecondaryLargeButtonStyle: BrowserJetButtonStyleProtocol {
     let titleDisabledColor: Color
     let titleHighlightedColor: Color
 }
+
+// MARK: - Previews
+
+private struct ButtonTypePreviewRow: View {
+    let title: String
+    let type: BrowserJetButtonStyle.ButtonType
+    let isDisabled: Bool
+
+    var body: some View {
+        BrowserJetAppButton(
+            title: title,
+            type: type,
+            height: 48,
+            isDisabled: isDisabled,
+            action: {}
+        )
+    }
+}
+
+private func buttonStylePreviewContent(theme: any AppTheme) -> some View {
+    let design = DesignSystem()
+    return ScrollView {
+        VStack(alignment: .leading, spacing: 20) {
+            previewSectionHeader("Primary large")
+            ButtonTypePreviewRow(title: "Enabled", type: .primaryLarge, isDisabled: false)
+            ButtonTypePreviewRow(title: "Disabled", type: .primaryLarge, isDisabled: true)
+
+            previewSectionHeader("Secondary large")
+            ButtonTypePreviewRow(title: "Enabled", type: .secondaryLarge, isDisabled: false)
+            ButtonTypePreviewRow(title: "Disabled", type: .secondaryLarge, isDisabled: true)
+        }
+        .padding(24)
+        .frame(maxWidth: 400)
+    }
+    .environment(\.designSystem, design)
+    .environment(\.appTheme, theme)
+}
+
+private func previewSectionHeader(_ text: String) -> some View {
+    Text(text)
+        .font(.headline)
+        .foregroundStyle(.secondary)
+}
+
+#Preview("Button types — light") {
+    buttonStylePreviewContent(theme: BrowserJetLightTheme())
+        .background(BrowserJetLightTheme().surfaceCard)
+}
+
+#Preview("Button types — dark") {
+    buttonStylePreviewContent(theme: BrowserJetDarkTheme())
+        .background(BrowserJetDarkTheme().surfaceCard)
+}
