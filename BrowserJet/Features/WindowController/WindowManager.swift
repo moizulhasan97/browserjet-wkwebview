@@ -7,10 +7,33 @@
 
 
 import AppKit
+import Foundation
 import SwiftUI
 
 final class WindowManager {
     static let shared = WindowManager()
+
+    /// Content sizes for the activation `BrowserJetWindowRoot` window (title bar is extra frame).
+    enum ActivationLayout {
+        case fullForm
+        case progressOnly
+        case infoAlert
+        case shiftLicense
+
+        var contentSize: NSSize {
+            switch self {
+            case .fullForm:
+                // Match `showLauncher` (500×639) so activation and post-verify launcher share the same frame.
+                return NSSize(width: 500, height: 300)
+            case .progressOnly:
+                return NSSize(width: 400, height: 220)
+            case .infoAlert:
+                return NSSize(width: 480, height: 580)
+            case .shiftLicense:
+                return NSSize(width: 520, height: 460)
+            }
+        }
+    }
 
     private var launcherWC: (any ShowableWindowController)?
     private var browserWC: (any ShowableWindowController)?
@@ -23,6 +46,15 @@ final class WindowManager {
         AppLogger.debug("WindowManager singleton initialized")
     }
 
+    /// Shrinks or expands the activation window when root is `BrowserJetWindowRoot` (no-op for launcher/browser windows).
+    /// Compact layouts use **borderless** `NSWindow` chrome so only the SwiftUI card (e.g. progress) is visible—no title bar behind it.
+    func resizeActivationWindowToFit(_ layout: ActivationLayout) {
+        guard let wc = launcherWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
+        let compact = layout != .fullForm
+        wc.setActivationChromeBorderless(compact)
+        wc.applyFixedContentSize(layout.contentSize)
+    }
+
     func showActivation(
         themeManager: ThemeManager,
         sessionManager: SessionManager,
@@ -30,23 +62,37 @@ final class WindowManager {
     ) {
         AppLogger.info("showActivation called")
         if launcherWC == nil {
-            AppLogger.info("Creating activation window - Size: 500x560, Corner radius: 18")
-            let rootView = ActivationWindowRoot()
+            let storedKey = Self.hasStoredLicenseKey()
+            let initialSize = storedKey
+                ? ActivationLayout.progressOnly.contentSize
+                : ActivationLayout.fullForm.contentSize
+            AppLogger.info(
+                "Creating activation window - storedKey: \(storedKey), size: \(initialSize.width)x\(initialSize.height), borderless: \(storedKey)"
+            )
+            let rootView = BrowserJetWindowRoot()
                 .environmentObject(themeManager)
                 .environmentObject(sessionManager)
                 .environment(\.appConfiguration, appConfiguration)
 
             launcherWC = BrowserJetWindowController(
                 content: rootView,
-                size: NSSize(width: 500, height: 900),
+                size: initialSize,
                 titleBarHidden: false,
                 resizable: false,
-                cornerRadius: 18
+                cornerRadius: 18,
+                borderlessChrome: storedKey
             )
             AppLogger.debug("Activation window controller created successfully")
         }
         launcherWC?.show()
         AppLogger.info("Activation window shown")
+    }
+
+    private static func hasStoredLicenseKey() -> Bool {
+        guard let raw = UserDefaults.standard.object(forKey: StorageKeys.licenseKey) as? String else {
+            return false
+        }
+        return !raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     func showLauncher(

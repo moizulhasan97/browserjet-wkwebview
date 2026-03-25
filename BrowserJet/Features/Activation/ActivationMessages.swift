@@ -29,6 +29,12 @@ enum ActivationMessages {
     static let passwordPlaceholder = "Enter password"
     static let forgotPasswordLink = "Forgot password?"
 
+    /// Progress while verifying a license key already saved on this device.
+    static let verifyingStoredKeyProgress = "Verifying saved license key…"
+
+    /// Brief bootstrap state before a specific outcome is shown.
+    static let bootstrapLoadingProgress = "Loading…"
+
     // MARK: - Mode (segmented + submit button)
 
     enum Mode {

@@ -8,7 +8,6 @@
 import SwiftUI
 
 // MARK: - Window Root (theme bridge)
-
 struct ActivationWindowRoot: View {
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
@@ -19,17 +18,7 @@ struct ActivationWindowRoot: View {
     }
 }
 
-// MARK: - Payment alert (trial / license expired)
-
-private struct PaymentAlertItem: Identifiable {
-    let id = UUID()
-    let title: String
-    let message: String
-    let url: URL
-}
-
 // MARK: - Constants
-
 private enum ActivationRootViewConstants {
     static let mainVStackSpacing: CGFloat = 14.0
     static let cardVStackSpacing: CGFloat = 16.0
@@ -44,8 +33,7 @@ struct ActivationRootView: View {
     @Environment(\.appConfiguration) private var appConfiguration: AppConfiguration
 
     @StateObject private var viewModel = ActivationViewModel()
-    @State private var shiftSheetKey: String = ""
-    @State private var shiftSheetEmail: String = ""
+    private let keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
     @State private var showShiftSuccessAlert: Bool = false
     @State private var showVerificationSuccessAlert: Bool = false
     @State private var paymentAlert: PaymentAlertItem?
@@ -80,10 +68,6 @@ struct ActivationRootView: View {
         .background(AppBackgroundStyle.browserJetGradient.makeView())
         .loadingOverlay(isLoading: viewModel.isLoading)
         .onChange(of: viewModel.verifyOutcome) { _, outcome in
-            if case .shiftRequired(let key, let email) = outcome {
-                shiftSheetKey = key
-                shiftSheetEmail = email
-            }
             if case .success = outcome {
                 viewModel.verifyOutcome = nil
                 showVerificationSuccessAlert = true
@@ -112,14 +96,17 @@ struct ActivationRootView: View {
             },
             set: { if !$0 { viewModel.verifyOutcome = nil } }
         )) {
-            ShiftLicenseView(
-                key: shiftSheetKey,
-                email: shiftSheetEmail,
-                onShiftSucceeded: {
-                    viewModel.verifyOutcome = nil
-                    showShiftSuccessAlert = true
-                }
-            )
+            if case .shiftRequired(let key, let email) = viewModel.verifyOutcome {
+                ShiftLicenseView(
+                    key: key,
+                    email: email,
+                    onShiftSucceeded: {
+                        viewModel.verifyOutcome = nil
+                        showShiftSuccessAlert = true
+                    }
+                )
+                .id("\(key)|\(email)")
+            }
         }
         .sheet(isPresented: $showShiftSuccessAlert) {
             InfoAlertView(
@@ -128,7 +115,9 @@ struct ActivationRootView: View {
                 buttonTitle: ActivationMessages.okButtonTitle,
                 onDismiss: {
                     showShiftSuccessAlert = false
-                    viewModel.completeShiftAndRetryVerify(key: shiftSheetKey)
+                    let raw = keyValueStore.object(forKey: StorageKeys.licenseKey) as? String ?? ""
+                    let key = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+                    viewModel.completeShiftAndRetryVerify(key: key)
                 }
             )
         }

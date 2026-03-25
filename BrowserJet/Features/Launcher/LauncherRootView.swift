@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// MARK: - Window Root (theme bridge)
 struct LauncherRootView: View {
     @Environment(\.colorScheme)
     private var colorScheme

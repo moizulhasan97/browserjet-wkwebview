@@ -122,6 +122,8 @@
 		AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1D2F3CACB100C6F08E /* BodyStyles.swift */; };
 		AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB262F3CACB100C6F08E /* ThemeManager.swift */; };
 		AFF3EB3F2F3CACB100C6F08E /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */; };
+		AFF4DA012F743A6C0028293B /* BrowserJetRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA002F743A6B0028293B /* BrowserJetRootView.swift */; };
+		AFF4DA032F7451720028293B /* PaymentAlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA022F7451720028293B /* PaymentAlertItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -243,6 +245,8 @@
 		AFF3EB252F3CACB100C6F08E /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		AFF3EB262F3CACB100C6F08E /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+Environment.swift"; sourceTree = "<group>"; };
+		AFF4DA002F743A6B0028293B /* BrowserJetRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetRootView.swift; sourceTree = "<group>"; };
+		AFF4DA022F7451720028293B /* PaymentAlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAlertItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -411,6 +415,7 @@
 		AF56EF142F3E01E100E49C58 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AFF4DA022F7451720028293B /* PaymentAlertItem.swift */,
 				AF80C5B42F4E71810064B8FD /* UserSession.swift */,
 				AF56EF152F3E01E500E49C58 /* AppConfiguration.swift */,
 			);
@@ -700,6 +705,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AFF4D9FF2F743A620028293B /* Root */,
 				AFE9764B2F5530AC00D270C8 /* ShiftLicense */,
 				AF498D322F4B6D52004C03B3 /* Activation */,
 				AF69F5AA2F4370BF00B33610 /* Browser */,
@@ -834,6 +840,14 @@
 				AFF3EB292F3CACB100C6F08E /* Theme */,
 			);
 			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		AFF4D9FF2F743A620028293B /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				AFF4DA002F743A6B0028293B /* BrowserJetRootView.swift */,
+			);
+			path = Root;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1036,12 +1050,14 @@
 				AF56EF1B2F3E02C900E49C58 /* BrowserJet.swift in Sources */,
 				AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */,
 				AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */,
+				AFF4DA032F7451720028293B /* PaymentAlertItem.swift in Sources */,
 				AF80C5B72F4E724B0064B8FD /* Data+Extensions.swift in Sources */,
 				AF69F5C12F43747800B33610 /* BrowserToolbarView.swift in Sources */,
 				AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */,
 				AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */,
 				AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */,
 				AF401AD12F4D37E500EF265C /* SystemInfo.swift in Sources */,
+				AFF4DA012F743A6C0028293B /* BrowserJetRootView.swift in Sources */,
 				AF60864A2F732CB2003931E2 /* LicenseActivationCoordinator.swift in Sources */,
 				AF56EF052F3D0A7C00E49C58 /* BrowserJetViewConfig.swift in Sources */,
 			);
