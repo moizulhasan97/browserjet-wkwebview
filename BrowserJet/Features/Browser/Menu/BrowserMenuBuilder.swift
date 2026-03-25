@@ -18,4 +18,11 @@ struct BrowserMenuBuilder {
         trailing: [.newTab, .burnProxyAndReload, .duplicateToTabsMenu, .refreshAllTabs, .accountManager, .screenshot],
         moreMenuItems: [.paymentCard, .buyLicenses, .contactUs, .changeKey, .about, .twitter]
     )
+
+    /// Trial expired: only refresh allowed; no new tab, no VPN, no more menu.
+    static let trialLock = BrowserMenuBuilder(
+        leading: [.reload],
+        trailing: [],
+        moreMenuItems: []
+    )
 }

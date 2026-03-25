@@ -12,16 +12,24 @@ struct BrowserToolbarView: View {
     @Environment(\.appTheme) private var theme
     @State private var showingDuplicatePopover = false
     let actions: [BrowserToolbarAction]
+    /// When non-nil, only these actions are enabled; others are visually disabled.
+    var enabledActions: Set<BrowserToolbarAction>? = nil
     let onAction: (BrowserToolbarAction) -> Void
     /// Called when the user confirms a duplicate-tabs count from the popover.
     var onDuplicateTabs: ((Int) -> Void)? = nil
 
     @State private var hovering: BrowserToolbarAction?
 
+    private func isActionEnabled(_ action: BrowserToolbarAction) -> Bool {
+        guard let allowed = enabledActions else { return true }
+        return allowed.contains(action)
+    }
+
     var body: some View {
         HStack(spacing: 10) {
             ForEach(actions, id: \.self) { action in
                 Button {
+                    guard isActionEnabled(action) else { return }
                     if action == .duplicateToTabsMenu {
                         showingDuplicatePopover.toggle()
                     } else {
@@ -34,6 +42,8 @@ struct BrowserToolbarView: View {
                     )
                 }
                 .buttonStyle(.plain)
+                .disabled(!isActionEnabled(action))
+                .opacity(isActionEnabled(action) ? 1 : 0.5)
                 .popover(
                     isPresented: Binding(
                         get: { showingDuplicatePopover && action == .duplicateToTabsMenu },

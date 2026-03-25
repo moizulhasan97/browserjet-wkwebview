@@ -44,6 +44,8 @@ struct BrowserTabsStripView: View {
                                     tab: tab,
                                     isSelected: tab.id == state.selectedTabID,
                                     width: calculatedWidth,
+                                    showCloseButton: true,
+                                    isCloseDisabled: state.isTrialLockActive,
                                     onSelect: {
                                         withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                                             state.selectedTabID = tab.id

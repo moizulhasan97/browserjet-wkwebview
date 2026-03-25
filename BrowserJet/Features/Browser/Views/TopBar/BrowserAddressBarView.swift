@@ -15,6 +15,8 @@ struct BrowserAddressBarView: View {
     private var theme
 
     @ObservedObject var tab: TabModel
+    /// When true (trial/license expired), bar shows URL but is read-only and visually disabled.
+    var isLocked: Bool = false
 
     @State private var isHovering: Bool = false
     @FocusState private var isFocused: Bool
@@ -40,28 +42,40 @@ struct BrowserAddressBarView: View {
     }
 
     private var shouldShowClear: Bool {
-        isFocused && !tab.addressText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !isLocked && isFocused && !tab.addressText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private var addressBinding: Binding<String> {
+        if isLocked {
+            return Binding(get: { tab.addressText }, set: { _ in })
+        }
+        return Binding(get: { tab.addressText }, set: { tab.addressText = $0 })
     }
 
     var body: some View {
         BrowserJetTextField(
             type: .browserAddress,
-            text: Binding(get: { tab.addressText }, set: { tab.addressText = $0 }),
+            text: addressBinding,
             placeholder: "Search or enter website",
             left: { leftIcon },
             right: { rightClearButton }
         )
+        .environment(\.isEnabled, !isLocked)
         .clipShape(Capsule())
         .overlay(pillBorder)
+        .allowsHitTesting(!isLocked)
         .onHover { hovering in
+            guard !isLocked else { return }
             withAnimation(.easeInOut(duration: 0.12)) {
                 isHovering = hovering
             }
         }
         .onTapGesture {
+            guard !isLocked else { return }
             isFocused = true
         }
         .onSubmit {
+            guard !isLocked else { return }
             tab.load(tab.addressText)
         }
     }

@@ -46,7 +46,11 @@ struct BrowserRootView: View {
             // webViewID changes after a burn.
             if let tab = state.selectedTab {
                 SelectedTabWebView(tab: tab) { url in
-                    state.addTab(url: url)
+                    if state.isTrialLockActive {
+                        tab.load(url)
+                    } else {
+                        state.addTab(url: url)
+                    }
                 }
             } else {
                 EmptyView()
@@ -57,6 +61,7 @@ struct BrowserRootView: View {
 
     private func handleToolbarAction(_ action: BrowserToolbarAction) {
         guard let tab = state.selectedTab else { return }
+        if state.isTrialLockActive, action != .reload { return }
 
         switch action {
         case .back:
@@ -90,6 +95,7 @@ struct BrowserRootView: View {
     }
     
     private func handleMoreMenuItem(_ item: BrowserMoreMenuItem) {
+        if state.isTrialLockActive { return }
         switch item {
         case .paymentCard:
             open(config.paymentCardURL)

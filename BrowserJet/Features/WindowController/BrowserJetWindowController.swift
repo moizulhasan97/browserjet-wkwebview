@@ -12,6 +12,15 @@ import SwiftUI
 protocol ShowableWindowController: AnyObject {
     func show()
     func close()
+    /// Fixed-size windows only: shrink/grow content area and re-center (no-op for types that don’t support it).
+    func applyFixedContentSize(_ size: NSSize)
+    /// Activation bootstrap only: hide titled window chrome so only the card is visible.
+    func setActivationChromeBorderless(_ borderless: Bool)
+}
+
+extension ShowableWindowController {
+    func applyFixedContentSize(_ size: NSSize) {}
+    func setActivationChromeBorderless(_ borderless: Bool) {}
 }
 
 final class BrowserJetWindowController<Content: View>: NSWindowController, ShowableWindowController {
@@ -20,20 +29,24 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         size: NSSize,
         titleBarHidden: Bool = true,
         resizable: Bool = false,
-        cornerRadius: CGFloat = 16
+        cornerRadius: CGFloat = 16,
+        /// No traffic lights or title bar — window frame matches content (e.g. stored-key verify card).
+        borderlessChrome: Bool = false
     ) {
         // swiftlint:disable:next line_length
-        AppLogger.debug("Initializing BrowserJetWindowController - Size: \(size.width)x\(size.height), Resizable: \(resizable), CornerRadius: \(cornerRadius)")
+        AppLogger.debug("Initializing BrowserJetWindowController - Size: \(size.width)x\(size.height), Resizable: \(resizable), CornerRadius: \(cornerRadius), borderless: \(borderlessChrome)")
         let hosting = NSHostingController(rootView: content)
 
-        var styleMask: NSWindow.StyleMask = [
-            .titled,
-            .closable,
-            .miniaturizable
-        ]
-        if resizable {
-            styleMask.insert(.resizable)
-        }
+        let styleMask: NSWindow.StyleMask = {
+            if borderlessChrome {
+                return [.borderless, .fullSizeContentView]
+            }
+            var mask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .fullSizeContentView]
+            if resizable {
+                mask.insert(.resizable)
+            }
+            return mask
+        }()
 
         let window = NSWindow(
             contentRect: NSRect(origin: .zero, size: size),
@@ -45,22 +58,20 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         window.contentViewController = hosting
         window.isReleasedWhenClosed = false
 
-        // Fixed size (prevents resize by drag + green button)
         if !resizable {
             window.setContentSize(size)
             window.minSize = size
             window.maxSize = size
-            window.standardWindowButton(.zoomButton)?.isEnabled = false
+            if !borderlessChrome {
+                window.standardWindowButton(.zoomButton)?.isEnabled = false
+            }
         }
 
-        // Titlebar / title
         window.title = ""
         window.titleVisibility = .hidden
-        window.titlebarAppearsTransparent = false
+        window.titlebarAppearsTransparent = borderlessChrome
+        window.isMovableByWindowBackground = borderlessChrome
 
-        window.styleMask.insert(.fullSizeContentView)
-
-        // Rounded corners
         window.isOpaque = false
         window.backgroundColor = .clear
         window.hasShadow = true
@@ -68,11 +79,54 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         window.contentView?.layer?.cornerRadius = cornerRadius
         window.contentView?.layer?.masksToBounds = true
 
-        // Center on screen
         window.center()
 
         self.init(window: window)
         AppLogger.debug("BrowserJetWindowController initialized successfully")
+    }
+
+    func applyFixedContentSize(_ size: NSSize) {
+        guard let window else { return }
+        let clamped = NSSize(
+            width: max(200, size.width),
+            height: max(120, size.height)
+        )
+        window.setContentSize(clamped)
+        if !window.styleMask.contains(.resizable) {
+            window.minSize = clamped
+            window.maxSize = clamped
+        }
+        window.center()
+        AppLogger.debug("BrowserJetWindowController content size → \(clamped.width)x\(clamped.height)")
+    }
+
+    func setActivationChromeBorderless(_ borderless: Bool) {
+        guard let window else { return }
+        if borderless {
+            window.styleMask = [.borderless, .fullSizeContentView]
+            window.titleVisibility = .hidden
+            window.titlebarAppearsTransparent = true
+            window.isMovableByWindowBackground = true
+        } else {
+            var mask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .fullSizeContentView]
+            if window.styleMask.contains(.resizable) {
+                mask.insert(.resizable)
+            }
+            window.styleMask = mask
+            window.titleVisibility = .hidden
+            window.titlebarAppearsTransparent = false
+            window.isMovableByWindowBackground = false
+            window.standardWindowButton(.zoomButton)?.isEnabled = false
+        }
+        window.isOpaque = false
+        window.backgroundColor = .clear
+        window.hasShadow = true
+        window.contentView?.wantsLayer = true
+        let radius = window.contentView?.layer?.cornerRadius ?? 18
+        window.contentView?.layer?.cornerRadius = radius
+        window.contentView?.layer?.masksToBounds = true
+        window.invalidateShadow()
+        AppLogger.debug("BrowserJetWindowController borderless chrome → \(borderless)")
     }
 
     func show() {
@@ -80,7 +134,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
 
-        if let window {
+        if let window, !window.styleMask.contains(.borderless) {
             window.zoom(nil)
         }
 

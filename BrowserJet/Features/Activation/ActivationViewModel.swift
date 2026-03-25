@@ -7,33 +7,54 @@
 
 import SwiftUI
 
+// MARK: - Verify outcome (post-verify routing)
+
+enum VerifyOutcome: Equatable {
+    case success
+    case shiftRequired(key: String, email: String)
+    case trialExpired(paymentURL: URL)
+    case licenseExpired(paymentURL: URL)
+}
+
 @MainActor
 final class ActivationViewModel: ObservableObject {
 
     enum Mode: String, CaseIterable, Hashable {
-        case activate = "Use Key"
-        case register = "Register"
-        
+        case activate
+        case register
+
+        var displayLabel: String {
+            switch self {
+            case .activate: return ActivationMessages.Mode.useKey
+            case .register: return ActivationMessages.Mode.register
+            }
+        }
+
         var buttonTitle: String {
             switch self {
-            case .activate:
-                return "Verify"
-            case .register:
-                return "Create Key"
+            case .activate: return ActivationMessages.Mode.verifyButton
+            case .register: return ActivationMessages.Mode.createKeyButton
             }
         }
     }
 
+    // MARK: - Dependencies
+
+    private let coordinator: LicenseActivationCoordinator
+
+    init(coordinator: LicenseActivationCoordinator = LicenseActivationCoordinator()) {
+        self.coordinator = coordinator
+    }
+
+    // MARK: - State
+
     @Published var mode: Mode = .activate
 
-    // Activate
     @Published var licenseKey: String = ""
 
-    // Register
     @Published var email: String = ""
     @Published var password: String = ""
-    
-    // Validation
+
     @Published var licenseKeyValidation: RegexValidationState = .none
     @Published var emailValidation: RegexValidationState = .none
     @Published var passwordValidation: RegexValidationState = .none
@@ -41,7 +62,7 @@ final class ActivationViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
 
-    // MARK: - Submit Gate
+    @Published var verifyOutcome: VerifyOutcome? = nil
 
     var canSubmit: Bool {
         switch mode {
@@ -55,15 +76,36 @@ final class ActivationViewModel: ObservableObject {
     // MARK: - Actions
 
     func submit() {
-        errorMessage = nil
+        Task {
+            isLoading = true
+            errorMessage = nil
+            verifyOutcome = nil
+            defer { isLoading = false }
 
-        switch mode {
-        case .activate:
-            // TODO: integrate verification API
-            print("✅ Verify key:", licenseKey)
-        case .register:
-            // TODO: integrate create key API
-            print("✅ Register with:", email, password)
+            do {
+                switch mode {
+                case .activate:
+                    verifyOutcome = try await coordinator.completeActivation(key: licenseKey)
+                case .register:
+                    verifyOutcome = try await coordinator.generateKeyAndActivate(email: email, password: password)
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    func completeShiftAndRetryVerify(key: String) {
+        Task {
+            isLoading = true
+            errorMessage = nil
+            verifyOutcome = nil
+            defer { isLoading = false }
+            do {
+                verifyOutcome = try await coordinator.completeActivation(key: key)
+            } catch {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 

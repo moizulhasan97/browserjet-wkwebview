@@ -19,6 +19,9 @@ final class BrowserWindowState: ObservableObject {
     private let proxyPool = ProxyPoolService()
     private let rotation: ProxyRotationType = .linear // for now; later derive from launcher
     private let initialURL: URL
+
+    /// When true (trial expired), only one tab is allowed; add/close tab disabled; only refresh is useful.
+    let isTrialLockActive: Bool
     
     // For `.perWindow`: share a single store and a single proxy (if needed)
     private lazy var perWindowProxy: AuthProxy? = {
@@ -39,7 +42,8 @@ final class BrowserWindowState: ObservableObject {
         userAgent: String?,
         sessionManager: SessionManager,
         initialURL: URL,
-        initialTabCount: Int
+        initialTabCount: Int,
+        isTrialLockActive: Bool = false
     ) {
         self.proxyType = proxyType
         self.isolationMode = isolationMode
@@ -47,15 +51,44 @@ final class BrowserWindowState: ObservableObject {
         self.userAgent = userAgent
         self.sessionManager = sessionManager
         self.initialURL = initialURL
-        
+        self.isTrialLockActive = isTrialLockActive
+
         if !proxyType.isLocal {
             proxyPool.configure(provider: StaticAuthProxyProvider(proxies: proxies), rotation: rotation)
         }
 
-        let count = max(1, initialTabCount)
-        for _ in 0..<count {
-            addTab(url: initialURL)
+        if isTrialLockActive {
+            addInitialTabForTrialLock(url: initialURL)
+        } else {
+            let count = max(1, initialTabCount)
+            for _ in 0..<count {
+                addTab(url: initialURL)
+            }
         }
+    }
+
+    /// When trial/license expired we need one tab; addTab returns early when isTrialLockActive, so we add it here.
+    private func addInitialTabForTrialLock(url: URL) {
+        guard let slot = sessionManager.acquireSessionSlot() else { return }
+        let tabProxy: AuthProxy? = {
+            switch isolationMode {
+            case .perWindow: return perWindowProxy
+            case .perTab: return proxyType.isLocal ? nil : proxyPool.getProxy(for: slot)
+            }
+        }()
+        let store = dataStoreForNewTab(proxy: tabProxy)
+        let tab = TabModel(
+            sessionSlot: slot,
+            startURL: url,
+            dataStore: store,
+            proxyType: proxyType,
+            authProxy: tabProxy,
+            userAgent: userAgent
+        ) { [weak self] newURL in
+            self?.addTab(url: newURL)
+        }
+        tabs.append(tab)
+        selectedTabID = tab.id
     }
 
     private func makeNewDataStore(proxy: AuthProxy?) -> WKWebsiteDataStore {
@@ -78,6 +111,7 @@ final class BrowserWindowState: ObservableObject {
     }
 
     func addTab(url: URL? = nil) {
+        if isTrialLockActive { return }
         // swiftlint:disable:next force_unwrapping
         let tabURL = url ?? URL(string: "about:blank")!
         guard let slot = sessionManager.acquireSessionSlot() else { return }
@@ -117,6 +151,7 @@ final class BrowserWindowState: ObservableObject {
     }
 
     func closeTab(_ tabID: UUID) {
+        if isTrialLockActive && tabs.count <= 1 { return }
         guard let index = tabs.firstIndex(where: { $0.id == tabID }) else { return }
         let slot = tabs[index].sessionSlot
         tabs.remove(at: index)

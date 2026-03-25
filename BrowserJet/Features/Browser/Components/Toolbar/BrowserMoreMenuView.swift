@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BrowserMoreMenuView: View {
     let items: [BrowserMoreMenuItem]
+    var isDisabled: Bool = false
     let onSelect: (BrowserMoreMenuItem) -> Void
 
     var body: some View {
@@ -17,7 +18,7 @@ struct BrowserMoreMenuView: View {
                 Button(item.title) {
                     onSelect(item)
                 }
-                .disabled(!item.isEnabled)
+                .disabled(!item.isEnabled || isDisabled)
             }
         } label: {
             BrowserToolbarIconButtonStyle(
@@ -26,6 +27,8 @@ struct BrowserMoreMenuView: View {
             )
         }
         .buttonStyle(.plain)
+        .disabled(isDisabled)
+        .opacity(isDisabled ? 0.5 : 1)
         .accessibilityLabel("More")
     }
 }
