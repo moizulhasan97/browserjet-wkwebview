@@ -124,6 +124,8 @@
 		AFF3EB3F2F3CACB100C6F08E /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */; };
 		AFF4DA012F743A6C0028293B /* BrowserJetRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA002F743A6B0028293B /* BrowserJetRootView.swift */; };
 		AFF4DA032F7451720028293B /* PaymentAlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA022F7451720028293B /* PaymentAlertItem.swift */; };
+		AFF4DA082F7489600028293B /* RecoverAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA072F74895C0028293B /* RecoverAccountView.swift */; };
+		AFF4DA0A2F7489680028293B /* RecoverAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -247,6 +249,8 @@
 		AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+Environment.swift"; sourceTree = "<group>"; };
 		AFF4DA002F743A6B0028293B /* BrowserJetRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetRootView.swift; sourceTree = "<group>"; };
 		AFF4DA022F7451720028293B /* PaymentAlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAlertItem.swift; sourceTree = "<group>"; };
+		AFF4DA072F74895C0028293B /* RecoverAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverAccountView.swift; sourceTree = "<group>"; };
+		AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverAccountViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -705,6 +709,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AFF4DA062F74894B0028293B /* RecoverAccount */,
 				AFF4D9FF2F743A620028293B /* Root */,
 				AFE9764B2F5530AC00D270C8 /* ShiftLicense */,
 				AF498D322F4B6D52004C03B3 /* Activation */,
@@ -848,6 +853,15 @@
 				AFF4DA002F743A6B0028293B /* BrowserJetRootView.swift */,
 			);
 			path = Root;
+			sourceTree = "<group>";
+		};
+		AFF4DA062F74894B0028293B /* RecoverAccount */ = {
+			isa = PBXGroup;
+			children = (
+				AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */,
+				AFF4DA072F74895C0028293B /* RecoverAccountView.swift */,
+			);
+			path = RecoverAccount;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1011,10 +1025,12 @@
 				AF56EEEF2F3CC94100E49C58 /* LauncherSearchField.swift in Sources */,
 				AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */,
 				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
+				AFF4DA082F7489600028293B /* RecoverAccountView.swift in Sources */,
 				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
 				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,
 				AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */,
 				AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */,
+				AFF4DA0A2F7489680028293B /* RecoverAccountViewModel.swift in Sources */,
 				AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */,
 				AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */,
 				AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */,

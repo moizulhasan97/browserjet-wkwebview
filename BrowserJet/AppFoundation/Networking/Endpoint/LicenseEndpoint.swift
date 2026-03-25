@@ -16,7 +16,8 @@ enum LicenseEndpoint: EndpointProtocol {
     case shiftLicenseKey(key: String, newPcName: String, newMacAddress: String, email: String, oldPcName: String)
     case sendEmailToUser(key: String, newPcName: String, newMacAddress: String, email: String, oldPcName: String)
     case updateToDatabase(key: String)
-    
+    case forgotPassword(email: String)
+
     var baseURL: URL { APIEnvironment.current.baseURL }
 
     var path: String { "/License.ashx" }
@@ -72,6 +73,12 @@ enum LicenseEndpoint: EndpointProtocol {
             return [
                 .init(name: "MethodName", value: "UpdateToMac"),
                 .init(name: "UserKey", value: key),
+            ]
+
+        case .forgotPassword(let email):
+            return [
+                .init(name: "Email", value: email),
+                .init(name: "GetKey", value: "Forgot"),
             ]
         }
     }

@@ -11,7 +11,8 @@ protocol ButtonStyleProvider {
     func style(
         for type: BrowserJetButtonStyle.ButtonType,
         typography: any AppTypography,
-        viewConfig: any ViewConfig
+        viewConfig: any ViewConfig,
+        theme: any AppTheme
     ) -> any BrowserJetButtonStyleProtocol
 }
 
@@ -19,7 +20,8 @@ struct ThemeButtonStyleProvider: ButtonStyleProvider {
     func style(
         for type: BrowserJetButtonStyle.ButtonType,
         typography: any AppTypography,
-        viewConfig: any ViewConfig
+        viewConfig: any ViewConfig,
+        theme: any AppTheme
     ) -> any BrowserJetButtonStyleProtocol {
         switch type {
         case .primaryLarge:
@@ -37,11 +39,45 @@ struct ThemeButtonStyleProvider: ButtonStyleProvider {
                 titleDisabledColor: .white.opacity(0.85),
                 titleHighlightedColor: .white.opacity(0.85)
             )
+
+        case .secondaryLarge:
+            BrowserJetSecondaryLargeButtonStyle(
+                cornerRadius: .capsule,
+                borderColor: theme.strokeControl,
+                borderDisabledColor: theme.strokeControl.opacity(0.4),
+                borderHighlightedColor: theme.strokeControl,
+                borderWidth: 1,
+                font: typography.button.font,
+                backgroundColor: theme.surfaceControl,
+                backgroundDisabledColor: theme.surfaceControl.opacity(0.6),
+                backgroundHighlightedColor: theme.surfaceControl.opacity(0.85),
+                titleColor: theme.textPrimary,
+                titleDisabledColor: theme.textPrimary.opacity(0.5),
+                titleHighlightedColor: theme.textPrimary
+            )
         }
     }
 }
 
 struct BrowserJetPrimaryLargeButtonStyle: BrowserJetButtonStyleProtocol {
+    let cornerRadius: CornerRadius
+    let borderColor: Color
+    let borderDisabledColor: Color
+    let borderHighlightedColor: Color
+    let borderWidth: CGFloat
+
+    let font: Font
+
+    let backgroundColor: Color
+    let backgroundDisabledColor: Color
+    let backgroundHighlightedColor: Color
+
+    let titleColor: Color
+    let titleDisabledColor: Color
+    let titleHighlightedColor: Color
+}
+
+struct BrowserJetSecondaryLargeButtonStyle: BrowserJetButtonStyleProtocol {
     let cornerRadius: CornerRadius
     let borderColor: Color
     let borderDisabledColor: Color
