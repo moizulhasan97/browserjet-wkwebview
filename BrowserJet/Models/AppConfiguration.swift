@@ -9,7 +9,6 @@ import Foundation
 
 struct AppConfiguration {
     private let isUserAgentEnabled: Bool
-    private let proxyType: ProxyType
     let defaultSearchAddress: String
     private let sessionIsolationMode: SessionIsolationMode
     let launcherTabPresets: [LauncherTabPreset]
@@ -26,7 +25,6 @@ struct AppConfiguration {
     
     init(
         isUserAgentEnabled: Bool,
-        proxyType: ProxyType,
         defaultSearchAddress: String,
         sessionIsolationMode: SessionIsolationMode,
         launcherTabPresets: [LauncherTabPreset],
@@ -40,7 +38,6 @@ struct AppConfiguration {
         trialBlockedVPNs: Set<VPNType>
     ) {
         self.isUserAgentEnabled = isUserAgentEnabled
-        self.proxyType = proxyType
         self.defaultSearchAddress = defaultSearchAddress
         self.sessionIsolationMode = sessionIsolationMode
         self.launcherTabPresets = launcherTabPresets
@@ -64,17 +61,12 @@ extension AppConfiguration {
         guard isUserAgentEnabled else { return nil }
         return nil
     }
-
-    var defaultProxyTypeValue: ProxyType {
-        proxyType
-    }
 }
 
 extension AppConfiguration {
     static let production: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
-            proxyType: .local,
             defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
@@ -141,7 +133,6 @@ extension AppConfiguration {
     static let development: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
-            proxyType: .local,
             defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
