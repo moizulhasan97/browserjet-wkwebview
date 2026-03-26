@@ -38,6 +38,9 @@ final class LicenseActivationCoordinator {
         let userSession = try UserSession(responseModel: response, store: keyValueStore)
         
         licenseStore.save(response)
+        await MainActor.run {
+            LicenseAccountStore.shared.refresh()
+        }
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
 

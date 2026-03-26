@@ -88,7 +88,6 @@ struct LauncherView: View {
 
     private func showBrowser() {
         let request = viewModel.settings.makeLaunchRequest(appConfiguration: config)
-        let proxies: [AuthProxy] = []
         WindowManager.shared.showBrowser(
             request: request,
             themeManager: themeManager,
@@ -169,7 +168,7 @@ private extension LauncherView {
                     Spacer()
                     vpnToggle
                 }
-                selectVPN
+                selectVPNSection
                 selectionRegion
             }
         }
@@ -182,7 +181,7 @@ private extension LauncherView {
                     get: { viewModel.settings.isPremiumProxyEnabled },
                     set: { viewModel.togglePremiumProxy($0) }
                 ),
-                isDisabled: !viewModel.settings.isVPNEnabled
+                isDisabled: !viewModel.settings.isVPNEnabled || viewModel.availableVPNs.isEmpty
             )
             getLabel("Premium Proxy")
         }
@@ -208,24 +207,57 @@ private extension LauncherView {
                 get: { viewModel.settings.isVPNEnabled },
                 set: { viewModel.toggleVPN($0) }
             ),
-            isDisabled: false
+            isDisabled: viewModel.availableVPNs.isEmpty
         )
     }
 
-    private var selectVPN: some View {
-        HStack {
-            getLabel("Select VPN")
-            Spacer()
-            BrowserJetMenuPicker(
-                options: viewModel.availableVPNs,
-                selection: Binding(
-                    get: { viewModel.settings.selectedVPN ?? .vpn1 },
-                    set: { viewModel.updateSelectedVPN($0) }
-                ),
-                isDisabled: !viewModel.settings.areVPNControlsEnabled,
-                width: Constants.vpnPickerWidth
-            ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
+    private var selectVPNSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            selectVPNRow
+            if viewModel.isTrialUser {
+                Text(LauncherMessages.trialPaidVpnFootnote)
+                    .foregroundStyle(theme.textFieldSecondary)
+                    .font(designSystem.typography.textBody1.font)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
+    }
+
+    @ViewBuilder
+    private var selectVPNRow: some View {
+        if viewModel.availableVPNs.isEmpty {
+            HStack {
+                getLabel("Select VPN")
+                Spacer()
+                Text("—")
+                    .foregroundStyle(theme.textFieldSecondary)
+                    .font(designSystem.typography.textBody1.font)
+            }
+        } else {
+            HStack {
+                getLabel("Select VPN")
+                Spacer()
+                BrowserJetMenuPicker(
+                    options: viewModel.availableVPNs,
+                    selection: vpnPickerSelectionBinding,
+                    isDisabled: !viewModel.settings.areVPNControlsEnabled || viewModel.availableVPNs.isEmpty,
+                    width: Constants.vpnPickerWidth
+                ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
+            }
+        }
+    }
+
+    private var vpnPickerSelectionBinding: Binding<VPNType> {
+        Binding(
+            get: {
+                let selected = viewModel.settings.selectedVPN
+                if let selected, viewModel.availableVPNs.contains(selected) {
+                    return selected
+                }
+                return viewModel.availableVPNs.first!
+            },
+            set: { viewModel.updateSelectedVPN($0) }
+        )
     }
 
     private var selectionRegion: some View {

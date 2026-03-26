@@ -21,6 +21,8 @@ struct AppConfiguration {
         let buyLicensesURL: URL
         let contactUsURL: URL
         let twitterURL: URL
+    // Blocked VPNs for trial users
+    let trialBlockedVPNs: Set<VPNType>
     
     init(
         isUserAgentEnabled: Bool,
@@ -34,7 +36,8 @@ struct AppConfiguration {
         paymentCardURL: URL,
         buyLicensesURL: URL,
         contactUsURL: URL,
-        twitterURL: URL
+        twitterURL: URL,
+        trialBlockedVPNs: Set<VPNType>
     ) {
         self.isUserAgentEnabled = isUserAgentEnabled
         self.proxyType = proxyType
@@ -48,6 +51,7 @@ struct AppConfiguration {
         self.buyLicensesURL = buyLicensesURL
         self.contactUsURL = contactUsURL
         self.twitterURL = twitterURL
+        self.trialBlockedVPNs = trialBlockedVPNs
     }
 }
 
@@ -128,6 +132,7 @@ extension AppConfiguration {
             buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             contactUsURL: URL(string: "https://browserjet.com/contact")!,
             twitterURL: URL(string: "https://twitter.com/browserjet")!,
+            trialBlockedVPNs: [.vpn1]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config
@@ -194,6 +199,7 @@ extension AppConfiguration {
             buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             contactUsURL: URL(string: "https://browserjet.com/contact")!,
             twitterURL: URL(string: "https://twitter.com/browserjet")!,
+            trialBlockedVPNs: [.vpn1]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config

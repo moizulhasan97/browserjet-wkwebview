@@ -25,6 +25,7 @@ struct BrowserJet: App {
         AppLogger.debug("ThemeManager initialized")
         DispatchQueue.main.async {
             AppLogger.info("Showing activation window")
+            LicenseAccountStore.shared.refresh()
 //            WindowManager.shared.showLauncher(
 //                themeManager: themeManager,
 //                sessionManager: sessionManager,

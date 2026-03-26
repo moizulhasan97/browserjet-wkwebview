@@ -72,6 +72,7 @@ final class WindowManager {
             let rootView = BrowserJetWindowRoot()
                 .environmentObject(themeManager)
                 .environmentObject(sessionManager)
+                .environmentObject(LicenseAccountStore.shared)
                 .environment(\.appConfiguration, appConfiguration)
 
             launcherWC = BrowserJetWindowController(
@@ -106,6 +107,7 @@ final class WindowManager {
             let rootView = LauncherRootView(appConfiguration: appConfiguration)
                 .environmentObject(themeManager)
                 .environmentObject(sessionManager)
+                .environmentObject(LicenseAccountStore.shared)
 
             launcherWC = BrowserJetWindowController(
                 content: rootView,
@@ -172,6 +174,7 @@ final class WindowManager {
         )
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
+            .environmentObject(LicenseAccountStore.shared)
 
         browserWC = BrowserJetWindowController(
             content: rootView,
@@ -215,6 +218,7 @@ final class WindowManager {
         )
         .environmentObject(themeManager)
         .environmentObject(sessionManager)
+        .environmentObject(LicenseAccountStore.shared)
         .environment(\.appConfiguration, appConfiguration)
 
         launcherWC?.close()

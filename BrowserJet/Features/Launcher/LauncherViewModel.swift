@@ -13,19 +13,44 @@ final class LauncherViewModel: ObservableObject {
 
     private let defaultSearchAddress: String
     let availableVPNs: [VPNType]
-    
+
+    private(set) var isTrialUser: Bool = false
+
+    private let blockedVPNsForTrial: Set<VPNType>
+
     init(defaultSearchAddress: String, appConfiguration: AppConfiguration) {
         AppLogger.debug("LauncherViewModel initializing with default address: \(defaultSearchAddress)")
-        self.availableVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
+
+        LicenseAccountStore.shared.refresh()
+        let trial = LicenseAccountStore.shared.isTrialUser
+        let blocked = appConfiguration.trialBlockedVPNs
+
+        self.isTrialUser = trial
+        self.blockedVPNsForTrial = blocked
         self.defaultSearchAddress = defaultSearchAddress
+
+        let allVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
+        let filtered: [VPNType]
+        if trial {
+            filtered = allVPNs.filter { !blocked.contains($0) }
+        } else {
+            filtered = allVPNs
+        }
+        self.availableVPNs = filtered
+
+        if trial && filtered.isEmpty {
+            AppLogger.warning("LauncherViewModel: trial user has no VPN options after applying trialBlockedVPNs")
+        }
+
         self.settings = LauncherSettings(
             address: "",
             numberOfTabs: .one,
             isVPNEnabled: false,
             isPremiumProxyEnabled: false,
-            selectedVPN: availableVPNs.first,
+            selectedVPN: filtered.first,
             selectedRegion: .uk
         )
+
         AppLogger.debug("LauncherViewModel initialized with default settings")
     }
 
@@ -34,9 +59,12 @@ final class LauncherViewModel: ObservableObject {
     }
 
     func toggleVPN(_ newValue: Bool) {
+        if newValue && availableVPNs.isEmpty {
+            AppLogger.warning("VPN toggle ignored — no VPN options available")
+            return
+        }
         AppLogger.info("VPN toggled to: \(newValue)")
         settings.isVPNEnabled = newValue
-        // If VPN is disabled, also disable premium proxy
         if !newValue {
             settings.isPremiumProxyEnabled = false
             AppLogger.debug("VPN disabled, premium proxy also disabled")
@@ -44,7 +72,6 @@ final class LauncherViewModel: ObservableObject {
     }
 
     func togglePremiumProxy(_ newValue: Bool) {
-        // Only allow toggle if VPN is enabled
         guard settings.isVPNEnabled else {
             AppLogger.warning("Attempted to toggle premium proxy without VPN enabled")
             return
@@ -54,7 +81,6 @@ final class LauncherViewModel: ObservableObject {
     }
 
     func updateAddress(_ address: String) {
-        // Only update if the value actually changed to prevent unnecessary updates
         guard settings.address != address else { return }
         AppLogger.debug("Address updated to: \(address)")
         settings.address = address
@@ -66,6 +92,11 @@ final class LauncherViewModel: ObservableObject {
     }
 
     func updateSelectedVPN(_ vpn: VPNType) {
+        if isTrialUser && blockedVPNsForTrial.contains(vpn) {
+            AppLogger.warning("Blocked VPN selection for trial user: \(vpn.rawValue)")
+            settings.selectedVPN = availableVPNs.first
+            return
+        }
         AppLogger.info("VPN selection changed to: \(vpn.rawValue)")
         settings.selectedVPN = vpn
     }
@@ -75,17 +106,7 @@ final class LauncherViewModel: ObservableObject {
         settings.selectedRegion = region
     }
 
-    //    func didTapLaunch() {
-    //        guard settings.isValid else {
-    //            AppLogger.warning("Launch attempted with invalid settings - Address: '\(settings.address)'")
-    //            return
-    //        }
-    //        AppLogger.info("Launch button tapped - Address: '\(settings.address)', Tabs: \(settings.numberOfTabs.rawValue), VPN: \(settings.isVPNEnabled), Premium Proxy: \(settings.isPremiumProxyEnabled), VPN Type: \(settings.selectedVPN?.rawValue ?? "none"), Region: \(settings.selectedRegion?.rawValue ?? "none")")
-    //        // TODO: Implement launch logic
-    //    }
-
     func didTapManageMyProxy() {
         AppLogger.info("Manage My Proxy button tapped")
-        // TODO: Implement manage proxy logic
     }
 }
