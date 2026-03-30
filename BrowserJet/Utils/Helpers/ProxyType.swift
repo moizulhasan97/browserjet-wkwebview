@@ -24,6 +24,13 @@ extension ProxyType {
         return false
     }
 
+    /// True when launcher resolved to premium (GPP) pool instead of built-in `VPNProvider` configs.
+    var isPremiumSession: Bool {
+        guard case .proxy(let source) = self else { return false }
+        if case .premium = source { return true }
+        return false
+    }
+
     /// For browser window UI.
     var statusTitle: String {
         switch self {

@@ -34,6 +34,7 @@ struct LauncherView: View {
 
     private let config: AppConfiguration
     @StateObject private var viewModel: LauncherViewModel
+    @ObservedObject private var premiumRepository = PremiumProxyRepository.shared
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
     private var presets: [LauncherTabPreset] {
@@ -68,6 +69,16 @@ struct LauncherView: View {
                 viewModel.updateAddress(config.defaultSearchAddress)
             }
         }
+        .onChange(of: premiumRepository.hasPremiumProxies) { _, hasProxies in
+            if hasProxies {
+                viewModel.clearPremiumProxyUnavailableMessage()
+            }
+        }
+        .onChange(of: premiumRepository.isLoading) { _, isLoading in
+            if isLoading {
+                viewModel.clearPremiumProxyUnavailableMessage()
+            }
+        }
     }
 
     private func getLabel(_ text: String) -> some View {
@@ -81,7 +92,7 @@ struct LauncherView: View {
             title: "Launch",
             type: .primaryLarge,
             height: Constants.launchButtonHeight,
-            isDisabled: !viewModel.settings.isValid,
+            isDisabled: !viewModel.isLaunchAllowed(),
             action: showBrowser
         )
     }
@@ -162,6 +173,7 @@ private extension LauncherView {
                     Spacer()
                     manageMyProxyButton
                 }
+                premiumStatusFootnotes
                 BrowserJetDivider()
                 HStack {
                     getLabel("VPN Status")
@@ -174,6 +186,25 @@ private extension LauncherView {
         }
     }
 
+    @ViewBuilder
+    private var premiumStatusFootnotes: some View {
+        if premiumRepository.isLoading {
+            HStack(alignment: .center, spacing: 8) {
+                ProgressView()
+                    .controlSize(.small)
+                Text("Loading premium proxies…")
+                    .foregroundStyle(theme.textFieldSecondary)
+                    .font(designSystem.typography.textBody1.font)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else if let message = viewModel.premiumProxyUnavailableMessage {
+            Text(message)
+                .foregroundStyle(theme.textFieldSecondary)
+                .font(designSystem.typography.textBody1.font)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
     private var premiumProxyToggle: some View {
         HStack {
             GlassPillToggle(
@@ -181,10 +212,17 @@ private extension LauncherView {
                     get: { viewModel.settings.isPremiumProxyEnabled },
                     set: { viewModel.togglePremiumProxy($0) }
                 ),
-                isDisabled: !viewModel.settings.isVPNEnabled || viewModel.availableVPNs.isEmpty
+                isDisabled: premiumToggleDisabled
             )
             getLabel("Premium Proxy")
         }
+    }
+
+    /// Disabled while VPN is off or GPP is still loading. If the list is empty after load, the user can tap ON to see “no premium proxies” messaging.
+    private var premiumToggleDisabled: Bool {
+        if !viewModel.settings.isVPNEnabled || viewModel.availableVPNs.isEmpty { return true }
+        if viewModel.settings.isPremiumProxyEnabled { return false }
+        return premiumRepository.isLoading
     }
 
     private var manageMyProxyButton: some View {

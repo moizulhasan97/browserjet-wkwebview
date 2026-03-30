@@ -13,6 +13,7 @@ enum StorageKeys {
     static let userEmail = "UserEmail"
     static let launcherSettings = "LauncherSettings"
     static let updateKeyInDatabase = "UpdateKeyInDatabase"
+    static let encryptedPremiumProxies = "EncryptedPremiumProxies"
 }
 
 protocol KeyValueStoring: AnyObject {

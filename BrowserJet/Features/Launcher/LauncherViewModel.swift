@@ -11,6 +11,9 @@ import Combine
 final class LauncherViewModel: ObservableObject {
     @Published var settings: LauncherSettings
 
+    /// Set when the user tries to enable Premium Proxy while the GPP list is empty; cleared when appropriate from the view.
+    @Published var premiumProxyUnavailableMessage: String?
+
     private let defaultSearchAddress: String
     let availableVPNs: [VPNType]
 
@@ -56,6 +59,18 @@ final class LauncherViewModel: ObservableObject {
 
     func onAppear() {
         AppLogger.debug("LauncherView appeared")
+        Task { @MainActor in
+            await PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
+        }
+    }
+
+    /// Launch is blocked when VPN + Premium is selected but the GPP list is empty.
+    func isLaunchAllowed() -> Bool {
+        guard settings.isValid else { return false }
+        if settings.isVPNEnabled && settings.isPremiumProxyEnabled {
+            return PremiumProxyRepository.shared.hasPremiumProxies
+        }
+        return true
     }
 
     func toggleVPN(_ newValue: Bool) {
@@ -67,6 +82,7 @@ final class LauncherViewModel: ObservableObject {
         settings.isVPNEnabled = newValue
         if !newValue {
             settings.isPremiumProxyEnabled = false
+            premiumProxyUnavailableMessage = nil
             AppLogger.debug("VPN disabled, premium proxy also disabled")
         }
     }
@@ -76,8 +92,18 @@ final class LauncherViewModel: ObservableObject {
             AppLogger.warning("Attempted to toggle premium proxy without VPN enabled")
             return
         }
+        if newValue && !PremiumProxyRepository.shared.hasPremiumProxies {
+            premiumProxyUnavailableMessage = LauncherMessages.premiumNoProxiesAvailable
+            AppLogger.warning("Premium proxy toggle ignored — no GPP proxy rows")
+            return
+        }
+        premiumProxyUnavailableMessage = nil
         AppLogger.info("Premium proxy toggled to: \(newValue)")
         settings.isPremiumProxyEnabled = newValue
+    }
+
+    func clearPremiumProxyUnavailableMessage() {
+        premiumProxyUnavailableMessage = nil
     }
 
     func updateAddress(_ address: String) {

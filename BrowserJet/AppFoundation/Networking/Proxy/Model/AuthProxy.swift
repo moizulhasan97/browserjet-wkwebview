@@ -9,12 +9,25 @@
 import Foundation
 
 struct AuthProxy: Hashable, Identifiable {
-    let id = UUID()
-
+    let id: UUID
     let host: String
     let port: UInt16
     let username: String
     let password: String
+
+    init(
+        id: UUID = UUID(),
+        host: String,
+        port: UInt16,
+        username: String,
+        password: String
+    ) {
+        self.id = id
+        self.host = host
+        self.port = port
+        self.username = username
+        self.password = password
+    }
 
     var display: String {
         "\(host):\(port)"

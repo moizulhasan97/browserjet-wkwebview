@@ -145,8 +145,9 @@ final class WindowManager {
         AppLogger.info("showBrowser called - tabs: \(request.numberOfTabs), proxy: \(request.proxyType.statusTitle), address: \(request.address)")
         let vpnProvider = VPNProvider(configurations: appConfiguration.vpnConfigurations)
         let generatedProxies: [AuthProxy]
-            
-        if let vpnID = request.selectedVPN?.rawValue {
+        if request.proxyType.isPremiumSession {
+            generatedProxies = PremiumProxyRepository.shared.authProxiesForSession()
+        } else if let vpnID = request.selectedVPN?.rawValue {
             generatedProxies = vpnProvider.generateProxies(for: vpnID)
         } else {
             generatedProxies = []
