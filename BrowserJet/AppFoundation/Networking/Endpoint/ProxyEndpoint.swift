@@ -10,6 +10,7 @@ import Foundation
 enum ProxyEndpoint: EndpointProtocol {
 
     case premium(key: String)
+    case vpn1(key: String)
 
     var baseURL: URL { APIEnvironment.current.baseURL }
     var path: String { "/License.ashx" }
@@ -20,6 +21,12 @@ enum ProxyEndpoint: EndpointProtocol {
         case .premium(let key):
             return [
                 .init(name: "MethodName", value: "GPP"),
+                .init(name: "Key", value: key),
+                .init(name: "RequestFrom", value: "Mac")
+            ]
+        case .vpn1(let key):
+            return [
+                .init(name: "MethodName", value: "VPR"),
                 .init(name: "Key", value: key),
                 .init(name: "RequestFrom", value: "Mac")
             ]

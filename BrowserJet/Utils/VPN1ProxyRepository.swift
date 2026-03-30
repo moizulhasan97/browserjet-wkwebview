@@ -1,24 +1,21 @@
 //
-//  PremiumProxyRepository.swift
+//  VPN1ProxyRepository.swift
 //  BrowserJet
-//
-//  Created by Moiz Ul Hasan on 27/03/2026.
 //
 
 import Foundation
 
 @MainActor
-final class PremiumProxyRepository: ObservableObject {
+final class VPN1ProxyRepository: ObservableObject {
 
-    static let shared = PremiumProxyRepository()
+    static let shared = VPN1ProxyRepository()
 
     private let proxyService: ProxyService
     private let keyValueStore: KeyValueStoring
 
     @Published private(set) var proxies: [DecryptedPremiumProxy] = []
-    @Published private(set) var isLoading: Bool = false
 
-    var hasPremiumProxies: Bool { !proxies.isEmpty }
+    var hasVPN1Proxies: Bool { !proxies.isEmpty }
 
     init(proxyService: ProxyService = ProxyService(), keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()) {
         self.proxyService = proxyService
@@ -27,7 +24,7 @@ final class PremiumProxyRepository: ObservableObject {
 
     func clearForLicenseChange() {
         proxies = []
-        AppLogger.info("PremiumProxyRepository: cleared in-memory premium proxies (license change)")
+        AppLogger.info("VPN1ProxyRepository: cleared in-memory VPN1 proxies (license change)")
     }
 
     func refreshFromNetworkIfPossible() async {
@@ -39,20 +36,17 @@ final class PremiumProxyRepository: ObservableObject {
             return
         }
 
-        isLoading = true
-        defer { isLoading = false }
-
         do {
-            let data = try await proxyService.getPremiumProxies(key: key)
-            let rows = try PremiumProxyPayloadDecryptor.decodePremiumProxies(from: data)
+            let data = try await proxyService.getVPN1Proxies(key: key)
+            let rows = try PremiumProxyPayloadDecryptor.decodeVPN1Proxies(from: data)
             guard !rows.isEmpty else {
                 throw PremiumProxyDecryptError.emptyProxyList
             }
             proxies = rows
-            AppLogger.info("PremiumProxyRepository: fetched \(proxies.count) premium proxy row(s)")
+            AppLogger.info("VPN1ProxyRepository: fetched \(proxies.count) VPN1 proxy row(s)")
         } catch {
             proxies = []
-            AppLogger.warning("PremiumProxyRepository: fetch failed (silent) — \(error.localizedDescription)")
+            AppLogger.info("VPN1ProxyRepository: VPN1 fetch unavailable — \(error.localizedDescription)")
         }
     }
 

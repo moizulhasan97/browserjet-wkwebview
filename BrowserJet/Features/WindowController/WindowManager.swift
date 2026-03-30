@@ -147,6 +147,8 @@ final class WindowManager {
         let generatedProxies: [AuthProxy]
         if request.proxyType.isPremiumSession {
             generatedProxies = PremiumProxyRepository.shared.authProxiesForSession()
+        } else if request.selectedVPN == .vpn1 {
+            generatedProxies = VPN1ProxyRepository.shared.authProxiesForSession()
         } else if let vpnID = request.selectedVPN?.rawValue {
             generatedProxies = vpnProvider.generateProxies(for: vpnID)
         } else {

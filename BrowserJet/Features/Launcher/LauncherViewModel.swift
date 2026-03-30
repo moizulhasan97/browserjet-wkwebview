@@ -60,15 +60,25 @@ final class LauncherViewModel: ObservableObject {
     func onAppear() {
         AppLogger.debug("LauncherView appeared")
         Task { @MainActor in
-            await PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
+            async let premiumRefresh: Void = PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
+            async let vpn1Refresh: Void = VPN1ProxyRepository.shared.refreshFromNetworkIfPossible()
+            await premiumRefresh
+            await vpn1Refresh
+            applyDefaultBuiltInVPNSelection()
+            reconcileVPN1SelectionIfNeeded()
         }
     }
 
-    /// Launch is blocked when VPN + Premium is selected but the GPP list is empty.
+    /// Launch is blocked when VPN + Premium is selected but the GPP list is empty, or VPN1 is selected without a VPR list.
     func isLaunchAllowed() -> Bool {
         guard settings.isValid else { return false }
         if settings.isVPNEnabled && settings.isPremiumProxyEnabled {
             return PremiumProxyRepository.shared.hasPremiumProxies
+        }
+        if settings.isVPNEnabled,
+           !settings.isPremiumProxyEnabled,
+           settings.selectedVPN == .vpn1 {
+            return VPN1ProxyRepository.shared.hasVPN1Proxies
         }
         return true
     }
@@ -80,10 +90,45 @@ final class LauncherViewModel: ObservableObject {
         }
         AppLogger.info("VPN toggled to: \(newValue)")
         settings.isVPNEnabled = newValue
-        if !newValue {
+        if newValue {
+            applyDefaultBuiltInVPNSelection()
+            reconcileVPN1SelectionIfNeeded()
+        } else {
             settings.isPremiumProxyEnabled = false
             premiumProxyUnavailableMessage = nil
             AppLogger.debug("VPN disabled, premium proxy also disabled")
+        }
+    }
+
+    /// Paid: prefer VPN1 when the VPR list loaded; otherwise VPN2 (CEF launcher default). Trial: first allowed tier.
+    private func applyDefaultBuiltInVPNSelection() {
+        if isTrialUser {
+            if let first = availableVPNs.first {
+                settings.selectedVPN = first
+            }
+            return
+        }
+        if VPN1ProxyRepository.shared.hasVPN1Proxies, availableVPNs.contains(.vpn1) {
+            settings.selectedVPN = .vpn1
+            AppLogger.info("LauncherViewModel: default built-in VPN → VPN1 (remote list available)")
+        } else if availableVPNs.contains(.vpn2) {
+            settings.selectedVPN = .vpn2
+            AppLogger.info("LauncherViewModel: default built-in VPN → VPN2 (VPN1 list empty or fetch failed)")
+        } else if let first = availableVPNs.first {
+            settings.selectedVPN = first
+        }
+    }
+
+    /// If VPN1 is selected but VPR has no rows, fall back to VPN2.
+    private func reconcileVPN1SelectionIfNeeded() {
+        guard !isTrialUser else { return }
+        guard settings.selectedVPN == .vpn1 else { return }
+        guard !VPN1ProxyRepository.shared.hasVPN1Proxies else { return }
+        if availableVPNs.contains(.vpn2) {
+            settings.selectedVPN = .vpn2
+            AppLogger.info("LauncherViewModel: reconciled selection VPN1 → VPN2 (no VPN1 proxies)")
+        } else if let first = availableVPNs.first {
+            settings.selectedVPN = first
         }
     }
 

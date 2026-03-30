@@ -53,19 +53,37 @@ enum PremiumProxyPayloadDecryptor {
     private static let ivString = "BrowserJet_AESIV"
 
     static func decodePremiumProxies(from responseData: Data) throws -> [DecryptedPremiumProxy] {
+        try decodeEncryptedRemoteRows(from: responseData, decodePlain: decodePlainJSONProxyList)
+    }
+
+    static func decodeVPN1Proxies(from responseData: Data) throws -> [DecryptedPremiumProxy] {
+        try decodeEncryptedRemoteRows(from: responseData, decodePlain: decodePlainJSONVPN1List)
+    }
+
+    private static func decodeEncryptedRemoteRows(
+        from responseData: Data,
+        decodePlain: (Data) -> [DecryptedPremiumProxy]?
+    ) throws -> [DecryptedPremiumProxy] {
         let data = stripUTF8BOM(responseData)
 
-        if let rows = decodePlainJSONProxyList(from: data), !rows.isEmpty {
+        if let rows = decodePlain(data), !rows.isEmpty {
             return rows
         }
 
         let cipherText = try extractCiphertextString(from: data)
         let plainData = try decryptBase64Ciphertext(cipherText)
 
-        if let rows = decodePlainJSONProxyList(from: plainData), !rows.isEmpty {
+        if let rows = decodePlain(plainData), !rows.isEmpty {
             return rows
         }
         throw PremiumProxyDecryptError.invalidJSON
+    }
+
+    private static func decodePlainJSONVPN1List(from data: Data) -> [DecryptedPremiumProxy]? {
+        guard let dtos = try? JSONDecoder().decode([VPN1ProxyDTO].self, from: data), !dtos.isEmpty else {
+            return nil
+        }
+        return dtos.map { $0.asDecryptedPremiumProxy() }
     }
 
     private static func decodePlainJSONProxyList(from data: Data) -> [DecryptedPremiumProxy]? {

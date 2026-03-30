@@ -36,6 +36,7 @@ final class LicenseActivationCoordinator {
             // TODO: Full “change key” UX — invalidate any data tied to the old license before saving the new one.
             await MainActor.run {
                 PremiumProxyRepository.shared.clearForLicenseChange()
+                VPN1ProxyRepository.shared.clearForLicenseChange()
             }
         }
 
@@ -48,6 +49,13 @@ final class LicenseActivationCoordinator {
 
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
+
+        Task { @MainActor in
+            async let gpp: Void = PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
+            async let vpr: Void = VPN1ProxyRepository.shared.refreshFromNetworkIfPossible()
+            await gpp
+            await vpr
+        }
 
         await licenseService.updateKeyInBackendIfNeeded(key: key, keyValueStore: keyValueStore)
 

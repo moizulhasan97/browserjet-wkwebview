@@ -103,6 +103,7 @@
 		AFCA5CEC2F75B104007A8578 /* LicenseAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */; };
 		AFCA5CF02F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */; };
 		AFCA5CF22F75BC32007A8578 /* PremiumProxyRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CF12F75BC32007A8578 /* PremiumProxyRepository.swift */; };
+		AFCC10022F90002007A8578 /* VPN1ProxyRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCC10012F90001007A8578 /* VPN1ProxyRepository.swift */; };
 		AFCA5CF42F75BC4C007A8578 /* DecryptedPremiumProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CF32F75BC4B007A8578 /* DecryptedPremiumProxy.swift */; };
 		AFE9764C2F5530AC00D270C8 /* ShiftLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE9764A2F5530AC00D270C8 /* ShiftLicenseView.swift */; };
 		AFE976502F55343100D270C8 /* ShiftViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */; };
@@ -231,6 +232,7 @@
 		AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseAccountStore.swift; sourceTree = "<group>"; };
 		AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumProxyPayloadDecryptor.swift; sourceTree = "<group>"; };
 		AFCA5CF12F75BC32007A8578 /* PremiumProxyRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumProxyRepository.swift; sourceTree = "<group>"; };
+		AFCC10012F90001007A8578 /* VPN1ProxyRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPN1ProxyRepository.swift; sourceTree = "<group>"; };
 		AFCA5CF32F75BC4B007A8578 /* DecryptedPremiumProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptedPremiumProxy.swift; sourceTree = "<group>"; };
 		AFE9764A2F5530AC00D270C8 /* ShiftLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftLicenseView.swift; sourceTree = "<group>"; };
 		AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftViewModel.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				AFCA5CF12F75BC32007A8578 /* PremiumProxyRepository.swift */,
+				AFCC10012F90001007A8578 /* VPN1ProxyRepository.swift */,
 				AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */,
 				AF56EF112F3DFC8D00E49C58 /* Modifiers */,
 				AF56EF0C2F3DF84A00E49C58 /* Helpers */,
@@ -1062,6 +1065,7 @@
 				AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */,
 				AFCA5CF02F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift in Sources */,
 				AFCA5CF22F75BC32007A8578 /* PremiumProxyRepository.swift in Sources */,
+				AFCC10022F90002007A8578 /* VPN1ProxyRepository.swift in Sources */,
 				AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */,
 				AF56EF072F3DEE3100E49C58 /* BrowserJetAppButton.swift in Sources */,
 				AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */,
