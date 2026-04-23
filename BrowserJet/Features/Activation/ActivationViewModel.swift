@@ -64,6 +64,8 @@ final class ActivationViewModel: ObservableObject {
 
     @Published var verifyOutcome: VerifyOutcome? = nil
 
+    @Published var showRecoverAccountSheet: Bool = false
+
     var canSubmit: Bool {
         switch mode {
         case .activate:
@@ -110,7 +112,6 @@ final class ActivationViewModel: ObservableObject {
     }
 
     func forgotPasswordTapped() {
-        // TODO: open URL or in-app flow
-        print("🔗 Forgot password tapped")
+        showRecoverAccountSheet = true
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 struct ActivationWindowRoot: View {
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
-
+    
     var body: some View {
         ActivationRootView()
             .environment(\.appTheme, themeManager.theme(for: colorScheme))
@@ -31,35 +31,35 @@ struct ActivationRootView: View {
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
     @Environment(\.appConfiguration) private var appConfiguration: AppConfiguration
-
+    
     @StateObject private var viewModel = ActivationViewModel()
     private let keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
     @State private var showShiftSuccessAlert: Bool = false
     @State private var showVerificationSuccessAlert: Bool = false
     @State private var paymentAlert: PaymentAlertItem?
     private typealias Constants = ActivationRootViewConstants
-
+    
     var body: some View {
         VStack(spacing: Constants.mainVStackSpacing) {
             header
-
+            
             CardContainer {
                 VStack(spacing: Constants.cardVStackSpacing) {
                     segmented
-
+                    
                     BrowserJetDivider()
-
+                    
                     content
-
+                    
                     if let msg = viewModel.errorMessage {
                         Text(msg)
                             .foregroundStyle(theme.danger)
                             .font(designSystem.typography.textBody1.font)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
-
+                    
                     submitButton
-
+                    
                     forgotPassword
                 }
             }
@@ -152,21 +152,28 @@ struct ActivationRootView: View {
                 }
             )
         }
+        .sheet(isPresented: $viewModel.showRecoverAccountSheet, onDismiss: {
+            viewModel.showRecoverAccountSheet = false
+        }) {
+            RecoverAccountView()
+                .environment(\.appTheme, theme)
+                .environment(\.designSystem, designSystem)
+        }
     }
-
+    
     private var header: some View {
         VStack(alignment: .leading, spacing: Constants.titleSubtitleVStackSpacing) {
             Text(ActivationMessages.welcomeTitle)
                 .foregroundStyle(theme.textPrimary)
                 .font(designSystem.typography.title1.font)
-
+            
             Text(ActivationMessages.activateSubtitle)
                 .foregroundStyle(theme.textFieldSecondary)
                 .font(designSystem.typography.textBody1.font)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-
+    
     private var segmented: some View {
         BrowserJetSegmentedPicker(
             options: ActivationViewModel.Mode.allCases,
@@ -175,7 +182,7 @@ struct ActivationRootView: View {
             label: { $0.displayLabel }
         )
     }
-
+    
     @ViewBuilder
     private var content: some View {
         switch viewModel.mode {
@@ -188,7 +195,7 @@ struct ActivationRootView: View {
                 rule: .licenseKey,
                 validationState: $viewModel.licenseKeyValidation
             )
-
+            
         case .register:
             VStack(spacing: 14) {
                 BrowserJetTextField(
@@ -196,23 +203,23 @@ struct ActivationRootView: View {
                     title: ActivationMessages.emailAddressTitle,
                     text: $viewModel.email,
                     placeholder: ActivationMessages.emailPlaceholder,
-                    rule: .email.message(ActivationMessages.emailValidationMessage),
+                    rule: ValidationRule.email,
                     validationState: $viewModel.emailValidation
                 )
-
+                
                 BrowserJetTextField(
                     type: .activationField,
                     title: ActivationMessages.passwordTitle,
                     text: $viewModel.password,
                     placeholder: ActivationMessages.passwordPlaceholder,
                     isSecure: true,
-                    rule: .password,
+                    rule: ValidationRule.password,
                     validationState: $viewModel.passwordValidation
                 )
             }
         }
     }
-
+    
     private var submitButton: some View {
         BrowserJetAppButton(
             title: viewModel.mode.buttonTitle,
@@ -223,12 +230,12 @@ struct ActivationRootView: View {
             viewModel.submit()
         }
     }
-
+    
     private var forgotPassword: some View {
         Button {
             viewModel.forgotPasswordTapped()
         } label: {
-            Text(ActivationMessages.forgotPasswordLink)
+            Text(ActivationMessages.recoverAccountLink)
                 .underline()
                 .foregroundStyle(theme.accent)
                 .font(designSystem.typography.textBody1.font)

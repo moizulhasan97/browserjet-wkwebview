@@ -34,6 +34,7 @@ struct LauncherView: View {
 
     private let config: AppConfiguration
     @StateObject private var viewModel: LauncherViewModel
+    @ObservedObject private var premiumRepository = PremiumProxyRepository.shared
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
     private var presets: [LauncherTabPreset] {
@@ -68,6 +69,16 @@ struct LauncherView: View {
                 viewModel.updateAddress(config.defaultSearchAddress)
             }
         }
+        .onChange(of: premiumRepository.hasPremiumProxies) { _, hasProxies in
+            if hasProxies {
+                viewModel.clearPremiumProxyUnavailableMessage()
+            }
+        }
+        .onChange(of: premiumRepository.isLoading) { _, isLoading in
+            if isLoading {
+                viewModel.clearPremiumProxyUnavailableMessage()
+            }
+        }
     }
 
     private func getLabel(_ text: String) -> some View {
@@ -81,14 +92,13 @@ struct LauncherView: View {
             title: "Launch",
             type: .primaryLarge,
             height: Constants.launchButtonHeight,
-            isDisabled: !viewModel.settings.isValid,
+            isDisabled: !viewModel.isLaunchAllowed(),
             action: showBrowser
         )
     }
 
     private func showBrowser() {
         let request = viewModel.settings.makeLaunchRequest(appConfiguration: config)
-        let proxies: [AuthProxy] = []
         WindowManager.shared.showBrowser(
             request: request,
             themeManager: themeManager,
@@ -163,15 +173,35 @@ private extension LauncherView {
                     Spacer()
                     manageMyProxyButton
                 }
+                premiumStatusFootnotes
                 BrowserJetDivider()
                 HStack {
                     getLabel("VPN Status")
                     Spacer()
                     vpnToggle
                 }
-                selectVPN
+                selectVPNSection
                 selectionRegion
             }
+        }
+    }
+
+    @ViewBuilder
+    private var premiumStatusFootnotes: some View {
+        if premiumRepository.isLoading {
+            HStack(alignment: .center, spacing: 8) {
+                ProgressView()
+                    .controlSize(.small)
+                Text("Loading premium proxies…")
+                    .foregroundStyle(theme.textFieldSecondary)
+                    .font(designSystem.typography.textBody1.font)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else if let message = viewModel.premiumProxyUnavailableMessage {
+            Text(message)
+                .foregroundStyle(theme.textFieldSecondary)
+                .font(designSystem.typography.textBody1.font)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -182,10 +212,17 @@ private extension LauncherView {
                     get: { viewModel.settings.isPremiumProxyEnabled },
                     set: { viewModel.togglePremiumProxy($0) }
                 ),
-                isDisabled: !viewModel.settings.isVPNEnabled
+                isDisabled: premiumToggleDisabled
             )
             getLabel("Premium Proxy")
         }
+    }
+
+    /// Disabled while VPN is off or GPP is still loading. If the list is empty after load, the user can tap ON to see “no premium proxies” messaging.
+    private var premiumToggleDisabled: Bool {
+        if !viewModel.settings.isVPNEnabled || viewModel.availableVPNs.isEmpty { return true }
+        if viewModel.settings.isPremiumProxyEnabled { return false }
+        return premiumRepository.isLoading
     }
 
     private var manageMyProxyButton: some View {
@@ -208,24 +245,57 @@ private extension LauncherView {
                 get: { viewModel.settings.isVPNEnabled },
                 set: { viewModel.toggleVPN($0) }
             ),
-            isDisabled: false
+            isDisabled: viewModel.availableVPNs.isEmpty
         )
     }
 
-    private var selectVPN: some View {
-        HStack {
-            getLabel("Select VPN")
-            Spacer()
-            BrowserJetMenuPicker(
-                options: viewModel.availableVPNs,
-                selection: Binding(
-                    get: { viewModel.settings.selectedVPN ?? .vpn1 },
-                    set: { viewModel.updateSelectedVPN($0) }
-                ),
-                isDisabled: !viewModel.settings.areVPNControlsEnabled,
-                width: Constants.vpnPickerWidth
-            ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
+    private var selectVPNSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            selectVPNRow
+            if viewModel.isTrialUser {
+                Text(LauncherMessages.trialPaidVpnFootnote)
+                    .foregroundStyle(theme.textFieldSecondary)
+                    .font(designSystem.typography.textBody1.font)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
+    }
+
+    @ViewBuilder
+    private var selectVPNRow: some View {
+        if viewModel.availableVPNs.isEmpty {
+            HStack {
+                getLabel("Select VPN")
+                Spacer()
+                Text("—")
+                    .foregroundStyle(theme.textFieldSecondary)
+                    .font(designSystem.typography.textBody1.font)
+            }
+        } else {
+            HStack {
+                getLabel("Select VPN")
+                Spacer()
+                BrowserJetMenuPicker(
+                    options: viewModel.availableVPNs,
+                    selection: vpnPickerSelectionBinding,
+                    isDisabled: !viewModel.settings.areVPNControlsEnabled || viewModel.availableVPNs.isEmpty,
+                    width: Constants.vpnPickerWidth
+                ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
+            }
+        }
+    }
+
+    private var vpnPickerSelectionBinding: Binding<VPNType> {
+        Binding(
+            get: {
+                let selected = viewModel.settings.selectedVPN
+                if let selected, viewModel.availableVPNs.contains(selected) {
+                    return selected
+                }
+                return viewModel.availableVPNs.first!
+            },
+            set: { viewModel.updateSelectedVPN($0) }
+        )
     }
 
     private var selectionRegion: some View {

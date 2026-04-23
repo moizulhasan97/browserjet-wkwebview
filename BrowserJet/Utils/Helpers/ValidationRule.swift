@@ -62,10 +62,10 @@ extension ValidationRule {
         #"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"#,
         defaultMessage: "Enter a valid email address"
     )
-
-    /// Minimum 8 characters, at least one letter and one number.
+    
+    /// TODO: Confirm with Ebad bhai to match website regex.
     static let password = ValidationRule(
-        #"^(?=.*[A-Za-z])(?=.*\d).{8,}$"#,
+        #"^(?=.*[A-Za-z])(?=.*\d).{7,}$"#,
         defaultMessage: "At least 8 characters, including a letter and a number"
     )
 }

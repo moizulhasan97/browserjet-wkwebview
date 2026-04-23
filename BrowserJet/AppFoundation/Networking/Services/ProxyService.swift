@@ -14,10 +14,10 @@ final class ProxyService {
         self.client = client
     }
 
-    func getPremiumProxies(key: String, email: String) async throws -> Data {
-        AppLogger.info("ProxyService: fetching premium proxies for email '\(email)'")
+    func getPremiumProxies(key: String) async throws -> Data {
+        AppLogger.info("ProxyService: fetching premium proxies (GPP)")
         do {
-            let data = try await client.requestData(ProxyEndpoint.premium(key: key, email: email))
+            let data = try await client.requestData(ProxyEndpoint.premium(key: key))
             AppLogger.info("ProxyService: received premium proxies - \(data.count) bytes")
             return data
         } catch {
@@ -27,7 +27,7 @@ final class ProxyService {
     }
 
     func getVPN1Proxies(key: String) async throws -> Data {
-        AppLogger.info("ProxyService: fetching VPN1 proxies")
+        AppLogger.info("ProxyService: fetching VPN1 proxies (VPR)")
         do {
             let data = try await client.requestData(ProxyEndpoint.vpn1(key: key))
             AppLogger.info("ProxyService: received VPN1 proxies - \(data.count) bytes")

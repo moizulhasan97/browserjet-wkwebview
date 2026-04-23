@@ -55,11 +55,22 @@ final class LicenseService {
         return !succeeded
     }
 
+    func requestPasswordReset(email: String) async throws {
+        AppLogger.info("LicenseService: requestPasswordReset for '\(email)'")
+        let raw = try await client.requestText(LicenseEndpoint.forgotPassword(email: email))
+        let normalized = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard normalized == "EmailSent" else {
+            AppLogger.warning("LicenseService: requestPasswordReset unexpected body → \(raw)")
+            throw APIError.custom("We couldn’t send the email. Please try again.")
+        }
+        AppLogger.info("LicenseService: requestPasswordReset — EmailSent")
+    }
+
     func generateKey(email: String, password: String) async throws -> String {
         AppLogger.info("LicenseService: generating key for email '\(email)'")
         do {
             let raw = try await client.requestText(LicenseEndpoint.generateKey(email: email, password: password))
-            if raw.lowercased().trimmingCharacters(in: .whitespaces) == "duplicateemail" {
+            if raw.lowercased().trimmingCharacters(in: .whitespacesAndNewlines).filter({!$0.isWhitespace}) == "duplicateemail" {
                 AppLogger.warning("LicenseService: generateKey rejected - duplicate email '\(email)'")
                 throw APIError.duplicateEmail
             }

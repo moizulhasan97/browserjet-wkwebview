@@ -72,6 +72,7 @@ final class WindowManager {
             let rootView = BrowserJetWindowRoot()
                 .environmentObject(themeManager)
                 .environmentObject(sessionManager)
+                .environmentObject(LicenseAccountStore.shared)
                 .environment(\.appConfiguration, appConfiguration)
 
             launcherWC = BrowserJetWindowController(
@@ -106,6 +107,7 @@ final class WindowManager {
             let rootView = LauncherRootView(appConfiguration: appConfiguration)
                 .environmentObject(themeManager)
                 .environmentObject(sessionManager)
+                .environmentObject(LicenseAccountStore.shared)
 
             launcherWC = BrowserJetWindowController(
                 content: rootView,
@@ -143,8 +145,11 @@ final class WindowManager {
         AppLogger.info("showBrowser called - tabs: \(request.numberOfTabs), proxy: \(request.proxyType.statusTitle), address: \(request.address)")
         let vpnProvider = VPNProvider(configurations: appConfiguration.vpnConfigurations)
         let generatedProxies: [AuthProxy]
-            
-        if let vpnID = request.selectedVPN?.rawValue {
+        if request.proxyType.isPremiumSession {
+            generatedProxies = PremiumProxyRepository.shared.authProxiesForSession()
+        } else if request.selectedVPN == .vpn1 {
+            generatedProxies = VPN1ProxyRepository.shared.authProxiesForSession()
+        } else if let vpnID = request.selectedVPN?.rawValue {
             generatedProxies = vpnProvider.generateProxies(for: vpnID)
         } else {
             generatedProxies = []
@@ -172,6 +177,7 @@ final class WindowManager {
         )
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
+            .environmentObject(LicenseAccountStore.shared)
 
         browserWC = BrowserJetWindowController(
             content: rootView,
@@ -215,6 +221,7 @@ final class WindowManager {
         )
         .environmentObject(themeManager)
         .environmentObject(sessionManager)
+        .environmentObject(LicenseAccountStore.shared)
         .environment(\.appConfiguration, appConfiguration)
 
         launcherWC?.close()

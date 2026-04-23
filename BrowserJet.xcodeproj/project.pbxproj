@@ -90,6 +90,7 @@
 		AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */; };
 		AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */; };
 		AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */; };
+		AF7A10012F90010000E49C58 /* LauncherMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7A10002F90010000E49C58 /* LauncherMessages.swift */; };
 		AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B42F4E71810064B8FD /* UserSession.swift */; };
 		AF80C5B72F4E724B0064B8FD /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B62F4E72480064B8FD /* Data+Extensions.swift */; };
 		AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */; };
@@ -99,6 +100,11 @@
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
 		AFA2C7DB2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */; };
 		AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */; };
+		AFCA5CEC2F75B104007A8578 /* LicenseAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */; };
+		AFCA5CF02F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */; };
+		AFCA5CF22F75BC32007A8578 /* PremiumProxyRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CF12F75BC32007A8578 /* PremiumProxyRepository.swift */; };
+		AFCC10022F90002007A8578 /* VPN1ProxyRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCC10012F90001007A8578 /* VPN1ProxyRepository.swift */; };
+		AFCA5CF42F75BC4C007A8578 /* DecryptedPremiumProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CF32F75BC4B007A8578 /* DecryptedPremiumProxy.swift */; };
 		AFE9764C2F5530AC00D270C8 /* ShiftLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE9764A2F5530AC00D270C8 /* ShiftLicenseView.swift */; };
 		AFE976502F55343100D270C8 /* ShiftViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */; };
 		AFE976522F5543CB00D270C8 /* InfoAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE976512F5543C800D270C8 /* InfoAlertView.swift */; };
@@ -124,6 +130,8 @@
 		AFF3EB3F2F3CACB100C6F08E /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EB062F3CACB100C6F08E /* Base.xcconfig */; };
 		AFF4DA012F743A6C0028293B /* BrowserJetRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA002F743A6B0028293B /* BrowserJetRootView.swift */; };
 		AFF4DA032F7451720028293B /* PaymentAlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA022F7451720028293B /* PaymentAlertItem.swift */; };
+		AFF4DA082F7489600028293B /* RecoverAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA072F74895C0028293B /* RecoverAccountView.swift */; };
+		AFF4DA0A2F7489680028293B /* RecoverAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -211,6 +219,7 @@
 		AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContainer.swift; sourceTree = "<group>"; };
 		AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserAddressBarView.swift; sourceTree = "<group>"; };
 		AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingStyles.swift; sourceTree = "<group>"; };
+		AF7A10002F90010000E49C58 /* LauncherMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherMessages.swift; sourceTree = "<group>"; };
 		AF80C5B42F4E71810064B8FD /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 		AF80C5B62F4E72480064B8FD /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeyValueStore.swift; sourceTree = "<group>"; };
@@ -220,6 +229,11 @@
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
 		AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarIconButtonStyle.swift; sourceTree = "<group>"; };
 		AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyType.swift; sourceTree = "<group>"; };
+		AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseAccountStore.swift; sourceTree = "<group>"; };
+		AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumProxyPayloadDecryptor.swift; sourceTree = "<group>"; };
+		AFCA5CF12F75BC32007A8578 /* PremiumProxyRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumProxyRepository.swift; sourceTree = "<group>"; };
+		AFCC10012F90001007A8578 /* VPN1ProxyRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPN1ProxyRepository.swift; sourceTree = "<group>"; };
+		AFCA5CF32F75BC4B007A8578 /* DecryptedPremiumProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptedPremiumProxy.swift; sourceTree = "<group>"; };
 		AFE9764A2F5530AC00D270C8 /* ShiftLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftLicenseView.swift; sourceTree = "<group>"; };
 		AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftViewModel.swift; sourceTree = "<group>"; };
 		AFE976512F5543C800D270C8 /* InfoAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAlertView.swift; sourceTree = "<group>"; };
@@ -247,6 +261,8 @@
 		AFF3EB272F3CACB100C6F08E /* Theme+Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+Environment.swift"; sourceTree = "<group>"; };
 		AFF4DA002F743A6B0028293B /* BrowserJetRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetRootView.swift; sourceTree = "<group>"; };
 		AFF4DA022F7451720028293B /* PaymentAlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAlertItem.swift; sourceTree = "<group>"; };
+		AFF4DA072F74895C0028293B /* RecoverAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverAccountView.swift; sourceTree = "<group>"; };
+		AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverAccountViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,6 +360,9 @@
 		AF56EEF02F3CCDA100E49C58 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				AFCA5CF12F75BC32007A8578 /* PremiumProxyRepository.swift */,
+				AFCC10012F90001007A8578 /* VPN1ProxyRepository.swift */,
+				AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */,
 				AF56EF112F3DFC8D00E49C58 /* Modifiers */,
 				AF56EF0C2F3DF84A00E49C58 /* Helpers */,
 				AF56EEF12F3CCDA900E49C58 /* Extensions */,
@@ -462,6 +481,7 @@
 		AF6086482F732CAA003931E2 /* Licensing */ = {
 			isa = PBXGroup;
 			children = (
+				AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */,
 				AF6086492F732CB2003931E2 /* LicenseActivationCoordinator.swift */,
 			);
 			path = Licensing;
@@ -566,6 +586,7 @@
 		AF69F5CB2F43769200B33610 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				AFCA5CF32F75BC4B007A8578 /* DecryptedPremiumProxy.swift */,
 				AF69F5CE2F4376C000B33610 /* TabModel.swift */,
 				AF69F5CC2F4376A200B33610 /* AuthProxy.swift */,
 			);
@@ -690,6 +711,7 @@
 		AFF3EB092F3CACB100C6F08E /* Launcher */ = {
 			isa = PBXGroup;
 			children = (
+				AF7A10002F90010000E49C58 /* LauncherMessages.swift */,
 				AF56EF302F3E41E200E49C58 /* LauncherViewModel.swift */,
 				AF56EF2D2F3E326D00E49C58 /* Models */,
 				AF56EF2B2F3E131C00E49C58 /* RegionType.swift */,
@@ -705,6 +727,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AFF4DA062F74894B0028293B /* RecoverAccount */,
 				AFF4D9FF2F743A620028293B /* Root */,
 				AFE9764B2F5530AC00D270C8 /* ShiftLicense */,
 				AF498D322F4B6D52004C03B3 /* Activation */,
@@ -850,6 +873,15 @@
 			path = Root;
 			sourceTree = "<group>";
 		};
+		AFF4DA062F74894B0028293B /* RecoverAccount */ = {
+			isa = PBXGroup;
+			children = (
+				AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */,
+				AFF4DA072F74895C0028293B /* RecoverAccountView.swift */,
+			);
+			path = RecoverAccount;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -986,6 +1018,7 @@
 				AF401ABB2F4D1B1100EF265C /* AppUpdateService.swift in Sources */,
 				AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */,
 				AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */,
+				AF7A10012F90010000E49C58 /* LauncherMessages.swift in Sources */,
 				AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */,
 				AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */,
 				AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */,
@@ -1011,10 +1044,13 @@
 				AF56EEEF2F3CC94100E49C58 /* LauncherSearchField.swift in Sources */,
 				AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */,
 				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
+				AFF4DA082F7489600028293B /* RecoverAccountView.swift in Sources */,
 				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
 				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,
+				AFCA5CEC2F75B104007A8578 /* LicenseAccountStore.swift in Sources */,
 				AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */,
 				AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */,
+				AFF4DA0A2F7489680028293B /* RecoverAccountViewModel.swift in Sources */,
 				AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */,
 				AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */,
 				AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */,
@@ -1027,6 +1063,9 @@
 				AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */,
 				AFF3EB3C2F3CACB100C6F08E /* AppTheme.swift in Sources */,
 				AFF3EB3D2F3CACB100C6F08E /* BodyStyles.swift in Sources */,
+				AFCA5CF02F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift in Sources */,
+				AFCA5CF22F75BC32007A8578 /* PremiumProxyRepository.swift in Sources */,
+				AFCC10022F90002007A8578 /* VPN1ProxyRepository.swift in Sources */,
 				AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */,
 				AF56EF072F3DEE3100E49C58 /* BrowserJetAppButton.swift in Sources */,
 				AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */,
@@ -1044,6 +1083,7 @@
 				AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */,
 				AF69F5E32F43A32100B33610 /* LauncherSettings+LaunchRequest.swift in Sources */,
 				AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */,
+				AFCA5CF42F75BC4C007A8578 /* DecryptedPremiumProxy.swift in Sources */,
 				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
 				AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */,
 				AF56EF002F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift in Sources */,

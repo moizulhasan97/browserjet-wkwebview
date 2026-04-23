@@ -11,50 +11,147 @@ import Combine
 final class LauncherViewModel: ObservableObject {
     @Published var settings: LauncherSettings
 
+    /// Set when the user tries to enable Premium Proxy while the GPP list is empty; cleared when appropriate from the view.
+    @Published var premiumProxyUnavailableMessage: String?
+
     private let defaultSearchAddress: String
     let availableVPNs: [VPNType]
-    
+
+    private(set) var isTrialUser: Bool = false
+
+    private let blockedVPNsForTrial: Set<VPNType>
+
     init(defaultSearchAddress: String, appConfiguration: AppConfiguration) {
         AppLogger.debug("LauncherViewModel initializing with default address: \(defaultSearchAddress)")
-        self.availableVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
+
+        LicenseAccountStore.shared.refresh()
+        let trial = LicenseAccountStore.shared.isTrialUser
+        let blocked = appConfiguration.trialBlockedVPNs
+
+        self.isTrialUser = trial
+        self.blockedVPNsForTrial = blocked
         self.defaultSearchAddress = defaultSearchAddress
+
+        let allVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
+        let filtered: [VPNType]
+        if trial {
+            filtered = allVPNs.filter { !blocked.contains($0) }
+        } else {
+            filtered = allVPNs
+        }
+        self.availableVPNs = filtered
+
+        if trial && filtered.isEmpty {
+            AppLogger.warning("LauncherViewModel: trial user has no VPN options after applying trialBlockedVPNs")
+        }
+
         self.settings = LauncherSettings(
             address: "",
             numberOfTabs: .one,
             isVPNEnabled: false,
             isPremiumProxyEnabled: false,
-            selectedVPN: availableVPNs.first,
+            selectedVPN: filtered.first,
             selectedRegion: .uk
         )
+
         AppLogger.debug("LauncherViewModel initialized with default settings")
     }
 
     func onAppear() {
         AppLogger.debug("LauncherView appeared")
+        Task { @MainActor in
+            async let premiumRefresh: Void = PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
+            async let vpn1Refresh: Void = VPN1ProxyRepository.shared.refreshFromNetworkIfPossible()
+            await premiumRefresh
+            await vpn1Refresh
+            applyDefaultBuiltInVPNSelection()
+            reconcileVPN1SelectionIfNeeded()
+        }
+    }
+
+    /// Launch is blocked when VPN + Premium is selected but the GPP list is empty, or VPN1 is selected without a VPR list.
+    func isLaunchAllowed() -> Bool {
+        guard settings.isValid else { return false }
+        if settings.isVPNEnabled && settings.isPremiumProxyEnabled {
+            return PremiumProxyRepository.shared.hasPremiumProxies
+        }
+        if settings.isVPNEnabled,
+           !settings.isPremiumProxyEnabled,
+           settings.selectedVPN == .vpn1 {
+            return VPN1ProxyRepository.shared.hasVPN1Proxies
+        }
+        return true
     }
 
     func toggleVPN(_ newValue: Bool) {
+        if newValue && availableVPNs.isEmpty {
+            AppLogger.warning("VPN toggle ignored — no VPN options available")
+            return
+        }
         AppLogger.info("VPN toggled to: \(newValue)")
         settings.isVPNEnabled = newValue
-        // If VPN is disabled, also disable premium proxy
-        if !newValue {
+        if newValue {
+            applyDefaultBuiltInVPNSelection()
+            reconcileVPN1SelectionIfNeeded()
+        } else {
             settings.isPremiumProxyEnabled = false
+            premiumProxyUnavailableMessage = nil
             AppLogger.debug("VPN disabled, premium proxy also disabled")
         }
     }
 
+    /// Paid: prefer VPN1 when the VPR list loaded; otherwise VPN2 (CEF launcher default). Trial: first allowed tier.
+    private func applyDefaultBuiltInVPNSelection() {
+        if isTrialUser {
+            if let first = availableVPNs.first {
+                settings.selectedVPN = first
+            }
+            return
+        }
+        if VPN1ProxyRepository.shared.hasVPN1Proxies, availableVPNs.contains(.vpn1) {
+            settings.selectedVPN = .vpn1
+            AppLogger.info("LauncherViewModel: default built-in VPN → VPN1 (remote list available)")
+        } else if availableVPNs.contains(.vpn2) {
+            settings.selectedVPN = .vpn2
+            AppLogger.info("LauncherViewModel: default built-in VPN → VPN2 (VPN1 list empty or fetch failed)")
+        } else if let first = availableVPNs.first {
+            settings.selectedVPN = first
+        }
+    }
+
+    /// If VPN1 is selected but VPR has no rows, fall back to VPN2.
+    private func reconcileVPN1SelectionIfNeeded() {
+        guard !isTrialUser else { return }
+        guard settings.selectedVPN == .vpn1 else { return }
+        guard !VPN1ProxyRepository.shared.hasVPN1Proxies else { return }
+        if availableVPNs.contains(.vpn2) {
+            settings.selectedVPN = .vpn2
+            AppLogger.info("LauncherViewModel: reconciled selection VPN1 → VPN2 (no VPN1 proxies)")
+        } else if let first = availableVPNs.first {
+            settings.selectedVPN = first
+        }
+    }
+
     func togglePremiumProxy(_ newValue: Bool) {
-        // Only allow toggle if VPN is enabled
         guard settings.isVPNEnabled else {
             AppLogger.warning("Attempted to toggle premium proxy without VPN enabled")
             return
         }
+        if newValue && !PremiumProxyRepository.shared.hasPremiumProxies {
+            premiumProxyUnavailableMessage = LauncherMessages.premiumNoProxiesAvailable
+            AppLogger.warning("Premium proxy toggle ignored — no GPP proxy rows")
+            return
+        }
+        premiumProxyUnavailableMessage = nil
         AppLogger.info("Premium proxy toggled to: \(newValue)")
         settings.isPremiumProxyEnabled = newValue
     }
 
+    func clearPremiumProxyUnavailableMessage() {
+        premiumProxyUnavailableMessage = nil
+    }
+
     func updateAddress(_ address: String) {
-        // Only update if the value actually changed to prevent unnecessary updates
         guard settings.address != address else { return }
         AppLogger.debug("Address updated to: \(address)")
         settings.address = address
@@ -66,6 +163,11 @@ final class LauncherViewModel: ObservableObject {
     }
 
     func updateSelectedVPN(_ vpn: VPNType) {
+        if isTrialUser && blockedVPNsForTrial.contains(vpn) {
+            AppLogger.warning("Blocked VPN selection for trial user: \(vpn.rawValue)")
+            settings.selectedVPN = availableVPNs.first
+            return
+        }
         AppLogger.info("VPN selection changed to: \(vpn.rawValue)")
         settings.selectedVPN = vpn
     }
@@ -75,17 +177,7 @@ final class LauncherViewModel: ObservableObject {
         settings.selectedRegion = region
     }
 
-    //    func didTapLaunch() {
-    //        guard settings.isValid else {
-    //            AppLogger.warning("Launch attempted with invalid settings - Address: '\(settings.address)'")
-    //            return
-    //        }
-    //        AppLogger.info("Launch button tapped - Address: '\(settings.address)', Tabs: \(settings.numberOfTabs.rawValue), VPN: \(settings.isVPNEnabled), Premium Proxy: \(settings.isPremiumProxyEnabled), VPN Type: \(settings.selectedVPN?.rawValue ?? "none"), Region: \(settings.selectedRegion?.rawValue ?? "none")")
-    //        // TODO: Implement launch logic
-    //    }
-
     func didTapManageMyProxy() {
         AppLogger.info("Manage My Proxy button tapped")
-        // TODO: Implement manage proxy logic
     }
 }

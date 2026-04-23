@@ -9,7 +9,6 @@ import Foundation
 
 struct AppConfiguration {
     private let isUserAgentEnabled: Bool
-    private let proxyType: ProxyType
     let defaultSearchAddress: String
     private let sessionIsolationMode: SessionIsolationMode
     let launcherTabPresets: [LauncherTabPreset]
@@ -21,10 +20,11 @@ struct AppConfiguration {
         let buyLicensesURL: URL
         let contactUsURL: URL
         let twitterURL: URL
+    // Blocked VPNs for trial users
+    let trialBlockedVPNs: Set<VPNType>
     
     init(
         isUserAgentEnabled: Bool,
-        proxyType: ProxyType,
         defaultSearchAddress: String,
         sessionIsolationMode: SessionIsolationMode,
         launcherTabPresets: [LauncherTabPreset],
@@ -34,10 +34,10 @@ struct AppConfiguration {
         paymentCardURL: URL,
         buyLicensesURL: URL,
         contactUsURL: URL,
-        twitterURL: URL
+        twitterURL: URL,
+        trialBlockedVPNs: Set<VPNType>
     ) {
         self.isUserAgentEnabled = isUserAgentEnabled
-        self.proxyType = proxyType
         self.defaultSearchAddress = defaultSearchAddress
         self.sessionIsolationMode = sessionIsolationMode
         self.launcherTabPresets = launcherTabPresets
@@ -48,6 +48,7 @@ struct AppConfiguration {
         self.buyLicensesURL = buyLicensesURL
         self.contactUsURL = contactUsURL
         self.twitterURL = twitterURL
+        self.trialBlockedVPNs = trialBlockedVPNs
     }
 }
 
@@ -60,17 +61,12 @@ extension AppConfiguration {
         guard isUserAgentEnabled else { return nil }
         return nil
     }
-
-    var defaultProxyTypeValue: ProxyType {
-        proxyType
-    }
 }
 
 extension AppConfiguration {
     static let production: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
-            proxyType: .local,
             defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
@@ -128,6 +124,7 @@ extension AppConfiguration {
             buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             contactUsURL: URL(string: "https://browserjet.com/contact")!,
             twitterURL: URL(string: "https://twitter.com/browserjet")!,
+            trialBlockedVPNs: [.vpn1]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config
@@ -136,7 +133,6 @@ extension AppConfiguration {
     static let development: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
-            proxyType: .local,
             defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
@@ -194,6 +190,7 @@ extension AppConfiguration {
             buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             contactUsURL: URL(string: "https://browserjet.com/contact")!,
             twitterURL: URL(string: "https://twitter.com/browserjet")!,
+            trialBlockedVPNs: [.vpn1]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config

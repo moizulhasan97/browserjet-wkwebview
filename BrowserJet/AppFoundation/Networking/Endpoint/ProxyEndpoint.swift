@@ -9,7 +9,7 @@ import Foundation
 
 enum ProxyEndpoint: EndpointProtocol {
 
-    case premium(key: String, email: String)
+    case premium(key: String)
     case vpn1(key: String)
 
     var baseURL: URL { APIEnvironment.current.baseURL }
@@ -18,16 +18,17 @@ enum ProxyEndpoint: EndpointProtocol {
 
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .premium(let key, let email):
+        case .premium(let key):
             return [
-                .init(name: "Method", value: "GetPremiumProxies"),
+                .init(name: "MethodName", value: "GPP"),
                 .init(name: "Key", value: key),
-                .init(name: "Email", value: email)
+                .init(name: "RequestFrom", value: "Mac")
             ]
         case .vpn1(let key):
             return [
-                .init(name: "Method", value: "GetVPN1Proxies"),
-                .init(name: "Key", value: key)
+                .init(name: "MethodName", value: "VPR"),
+                .init(name: "Key", value: key),
+                .init(name: "RequestFrom", value: "Mac")
             ]
         }
     }

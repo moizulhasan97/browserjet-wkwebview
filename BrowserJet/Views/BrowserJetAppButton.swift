@@ -22,7 +22,7 @@ struct BrowserJetAppButton: View {
         type: BrowserJetButtonStyle.ButtonType,
         width: CustomWidth = .full,
         height: CGFloat = 68.0,
-        isDisabled: Bool,
+        isDisabled: Bool = false,
         action: @escaping () -> Void
     ) {
         self.title = title
@@ -59,10 +59,11 @@ struct BrowserJetAppButton: View {
 struct BrowserJetButtonStyle: ButtonStyle {
     enum ButtonType: Equatable {
         case primaryLarge
+        case secondaryLarge
     }
 
-    @Environment(\.designSystem)
-    private var designSystem
+    @Environment(\.designSystem) private var designSystem
+    @Environment(\.appTheme) private var theme
 
     let width: CustomWidth
     let type: ButtonType
@@ -82,7 +83,8 @@ struct BrowserJetButtonStyle: ButtonStyle {
         designSystem.buttonStyle.style(
             for: type,
             typography: designSystem.typography,
-            viewConfig: designSystem.viewConfig
+            viewConfig: designSystem.viewConfig,
+            theme: theme
         )
     }
 
