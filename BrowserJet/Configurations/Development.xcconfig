@@ -1,0 +1,14 @@
+//
+//  Development.xcconfig
+//  BrowserJet
+//
+//  Created by Moiz Ul Hasan on 27/04/2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+#include "Base.xcconfig"
+MARKETING_VERSION = 3.8.2-dev
+CURRENT_PROJECT_VERSION = 7
+APP_CONFIGURATION_NAME = Development
