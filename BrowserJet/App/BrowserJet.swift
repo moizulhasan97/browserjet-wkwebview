@@ -26,7 +26,9 @@ struct BrowserJet: App {
             await RemoteConfigManager.shared.fetchAndActivate()
             #if DEBUG
             RemoteConfigManager.shared.debugPrintAllValues()
-            #endif 
+            #endif
+            let updatePolicy = AppUpdatePolicy.evaluateBuild()
+            print(updatePolicy)
         }
         AppLogger.info("App initializing - Environment: \(AppEnvironment.current.displayName)")
         let themeManager = self.themeManager
