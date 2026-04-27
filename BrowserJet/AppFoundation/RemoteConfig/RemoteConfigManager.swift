@@ -11,17 +11,17 @@ import FirebaseRemoteConfig
 
 @MainActor
 final class RemoteConfigManager: ObservableObject {
-
+    
     static let shared = RemoteConfigManager()
-
+    
     @Published private(set) var lastFetchStatus: RemoteConfigFetchAndActivateStatus?
     @Published private(set) var lastFetchError: Error?
-
+    
     private let remoteConfig: RemoteConfig
-
+    
     private init() {
         remoteConfig = RemoteConfig.remoteConfig()
-
+        
         let settings = RemoteConfigSettings()
 #if DEBUG
         settings.minimumFetchInterval = 0
@@ -29,10 +29,10 @@ final class RemoteConfigManager: ObservableObject {
         settings.minimumFetchInterval = 3_600
 #endif
         remoteConfig.configSettings = settings
-
-        remoteConfig.setDefaults(Self.defaultValues(for: remoteConfig))
+        
+        remoteConfig.setDefaults(Self.defaultValues())
     }
-
+    
     /// Fetches from the server and applies activated values when appropriate.
     func fetchAndActivate() async {
         lastFetchError = nil
@@ -44,38 +44,64 @@ final class RemoteConfigManager: ObservableObject {
             lastFetchStatus = nil
         }
     }
-
+    
     // MARK: - Typed accessors
     func bool(for key: RemoteConfigKey) -> Bool {
         remoteConfig.configValue(forKey: key.rawValue).boolValue
     }
-
+    
     func string(for key: RemoteConfigKey) -> String {
-        remoteConfig.configValue(forKey: key.rawValue).stringValue ?? ""
+        remoteConfig.configValue(forKey: key.rawValue).stringValue
     }
-
+    
     func number(for key: RemoteConfigKey) -> NSNumber {
         remoteConfig.configValue(forKey: key.rawValue).numberValue
     }
-
+    
     func data(for key: RemoteConfigKey) -> Data {
         remoteConfig.configValue(forKey: key.rawValue).dataValue
     }
-
+    
     // MARK: - Defaults
-    private static func defaultValues(for remoteConfig: RemoteConfig) -> [String: NSObject] {
+    private static func defaultValues() -> [String: NSObject] {
         var map: [String: NSObject] = [:]
         for key in RemoteConfigKey.allCases {
-            map[key.rawValue] = defaultValue(for: key, remoteConfig: remoteConfig)
+            map[key.rawValue] = defaultValue(for: key)
         }
         return map
     }
-
-    private static func defaultValue(for key: RemoteConfigKey, remoteConfig: RemoteConfig) -> NSObject {
+    
+    /// Safety fallback if firebase fails or key is missing in Remote Config
+    private static func defaultValue(for key: RemoteConfigKey) -> NSObject {
         switch key {
-        case .testFeatureEnabled:
-            // TODO: - Replace type/value when this key becomes a real parameter.
-            return remoteConfig.configValue(forKey: key.rawValue).boolValue as NSObject
+        case .forceUpdateEnabled:
+            return false as NSNumber
+            
+        case .optionalUpdateEnabled:
+            return false as NSNumber
+            
+        case .macOSAppLatestMarketingVersion:
+            return AppUtils.getAppMarketingVersion() as NSString
+            
+        case .macOSAppMinimumSupportedMarketingVersion:
+            return "1.0.0" as NSString
+            
+        case .macOSAppLatestBuildVersion:
+            return AppUtils.getAppBuildVersion() as NSNumber
+            
+        case .macOSAppMinimumSupportedBuildVersion:
+            return 0 as NSNumber
+        }
+    }
+    
+    func debugPrintAllValues() {
+        for key in RemoteConfigKey.allCases {
+            let value = remoteConfig.configValue(forKey: key.rawValue)
+            print("""
+            🔹 \(key.rawValue)
+            value: \(value.stringValue ?? "nil")
+            source: \(value.source)
+            """)
         }
     }
 }

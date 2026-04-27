@@ -24,6 +24,9 @@ struct BrowserJet: App {
         FirebaseApp.configure()
         Task { @MainActor in
             await RemoteConfigManager.shared.fetchAndActivate()
+            #if DEBUG
+            RemoteConfigManager.shared.debugPrintAllValues()
+            #endif 
         }
         AppLogger.info("App initializing - Environment: \(AppEnvironment.current.displayName)")
         let themeManager = self.themeManager

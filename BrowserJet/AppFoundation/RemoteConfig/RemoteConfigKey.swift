@@ -8,5 +8,10 @@
 import Foundation
 
 enum RemoteConfigKey: String, CaseIterable, Sendable {
-    case testFeatureEnabled = "test_feature_enabled"
+    case forceUpdateEnabled = "force_update_enabled"
+    case macOSAppMinimumSupportedMarketingVersion = "macos_app_minimum_supported_marketing_version"
+    case optionalUpdateEnabled = "optional_update_enabled"
+    case macOSAppLatestMarketingVersion = "macos_app_latest_marketing_version"
+    case macOSAppLatestBuildVersion = "macos_app_latest_build_version"
+    case macOSAppMinimumSupportedBuildVersion = "macos_app_minimum_supported_build_version"
 }

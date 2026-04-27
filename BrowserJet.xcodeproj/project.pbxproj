@@ -17,6 +17,7 @@
 		AF127CF62F9AC70400EE34E2 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = AF127CF52F9AC70400EE34E2 /* FirebaseRemoteConfig */; };
 		AF127CF92F9ACA8100EE34E2 /* RemoteConfigKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127CF82F9ACA7E00EE34E2 /* RemoteConfigKey.swift */; };
 		AF127CFB2F9ACA9800EE34E2 /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127CFA2F9ACA9600EE34E2 /* RemoteConfigManager.swift */; };
+		AF127D022F9FBA8800EE34E2 /* AppUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127D012F9FBA8200EE34E2 /* AppUtils.swift */; };
 		AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */; };
 		AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */; };
 		AF401AA42F4CD89D00EF265C /* BrowserJetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */; };
@@ -149,6 +150,7 @@
 		AF127CFA2F9ACA9600EE34E2 /* RemoteConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigManager.swift; sourceTree = "<group>"; };
 		AF127CFD2F9FAFC500EE34E2 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		AF127CFF2F9FAFD400EE34E2 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
+		AF127D012F9FBA8200EE34E2 /* AppUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
 		AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextfieldStyleProtocol.swift; sourceTree = "<group>"; };
 		AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStyleProvider.swift; sourceTree = "<group>"; };
 		AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextField.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 		AF56EF0C2F3DF84A00E49C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				AF127D012F9FBA8200EE34E2 /* AppUtils.swift */,
 				AF401AD02F4D37E500EF265C /* SystemInfo.swift */,
 				AF401ACD2F4D2CA100EF265C /* Userdefaults */,
 				AF401AC42F4D2BE700EF265C /* DateFormatterProvider.swift */,
@@ -1128,6 +1131,7 @@
 				AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */,
 				AFF4DA032F7451720028293B /* PaymentAlertItem.swift in Sources */,
 				AF80C5B72F4E724B0064B8FD /* Data+Extensions.swift in Sources */,
+				AF127D022F9FBA8800EE34E2 /* AppUtils.swift in Sources */,
 				AF69F5C12F43747800B33610 /* BrowserToolbarView.swift in Sources */,
 				AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */,
 				AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */,
