@@ -99,7 +99,7 @@ final class RemoteConfigManager: ObservableObject {
             let value = remoteConfig.configValue(forKey: key.rawValue)
             print("""
             🔹 \(key.rawValue)
-            value: \(value.stringValue ?? "nil")
+            value: \(value.stringValue)
             source: \(value.source)
             """)
         }
