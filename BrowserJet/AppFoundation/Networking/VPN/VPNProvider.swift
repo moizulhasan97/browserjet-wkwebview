@@ -20,9 +20,14 @@ final class VPNProvider {
         }
         
         switch config.layout {
+        case .remoteManaged:
+            // coming from API
+            return []
+            
         case .datatude(let pool):
             guard let region else { return [] }
             return Self.makeDatatudeProxies(config: pool, region: region)
+            
         case .multiSlotZip(let password, let portGen, let ipGen, let usernameStrategy):
             return generateZippedProxies(
                 password: password,

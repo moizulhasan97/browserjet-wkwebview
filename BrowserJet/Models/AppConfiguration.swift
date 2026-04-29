@@ -77,18 +77,7 @@ extension AppConfiguration {
                 VPNConfiguration(
                     id: "vpn1",
                     displayName: "VPN 1",
-                    layout: .multiSlotZip(
-                        password: "SPQLPBWP",
-                        portGenerationConfig: PortGenerationConfig(
-                            portPattern: .sequential(basePort: 16020, startIndex: 0),
-                            count: 4
-                        ),
-                        ipGenerationConfig: IPGenerationConfig(
-                            ipPattern: .sequential(baseIP: "142.173.65.60", startIndex: 0),
-                            count: 4
-                        ),
-                        usernameStrategy: .static(username: "Y9PQL")
-                    )
+                    layout: .remoteManaged
                 ),
                 VPNConfiguration(
                     id: "vpn2",
@@ -130,18 +119,7 @@ extension AppConfiguration {
                 VPNConfiguration(
                     id: "vpn1",
                     displayName: "VPN 1",
-                    layout: .multiSlotZip(
-                        password: "SPQLPBWP",
-                        portGenerationConfig: PortGenerationConfig(
-                            portPattern: .sequential(basePort: 16020, startIndex: 0),
-                            count: 4
-                        ),
-                        ipGenerationConfig: IPGenerationConfig(
-                            ipPattern: .sequential(baseIP: "142.173.65.60", startIndex: 0),
-                            count: 4
-                        ),
-                        usernameStrategy: .static(username: "Y9PQL")
-                    )
+                    layout: .remoteManaged
                 ),
                 VPNConfiguration(
                     id: "vpn2",
