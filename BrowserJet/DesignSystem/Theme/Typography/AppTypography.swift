@@ -11,6 +11,7 @@ protocol AppTypography {
 
     // Body
     var textBody1: Typography { get } // No Of Tabs
+    var textBody2: Typography { get }
 
     var heading1: Typography { get }
 

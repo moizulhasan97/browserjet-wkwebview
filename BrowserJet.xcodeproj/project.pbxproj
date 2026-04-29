@@ -104,6 +104,13 @@
 		AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */; };
 		AF80C5BD2F4E750E0064B8FD /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5BC2F4E750E0064B8FD /* AppError.swift */; };
 		AF99BFB62F9FDF710096FAE9 /* AppUpdatePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFB52F9FDF6E0096FAE9 /* AppUpdatePolicy.swift */; };
+		AF99BFB92FA002960096FAE9 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = AF99BFB82FA002960096FAE9 /* Sparkle */; };
+		AF99BFBB2FA009B10096FAE9 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFBA2FA009AA0096FAE9 /* Bundle+Version.swift */; };
+		AF99BFBF2FA00AD90096FAE9 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFBE2FA00AD70096FAE9 /* CheckForUpdatesView.swift */; };
+		AF99BFC12FA010830096FAE9 /* SparkleUpdateCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC02FA010820096FAE9 /* SparkleUpdateCoordinator.swift */; };
+		AF99BFC32FA013370096FAE9 /* ForceUpdateGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC22FA013350096FAE9 /* ForceUpdateGate.swift */; };
+		AF99BFC52FA013500096FAE9 /* ForceUpdateBlockingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC42FA0134E0096FAE9 /* ForceUpdateBlockingOverlay.swift */; };
+		AF99BFC72FA02F000096FAE9 /* SparkleUpdaterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC62FA02EFF0096FAE9 /* SparkleUpdaterDelegate.swift */; };
 		AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */; };
 		AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */; };
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
@@ -239,6 +246,12 @@
 		AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeyValueStore.swift; sourceTree = "<group>"; };
 		AF80C5BC2F4E750E0064B8FD /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		AF99BFB52F9FDF6E0096FAE9 /* AppUpdatePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdatePolicy.swift; sourceTree = "<group>"; };
+		AF99BFBA2FA009AA0096FAE9 /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
+		AF99BFBE2FA00AD70096FAE9 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
+		AF99BFC02FA010820096FAE9 /* SparkleUpdateCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleUpdateCoordinator.swift; sourceTree = "<group>"; };
+		AF99BFC22FA013350096FAE9 /* ForceUpdateGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateGate.swift; sourceTree = "<group>"; };
+		AF99BFC42FA0134E0096FAE9 /* ForceUpdateBlockingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateBlockingOverlay.swift; sourceTree = "<group>"; };
+		AF99BFC62FA02EFF0096FAE9 /* SparkleUpdaterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleUpdaterDelegate.swift; sourceTree = "<group>"; };
 		AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabsPopoverView.swift; sourceTree = "<group>"; };
 		AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuItem.swift; sourceTree = "<group>"; };
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
@@ -285,6 +298,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF99BFB92FA002960096FAE9 /* Sparkle in Frameworks */,
 				AF127CF42F9AC70400EE34E2 /* FirebaseCrashlytics in Frameworks */,
 				AF127CF22F9AC70400EE34E2 /* FirebaseCore in Frameworks */,
 				AF127CF02F9AC70400EE34E2 /* FirebaseAnalytics in Frameworks */,
@@ -402,6 +416,7 @@
 		AF56EEF12F3CCDA900E49C58 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				AF99BFBA2FA009AA0096FAE9 /* Bundle+Version.swift */,
 				AF80C5B62F4E72480064B8FD /* Data+Extensions.swift */,
 				AF56EF1E2F3E061300E49C58 /* Int */,
 				AF56EEF22F3CCDAE00E49C58 /* Color */,
@@ -689,6 +704,26 @@
 			path = Errors;
 			sourceTree = "<group>";
 		};
+		AF99BFBC2FA00AC40096FAE9 /* Update */ = {
+			isa = PBXGroup;
+			children = (
+				AF99BFC62FA02EFF0096FAE9 /* SparkleUpdaterDelegate.swift */,
+				AF99BFC42FA0134E0096FAE9 /* ForceUpdateBlockingOverlay.swift */,
+				AF99BFC22FA013350096FAE9 /* ForceUpdateGate.swift */,
+				AF99BFC02FA010820096FAE9 /* SparkleUpdateCoordinator.swift */,
+				AF99BFBD2FA00ACE0096FAE9 /* SparkleSystemUI */,
+			);
+			path = Update;
+			sourceTree = "<group>";
+		};
+		AF99BFBD2FA00ACE0096FAE9 /* SparkleSystemUI */ = {
+			isa = PBXGroup;
+			children = (
+				AF99BFBE2FA00AD70096FAE9 /* CheckForUpdatesView.swift */,
+			);
+			path = SparkleSystemUI;
+			sourceTree = "<group>";
+		};
 		AFE9764B2F5530AC00D270C8 /* ShiftLicense */ = {
 			isa = PBXGroup;
 			children = (
@@ -761,6 +796,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AF99BFBC2FA00AC40096FAE9 /* Update */,
 				AFF4DA062F74894B0028293B /* RecoverAccount */,
 				AFF4D9FF2F743A620028293B /* Root */,
 				AFE9764B2F5530AC00D270C8 /* ShiftLicense */,
@@ -938,6 +974,7 @@
 				AF127CF12F9AC70400EE34E2 /* FirebaseCore */,
 				AF127CF32F9AC70400EE34E2 /* FirebaseCrashlytics */,
 				AF127CF52F9AC70400EE34E2 /* FirebaseRemoteConfig */,
+				AF99BFB82FA002960096FAE9 /* Sparkle */,
 			);
 			productName = BrowserJet;
 			productReference = AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */;
@@ -969,6 +1006,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				AF127CEE2F9AC70400EE34E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AF99BFB72FA002960096FAE9 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AFF3EAC62F3CAC3A00C6F08E /* Products */;
@@ -1033,6 +1071,7 @@
 				AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */,
 				AFE976522F5543CB00D270C8 /* InfoAlertView.swift in Sources */,
 				AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */,
+				AF99BFC12FA010830096FAE9 /* SparkleUpdateCoordinator.swift in Sources */,
 				AF69F5C92F43763B00B33610 /* SessionManager.swift in Sources */,
 				AF401AB42F4D1A9B00EF265C /* EndpointProtocol.swift in Sources */,
 				AFE976562F55586D00D270C8 /* ActivationMessages.swift in Sources */,
@@ -1069,6 +1108,7 @@
 				AF80C5BD2F4E750E0064B8FD /* AppError.swift in Sources */,
 				AF69F5B02F43716300B33610 /* BrowserToolbarAction.swift in Sources */,
 				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
+				AF99BFC32FA013370096FAE9 /* ForceUpdateGate.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
 				AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */,
@@ -1094,10 +1134,12 @@
 				AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */,
 				AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */,
 				AFF4DA0A2F7489680028293B /* RecoverAccountViewModel.swift in Sources */,
+				AF99BFC72FA02F000096FAE9 /* SparkleUpdaterDelegate.swift in Sources */,
 				AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */,
 				AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */,
 				AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */,
 				AF56EF0E2F3DF85000E49C58 /* CornerRadius.swift in Sources */,
+				AF99BFBB2FA009B10096FAE9 /* Bundle+Version.swift in Sources */,
 				AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */,
 				AF56EF102F3DFC8400E49C58 /* CustomWidth.swift in Sources */,
 				AF56EF192F3E027000E49C58 /* AppConfiguration+Environment.swift in Sources */,
@@ -1124,7 +1166,9 @@
 				AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */,
 				AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */,
 				AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */,
+				AF99BFBF2FA00AD90096FAE9 /* CheckForUpdatesView.swift in Sources */,
 				AF69F5E32F43A32100B33610 /* LauncherSettings+LaunchRequest.swift in Sources */,
+				AF99BFC52FA013500096FAE9 /* ForceUpdateBlockingOverlay.swift in Sources */,
 				AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */,
 				AFCA5CF42F75BC4C007A8578 /* DecryptedPremiumProxy.swift in Sources */,
 				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
@@ -1277,13 +1321,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = BrowserJet/BrowserJet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "$(inherited)";
 				DEVELOPMENT_TEAM = F7WH9VQS26;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BrowserJet/Info.plist;
@@ -1297,6 +1349,12 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -1308,13 +1366,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				AUTOMATION_APPLE_EVENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = BrowserJet/BrowserJet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "$(inherited)";
 				DEVELOPMENT_TEAM = F7WH9VQS26;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BrowserJet/Info.plist;
@@ -1328,6 +1394,12 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -1365,6 +1437,14 @@
 				minimumVersion = 12.12.1;
 			};
 		};
+		AF99BFB72FA002960096FAE9 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1387,6 +1467,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AF127CEE2F9AC70400EE34E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
+		};
+		AF99BFB82FA002960096FAE9 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF99BFB72FA002960096FAE9 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

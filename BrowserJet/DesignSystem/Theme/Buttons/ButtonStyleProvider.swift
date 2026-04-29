@@ -55,6 +55,21 @@ struct ThemeButtonStyleProvider: ButtonStyleProvider {
                 titleDisabledColor: theme.textPrimary.opacity(0.5),
                 titleHighlightedColor: theme.textPrimary
             )
+        case .destructivePrimaryLarge:
+            BrowserJetSecondaryLargeButtonStyle(
+                cornerRadius: .fixed(0),
+                borderColor: theme.strokeControl.opacity(0),
+                borderDisabledColor: theme.strokeControl.opacity(0),
+                borderHighlightedColor: theme.strokeControl.opacity(0),
+                borderWidth: 0,
+                font: typography.button.font,
+                backgroundColor: theme.surfaceControl.opacity(0),
+                backgroundDisabledColor: theme.surfaceControl.opacity(0),
+                backgroundHighlightedColor: theme.surfaceControl.opacity(0),
+                titleColor: theme.danger,
+                titleDisabledColor: theme.danger.opacity(0.5),
+                titleHighlightedColor: theme.danger
+            )
         }
     }
 }

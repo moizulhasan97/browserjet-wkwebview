@@ -7,28 +7,45 @@
 
 import SwiftUI
 import Firebase
+import Sparkle
 
 @main
 struct BrowserJet: App {
     
     private let themeManager = ThemeManager()
     private let sessionManager = SessionManager()
-
+    private let updaterController: SPUStandardUpdaterController
+    private let sparkleUpdaterDelegate = SparkleUpdaterDelegate()
+    
     var body: some Scene {
         Settings {
             EmptyView()
+        }.commands {
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesView(updater: updaterController.updater)
+            }
         }
     }
-
+    
     init() {
+        updaterController = SPUStandardUpdaterController(
+            startingUpdater: true,
+            updaterDelegate: sparkleUpdaterDelegate,
+            userDriverDelegate: nil
+        )
+        ForceUpdateGate.shared.register(updaterController: updaterController)
+        SparkleUpdateCoordinator.shared.register(updaterController)
         FirebaseApp.configure()
         Task { @MainActor in
             await RemoteConfigManager.shared.fetchAndActivate()
-            #if DEBUG
+#if DEBUG
             RemoteConfigManager.shared.debugPrintAllValues()
-            #endif
+#endif
             let updatePolicy = AppUpdatePolicy.evaluateBuild()
-            print(updatePolicy)
+            SparkleUpdateCoordinator.shared.applyPolicyResult(
+                updatePolicy,
+                context: .afterRemoteConfigFetch
+            )
         }
         AppLogger.info("App initializing - Environment: \(AppEnvironment.current.displayName)")
         let themeManager = self.themeManager

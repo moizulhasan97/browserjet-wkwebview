@@ -13,26 +13,26 @@ struct BrowserAddressBarView: View {
     private var designSystem
     @Environment(\.appTheme)
     private var theme
-
+    
     @ObservedObject var tab: TabModel
     /// When true (trial/license expired), bar shows URL but is read-only and visually disabled.
     var isLocked: Bool = false
-
+    
     @State private var isHovering: Bool = false
     @FocusState private var isFocused: Bool
-
+    
     private var leftIconName: String {
         if let url = tab.webView.url, let scheme = url.scheme?.lowercased() {
             return iconName(forScheme: scheme)
         }
-
+        
         if let typedURL = URL(string: tab.addressText), let scheme = typedURL.scheme?.lowercased() {
             return iconName(forScheme: scheme)
         }
-
+        
         return "globe"
     }
-
+    
     private func iconName(forScheme scheme: String) -> String {
         switch scheme {
         case "https": return "lock.fill"
@@ -40,18 +40,18 @@ struct BrowserAddressBarView: View {
         default:      return "globe"
         }
     }
-
+    
     private var shouldShowClear: Bool {
         !isLocked && isFocused && !tab.addressText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-
+    
     private var addressBinding: Binding<String> {
         if isLocked {
             return Binding(get: { tab.addressText }, set: { _ in })
         }
         return Binding(get: { tab.addressText }, set: { tab.addressText = $0 })
     }
-
+    
     var body: some View {
         BrowserJetTextField(
             type: .browserAddress,
@@ -79,14 +79,14 @@ struct BrowserAddressBarView: View {
             tab.load(tab.addressText)
         }
     }
-
+    
     private var leftIcon: some View {
         Image(systemName: leftIconName)
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(theme.textPrimary.opacity(0.8))
             .frame(width: 18, height: 18)
     }
-
+    
     @ViewBuilder
     private var rightClearButton: some View {
         if shouldShowClear {
@@ -104,51 +104,12 @@ struct BrowserAddressBarView: View {
             EmptyView()
         }
     }
-
+    
     private var pillBorder: some View {
         Capsule()
             .stroke(
                 isHovering ? theme.strokeControl.opacity(0.9) : theme.strokeControl.opacity(0.65),
                 lineWidth: DesignMetrics.controlStrokeWidth
             )
-    }
-}
-
-#Preview {
-    BrowserAddressBarViewPreviewHost()
-        .padding()
-        .background(AppBackgroundStyle.browserJetGradient.makeView())
-        .environment(\.appTheme, BrowserJetLightTheme())
-        .environment(\.designSystem, DesignSystem())
-}
-
-@MainActor
-private final class PreviewTabHolder: ObservableObject {
-    let tab: TabModel = TabModel.preview(
-        addressText: "https://www.google.com",
-        title: "Google",
-        isLoading: false,
-        favicon: nil
-    )
-
-    func setAddress(_ text: String) {
-        tab.addressText = text
-    }
-}
-
-private struct BrowserAddressBarViewPreviewHost: View {
-    @StateObject private var holder = PreviewTabHolder()
-
-    var body: some View {
-        VStack(spacing: 16) {
-            BrowserAddressBarView(tab: holder.tab)
-                .frame(maxWidth: 900)
-
-            HStack {
-                Button("Set https") { holder.setAddress("https://www.google.com") }
-                Button("Set http")  { holder.setAddress("http://example.com") }
-                Button("Set query") { holder.setAddress("ticketmaster queue") }
-            }
-        }
     }
 }

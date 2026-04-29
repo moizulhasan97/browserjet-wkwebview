@@ -11,10 +11,18 @@ import SwiftUI
 struct BrowserJetWindowRoot: View {
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
-
+    @ObservedObject private var forceGate = ForceUpdateGate.shared
+    
     var body: some View {
-        BrowserJetRootView()
-            .environment(\.appTheme, themeManager.theme(for: colorScheme))
+        Group {
+            if forceGate.isBlocking {
+                ForceUpdateBlockingOverlay()
+            } else {
+                BrowserJetRootView()
+            }
+        }
+        .environment(\.appTheme, themeManager.theme(for: colorScheme))
+        .environment(\.designSystem, DesignSystem())
     }
 }
 
@@ -34,7 +42,7 @@ struct BrowserJetRootView: View {
     @Environment(\.appConfiguration) private var appConfiguration: AppConfiguration
     @Environment(\.appTheme) private var theme
     @Environment(\.designSystem) private var designSystem
-
+    
     private let coordinator = LicenseActivationCoordinator()
     private let keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
     @State private var phase: AppEntryPhase = Self.initialPhaseFromStoredKey()
@@ -42,7 +50,7 @@ struct BrowserJetRootView: View {
     @State private var bootstrapVerifyOutcome: VerifyOutcome?
     @State private var showBootstrapShiftSuccessAlert: Bool = false
     @State private var bootstrapPaymentAlert: PaymentAlertItem?
-
+    
     var body: some View {
         Group {
             if phase == .activation {
@@ -62,7 +70,7 @@ struct BrowserJetRootView: View {
             handleBootstrapVerifyOutcome(outcome)
         }
     }
-
+    
     private var activationFullChrome: some View {
         VStack(spacing: 0) {
             if let msg = storedKeyVerifyFailureMessage {
@@ -80,7 +88,7 @@ struct BrowserJetRootView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppBackgroundStyle.browserJetGradient.makeView())
     }
-
+    
     @ViewBuilder
     private var compactBootstrapChrome: some View {
         if phase == .verifyingStoredKey {
@@ -128,7 +136,7 @@ struct BrowserJetRootView: View {
             InfoAlertProgressView(message: ActivationMessages.bootstrapLoadingProgress)
         }
     }
-
+    
     private var activationWindowLayout: WindowManager.ActivationLayout {
         if phase == .activation {
             return .fullForm
@@ -144,11 +152,11 @@ struct BrowserJetRootView: View {
         }
         return .progressOnly
     }
-
+    
     private func syncActivationWindowFrame() {
         WindowManager.shared.resizeActivationWindowToFit(activationWindowLayout)
     }
-
+    
     private func handleBootstrapVerifyOutcome(_ outcome: VerifyOutcome?) {
         guard let outcome else {
             syncActivationWindowFrame()
@@ -181,7 +189,7 @@ struct BrowserJetRootView: View {
         }
         syncActivationWindowFrame()
     }
-
+    
     private static func initialPhaseFromStoredKey() -> AppEntryPhase {
         guard let raw = UserDefaults.standard.object(forKey: StorageKeys.licenseKey) as? String else {
             return .activation
@@ -189,7 +197,7 @@ struct BrowserJetRootView: View {
         let key = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         return key.isEmpty ? .activation : .verifyingStoredKey
     }
-
+    
     @MainActor
     private func runInitialEntry() async {
         await verifyPersistedLicenseKey(emptyKeyUserMessage: nil)
@@ -206,7 +214,7 @@ struct BrowserJetRootView: View {
             phase = .activation
             return
         }
-
+        
         phase = .verifyingStoredKey
         do {
             let outcome = try await coordinator.completeActivation(key: key)

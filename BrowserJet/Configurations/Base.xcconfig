@@ -16,3 +16,6 @@ APP_CONFIGURATION_NAME = Base
 // SwiftLint
 SWIFTLINT_ENABLED = NO
 SWIFTLINT_CONFIG_FILE = .swiftlint.yml
+
+// Update
+MACOS_MANUAL_DOWNLOAD_URL = https://browserjet.com/download-file

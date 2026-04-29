@@ -19,6 +19,32 @@ final class RemoteConfigManager: ObservableObject {
     
     private let remoteConfig: RemoteConfig
     
+    /// Manual download page: Remote Config when fetch succeeded and value is valid; otherwise `MACOS_DOWNLOAD_URL` from Info.plist (xcconfig).
+    var resolvedManualDownloadURL: URL? {
+        if lastFetchError != nil {
+            AppLogger.warning("RemoteConfig: fetch failed — using Info.plist MACOS_DOWNLOAD_URL for manual download")
+            return AppUtils.macOSManualDownloadURL
+        }
+        
+        let raw = string(for: .macOSManualDownloadURL)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard !raw.isEmpty else {
+            AppLogger.warning("RemoteConfig: macos_app_download_url empty — using Info.plist MACOS_DOWNLOAD_URL")
+            return AppUtils.macOSManualDownloadURL
+        }
+        
+        guard let url = URL(string: raw),
+              let scheme = url.scheme?.lowercased(),
+              scheme == "https" || scheme == "http"
+        else {
+            AppLogger.warning("RemoteConfig: macos_app_download_url invalid — using Info.plist MACOS_DOWNLOAD_URL")
+            return AppUtils.macOSManualDownloadURL
+        }
+        
+        return url
+    }
+    
     private init() {
         remoteConfig = RemoteConfig.remoteConfig()
         
@@ -91,6 +117,9 @@ final class RemoteConfigManager: ObservableObject {
             
         case .macOSAppMinimumSupportedBuildVersion:
             return 0 as NSNumber
+            
+        case .macOSManualDownloadURL:
+            return (AppUtils.macOSManualDownloadURL?.absoluteString ?? "https://browserjet.com/download-file") as NSString
         }
     }
     
