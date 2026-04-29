@@ -19,12 +19,18 @@ final class VPNProvider {
             return []
         }
         
-        if let datatude = config.datatudePoolConfig {
+        switch config.layout {
+        case .datatude(let pool):
             guard let region else { return [] }
-            return Self.makeDatatudeProxies(config: datatude, region: region)
+            return Self.makeDatatudeProxies(config: pool, region: region)
+        case .multiSlotZip(let password, let portGen, let ipGen, let usernameStrategy):
+            return generateZippedProxies(
+                password: password,
+                portGenerationConfig: portGen,
+                ipGenerationConfig: ipGen,
+                usernameStrategy: usernameStrategy
+            )
         }
-        
-        return generateProxies(from: config)
     }
     
     private static func makeDatatudeProxies(config: DatatudePoolConfig, region: RegionType) -> [AuthProxy] {
@@ -50,10 +56,15 @@ final class VPNProvider {
         return out
     }
     
-    private func generateProxies(from config: VPNConfiguration) -> [AuthProxy] {
-        let ips = generateIPs(from: config.ipGenerationConfig)
-        let ports = generatePorts(from: config.portGenerationConfig)
-        let usernameGenerator = makeUsernameGenerator(from: config.usernameStrategy)
+    private func generateZippedProxies(
+        password: String,
+        portGenerationConfig: PortGenerationConfig,
+        ipGenerationConfig: IPGenerationConfig,
+        usernameStrategy: UsernameGenerationStrategy
+    ) -> [AuthProxy] {
+        let ips = generateIPs(from: ipGenerationConfig)
+        let ports = generatePorts(from: portGenerationConfig)
+        let usernameGenerator = makeUsernameGenerator(from: usernameStrategy)
         
         return zip(ips, ports).enumerated().map { index, tuple in
             let (ip, port) = tuple
@@ -61,7 +72,7 @@ final class VPNProvider {
                 host: ip,
                 port: port,
                 username: usernameGenerator.generateUsername(for: index),
-                password: config.password
+                password: password
             )
         }
     }
@@ -103,14 +114,10 @@ final class VPNProvider {
     
     private func incrementIP(_ ip: String, by amount: Int) -> String {
         let components = ip.split(separator: ".").compactMap { Int($0) }
-        guard components.count == 4 else {
-            return ip
-        }
+        guard components.count == 4 else { return ip }
         
         let lastOctet = components[3] + amount
-        guard lastOctet <= 255 else {
-            return ip
-        }
+        guard lastOctet <= 255 else { return ip }
         
         return "\(components[0]).\(components[1]).\(components[2]).\(lastOctet)"
     }

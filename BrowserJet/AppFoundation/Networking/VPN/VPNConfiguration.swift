@@ -5,31 +5,66 @@
 //  Created by Moiz Ul Hasan on 19/02/2026.
 //
 
-struct VPNConfiguration: Identifiable, Hashable {
-    let id: String
-    let displayName: String
-    
-    let baseIP: String
-    let portGenerationConfig: PortGenerationConfig
-    let password: String
-    
-    let usernameStrategy: UsernameGenerationStrategy
-    
-    let ipGenerationConfig: IPGenerationConfig
-    
-    /// When set, built-in proxies use datatude usernames on `host:port` instead of zipped IP/port slots.
-    let datatudePoolConfig: DatatudePoolConfig?
+enum VPNConfigurationLayout: Hashable {
+    /// IP list × port list × username strategy (e.g. VPN1 metadata / non-datatude pools).
+    case multiSlotZip(
+        //baseIP: String,
+        password: String,
+        portGenerationConfig: PortGenerationConfig,
+        ipGenerationConfig: IPGenerationConfig,
+        usernameStrategy: UsernameGenerationStrategy
+    )
+    /// single host:port + password; usernames from counter + region at runtime.
+    case datatude(DatatudePoolConfig)
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(displayName)
-        hasher.combine(baseIP)
-        hasher.combine(portGenerationConfig)
-        hasher.combine(password)
-        hasher.combine(ipGenerationConfig)
-        hasher.combine(datatudePoolConfig)
-        
-        switch usernameStrategy {
+        switch self {
+        case .multiSlotZip(let password, let portGen, let ipGen, let usernameStrategy):
+            hasher.combine("multi")
+            //hasher.combine(baseIP)
+            hasher.combine(password)
+            hasher.combine(portGen)
+            hasher.combine(ipGen)
+            Self.hashUsernameStrategy(usernameStrategy, into: &hasher)
+        case .datatude(let pool):
+            hasher.combine("datatude")
+            hasher.combine(pool)
+        }
+    }
+    
+    static func == (lhs: VPNConfigurationLayout, rhs: VPNConfigurationLayout) -> Bool {
+        switch (lhs, rhs) {
+        case (
+            .multiSlotZip(let p1, let pp1, let i1, let u1),
+            .multiSlotZip(let p2, let pp2, let i2, let u2)
+        ):
+            return p1 == p2 && pp1 == pp2 && i1 == i2
+            && usernameStrategyMatches(u1, u2)
+        case (.datatude(let a), .datatude(let b)):
+            return a == b
+        default:
+            return false
+        }
+    }
+    
+    private static func usernameStrategyMatches(
+        _ a: UsernameGenerationStrategy,
+        _ b: UsernameGenerationStrategy
+    ) -> Bool {
+        switch (a, b) {
+        case (.static(let x), .static(let y)): return x == y
+        case (.sequential(let x, let xi), .sequential(let y, let yi)):
+            return x == y && xi == yi
+        case (.custom, .custom): return true
+        default: return false
+        }
+    }
+    
+    private static func hashUsernameStrategy(
+        _ strategy: UsernameGenerationStrategy,
+        into hasher: inout Hasher
+    ) {
+        switch strategy {
         case .static(let username):
             hasher.combine("static")
             hasher.combine(username)
@@ -41,26 +76,21 @@ struct VPNConfiguration: Identifiable, Hashable {
             hasher.combine("custom")
         }
     }
+}
+
+struct VPNConfiguration: Identifiable, Hashable {
+    let id: String
+    let displayName: String
+    let layout: VPNConfigurationLayout
     
-    static func == (lhs: VPNConfiguration, rhs: VPNConfiguration) -> Bool {
-        lhs.id == rhs.id &&
-        lhs.displayName == rhs.displayName &&
-        lhs.baseIP == rhs.baseIP &&
-        lhs.portGenerationConfig == rhs.portGenerationConfig &&
-        lhs.password == rhs.password &&
-        lhs.ipGenerationConfig == rhs.ipGenerationConfig &&
-        lhs.datatudePoolConfig == rhs.datatudePoolConfig &&
-        lhs.usernameStrategyMatches(rhs.usernameStrategy)
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(displayName)
+        hasher.combine(layout)
     }
     
-    private func usernameStrategyMatches(_ other: UsernameGenerationStrategy) -> Bool {
-        switch (usernameStrategy, other) {
-        case (.static(let a), .static(let b)): return a == b
-        case (.sequential(let a, let ai), .sequential(let b, let bi)):
-            return a == b && ai == bi
-        case (.custom, .custom): return true
-        default: return false
-        }
+    static func == (lhs: VPNConfiguration, rhs: VPNConfiguration) -> Bool {
+        lhs.id == rhs.id && lhs.displayName == rhs.displayName && lhs.layout == rhs.layout
     }
 }
 

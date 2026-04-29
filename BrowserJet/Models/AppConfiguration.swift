@@ -77,54 +77,30 @@ extension AppConfiguration {
                 VPNConfiguration(
                     id: "vpn1",
                     displayName: "VPN 1",
-                    baseIP: "142.173.65.60",
-                    portGenerationConfig: PortGenerationConfig(
-                        portPattern: .sequential(
-                            basePort: 16020,
-                            startIndex: 0
+                    layout: .multiSlotZip(
+                        password: "SPQLPBWP",
+                        portGenerationConfig: PortGenerationConfig(
+                            portPattern: .sequential(basePort: 16020, startIndex: 0),
+                            count: 4
                         ),
-                        count: 4
-                    ),
-                    password: "SPQLPBWP",
-                    usernameStrategy: .static(username: "Y9PQL"),
-                    ipGenerationConfig: IPGenerationConfig(
-                        ipPattern: .sequential(
-                            baseIP: "142.173.65.60",
-                            startIndex: 0
+                        ipGenerationConfig: IPGenerationConfig(
+                            ipPattern: .sequential(baseIP: "142.173.65.60", startIndex: 0),
+                            count: 4
                         ),
-                        count: 4
-                    ),
-                    datatudePoolConfig: nil
+                        usernameStrategy: .static(username: "Y9PQL")
+                    )
                 ),
                 VPNConfiguration(
                     id: "vpn2",
                     displayName: "VPN 2",
-                    baseIP: "151.145.134.153",
-                    portGenerationConfig: PortGenerationConfig(
-                        portPattern: .custom(ports: [
-                            14843,
-                            14844,
-                            14845,
-                            7672
-                        ]),
-                        count: 4
-                    ),
-                    password: "8YUTNTH5",
-                    usernameStrategy: .static(username: "EQKOH"),
-                    ipGenerationConfig: .init(
-                        ipPattern: .custom(ips: [
-                            "151.145.134.153",
-                            "151.145.134.154",
-                            "151.145.134.155",
-                            "151.145.138.122"
-                        ]),
-                        count: 4
-                    ), datatudePoolConfig: .init(
-                        host: "rotating.prox-e.io",
-                        port: 5055,
-                        password: "mkdb1458!2025",
-                        counterRange: 11...99_999,
-                        counterDigitWidth: 8
+                    layout: .datatude(
+                        DatatudePoolConfig(
+                            host: "rotating.prox-e.io",
+                            port: 5055,
+                            password: "mkdb1458!2025",
+                            counterRange: 11...99_999,
+                            counterDigitWidth: 8
+                        )
                     )
                 )
             ],
@@ -154,53 +130,30 @@ extension AppConfiguration {
                 VPNConfiguration(
                     id: "vpn1",
                     displayName: "VPN 1",
-                    baseIP: "142.173.65.60",
-                    portGenerationConfig: PortGenerationConfig(
-                        portPattern: .sequential(
-                            basePort: 16020,
-                            startIndex: 0
+                    layout: .multiSlotZip(
+                        password: "SPQLPBWP",
+                        portGenerationConfig: PortGenerationConfig(
+                            portPattern: .sequential(basePort: 16020, startIndex: 0),
+                            count: 4
                         ),
-                        count: 4
-                    ),
-                    password: "SPQLPBWP",
-                    usernameStrategy: .static(username: "Y9PQL"),
-                    ipGenerationConfig: IPGenerationConfig(
-                        ipPattern: .sequential(
-                            baseIP: "142.173.65.60",
-                            startIndex: 0
+                        ipGenerationConfig: IPGenerationConfig(
+                            ipPattern: .sequential(baseIP: "142.173.65.60", startIndex: 0),
+                            count: 4
                         ),
-                        count: 4
-                    ), datatudePoolConfig: nil
+                        usernameStrategy: .static(username: "Y9PQL")
+                    )
                 ),
                 VPNConfiguration(
                     id: "vpn2",
                     displayName: "VPN 2",
-                    baseIP: "151.145.134.153",
-                    portGenerationConfig: PortGenerationConfig(
-                        portPattern: .custom(ports: [
-                            14843,
-                            14844,
-                            14845,
-                            7672
-                        ]),
-                        count: 4
-                    ),
-                    password: "8YUTNTH5",
-                    usernameStrategy: .static(username: "EQKOH"),
-                    ipGenerationConfig: .init(
-                        ipPattern: .custom(ips: [
-                            "151.145.134.153",
-                            "151.145.134.154",
-                            "151.145.134.155",
-                            "151.145.138.122"
-                        ]),
-                        count: 4
-                    ), datatudePoolConfig: .init(
-                        host: "rotating.prox-e.io",
-                        port: 5055,
-                        password: "mkdb1458!2025",
-                        counterRange: 11...99_999,
-                        counterDigitWidth: 8
+                    layout: .datatude(
+                        DatatudePoolConfig(
+                            host: "rotating.prox-e.io",
+                            port: 5055,
+                            password: "mkdb1458!2025",
+                            counterRange: 11...99_999,
+                            counterDigitWidth: 8
+                        )
                     )
                 )
             ],
