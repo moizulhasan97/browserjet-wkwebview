@@ -23,14 +23,20 @@ extension ProxyType {
         if case .local = self { return true }
         return false
     }
-
+    
     /// True when launcher resolved to premium (GPP) pool instead of built-in `VPNProvider` configs.
     var isPremiumSession: Bool {
         guard case .proxy(let source) = self else { return false }
         if case .premium = source { return true }
         return false
     }
-
+    
+    /// Built-in VPN tier when `proxy` is `.builtIn`; otherwise `nil`.
+    var builtInVPNType: VPNType? {
+        guard case .proxy(.builtIn(let vpn, _)) = self else { return nil }
+        return vpn
+    }
+    
     /// For browser window UI.
     var statusTitle: String {
         switch self {
@@ -43,7 +49,7 @@ extension ProxyType {
             }
         }
     }
-
+    
     /// Temporary resolver (until API + storage exists).
     /// - For now: local => nil, proxy => pick proxies[slot] else first proxy.
     func resolveAuthProxy(slot: Int, proxies: [AuthProxy]) -> AuthProxy? {

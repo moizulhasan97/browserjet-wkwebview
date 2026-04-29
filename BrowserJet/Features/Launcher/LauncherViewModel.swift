@@ -10,28 +10,34 @@ import Combine
 @MainActor
 final class LauncherViewModel: ObservableObject {
     @Published var settings: LauncherSettings
-
+    
     /// Set when the user tries to enable Premium Proxy while the GPP list is empty; cleared when appropriate from the view.
     @Published var premiumProxyUnavailableMessage: String?
-
+    
     private let defaultSearchAddress: String
     let availableVPNs: [VPNType]
-
+    
     private(set) var isTrialUser: Bool = false
-
+    
     private let blockedVPNsForTrial: Set<VPNType>
-
+    private let vpnAllowedRegions: [VPNType: [RegionType]]
+    
+    var regionPickerOptions: [RegionType] {
+        guard let vpn = settings.selectedVPN else { return RegionType.allCases }
+        return vpnAllowedRegions[vpn] ?? RegionType.allCases
+    }
+    
     init(defaultSearchAddress: String, appConfiguration: AppConfiguration) {
         AppLogger.debug("LauncherViewModel initializing with default address: \(defaultSearchAddress)")
-
+        
         LicenseAccountStore.shared.refresh()
         let trial = LicenseAccountStore.shared.isTrialUser
         let blocked = appConfiguration.trialBlockedVPNs
-
+        
         self.isTrialUser = trial
         self.blockedVPNsForTrial = blocked
         self.defaultSearchAddress = defaultSearchAddress
-
+        
         let allVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
         let filtered: [VPNType]
         if trial {
@@ -40,23 +46,23 @@ final class LauncherViewModel: ObservableObject {
             filtered = allVPNs
         }
         self.availableVPNs = filtered
-
-        if trial && filtered.isEmpty {
-            AppLogger.warning("LauncherViewModel: trial user has no VPN options after applying trialBlockedVPNs")
-        }
-
+        
+        self.vpnAllowedRegions = appConfiguration.vpnAllowedRegions
+        let initialVPN = filtered.first
+        let initialRegion = Self.pickInitialRegion(for: initialVPN, policy: appConfiguration.vpnAllowedRegions)
+        
         self.settings = LauncherSettings(
             address: "",
             numberOfTabs: .one,
             isVPNEnabled: false,
             isPremiumProxyEnabled: false,
-            selectedVPN: filtered.first,
-            selectedRegion: .uk
+            selectedVPN: initialVPN,
+            selectedRegion: initialRegion
         )
-
+        
         AppLogger.debug("LauncherViewModel initialized with default settings")
     }
-
+    
     func onAppear() {
         AppLogger.debug("LauncherView appeared")
         Task { @MainActor in
@@ -68,7 +74,7 @@ final class LauncherViewModel: ObservableObject {
             reconcileVPN1SelectionIfNeeded()
         }
     }
-
+    
     /// Launch is blocked when VPN + Premium is selected but the GPP list is empty, or VPN1 is selected without a VPR list.
     func isLaunchAllowed() -> Bool {
         guard settings.isValid else { return false }
@@ -82,7 +88,7 @@ final class LauncherViewModel: ObservableObject {
         }
         return true
     }
-
+    
     func toggleVPN(_ newValue: Bool) {
         if newValue && availableVPNs.isEmpty {
             AppLogger.warning("VPN toggle ignored — no VPN options available")
@@ -99,13 +105,14 @@ final class LauncherViewModel: ObservableObject {
             AppLogger.debug("VPN disabled, premium proxy also disabled")
         }
     }
-
+    
     /// Paid: prefer VPN1 when the VPR list loaded; otherwise VPN2 (CEF launcher default). Trial: first allowed tier.
     private func applyDefaultBuiltInVPNSelection() {
         if isTrialUser {
             if let first = availableVPNs.first {
                 settings.selectedVPN = first
             }
+            reconcileRegionForSelectedVPN()
             return
         }
         if VPN1ProxyRepository.shared.hasVPN1Proxies, availableVPNs.contains(.vpn1) {
@@ -117,8 +124,9 @@ final class LauncherViewModel: ObservableObject {
         } else if let first = availableVPNs.first {
             settings.selectedVPN = first
         }
+        reconcileRegionForSelectedVPN()
     }
-
+    
     /// If VPN1 is selected but VPR has no rows, fall back to VPN2.
     private func reconcileVPN1SelectionIfNeeded() {
         guard !isTrialUser else { return }
@@ -130,8 +138,9 @@ final class LauncherViewModel: ObservableObject {
         } else if let first = availableVPNs.first {
             settings.selectedVPN = first
         }
+        reconcileRegionForSelectedVPN()
     }
-
+    
     func togglePremiumProxy(_ newValue: Bool) {
         guard settings.isVPNEnabled else {
             AppLogger.warning("Attempted to toggle premium proxy without VPN enabled")
@@ -146,38 +155,62 @@ final class LauncherViewModel: ObservableObject {
         AppLogger.info("Premium proxy toggled to: \(newValue)")
         settings.isPremiumProxyEnabled = newValue
     }
-
+    
     func clearPremiumProxyUnavailableMessage() {
         premiumProxyUnavailableMessage = nil
     }
-
+    
     func updateAddress(_ address: String) {
         guard settings.address != address else { return }
         AppLogger.debug("Address updated to: \(address)")
         settings.address = address
     }
-
+    
     func updateNumberOfTabs(_ preset: LauncherTabPreset) {
         AppLogger.info("Number of tabs changed to: \(preset.rawValue)")
         settings.numberOfTabs = preset
     }
-
+    
     func updateSelectedVPN(_ vpn: VPNType) {
         if isTrialUser && blockedVPNsForTrial.contains(vpn) {
             AppLogger.warning("Blocked VPN selection for trial user: \(vpn.rawValue)")
             settings.selectedVPN = availableVPNs.first
+            reconcileRegionForSelectedVPN()
             return
         }
         AppLogger.info("VPN selection changed to: \(vpn.rawValue)")
         settings.selectedVPN = vpn
+        reconcileRegionForSelectedVPN()
     }
-
+    
     func updateSelectedRegion(_ region: RegionType) {
         AppLogger.info("Region selection changed to: \(region.rawValue)")
         settings.selectedRegion = region
     }
-
+    
     func didTapManageMyProxy() {
         AppLogger.info("Manage My Proxy button tapped")
+    }
+    
+    private static func allowedRegions(for vpn: VPNType?, policy: [VPNType: [RegionType]]) -> [RegionType] {
+        guard let vpn else { return RegionType.allCases }
+        return policy[vpn] ?? RegionType.allCases
+    }
+    
+    private static func pickInitialRegion(
+        for vpn: VPNType?,
+        policy: [VPNType: [RegionType]],
+        preferred: RegionType = .uk
+    ) -> RegionType {
+        let allowed = allowedRegions(for: vpn, policy: policy)
+        if allowed.contains(preferred) { return preferred }
+        return allowed.first ?? .uk
+    }
+    
+    private func reconcileRegionForSelectedVPN() {
+        guard let vpn = settings.selectedVPN else { return }
+        let allowed = Self.allowedRegions(for: vpn, policy: vpnAllowedRegions)
+        if let r = settings.selectedRegion, allowed.contains(r) { return }
+        settings.selectedRegion = allowed.first
     }
 }

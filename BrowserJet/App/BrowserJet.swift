@@ -57,7 +57,7 @@ struct BrowserJet: App {
             WindowManager.shared.showActivation(
                 themeManager: themeManager,
                 sessionManager: sessionManager,
-                appConfiguration: .development
+                appConfiguration: AppEnvironment.currentConfiguration
             )
         }
     }

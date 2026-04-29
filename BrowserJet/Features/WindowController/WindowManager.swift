@@ -12,14 +12,14 @@ import SwiftUI
 
 final class WindowManager {
     static let shared = WindowManager()
-
+    
     /// Content sizes for the activation `BrowserJetWindowRoot` window (title bar is extra frame).
     enum ActivationLayout {
         case fullForm
         case progressOnly
         case infoAlert
         case shiftLicense
-
+        
         var contentSize: NSSize {
             switch self {
             case .fullForm:
@@ -34,18 +34,18 @@ final class WindowManager {
             }
         }
     }
-
+    
     private var launcherWC: (any ShowableWindowController)?
     private var browserWC: (any ShowableWindowController)?
-
+    
     /// Same size and behavior as launcher-opened browser (show() calls zoom for maximize).
     private let browserWindowSize = NSSize(width: 1200, height: 780)
     private let browserCornerRadius: CGFloat = 18
-
+    
     private init() {
         AppLogger.debug("WindowManager singleton initialized")
     }
-
+    
     /// Shrinks or expands the activation window when root is `BrowserJetWindowRoot` (no-op for launcher/browser windows).
     /// Compact layouts use **borderless** `NSWindow` chrome so only the SwiftUI card (e.g. progress) is visible—no title bar behind it.
     func resizeActivationWindowToFit(_ layout: ActivationLayout) {
@@ -54,7 +54,7 @@ final class WindowManager {
         wc.setActivationChromeBorderless(compact)
         wc.applyFixedContentSize(layout.contentSize)
     }
-
+    
     func showActivation(
         themeManager: ThemeManager,
         sessionManager: SessionManager,
@@ -64,8 +64,8 @@ final class WindowManager {
         if launcherWC == nil {
             let storedKey = Self.hasStoredLicenseKey()
             let initialSize = storedKey
-                ? ActivationLayout.progressOnly.contentSize
-                : ActivationLayout.fullForm.contentSize
+            ? ActivationLayout.progressOnly.contentSize
+            : ActivationLayout.fullForm.contentSize
             AppLogger.info(
                 "Creating activation window - storedKey: \(storedKey), size: \(initialSize.width)x\(initialSize.height), borderless: \(storedKey)"
             )
@@ -74,7 +74,7 @@ final class WindowManager {
                 .environmentObject(sessionManager)
                 .environmentObject(LicenseAccountStore.shared)
                 .environment(\.appConfiguration, appConfiguration)
-
+            
             launcherWC = BrowserJetWindowController(
                 content: rootView,
                 size: initialSize,
@@ -88,14 +88,14 @@ final class WindowManager {
         launcherWC?.show()
         AppLogger.info("Activation window shown")
     }
-
+    
     private static func hasStoredLicenseKey() -> Bool {
         guard let raw = UserDefaults.standard.object(forKey: StorageKeys.licenseKey) as? String else {
             return false
         }
         return !raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-
+    
     func showLauncher(
         themeManager: ThemeManager,
         sessionManager: SessionManager,
@@ -108,7 +108,7 @@ final class WindowManager {
                 .environmentObject(themeManager)
                 .environmentObject(sessionManager)
                 .environmentObject(LicenseAccountStore.shared)
-
+            
             launcherWC = BrowserJetWindowController(
                 content: rootView,
                 size: NSSize(width: 500, height: 639),
@@ -121,7 +121,7 @@ final class WindowManager {
         launcherWC?.show()
         AppLogger.info("Launcher window shown")
     }
-
+    
     /// Close activation window and show the launcher (e.g. after successful activation).
     func dismissActivationAndShowLauncher(
         themeManager: ThemeManager,
@@ -133,7 +133,7 @@ final class WindowManager {
         AppLogger.info("Activation window closed")
         showLauncher(themeManager: themeManager, sessionManager: sessionManager, appConfiguration: appConfiguration)
     }
-
+    
     @MainActor
     func showBrowser(
         request: LaunchRequest,
@@ -144,23 +144,24 @@ final class WindowManager {
         // swiftlint:disable:next line_length
         AppLogger.info("showBrowser called - tabs: \(request.numberOfTabs), proxy: \(request.proxyType.statusTitle), address: \(request.address)")
         let vpnProvider = VPNProvider(configurations: appConfiguration.vpnConfigurations)
+        let builtInRegion = builtInRegion(from: request.proxyType)
         let generatedProxies: [AuthProxy]
         if request.proxyType.isPremiumSession {
             generatedProxies = PremiumProxyRepository.shared.authProxiesForSession()
         } else if request.selectedVPN == .vpn1 {
             generatedProxies = VPN1ProxyRepository.shared.authProxiesForSession()
         } else if let vpnID = request.selectedVPN?.rawValue {
-            generatedProxies = vpnProvider.generateProxies(for: vpnID)
+            generatedProxies = vpnProvider.generateProxies(for: vpnID, region: builtInRegion)
         } else {
             generatedProxies = []
         }
         
         let initialURL = URL(string: request.address)
-            ?? URL(string: appConfiguration.defaultSearchAddress)
-            ?? URL(string: "https://www.google.com")
-            ?? URL(string: "about:blank")
-            ?? URL(string: "about:blank")!
-
+        ?? URL(string: appConfiguration.defaultSearchAddress)
+        ?? URL(string: "https://www.google.com")
+        ?? URL(string: "about:blank")
+        ?? URL(string: "about:blank")!
+        
         let state = BrowserWindowState(
             proxyType: request.proxyType,
             isolationMode: request.isolationMode,
@@ -170,7 +171,7 @@ final class WindowManager {
             initialURL: initialURL,
             initialTabCount: request.numberOfTabs
         )
-
+        
         let rootView = BrowserRootView(
             state: state,
             menu: .default
@@ -178,7 +179,7 @@ final class WindowManager {
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
             .environmentObject(LicenseAccountStore.shared)
-
+        
         browserWC = BrowserJetWindowController(
             content: rootView,
             size: browserWindowSize,
@@ -186,16 +187,16 @@ final class WindowManager {
             resizable: true,
             cornerRadius: browserCornerRadius
         )
-
+        
         // Close launcher window before showing browser
         launcherWC?.close()
         launcherWC = nil
         AppLogger.info("Launcher window closed")
-
+        
         browserWC?.show()
         AppLogger.info("Browser window shown")
     }
-
+    
     /// When trial or license is expired: open browser with full chrome (same look as launcher). Single tab, payment URL; address bar and non-refresh actions disabled.
     @MainActor
     func showBrowserForTrialExpired(
@@ -219,15 +220,15 @@ final class WindowManager {
             state: state,
             menu: .default
         )
-        .environmentObject(themeManager)
-        .environmentObject(sessionManager)
-        .environmentObject(LicenseAccountStore.shared)
-        .environment(\.appConfiguration, appConfiguration)
-
+            .environmentObject(themeManager)
+            .environmentObject(sessionManager)
+            .environmentObject(LicenseAccountStore.shared)
+            .environment(\.appConfiguration, appConfiguration)
+        
         launcherWC?.close()
         launcherWC = nil
         AppLogger.info("Activation window closed")
-
+        
         browserWC = BrowserJetWindowController(
             content: rootView,
             size: browserWindowSize,
@@ -237,5 +238,15 @@ final class WindowManager {
         )
         browserWC?.show()
         AppLogger.info("Browser window shown (payment only)")
+    }
+    
+    private func builtInRegion(from proxyType: ProxyType) -> RegionType? {
+        guard case .proxy(let source) = proxyType else { return nil }
+        switch source {
+        case .builtIn(_, let region), .premium(_, let region):
+            return region
+        case .custom:
+            return nil
+        }
     }
 }
