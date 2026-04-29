@@ -6,62 +6,62 @@
 //
 
 struct VPNConfiguration: Identifiable, Hashable {
-    let id: String  // "vpn1", "vpn2"
-    let displayName: String  // "VPN 1", "VPN 2"
+    let id: String
+    let displayName: String
     
     let baseIP: String
     let portGenerationConfig: PortGenerationConfig
     let password: String
     
-    // Username generation strategy
     let usernameStrategy: UsernameGenerationStrategy
     
-    // IP generation configuration
     let ipGenerationConfig: IPGenerationConfig
     
+    /// When set, built-in proxies use datatude usernames on `host:port` instead of zipped IP/port slots.
+    let datatudePoolConfig: DatatudePoolConfig?
+    
     func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
-            hasher.combine(displayName)
-            hasher.combine(baseIP)
+        hasher.combine(id)
+        hasher.combine(displayName)
+        hasher.combine(baseIP)
         hasher.combine(portGenerationConfig)
-            hasher.combine(password)
-            hasher.combine(ipGenerationConfig)
-            
-            // Only hash the strategy if it's not .custom
-            switch usernameStrategy {
-            case .static(let username):
-                hasher.combine("static")
-                hasher.combine(username)
-            case .sequential(let base, let startIndex):
-                hasher.combine("sequential")
-                hasher.combine(base)
-                hasher.combine(startIndex)
-            case .custom:
-                hasher.combine("custom")
-                // Don't hash the closure
-            }
-        }
+        hasher.combine(password)
+        hasher.combine(ipGenerationConfig)
+        hasher.combine(datatudePoolConfig)
         
-        static func == (lhs: VPNConfiguration, rhs: VPNConfiguration) -> Bool {
-            // Custom equality that ignores .custom closures
-            return lhs.id == rhs.id &&
-                   lhs.displayName == rhs.displayName &&
-                   lhs.baseIP == rhs.baseIP &&
-            lhs.portGenerationConfig == rhs.portGenerationConfig &&
-                   lhs.password == rhs.password &&
-                   lhs.ipGenerationConfig == rhs.ipGenerationConfig &&
-                   lhs.usernameStrategyMatches(rhs.usernameStrategy)
+        switch usernameStrategy {
+        case .static(let username):
+            hasher.combine("static")
+            hasher.combine(username)
+        case .sequential(let base, let startIndex):
+            hasher.combine("sequential")
+            hasher.combine(base)
+            hasher.combine(startIndex)
+        case .custom:
+            hasher.combine("custom")
         }
-        
-        private func usernameStrategyMatches(_ other: UsernameGenerationStrategy) -> Bool {
-            switch (self.usernameStrategy, other) {
-            case (.static(let a), .static(let b)): return a == b
-            case (.sequential(let a, let ai), .sequential(let b, let bi)):
-                return a == b && ai == bi
-            case (.custom, .custom): return true // Consider all custom as equal
-            default: return false
-            }
+    }
+    
+    static func == (lhs: VPNConfiguration, rhs: VPNConfiguration) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.displayName == rhs.displayName &&
+        lhs.baseIP == rhs.baseIP &&
+        lhs.portGenerationConfig == rhs.portGenerationConfig &&
+        lhs.password == rhs.password &&
+        lhs.ipGenerationConfig == rhs.ipGenerationConfig &&
+        lhs.datatudePoolConfig == rhs.datatudePoolConfig &&
+        lhs.usernameStrategyMatches(rhs.usernameStrategy)
+    }
+    
+    private func usernameStrategyMatches(_ other: UsernameGenerationStrategy) -> Bool {
+        switch (usernameStrategy, other) {
+        case (.static(let a), .static(let b)): return a == b
+        case (.sequential(let a, let ai), .sequential(let b, let bi)):
+            return a == b && ai == bi
+        case (.custom, .custom): return true
+        default: return false
         }
+    }
 }
 
 struct IPGenerationConfig: Hashable {

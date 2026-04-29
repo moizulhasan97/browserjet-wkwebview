@@ -111,6 +111,7 @@
 		AF99BFC32FA013370096FAE9 /* ForceUpdateGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC22FA013350096FAE9 /* ForceUpdateGate.swift */; };
 		AF99BFC52FA013500096FAE9 /* ForceUpdateBlockingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC42FA0134E0096FAE9 /* ForceUpdateBlockingOverlay.swift */; };
 		AF99BFC72FA02F000096FAE9 /* SparkleUpdaterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC62FA02EFF0096FAE9 /* SparkleUpdaterDelegate.swift */; };
+		AF99BFC92FA27D550096FAE9 /* DatatudePoolConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC82FA27D530096FAE9 /* DatatudePoolConfig.swift */; };
 		AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */; };
 		AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */; };
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
@@ -252,6 +253,7 @@
 		AF99BFC22FA013350096FAE9 /* ForceUpdateGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateGate.swift; sourceTree = "<group>"; };
 		AF99BFC42FA0134E0096FAE9 /* ForceUpdateBlockingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateBlockingOverlay.swift; sourceTree = "<group>"; };
 		AF99BFC62FA02EFF0096FAE9 /* SparkleUpdaterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleUpdaterDelegate.swift; sourceTree = "<group>"; };
+		AF99BFC82FA27D530096FAE9 /* DatatudePoolConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatatudePoolConfig.swift; sourceTree = "<group>"; };
 		AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabsPopoverView.swift; sourceTree = "<group>"; };
 		AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuItem.swift; sourceTree = "<group>"; };
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 		AF0A09DB2F4653B100A12964 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
+				AF99BFC82FA27D530096FAE9 /* DatatudePoolConfig.swift */,
 				AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */,
 				AF0A09DE2F4653D300A12964 /* VPNProvider.swift */,
 				AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */,
@@ -1158,6 +1161,7 @@
 				AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */,
 				AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */,
 				AF401ABD2F4D1BC800EF265C /* LicenseEndpoint.swift in Sources */,
+				AF99BFC92FA27D550096FAE9 /* DatatudePoolConfig.swift in Sources */,
 				AF69F5E52F43A3B200B33610 /* BrowserRootView.swift in Sources */,
 				AF401ACC2F4D2C8400EF265C /* PersistedLicense.swift in Sources */,
 				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,

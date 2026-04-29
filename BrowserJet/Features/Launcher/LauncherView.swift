@@ -303,7 +303,7 @@ private extension LauncherView {
             getLabel("Select Region")
             Spacer()
             BrowserJetMenuPicker(
-                options: RegionType.allCases,
+                options: viewModel.regionPickerOptions,
                 selection: Binding(
                     get: { viewModel.settings.selectedRegion ?? .uk },
                     set: { viewModel.updateSelectedRegion($0) }

@@ -16,12 +16,13 @@ struct AppConfiguration {
     let duplicateTabCounts: [Int]
     let maxBrowserTabs: Int
     // More-menu URLs
-        let paymentCardURL: URL
-        let buyLicensesURL: URL
-        let contactUsURL: URL
-        let twitterURL: URL
+    let paymentCardURL: URL
+    let buyLicensesURL: URL
+    let contactUsURL: URL
+    let twitterURL: URL
     // Blocked VPNs for trial users
     let trialBlockedVPNs: Set<VPNType>
+    let vpnAllowedRegions: [VPNType: [RegionType]]
     
     init(
         isUserAgentEnabled: Bool,
@@ -35,7 +36,8 @@ struct AppConfiguration {
         buyLicensesURL: URL,
         contactUsURL: URL,
         twitterURL: URL,
-        trialBlockedVPNs: Set<VPNType>
+        trialBlockedVPNs: Set<VPNType>,
+        vpnAllowedRegions: [VPNType: [RegionType]]
     ) {
         self.isUserAgentEnabled = isUserAgentEnabled
         self.defaultSearchAddress = defaultSearchAddress
@@ -49,6 +51,7 @@ struct AppConfiguration {
         self.contactUsURL = contactUsURL
         self.twitterURL = twitterURL
         self.trialBlockedVPNs = trialBlockedVPNs
+        self.vpnAllowedRegions = vpnAllowedRegions
     }
 }
 
@@ -56,7 +59,7 @@ extension AppConfiguration {
     var sessionIsolationModeValue: SessionIsolationMode {
         sessionIsolationMode
     }
-
+    
     var userAgentValue: String? {
         guard isUserAgentEnabled else { return nil }
         return nil
@@ -76,12 +79,12 @@ extension AppConfiguration {
                     displayName: "VPN 1",
                     baseIP: "142.173.65.60",
                     portGenerationConfig: PortGenerationConfig(
-                           portPattern: .sequential(
-                               basePort: 16020,
-                               startIndex: 0
-                           ),
-                           count: 4
-                       ),
+                        portPattern: .sequential(
+                            basePort: 16020,
+                            startIndex: 0
+                        ),
+                        count: 4
+                    ),
                     password: "SPQLPBWP",
                     usernameStrategy: .static(username: "Y9PQL"),
                     ipGenerationConfig: IPGenerationConfig(
@@ -90,21 +93,22 @@ extension AppConfiguration {
                             startIndex: 0
                         ),
                         count: 4
-                    )
+                    ),
+                    datatudePoolConfig: nil
                 ),
                 VPNConfiguration(
                     id: "vpn2",
                     displayName: "VPN 2",
                     baseIP: "151.145.134.153",
                     portGenerationConfig: PortGenerationConfig(
-                           portPattern: .custom(ports: [
+                        portPattern: .custom(ports: [
                             14843,
                             14844,
                             14845,
                             7672
-                           ]),
-                           count: 4
-                       ),
+                        ]),
+                        count: 4
+                    ),
                     password: "8YUTNTH5",
                     usernameStrategy: .static(username: "EQKOH"),
                     ipGenerationConfig: .init(
@@ -115,6 +119,12 @@ extension AppConfiguration {
                             "151.145.138.122"
                         ]),
                         count: 4
+                    ), datatudePoolConfig: .init(
+                        host: "rotating.prox-e.io",
+                        port: 5055,
+                        password: "mkdb1458!2025",
+                        counterRange: 11...99_999,
+                        counterDigitWidth: 8
                     )
                 )
             ],
@@ -124,7 +134,11 @@ extension AppConfiguration {
             buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             contactUsURL: URL(string: "https://browserjet.com/contact")!,
             twitterURL: URL(string: "https://twitter.com/browserjet")!,
-            trialBlockedVPNs: [.vpn1]
+            trialBlockedVPNs: [.vpn1],
+            vpnAllowedRegions: [
+                .vpn1: [.uk, .us, .ca],
+                .vpn2: [.uk, .us, .ca],
+            ]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config
@@ -142,12 +156,12 @@ extension AppConfiguration {
                     displayName: "VPN 1",
                     baseIP: "142.173.65.60",
                     portGenerationConfig: PortGenerationConfig(
-                           portPattern: .sequential(
-                               basePort: 16020,
-                               startIndex: 0
-                           ),
-                           count: 4
-                       ),
+                        portPattern: .sequential(
+                            basePort: 16020,
+                            startIndex: 0
+                        ),
+                        count: 4
+                    ),
                     password: "SPQLPBWP",
                     usernameStrategy: .static(username: "Y9PQL"),
                     ipGenerationConfig: IPGenerationConfig(
@@ -156,21 +170,21 @@ extension AppConfiguration {
                             startIndex: 0
                         ),
                         count: 4
-                    )
+                    ), datatudePoolConfig: nil
                 ),
                 VPNConfiguration(
                     id: "vpn2",
                     displayName: "VPN 2",
                     baseIP: "151.145.134.153",
                     portGenerationConfig: PortGenerationConfig(
-                           portPattern: .custom(ports: [
+                        portPattern: .custom(ports: [
                             14843,
                             14844,
                             14845,
                             7672
-                           ]),
-                           count: 4
-                       ),
+                        ]),
+                        count: 4
+                    ),
                     password: "8YUTNTH5",
                     usernameStrategy: .static(username: "EQKOH"),
                     ipGenerationConfig: .init(
@@ -181,6 +195,12 @@ extension AppConfiguration {
                             "151.145.138.122"
                         ]),
                         count: 4
+                    ), datatudePoolConfig: .init(
+                        host: "rotating.prox-e.io",
+                        port: 5055,
+                        password: "mkdb1458!2025",
+                        counterRange: 11...99_999,
+                        counterDigitWidth: 8
                     )
                 )
             ],
@@ -190,7 +210,11 @@ extension AppConfiguration {
             buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             contactUsURL: URL(string: "https://browserjet.com/contact")!,
             twitterURL: URL(string: "https://twitter.com/browserjet")!,
-            trialBlockedVPNs: [.vpn1]
+            trialBlockedVPNs: [.vpn1],
+            vpnAllowedRegions: [
+                .vpn1: [.uk, .us, .ca],
+                .vpn2: [.uk, .us, .ca],
+            ]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config

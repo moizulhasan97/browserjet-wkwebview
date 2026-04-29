@@ -6,12 +6,24 @@
 //
 
 enum RegionType: String,
-    CaseIterable,
-    Hashable {
+                 CaseIterable,
+                 Hashable {
     // swiftlint:disable:next identifier_name
     case uk = "UK"
     // swiftlint:disable:next identifier_name
     case us = "US"
     // swiftlint:disable:next identifier_name
     case ca = "CA"
+}
+
+extension RegionType {
+    
+    /// For vpn2
+    var datatudeRegionSlug: String {
+        switch self {
+        case .uk: return "gb"
+        case .us: return "us"
+        case .ca: return "ca"
+        }
+    }
 }
