@@ -9,10 +9,19 @@ import Foundation
 
 enum AppUtils {
     static func getAppMarketingVersion() -> String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+        Bundle.main.appVersion
     }
     
     static func getAppBuildVersion() -> Int {
-        Int(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0") ?? 0
+        Int(Bundle.main.buildNumber) ?? 0
+    }
+    
+    static var macOSManualDownloadURL: URL? {
+        guard let value = Bundle.main.object(forInfoDictionaryKey: "MACOS_MANUAL_DOWNLOAD_URL") as? String else {
+            return nil
+        }
+        
+        let cleanedValue = value.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+        return URL(string: cleanedValue)
     }
 }

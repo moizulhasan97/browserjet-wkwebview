@@ -15,3 +15,12 @@ struct TextBody1: Typography {
         .sfPro(weight: .regular)
     }
 }
+
+struct TextBody2: Typography {
+    var size: CGFloat {
+        12.0
+    }
+    var fontProvider: FontProvider {
+        .sfPro(weight: .regular)
+    }
+}

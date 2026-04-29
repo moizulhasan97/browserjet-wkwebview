@@ -60,6 +60,7 @@ struct BrowserJetButtonStyle: ButtonStyle {
     enum ButtonType: Equatable {
         case primaryLarge
         case secondaryLarge
+        case destructivePrimaryLarge
     }
 
     @Environment(\.designSystem) private var designSystem
