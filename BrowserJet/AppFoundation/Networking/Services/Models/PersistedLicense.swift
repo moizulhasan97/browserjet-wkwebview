@@ -20,7 +20,8 @@ struct PersistedLicense: Codable {
     let userStatus: String
     let firstNotificationMessage: String
     let secondNotificationMessage: String
-
+    let proxyExpiryDate: Date?
+    
     init(_ response: VerifyKeyResponse) {
         let now = Date().toLocalTime()
         userEmail = response.userEmail
@@ -35,5 +36,22 @@ struct PersistedLicense: Codable {
         userStatus = response.userStatus.rawValue
         firstNotificationMessage = response.firstNotificationMessage
         secondNotificationMessage = response.secondNotificationMessage
+        proxyExpiryDate = response.proxyExpiryDate
+    }
+    
+    /// Whether browser license checks should run
+    func isEligibleForBackgroundLicenseMonitoring(referenceNow: Date = Date().toLocalTime()) -> Bool {
+        guard let auth = AuthenticationType(rawValue: authenticationType), auth == .verified else { return false }
+        guard let status = UserStatus(rawValue: userStatus), status == .active else { return false }
+        guard referenceNow <= userExpiryDate else { return false }
+        switch UserKind(rawValue: userKind) ?? .trial {
+        case .paid:
+            return true
+        case .trial:
+            if let proxyExpiryDate {
+                return referenceNow <= proxyExpiryDate
+            }
+            return !trialExpired
+        }
     }
 }

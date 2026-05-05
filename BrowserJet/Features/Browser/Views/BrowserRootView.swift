@@ -69,6 +69,9 @@ struct BrowserRootView: View {
             }
         }
         .background(AppBackgroundStyle.browserJetGradient.makeView())
+        .task {
+            await BrowserLicenseBackgroundMonitor.run()
+        }
     }
     
     private func handleToolbarAction(_ action: BrowserToolbarAction) {

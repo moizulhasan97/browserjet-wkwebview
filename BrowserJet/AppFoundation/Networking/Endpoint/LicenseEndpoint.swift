@@ -8,7 +8,7 @@
 import Foundation
 
 enum LicenseEndpoint: EndpointProtocol {
-
+    
     case verifyKey(key: String, pcName: String, macAddress: String)
     case generateKey(email: String, password: String)
     case checkExpiry(String)
@@ -17,13 +17,14 @@ enum LicenseEndpoint: EndpointProtocol {
     case sendEmailToUser(key: String, newPcName: String, newMacAddress: String, email: String, oldPcName: String)
     case updateToDatabase(key: String)
     case forgotPassword(email: String)
-
+    case verifyMac(key: String, macAddress: String)
+    
     var baseURL: URL { APIEnvironment.current.baseURL }
-
+    
     var path: String { "/License.ashx" }
-
+    
     var method: HTTPMethod { .get }
-
+    
     var queryItems: [URLQueryItem]? {
         switch self {
         case .verifyKey(let key, let pcName, let macAddress):
@@ -68,17 +69,25 @@ enum LicenseEndpoint: EndpointProtocol {
                 .init(name: "Email", value: email),
                 .init(name: "machine", value: oldPcName),
             ]
-        
+            
         case .updateToDatabase(let key):
             return [
                 .init(name: "MethodName", value: "UpdateToMac"),
                 .init(name: "UserKey", value: key),
             ]
-
+            
         case .forgotPassword(let email):
             return [
                 .init(name: "Email", value: email),
                 .init(name: "GetKey", value: "Forgot"),
+            ]
+            
+        case .verifyMac(let key, let macAddress):
+            return [
+                .init(name: "MAC", value: macAddress),
+                .init(name: "MethodName", value: "VerifyMac"),
+                .init(name: "Key", value: key),
+                .init(name: "From Mac", value: "True")
             ]
         }
     }

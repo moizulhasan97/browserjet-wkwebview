@@ -103,6 +103,8 @@
 		AF80C5B72F4E724B0064B8FD /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B62F4E72480064B8FD /* Data+Extensions.swift */; };
 		AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */; };
 		AF80C5BD2F4E750E0064B8FD /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5BC2F4E750E0064B8FD /* AppError.swift */; };
+		AF8267132FA9256A0036EFD5 /* BrowserLicenseBackgroundMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8267122FA925670036EFD5 /* BrowserLicenseBackgroundMonitor.swift */; };
+		AF8267152FA94B420036EFD5 /* Time+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8267142FA94B3A0036EFD5 /* Time+Int.swift */; };
 		AF99BFB62F9FDF710096FAE9 /* AppUpdatePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFB52F9FDF6E0096FAE9 /* AppUpdatePolicy.swift */; };
 		AF99BFB92FA002960096FAE9 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = AF99BFB82FA002960096FAE9 /* Sparkle */; };
 		AF99BFBB2FA009B10096FAE9 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFBA2FA009AA0096FAE9 /* Bundle+Version.swift */; };
@@ -246,6 +248,8 @@
 		AF80C5B62F4E72480064B8FD /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeyValueStore.swift; sourceTree = "<group>"; };
 		AF80C5BC2F4E750E0064B8FD /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		AF8267122FA925670036EFD5 /* BrowserLicenseBackgroundMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserLicenseBackgroundMonitor.swift; sourceTree = "<group>"; };
+		AF8267142FA94B3A0036EFD5 /* Time+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time+Int.swift"; sourceTree = "<group>"; };
 		AF99BFB52F9FDF6E0096FAE9 /* AppUpdatePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdatePolicy.swift; sourceTree = "<group>"; };
 		AF99BFBA2FA009AA0096FAE9 /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
 		AF99BFBE2FA00AD70096FAE9 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
@@ -503,6 +507,7 @@
 		AF56EF1E2F3E061300E49C58 /* Int */ = {
 			isa = PBXGroup;
 			children = (
+				AF8267142FA94B3A0036EFD5 /* Time+Int.swift */,
 				AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */,
 			);
 			path = Int;
@@ -530,6 +535,7 @@
 		AF6086482F732CAA003931E2 /* Licensing */ = {
 			isa = PBXGroup;
 			children = (
+				AF8267122FA925670036EFD5 /* BrowserLicenseBackgroundMonitor.swift */,
 				AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */,
 				AF6086492F732CB2003931E2 /* LicenseActivationCoordinator.swift */,
 			);
@@ -1089,6 +1095,7 @@
 				AFE9764C2F5530AC00D270C8 /* ShiftLicenseView.swift in Sources */,
 				AF401AC32F4D1C5B00EF265C /* AppUpdateEndpoint.swift in Sources */,
 				AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */,
+				AF8267132FA9256A0036EFD5 /* BrowserLicenseBackgroundMonitor.swift in Sources */,
 				AF401AC82F4D2C1600EF265C /* LicenseEnums.swift in Sources */,
 				AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */,
 				AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */,
@@ -1159,6 +1166,7 @@
 				AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */,
 				AF56EEFB2F3CFA8E00E49C58 /* BrowserJetDivider.swift in Sources */,
 				AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */,
+				AF8267152FA94B420036EFD5 /* Time+Int.swift in Sources */,
 				AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */,
 				AF401ABD2F4D1BC800EF265C /* LicenseEndpoint.swift in Sources */,
 				AF99BFC92FA27D550096FAE9 /* DatatudePoolConfig.swift in Sources */,
