@@ -26,19 +26,22 @@ enum AppUtils {
     }
     
     static func relaunchApplication() {
-        let appURL = Bundle.main.bundleURL
+        let appPath = Bundle.main.bundlePath
         
         let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-        task.arguments = [appURL.path]
+        task.executableURL = URL(fileURLWithPath: "/bin/sh")
+        task.arguments = [
+            "-c",
+            "sleep 1; /usr/bin/open -n \"$1\"",
+            "relauncher",
+            appPath
+        ]
         
         do {
             try task.run()
-            AppLogger.info("AppUtils: relaunch command sent")
+            NSApplication.shared.terminate(nil)
         } catch {
-            AppLogger.error("AppUtils: failed to relaunch app - \(error.localizedDescription)")
+            AppLogger.error("Failed to relaunch app: \(error.localizedDescription)")
         }
-        
-        NSApplication.shared.terminate(nil)
     }
 }
