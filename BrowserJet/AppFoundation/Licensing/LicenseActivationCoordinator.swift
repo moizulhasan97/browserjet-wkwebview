@@ -50,12 +50,12 @@ final class LicenseActivationCoordinator {
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
 
-        Task { @MainActor in
-            async let gpp: Void = PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
-            async let vpr: Void = VPN1ProxyRepository.shared.refreshFromNetworkIfPossible()
-            await gpp
-            await vpr
-        }
+//        Task { @MainActor in
+//            async let gpp: Void = PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
+//            async let vpr: Void = VPN1ProxyRepository.shared.refreshFromNetworkIfPossible()
+//            await gpp
+//            await vpr
+//        }
 
         await licenseService.updateKeyInBackendIfNeeded(key: key, keyValueStore: keyValueStore)
 
