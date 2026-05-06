@@ -45,6 +45,45 @@ final class RemoteConfigManager: ObservableObject {
         return url
     }
     
+    // MARK: - URL Config Accessors
+    var baseServerURL: String {
+        normalizedURLString(for: .baseServerURL, fallback: "https://service.browserjet.com")
+    }
+    
+    var baseWebURL: String {
+        normalizedURLString(for: .baseWebURL, fallback: "https://browserjet.com")
+    }
+    
+    var updateCardPath: String {
+        normalizedPath(for: .updateCardPath, fallback: "/UpdateCard.aspx")
+    }
+    
+    var buyMoreLicensesPath: String {
+        normalizedPath(for: .buyMoreLicensesPath, fallback: "/MoreLicenses.aspx")
+    }
+    
+    var contactUsPath: String {
+        normalizedPath(for: .contactUsPath, fallback: "/contact")
+    }
+    
+    var twitterURL: String {
+        normalizedURLString(for: .twitterURL, fallback: "https://twitter.com/browserjet")
+    }
+    
+    private func normalizedURLString(for key: RemoteConfigKey, fallback: String) -> String {
+        let raw = string(for: key).trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let url = URL(string: raw), let scheme = url.scheme?.lowercased(), scheme == "https" || scheme == "http" else {
+            return fallback
+        }
+        return raw
+    }
+    
+    private func normalizedPath(for key: RemoteConfigKey, fallback: String) -> String {
+        let raw = string(for: key).trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !raw.isEmpty else { return fallback }
+        return raw.hasPrefix("/") ? raw : "/\(raw)"
+    }
+    
     private init() {
         remoteConfig = RemoteConfig.remoteConfig()
         
@@ -120,6 +159,19 @@ final class RemoteConfigManager: ObservableObject {
             
         case .macOSManualDownloadURL:
             return (AppUtils.macOSManualDownloadURL?.absoluteString ?? "https://browserjet.com/download-file") as NSString
+            
+        case .baseServerURL:
+            return "https://service.browserjet.com" as NSString
+        case .baseWebURL:
+            return "https://browserjet.com" as NSString
+        case .updateCardPath:
+            return "/UpdateCard.aspx" as NSString
+        case .buyMoreLicensesPath:
+            return "/MoreLicenses.aspx" as NSString
+        case .contactUsPath:
+            return "/contact" as NSString
+        case .twitterURL:
+            return "https://twitter.com/browserjet" as NSString
         }
     }
     

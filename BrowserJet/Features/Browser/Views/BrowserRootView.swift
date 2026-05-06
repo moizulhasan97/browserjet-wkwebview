@@ -33,6 +33,17 @@ struct BrowserRootView: View {
     @StateObject private var changeKeyViewModel = ChangeLicenseKeyViewModel()
     @State private var showChangeKeySheet: Bool = false
     @State private var showChangeKeySuccessAlert: Bool = false
+    private let keyValueStore: KeyValueStoring
+    
+    init(
+        state: BrowserWindowState,
+        menu: BrowserMenuBuilder,
+        keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
+    ) {
+        _state = StateObject(wrappedValue: state)
+        self.menu = menu
+        self.keyValueStore = keyValueStore
+    }
     
     var body: some View {
         Group {
@@ -44,6 +55,21 @@ struct BrowserRootView: View {
         }
         .environment(\.appTheme, themeManager.theme(for: colorScheme))
         .environment(\.designSystem, DesignSystem())
+    }
+    
+    private var currentUserEmail: String? {
+        let email = (keyValueStore.object(forKey: StorageKeys.userEmail) as? String)?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let email, !email.isEmpty else { return nil }
+        return email
+    }
+    
+    private func openIfAvailable(_ url: URL?) {
+        guard let url else {
+            AppLogger.warning("More menu URL unavailable")
+            return
+        }
+        open(url)
     }
     
     private var browserMainContent: some View {
@@ -135,13 +161,13 @@ struct BrowserRootView: View {
         if state.isTrialLockActive { return }
         switch item {
         case .paymentCard:
-            open(config.paymentCardURL)
+            openIfAvailable(URLConstants.updateYourCardURL(email: currentUserEmail))
         case .buyLicenses:
-            open(config.buyLicensesURL)
+            openIfAvailable(URLConstants.buyMoreLicensesURL(email: currentUserEmail))
         case .contactUs:
-            open(config.contactUsURL)
+            openIfAvailable(URLConstants.contactUsURL)
         case .twitter:
-            open(config.twitterURL)
+            openIfAvailable(URLConstants.twitterURL)
             
         case .changeKey:
             changeKeyViewModel.reset()

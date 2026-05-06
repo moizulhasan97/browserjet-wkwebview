@@ -98,19 +98,18 @@ enum LicenseEndpoint: EndpointProtocol {
     static func licenseExpiredPaymentURL(email: String) -> URL {
         let base = APIEnvironment.current.baseURL
         var components = URLComponents(url: base.appendingPathComponent("License.ashx"), resolvingAgainstBaseURL: false)
-        let encodedEmail = email.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryValueAllowed) ?? email
         components?.queryItems = [
             URLQueryItem(name: "Method", value: "PayRenewal"),
-            URLQueryItem(name: "Email", value: encodedEmail)
+            URLQueryItem(name: "Email", value: email.trimmingCharacters(in: .whitespacesAndNewlines))
         ]
-        return components?.url ?? base
+        return components?.url ?? base.appendingPathComponent("License.ashx")
     }
 }
 
-private extension CharacterSet {
-    static var urlQueryValueAllowed: CharacterSet {
-        var set = CharacterSet.urlQueryAllowed
-        set.remove(charactersIn: "&+")
-        return set
-    }
-}
+//private extension CharacterSet {
+//    static var urlQueryValueAllowed: CharacterSet {
+//        var set = CharacterSet.urlQueryAllowed
+//        set.remove(charactersIn: "&+")
+//        return set
+//    }
+//}

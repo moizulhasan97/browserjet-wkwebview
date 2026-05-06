@@ -20,6 +20,7 @@
 		AF127D022F9FBA8800EE34E2 /* AppUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127D012F9FBA8200EE34E2 /* AppUtils.swift */; };
 		AF20170C2FAB366F0058705F /* ChangeLicenseKeyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */; };
 		AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */; };
+		AF2017102FAB498E0058705F /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170F2FAB498D0058705F /* URLConstants.swift */; };
 		AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */; };
 		AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */; };
 		AF401AA42F4CD89D00EF265C /* BrowserJetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */; };
@@ -165,6 +166,7 @@
 		AF127D012F9FBA8200EE34E2 /* AppUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
 		AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyViewModel.swift; sourceTree = "<group>"; };
 		AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyView.swift; sourceTree = "<group>"; };
+		AF20170F2FAB498D0058705F /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
 		AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextfieldStyleProtocol.swift; sourceTree = "<group>"; };
 		AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStyleProvider.swift; sourceTree = "<group>"; };
 		AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextField.swift; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 		AF401AB22F4D1A9700EF265C /* Endpoint */ = {
 			isa = PBXGroup;
 			children = (
+				AF20170F2FAB498D0058705F /* URLConstants.swift */,
 				AF401AC22F4D1C5B00EF265C /* AppUpdateEndpoint.swift */,
 				AF401AC02F4D1C3000EF265C /* HTTPMethod.swift */,
 				AF401ABE2F4D1BE900EF265C /* ProxyEndpoint.swift */,
@@ -1131,6 +1134,7 @@
 				AF80C5BD2F4E750E0064B8FD /* AppError.swift in Sources */,
 				AF69F5B02F43716300B33610 /* BrowserToolbarAction.swift in Sources */,
 				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
+				AF2017102FAB498E0058705F /* URLConstants.swift in Sources */,
 				AF99BFC32FA013370096FAE9 /* ForceUpdateGate.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
