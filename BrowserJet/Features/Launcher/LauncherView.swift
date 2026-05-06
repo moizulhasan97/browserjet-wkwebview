@@ -35,8 +35,10 @@ struct LauncherView: View {
     private let config: AppConfiguration
     @StateObject private var viewModel: LauncherViewModel
     @ObservedObject private var premiumRepository = PremiumProxyRepository.shared
+    @ObservedObject private var accountStore = LicenseAccountStore.shared
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
+    
     private var presets: [LauncherTabPreset] {
         config.launcherTabPresets.filter { $0.rawValue <= config.maxBrowserTabs }
     }
@@ -119,7 +121,7 @@ private extension LauncherView {
     }
 
     private var username: some View {
-        Text("Welcome Gabriel")
+        Text("Welcome \(accountStore.username)")
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.title1.font)
     }
