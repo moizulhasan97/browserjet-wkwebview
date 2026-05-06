@@ -30,6 +30,9 @@ struct BrowserRootView: View {
     @EnvironmentObject private var themeManager: ThemeManager
     @Environment(\.colorScheme) private var colorScheme
     @ObservedObject private var forceGate = ForceUpdateGate.shared
+    @StateObject private var changeKeyViewModel = ChangeLicenseKeyViewModel()
+    @State private var showChangeKeySheet: Bool = false
+    @State private var showChangeKeySuccessAlert: Bool = false
     
     var body: some View {
         Group {
@@ -71,6 +74,25 @@ struct BrowserRootView: View {
         .background(AppBackgroundStyle.browserJetGradient.makeView())
         .task {
             await BrowserLicenseBackgroundMonitor.run()
+        }
+        .sheet(isPresented: $showChangeKeySheet) {
+            ChangeLicenseKeyView(viewModel: changeKeyViewModel)
+        }
+        .sheet(isPresented: $showChangeKeySuccessAlert) {
+            InfoAlertView(
+                title: ActivationMessages.ChangeKeySuccess.title,
+                message: ActivationMessages.ChangeKeySuccess.message,
+                buttonTitle: ActivationMessages.okButtonTitle,
+                onDismiss: {
+                    showChangeKeySuccessAlert = false
+                    AppUtils.relaunchApplication()
+                }
+            )
+        }
+        .onChange(of: changeKeyViewModel.didSucceed) { _, didSucceed in
+            guard didSucceed else { return }
+            showChangeKeySheet = false
+            showChangeKeySuccessAlert = true
         }
     }
     
@@ -122,7 +144,8 @@ struct BrowserRootView: View {
             open(config.twitterURL)
             
         case .changeKey:
-            print("MoreMenu: Change Key")
+            changeKeyViewModel.reset()
+            showChangeKeySheet = true
             
         case .about:
             print("MoreMenu: About Browser Jet")

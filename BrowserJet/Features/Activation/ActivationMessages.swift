@@ -90,4 +90,9 @@ Open the dashboard to view your license key.
         static let title = "License Expired"
         static let message = "Your license has expired. You will be redirected to the payment page."
     }
+    
+    enum ChangeKeySuccess {
+        static let title = "Success"
+        static let message = "Congratulations! Your key has been verified successfully"
+    }
 }

@@ -76,4 +76,39 @@ final class LicenseActivationCoordinator {
         }
         return .success
     }
+    
+    func changeLicenseKey(key: String) async throws {
+        let trimmedKey = key.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard ValidationRule.licenseKey.evaluate(trimmedKey) == .valid else {
+            throw AppError.invalidInput
+        }
+        
+        let response = try await licenseService.verifyKey(trimmedKey)
+        
+        guard response.authenticationType == .verified else {
+            throw AppError.notVerified
+        }
+        
+        if let previousKey = keyValueStore.object(forKey: StorageKeys.licenseKey) as? String,
+           previousKey != trimmedKey {
+            await MainActor.run {
+                PremiumProxyRepository.shared.clearForLicenseChange()
+                VPN1ProxyRepository.shared.clearForLicenseChange()
+            }
+        }
+        
+        // Force UpdateToMac retry on next activation/bootstrap cycle after relaunch.
+        keyValueStore.removeObject(forKey: StorageKeys.updateKeyInDatabase)
+        
+        licenseStore.save(response)
+        await MainActor.run {
+            LicenseAccountStore.shared.refresh()
+        }
+        
+        keyValueStore.set(trimmedKey, forKey: StorageKeys.licenseKey)
+        keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
+        
+        AppLogger.info("LicenseActivationCoordinator: change key successful, relaunch required")
+    }
 }
