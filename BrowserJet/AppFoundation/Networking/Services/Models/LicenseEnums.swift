@@ -19,3 +19,25 @@ enum UserStatus: String {
     case active   = "active"
     case rejected = "rejected"
 }
+
+enum SubscriptionTier: String, Codable {
+    case basic
+    case pro
+    case unknown
+    
+    static func fromBackend(rawValue: String, userKind: UserKind) -> SubscriptionTier {
+        let normalized = rawValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        switch normalized {
+        case "lite":
+            return .basic
+            
+        case "":
+            // empty means Pro for paid users.
+            return userKind == .paid ? .pro : .unknown
+            
+        default:
+            // Includes 5Tab and any unknown future value.
+            return .unknown
+        }
+    }
+}
