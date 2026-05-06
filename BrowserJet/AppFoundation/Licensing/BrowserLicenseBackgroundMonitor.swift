@@ -9,10 +9,10 @@ import AppKit
 
 enum BrowserLicenseBackgroundMonitor {
     
-    private static let verifyKeyPollInterval: UInt64 = 10.seconds
-    private static let checkExpiryPollInterval: UInt64 = 30.minutes
-    private static let macFailureTerminateDelay: UInt64 = 10.seconds
-    private static let keyExpiredTerminateDelay: UInt64 = 30.minutes
+//    private static let verifyKeyPollInterval: UInt64 = 10.seconds
+//    //private static let checkExpiryPollInterval: UInt64 = 10.seconds //30.minutes
+//    private static let macFailureTerminateDelay: UInt64 = 10.seconds
+//    private static let keyExpiredTerminateDelay: UInt64 = 30.minutes
     
     static func run(
         licenseService: LicenseService = LicenseService(),
@@ -29,19 +29,19 @@ enum BrowserLicenseBackgroundMonitor {
             return
         }
         
-        await withTaskGroup(of: Void.self) { group in
-            group.addTask {
+            //await withTaskGroup(of: Void.self) { group in
+            //group.addTask {
                 await verifyKeyPollLoop(
                     key: key,
                     licenseService: licenseService,
                     licenseStore: licenseStore,
                     keyValueStore: keyValueStore
                 )
-            }
-            group.addTask {
-                await checkExpiryPollLoop(key: key, licenseService: licenseService)
-            }
-        }
+            //}
+//            group.addTask {
+//                await checkExpiryPollLoop(key: key, licenseService: licenseService)
+//            }
+                //}
     }
     
     private static func trimmedLicenseKey(from store: KeyValueStoring) -> String? {
@@ -58,10 +58,17 @@ enum BrowserLicenseBackgroundMonitor {
     ) async {
         while !Task.isCancelled {
             do {
-                try await Task.sleep(nanoseconds: verifyKeyPollInterval)
+                try await Task.sleep(nanoseconds: AppGraceShutdown.Timing.verifyKeyPollInterval)
                 let response = try await licenseService.verifyKey(key)
                 if response.userStatus == .rejected {
                     await presentMacVerificationFailedAndQuit()
+                    return
+                }
+                // TODO: - Remove this after confirming with Ebad bhai
+                let now = Date()
+                if Self.isAccessExpiredForBackground(response: response, referenceNow: now) {
+                    AppLogger.info("BrowserLicenseBackgroundMonitor: access expired per VerifyKeyResponse")
+                    await presentKeyExpiredAndQuit()
                     return
                 }
                 licenseStore.save(response)
@@ -76,45 +83,55 @@ enum BrowserLicenseBackgroundMonitor {
         }
     }
     
-    private static func checkExpiryPollLoop(key: String, licenseService: LicenseService) async {
-        while !Task.isCancelled {
-            do {
-                try await Task.sleep(nanoseconds: checkExpiryPollInterval)
-                let expired = try await licenseService.checkKeyExpiry(key)
-                if expired {
-                    await presentKeyExpiredAndQuit()
-                    return
-                }
-            } catch is CancellationError {
-                return
-            } catch {
-                AppLogger.warning("BrowserLicenseBackgroundMonitor: checkKeyExpiry poll failed — \(error.localizedDescription)")
-            }
-        }
-    }
+//    private static func checkExpiryPollLoop(key: String, licenseService: LicenseService) async {
+//        while !Task.isCancelled {
+//            do {
+//                try await Task.sleep(nanoseconds: checkExpiryPollInterval)
+//                let expired = try await licenseService.checkKeyExpiry(key)
+//                if expired {
+//                    await presentKeyExpiredAndQuit()
+//                    return
+//                }
+//            } catch is CancellationError {
+//                return
+//            } catch {
+//                AppLogger.warning("BrowserLicenseBackgroundMonitor: checkKeyExpiry poll failed — \(error.localizedDescription)")
+//            }
+//        }
+//    }
     
     @MainActor
     private static func presentMacVerificationFailedAndQuit() async {
         let alert = NSAlert()
-        alert.messageText = "BrowserJet"
-        alert.informativeText = AppError.keyMacVerificationFailed.errorDescription ?? ""
+        alert.messageText = AppGraceShutdown.alertTitle
+        alert.informativeText = AppGraceShutdown.macMismatchQuitMessage()
         alert.alertStyle = .critical
         alert.addButton(withTitle: "OK")
         alert.runModal()
-        try? await Task.sleep(nanoseconds: macFailureTerminateDelay)
+        try? await Task.sleep(nanoseconds: AppGraceShutdown.Timing.macMismatchQuit)
         NSApplication.shared.terminate(nil)
     }
     
     @MainActor
     private static func presentKeyExpiredAndQuit() async {
         let alert = NSAlert()
-        alert.messageText = "BrowserJet"
-        alert.informativeText =
-        "Your key has expired. Please save your work as BrowserJet will close in 30 minutes."
+        alert.messageText = AppGraceShutdown.alertTitle
+        alert.informativeText = AppGraceShutdown.keyExpiredQuitMessage(forDelayNanoseconds: AppGraceShutdown.Timing.keyExpiredQuit)
         alert.alertStyle = .informational
         alert.addButton(withTitle: "OK")
         alert.runModal()
-        try? await Task.sleep(nanoseconds: keyExpiredTerminateDelay)
+        try? await Task.sleep(nanoseconds: AppGraceShutdown.Timing.keyExpiredQuit)
         NSApplication.shared.terminate(nil)
+    }
+    
+    private static func isAccessExpiredForBackground(response: VerifyKeyResponse, referenceNow: Date) -> Bool {
+        guard response.authenticationType == .verified else { return false }
+        guard response.userStatus == .active else { return false }
+        switch response.userKind {
+        case .trial:
+            return response.has5TabTrialCode || response.isTrialAccessExpiredByProxyDate(referenceNow: referenceNow)
+        case .paid:
+            return response.isUserLicenseExpired(referenceNow: referenceNow)
+        }
     }
 }
