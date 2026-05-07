@@ -16,9 +16,13 @@ struct LoadingOverlayView: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.18)
-                .ignoresSafeArea()
-                .allowsHitTesting(true)
+            ZStack {
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+                theme.accent.opacity(0.06) // tune 0.2–0.5
+            }
+            .ignoresSafeArea()
+            .allowsHitTesting(true)
 
             VStack(spacing: 12) {
                 ProgressView()
