@@ -24,3 +24,12 @@ struct TextBody2: Typography {
         .sfPro(weight: .regular)
     }
 }
+
+struct TextCaption: Typography {
+    var size: CGFloat {
+        11.0
+    }
+    var fontProvider: FontProvider {
+        .sfPro(weight: .regular)
+    }
+}

@@ -158,6 +158,13 @@ struct BrowserRootView: View {
     }
     
     private func handleMoreMenuItem(_ item: BrowserMoreMenuItem) {
+        if item == .about {
+            AboutBrowserJetWindowController.shared.show(
+                themeManager: themeManager,
+                colorScheme: colorScheme
+            )
+            return
+        }
         if state.isTrialLockActive { return }
         switch item {
         case .paymentCard:
@@ -168,13 +175,13 @@ struct BrowserRootView: View {
             openIfAvailable(URLConstants.contactUsURL)
         case .twitter:
             openIfAvailable(URLConstants.twitterURL)
-            
+
         case .changeKey:
             changeKeyViewModel.reset()
             showChangeKeySheet = true
-            
+
         case .about:
-            print("MoreMenu: About Browser Jet")
+            break
         }
     }
     

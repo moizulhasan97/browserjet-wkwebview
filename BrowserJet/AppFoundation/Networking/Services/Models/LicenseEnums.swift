@@ -41,3 +41,25 @@ enum SubscriptionTier: String, Codable {
         }
     }
 }
+
+extension SubscriptionTier {
+    
+    /// UI label for Customer Plans ("Captain - Lite" / "Captain - Pro").
+    var captainPlanMarketingLine: String {
+        switch self {
+        case .pro: return "Captain - Pro"
+        default: return "Captain - Lite"
+        }
+    }
+    
+    /// `.unknown` maps to Pro only for paid users; otherwise Lite
+    func captainPlanMarketingLine(resolvingUnknownUserKind kind: UserKind) -> String {
+        switch self {
+        case .basic, .pro:
+            return captainPlanMarketingLine
+        case .unknown:
+            return kind == .paid ? SubscriptionTier.pro.captainPlanMarketingLine
+            : SubscriptionTier.basic.captainPlanMarketingLine
+        }
+    }
+}

@@ -21,6 +21,9 @@
 		AF20170C2FAB366F0058705F /* ChangeLicenseKeyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */; };
 		AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */; };
 		AF2017102FAB498E0058705F /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170F2FAB498D0058705F /* URLConstants.swift */; };
+		AF2017132FABFD380058705F /* AboutBrowserJetDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2017122FABFD360058705F /* AboutBrowserJetDisplayModel.swift */; };
+		AF2017152FABFDA00058705F /* AboutBrowserJetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2017142FABFD9F0058705F /* AboutBrowserJetView.swift */; };
+		AF2017172FABFDBE0058705F /* AboutBrowserJetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2017162FABFDBC0058705F /* AboutBrowserJetWindowController.swift */; };
 		AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */; };
 		AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */; };
 		AF401AA42F4CD89D00EF265C /* BrowserJetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */; };
@@ -167,6 +170,9 @@
 		AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyViewModel.swift; sourceTree = "<group>"; };
 		AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyView.swift; sourceTree = "<group>"; };
 		AF20170F2FAB498D0058705F /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
+		AF2017122FABFD360058705F /* AboutBrowserJetDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBrowserJetDisplayModel.swift; sourceTree = "<group>"; };
+		AF2017142FABFD9F0058705F /* AboutBrowserJetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBrowserJetView.swift; sourceTree = "<group>"; };
+		AF2017162FABFDBC0058705F /* AboutBrowserJetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBrowserJetWindowController.swift; sourceTree = "<group>"; };
 		AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextfieldStyleProtocol.swift; sourceTree = "<group>"; };
 		AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStyleProvider.swift; sourceTree = "<group>"; };
 		AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextField.swift; sourceTree = "<group>"; };
@@ -346,6 +352,16 @@
 				AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */,
 			);
 			path = ChangeKey;
+			sourceTree = "<group>";
+		};
+		AF2017112FABFD2A0058705F /* About */ = {
+			isa = PBXGroup;
+			children = (
+				AF2017162FABFDBC0058705F /* AboutBrowserJetWindowController.swift */,
+				AF2017142FABFD9F0058705F /* AboutBrowserJetView.swift */,
+				AF2017122FABFD360058705F /* AboutBrowserJetDisplayModel.swift */,
+			);
+			path = About;
 			sourceTree = "<group>";
 		};
 		AF401A9E2F4CC73F00EF265C /* TextFields */ = {
@@ -558,6 +574,7 @@
 		AF69F5AA2F4370BF00B33610 /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				AF2017112FABFD2A0058705F /* About */,
 				AF20170A2FAB36640058705F /* ChangeKey */,
 				AF69F5D02F437A3100B33610 /* State */,
 				AF69F5B62F4372BA00B33610 /* Components */,
@@ -1110,6 +1127,7 @@
 				AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */,
 				AFE9764C2F5530AC00D270C8 /* ShiftLicenseView.swift in Sources */,
 				AF401AC32F4D1C5B00EF265C /* AppUpdateEndpoint.swift in Sources */,
+				AF2017172FABFDBE0058705F /* AboutBrowserJetWindowController.swift in Sources */,
 				AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */,
 				AF8267132FA9256A0036EFD5 /* BrowserLicenseBackgroundMonitor.swift in Sources */,
 				AF401AC82F4D2C1600EF265C /* LicenseEnums.swift in Sources */,
@@ -1195,8 +1213,10 @@
 				AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */,
 				AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */,
 				AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */,
+				AF2017152FABFDA00058705F /* AboutBrowserJetView.swift in Sources */,
 				AF99BFBF2FA00AD90096FAE9 /* CheckForUpdatesView.swift in Sources */,
 				AF69F5E32F43A32100B33610 /* LauncherSettings+LaunchRequest.swift in Sources */,
+				AF2017132FABFD380058705F /* AboutBrowserJetDisplayModel.swift in Sources */,
 				AF99BFC52FA013500096FAE9 /* ForceUpdateBlockingOverlay.swift in Sources */,
 				AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */,
 				AFCA5CF42F75BC4C007A8578 /* DecryptedPremiumProxy.swift in Sources */,

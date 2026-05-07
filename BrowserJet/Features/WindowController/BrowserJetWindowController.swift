@@ -25,6 +25,7 @@ extension ShowableWindowController {
 
 final class BrowserJetWindowController<Content: View>: NSWindowController, ShowableWindowController {
     convenience init(
+        titledWindowTitle: String? = nil,
         content: Content,
         size: NSSize,
         titleBarHidden: Bool = true,
@@ -67,8 +68,13 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
             }
         }
 
-        window.title = ""
-        window.titleVisibility = .hidden
+        if let titledWindowTitle {
+            window.title = titledWindowTitle
+            window.titleVisibility = .visible
+        } else {
+            window.title = ""
+            window.titleVisibility = .hidden
+        }
         window.titlebarAppearsTransparent = borderlessChrome
         window.isMovableByWindowBackground = borderlessChrome
 
@@ -134,7 +140,9 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
 
-        if let window, !window.styleMask.contains(.borderless) {
+        if let window,
+           !window.styleMask.contains(.borderless),
+           window.styleMask.contains(.resizable) {
             window.zoom(nil)
         }
 
