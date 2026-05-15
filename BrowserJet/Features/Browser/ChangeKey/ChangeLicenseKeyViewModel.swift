@@ -15,10 +15,10 @@ final class ChangeLicenseKeyViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var didSucceed: Bool = false
     @Published var sameKeyMessage: String?
-    
+
     private let keyValueStore: KeyValueStoring
     private let coordinator: LicenseActivationCoordinator
-    
+
     init(
         coordinator: LicenseActivationCoordinator = LicenseActivationCoordinator(),
         keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
@@ -26,7 +26,7 @@ final class ChangeLicenseKeyViewModel: ObservableObject {
         self.coordinator = coordinator
         self.keyValueStore = keyValueStore
     }
-    
+
     func reset() {
         licenseKey = ""
         licenseKeyValidation = .none
@@ -35,25 +35,25 @@ final class ChangeLicenseKeyViewModel: ObservableObject {
         sameKeyMessage = nil
         didSucceed = false
     }
-    
+
     func submit() {
         onLicenseKeyChanged()
-        
+
         guard canSubmit else {
             if isSameAsCurrentKey {
                 errorMessage = nil
             }
             return
         }
-        
+
         let key = licenseKey.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+
         Task {
             isLoading = true
             errorMessage = nil
             didSucceed = false
             defer { isLoading = false }
-            
+
             do {
                 try await coordinator.changeLicenseKey(key: key)
                 didSucceed = true
@@ -62,24 +62,24 @@ final class ChangeLicenseKeyViewModel: ObservableObject {
             }
         }
     }
-    
+
     private var normalizedInputKey: String {
         licenseKey.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
     }
-    
+
     private var normalizedStoredKey: String {
         let raw = keyValueStore.object(forKey: StorageKeys.licenseKey) as? String ?? ""
         return raw.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
     }
-    
+
     private var isSameAsCurrentKey: Bool {
         !normalizedInputKey.isEmpty && normalizedInputKey == normalizedStoredKey
     }
-    
+
     var canSubmit: Bool {
         licenseKeyValidation == .valid && !isLoading && !isSameAsCurrentKey
     }
-    
+
     func onLicenseKeyChanged() {
         if isSameAsCurrentKey {
             sameKeyMessage = "You entered your current key. Please enter a different key."

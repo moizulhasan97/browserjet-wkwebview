@@ -5,7 +5,7 @@
 //  Created by Moiz Ul Hasan on 19/02/2026.
 //
 
-//enum VPNConfigurationLayout: Hashable {
+// enum VPNConfigurationLayout: Hashable {
 //    /// IP list × port list × username strategy (e.g. VPN1 metadata / non-datatude pools).
 //    case multiSlotZip(
 //        //baseIP: String,
@@ -76,12 +76,12 @@
 //            hasher.combine("custom")
 //        }
 //    }
-//}
+// }
 
 enum VPNConfigurationLayout: Hashable {
     /// Proxies come from a remote API e.g., VPN1
     case remoteManaged
-    
+
     /// Local: zip IP list × port list × username strategy.
     case multiSlotZip(
         password: String,
@@ -89,65 +89,68 @@ enum VPNConfigurationLayout: Hashable {
         ipGenerationConfig: IPGenerationConfig,
         usernameStrategy: UsernameGenerationStrategy
     )
-    
+
     /// Local: single host:port + password; usernames from counter + region at runtime.
     case datatude(DatatudePoolConfig)
-    
+
     func hash(into hasher: inout Hasher) {
         switch self {
         case .remoteManaged:
             hasher.combine("remoteManaged")
-        case .multiSlotZip(let password, let portGen, let ipGen, let usernameStrategy):
+        case let .multiSlotZip(password, portGen, ipGen, usernameStrategy):
             hasher.combine("multi")
             hasher.combine(password)
             hasher.combine(portGen)
             hasher.combine(ipGen)
             Self.hashUsernameStrategy(usernameStrategy, into: &hasher)
-        case .datatude(let pool):
+        case let .datatude(pool):
             hasher.combine("datatude")
             hasher.combine(pool)
         }
     }
-    
+
     static func == (lhs: VPNConfigurationLayout, rhs: VPNConfigurationLayout) -> Bool {
         switch (lhs, rhs) {
         case (.remoteManaged, .remoteManaged):
             return true
-        case (
-            .multiSlotZip(let p1, let pp1, let i1, let u1),
-            .multiSlotZip(let p2, let pp2, let i2, let u2)
+        case let (
+            .multiSlotZip(lhsPassword, lhsPortConfig, lhsIPConfig, lhsUsernameStrategy),
+            .multiSlotZip(rhsPassword, rhsPortConfig, rhsIPConfig, rhsUsernameStrategy)
         ):
-            return p1 == p2 && pp1 == pp2 && i1 == i2
-            && Self.usernameStrategyMatches(u1, u2)
-        case (.datatude(let a), .datatude(let b)):
-            return a == b
+            return lhsPassword == rhsPassword
+                && lhsPortConfig == rhsPortConfig
+                && lhsIPConfig == rhsIPConfig
+                && Self.usernameStrategyMatches(lhsUsernameStrategy, rhsUsernameStrategy)
+        case let (.datatude(lhsPool), .datatude(rhsPool)):
+            return lhsPool == rhsPool
         default:
             return false
         }
     }
-    
+
     private static func usernameStrategyMatches(
-        _ a: UsernameGenerationStrategy,
-        _ b: UsernameGenerationStrategy
+        _ lhs: UsernameGenerationStrategy,
+        _ rhs: UsernameGenerationStrategy
     ) -> Bool {
-        switch (a, b) {
-        case (.static(let x), .static(let y)): return x == y
-        case (.sequential(let x, let xi), .sequential(let y, let yi)):
-            return x == y && xi == yi
+        switch (lhs, rhs) {
+        case let (.static(lhsUsername), .static(rhsUsername)):
+            return lhsUsername == rhsUsername
+        case let (.sequential(lhsBase, lhsStartIndex), .sequential(rhsBase, rhsStartIndex)):
+            return lhsBase == rhsBase && lhsStartIndex == rhsStartIndex
         case (.custom, .custom): return true
         default: return false
         }
     }
-    
+
     private static func hashUsernameStrategy(
         _ strategy: UsernameGenerationStrategy,
         into hasher: inout Hasher
     ) {
         switch strategy {
-        case .static(let username):
+        case let .static(username):
             hasher.combine("static")
             hasher.combine(username)
-        case .sequential(let base, let startIndex):
+        case let .sequential(base, startIndex):
             hasher.combine("sequential")
             hasher.combine(base)
             hasher.combine(startIndex)
@@ -161,13 +164,13 @@ struct VPNConfiguration: Identifiable, Hashable {
     let id: String
     let displayName: String
     let layout: VPNConfigurationLayout
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(displayName)
         hasher.combine(layout)
     }
-    
+
     static func == (lhs: VPNConfiguration, rhs: VPNConfiguration) -> Bool {
         lhs.id == rhs.id && lhs.displayName == rhs.displayName && lhs.layout == rhs.layout
     }

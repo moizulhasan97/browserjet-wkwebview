@@ -5,12 +5,10 @@
 //  Created by Moiz Ul Hasan on 24/02/2026.
 //
 
-
 import Foundation
 import IOKit
 
 enum SystemInfo {
-
     /// Falls back to the hostname if the display name is unavailable.
     static func currentComputerName() -> String {
         Host.current().localizedName ?? ProcessInfo.processInfo.hostName

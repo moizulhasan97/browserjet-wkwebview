@@ -5,9 +5,7 @@
 //  Created by Moiz Ul Hasan on 12/02/2026.
 //
 
-enum RegionType: String,
-                 CaseIterable,
-                 Hashable {
+enum RegionType: String, CaseIterable, Hashable {
     // swiftlint:disable:next identifier_name
     case uk = "UK"
     // swiftlint:disable:next identifier_name
@@ -17,7 +15,6 @@ enum RegionType: String,
 }
 
 extension RegionType {
-    
     /// For vpn2
     var datatudeRegionSlug: String {
         switch self {

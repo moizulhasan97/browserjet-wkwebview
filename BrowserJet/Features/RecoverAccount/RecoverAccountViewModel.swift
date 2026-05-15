@@ -13,17 +13,17 @@ final class RecoverAccountViewModel: ObservableObject {
     @Published var emailValidation: RegexValidationState = .none
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-    
+
     private let licenseService: LicenseService
-    
+
     init(licenseService: LicenseService = LicenseService()) {
         self.licenseService = licenseService
     }
-    
+
     var canContinue: Bool {
         emailValidation == .valid
     }
-    
+
     func submit() async -> Bool {
         let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines)
         guard ValidationRule.email.evaluate(trimmed) == .valid else { return false }

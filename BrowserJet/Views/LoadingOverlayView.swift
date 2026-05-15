@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct LoadingOverlayView: View {
-    @Environment(\.appTheme) private var theme
-    @Environment(\.designSystem) private var designSystem
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.designSystem)
+    private var designSystem
 
     // optional label underneath the spinner
-    var message: String? = nil
+    var message: String?
 
     var body: some View {
         ZStack {
@@ -50,7 +52,6 @@ struct LoadingOverlayView: View {
 // MARK: - Previews
 #Preview("Spinner – Variants") {
     HStack(spacing: 32) {
-
         // Spinner only
         VStack(spacing: 12) {
             Text("No message")

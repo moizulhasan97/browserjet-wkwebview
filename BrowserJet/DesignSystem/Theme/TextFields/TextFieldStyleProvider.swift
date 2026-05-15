@@ -23,9 +23,7 @@ struct ThemeTextFieldStyleProvider: TextFieldStyleProvider {
         viewConfig: any ViewConfig,
         theme: any AppTheme
     ) -> any BrowserJetTextFieldStyleProtocol {
-
         switch type {
-
         case .launcherAddress:
             return BrowserJetTextFieldStyle(
                 height: DesignMetrics.launcherAddressFieldHeight,

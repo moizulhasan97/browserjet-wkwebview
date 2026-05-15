@@ -9,9 +9,10 @@ import SwiftUI
 
 // MARK: - Root
 struct ActivationWindowRoot: View {
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorScheme)
+    private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
-    
+
     var body: some View {
         ActivationRootView()
             .environment(\.appTheme, themeManager.theme(for: colorScheme))
@@ -31,36 +32,39 @@ private enum ActivationRootViewConstants {
 // MARK: - View
 
 struct ActivationRootView: View {
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
-    @Environment(\.appConfiguration) private var appConfiguration: AppConfiguration
-    
+    @Environment(\.appConfiguration)
+    private var appConfiguration: AppConfiguration
+
     @StateObject private var viewModel = ActivationViewModel()
-    
+
     private let keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
-    
+
     @State private var showShiftSuccessAlert: Bool = false
     @State private var showVerificationSuccessAlert: Bool = false
     @State private var paymentAlert: PaymentAlertItem?
-    
+
     private typealias Constants = ActivationRootViewConstants
-    
+
     var body: some View {
         VStack(spacing: Constants.mainVStackSpacing) {
             header
-            
+
             CardContainer {
                 VStack(spacing: Constants.cardVStackSpacing) {
                     activationSection
-                    
+
                     orDivider
-                    
+
                     registrationSection
-                    
+
                     recoverAccountButton
-                    
+
                     feedbackMessage
                 }
             }
@@ -78,15 +82,14 @@ struct ActivationRootView: View {
             },
             set: { if !$0 { viewModel.verifyOutcome = nil } }
         )) {
-            if case .shiftRequired(let key, let email) = viewModel.verifyOutcome {
+            if case let .shiftRequired(key, email) = viewModel.verifyOutcome {
                 ShiftLicenseView(
                     key: key,
-                    email: email,
-                    onShiftSucceeded: {
-                        viewModel.verifyOutcome = nil
-                        showShiftSuccessAlert = true
-                    }
-                )
+                    email: email
+                ) {
+                    viewModel.verifyOutcome = nil
+                    showShiftSuccessAlert = true
+                }
                 .id("\(key)|\(email)")
             }
         }
@@ -94,84 +97,82 @@ struct ActivationRootView: View {
             InfoAlertView(
                 title: ActivationMessages.ShiftSuccess.title,
                 message: ActivationMessages.ShiftSuccess.message,
-                buttonTitle: ActivationMessages.okButtonTitle,
-                onDismiss: {
-                    showShiftSuccessAlert = false
-                    
-                    let raw = keyValueStore.object(forKey: StorageKeys.licenseKey) as? String ?? ""
-                    let key = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-                    
-                    viewModel.completeShiftAndRetryVerify(key: key)
-                }
-            )
+                buttonTitle: ActivationMessages.okButtonTitle
+            ) {
+                showShiftSuccessAlert = false
+
+                let raw = keyValueStore.object(forKey: StorageKeys.licenseKey) as? String ?? ""
+                let key = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                viewModel.completeShiftAndRetryVerify(key: key)
+            }
         }
         .sheet(isPresented: $showVerificationSuccessAlert) {
             InfoAlertView(
                 title: ActivationMessages.VerificationSuccess.title,
                 message: ActivationMessages.VerificationSuccess.message,
-                buttonTitle: ActivationMessages.okButtonTitle,
-                onDismiss: {
-                    showVerificationSuccessAlert = false
-                    
-                    WindowManager.shared.dismissActivationAndShowLauncher(
-                        themeManager: themeManager,
-                        sessionManager: sessionManager,
-                        appConfiguration: appConfiguration
-                    )
-                }
-            )
+                buttonTitle: ActivationMessages.okButtonTitle
+            ) {
+                showVerificationSuccessAlert = false
+
+                WindowManager.shared.dismissActivationAndShowLauncher(
+                    themeManager: themeManager,
+                    sessionManager: sessionManager,
+                    appConfiguration: appConfiguration
+                )
+            }
         }
         .sheet(item: $paymentAlert) { alert in
             InfoAlertView(
                 title: alert.title,
                 message: alert.message,
-                buttonTitle: ActivationMessages.okButtonTitle,
-                onDismiss: {
-                    paymentAlert = nil
-                    
-                    WindowManager.shared.showBrowserForTrialExpired(
-                        paymentURL: alert.url,
-                        themeManager: themeManager,
-                        sessionManager: sessionManager,
-                        appConfiguration: appConfiguration
-                    )
-                }
-            )
+                buttonTitle: ActivationMessages.okButtonTitle
+            ) {
+                paymentAlert = nil
+
+                WindowManager.shared.showBrowserForTrialExpired(
+                    paymentURL: alert.url,
+                    themeManager: themeManager,
+                    sessionManager: sessionManager,
+                    appConfiguration: appConfiguration
+                )
+            }
         }
-        .sheet(isPresented: $viewModel.showRecoverAccountSheet, onDismiss: {
-            viewModel.showRecoverAccountSheet = false
-        }) {
-            RecoverAccountView()
-                .environment(\.appTheme, theme)
-                .environment(\.designSystem, designSystem)
-        }
+        .sheet(
+            isPresented: $viewModel.showRecoverAccountSheet,
+            onDismiss: { viewModel.showRecoverAccountSheet = false },
+            content: {
+                RecoverAccountView()
+                    .environment(\.appTheme, theme)
+                    .environment(\.designSystem, designSystem)
+            }
+        )
     }
 }
 
 // MARK: - Subviews
 
 private extension ActivationRootView {
-    
     var header: some View {
         VStack(alignment: .leading, spacing: Constants.titleSubtitleVStackSpacing) {
             Text(ActivationMessages.welcomeTitle)
                 .foregroundStyle(theme.textPrimary)
                 .font(designSystem.typography.title1.font)
-            
+
             Text("Activate your license or create a new key to continue")
                 .foregroundStyle(theme.textFieldSecondary)
                 .font(designSystem.typography.textBody1.font)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     var activationSection: some View {
         VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
             sectionHeader(
                 title: "Already have a license key?",
                 subtitle: "Enter your key below to activate Browser Jet."
             )
-            
+
             BrowserJetTextField(
                 type: .activationField,
                 title: ActivationMessages.enterYourKeyTitle,
@@ -180,7 +181,7 @@ private extension ActivationRootView {
                 rule: .licenseKey,
                 validationState: $viewModel.licenseKeyValidation
             )
-            
+
             BrowserJetAppButton(
                 title: ActivationMessages.Mode.verifyButton,
                 type: .primaryLarge,
@@ -193,14 +194,14 @@ private extension ActivationRootView {
             .animation(.easeInOut(duration: 0.2), value: viewModel.canVerifyKey)
         }
     }
-    
+
     var registrationSection: some View {
         VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
             sectionHeader(
                 title: "New user?",
                 subtitle: "Create a key using your email and password."
             )
-            
+
             VStack(spacing: Constants.fieldSpacing) {
                 BrowserJetTextField(
                     type: .activationField,
@@ -210,7 +211,7 @@ private extension ActivationRootView {
                     rule: ValidationRule.email,
                     validationState: $viewModel.emailValidation
                 )
-                
+
                 BrowserJetTextField(
                     type: .activationField,
                     title: ActivationMessages.passwordTitle,
@@ -221,7 +222,7 @@ private extension ActivationRootView {
                     validationState: $viewModel.passwordValidation
                 )
             }
-            
+
             BrowserJetAppButton(
                 title: ActivationMessages.Mode.createKeyButton,
                 type: .primaryLarge,
@@ -234,32 +235,32 @@ private extension ActivationRootView {
             .animation(.easeInOut(duration: 0.2), value: viewModel.canCreateKey)
         }
     }
-    
+
     var orDivider: some View {
         HStack(spacing: 12) {
             BrowserJetDivider()
-            
+
             Text("OR")
                 .foregroundStyle(theme.textFieldSecondary)
                 .font(designSystem.typography.textBody2.font)
-            
+
             BrowserJetDivider()
         }
     }
-    
+
     func sectionHeader(title: String, subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .foregroundStyle(theme.textPrimary)
                 .font(designSystem.typography.textBody1.font)
-            
+
             Text(subtitle)
                 .foregroundStyle(theme.textFieldSecondary)
                 .font(designSystem.typography.textBody2.font)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     var recoverAccountButton: some View {
         Button {
             viewModel.forgotPasswordTapped()
@@ -272,9 +273,8 @@ private extension ActivationRootView {
         .frame(maxWidth: .infinity, alignment: .trailing)
         .padding(.top, 2)
     }
-    
-    @ViewBuilder
-    var feedbackMessage: some View {
+
+    @ViewBuilder var feedbackMessage: some View {
         if let msg = viewModel.errorMessage {
             Text(msg)
                 .foregroundStyle(theme.danger)
@@ -288,18 +288,17 @@ private extension ActivationRootView {
 // MARK: - Actions
 
 private extension ActivationRootView {
-    
     func handleVerifyOutcome(_ outcome: VerifyOutcome?) {
         guard let outcome else { return }
-        
+
         switch outcome {
         case .success:
             viewModel.verifyOutcome = nil
             showVerificationSuccessAlert = true
-            
+
         case .shiftRequired:
             break
-            
+
         case .trialExpired(let url):
             viewModel.verifyOutcome = nil
             paymentAlert = PaymentAlertItem(
@@ -307,7 +306,7 @@ private extension ActivationRootView {
                 message: ActivationMessages.TrialExpired.message,
                 url: url
             )
-            
+
         case .licenseExpired(let url):
             viewModel.verifyOutcome = nil
             paymentAlert = PaymentAlertItem(

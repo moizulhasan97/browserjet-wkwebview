@@ -34,7 +34,7 @@ protocol AppTheme {
     // MARK: - Badge
     var badgeBackground: Color { get }
     var badgeText: Color { get }
-    
+
     // MARK: - Error
     var danger: Color { get }
 }

@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 17/02/2026.
 //
 
-
 import Foundation
 
 struct LaunchRequest: Hashable {
@@ -15,7 +14,7 @@ struct LaunchRequest: Hashable {
     let isolationMode: SessionIsolationMode
     let userAgent: String?
     let selectedVPN: VPNType?
-    
+
     init(
         address: String,
         numberOfTabs: Int,

@@ -17,7 +17,6 @@ protocol AuthProxyProvider {
 }
 
 final class ProxyPoolService {
-
     private var provider: AuthProxyProvider?
     private var pool: [AuthProxy] = []
     private var rotation: ProxyRotationType = .linear
@@ -76,7 +75,7 @@ final class ProxyPoolService {
 
     private func ensureAssignedCapacity(upTo slot: Int) {
         if slot >= assigned.count {
-            assigned.append(contentsOf: Array<AuthProxy?>(repeating: nil, count: slot - assigned.count + 1))
+            assigned.append(contentsOf: [AuthProxy?](repeating: nil, count: slot - assigned.count + 1))
         }
     }
 

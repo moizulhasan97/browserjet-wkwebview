@@ -5,10 +5,9 @@
 //  Created by Moiz Ul Hasan on 20/02/2026.
 //
 
-
 import SwiftUI
 
-//struct DuplicateTabsPopoverView: View {
+// struct DuplicateTabsPopoverView: View {
 //    let maxCount: Int
 //    let onConfirm: (Int) -> Void
 //
@@ -38,11 +37,13 @@ import SwiftUI
 //        .padding(20)
 //        .frame(width: 220)
 //    }
-//}
+// }
 
 struct DuplicateTabsPopoverView: View {
-    @Environment(\.appTheme) private var theme
-    @Environment(\.appConfiguration) private var config
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.appConfiguration)
+    private var config
 
     @State private var selectedCount: Int = 2
     let onConfirm: (Int) -> Void

@@ -54,7 +54,6 @@ struct BrowserJetAppButton: View {
     }
 }
 
-
 // MARK: - HuntingButtonStyle
 struct BrowserJetButtonStyle: ButtonStyle {
     enum ButtonType: Equatable {
@@ -63,8 +62,10 @@ struct BrowserJetButtonStyle: ButtonStyle {
         case destructivePrimaryLarge
     }
 
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
 
     let width: CustomWidth
     let type: ButtonType

@@ -11,30 +11,30 @@ enum AuthenticationType: String {
 }
 
 enum UserKind: String {
-    case paid  = "paid"
-    case trial = "trial"
+    case paid
+    case trial
 }
 
 enum UserStatus: String {
-    case active   = "active"
-    case rejected = "rejected"
+    case active
+    case rejected
 }
 
 enum SubscriptionTier: String, Codable {
     case basic
     case pro
     case unknown
-    
+
     static func fromBackend(rawValue: String, userKind: UserKind) -> SubscriptionTier {
         let normalized = rawValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         switch normalized {
         case "lite":
             return .basic
-            
+
         case "":
             // empty means Pro for paid users.
             return userKind == .paid ? .pro : .unknown
-            
+
         default:
             // Includes 5Tab and any unknown future value.
             return .unknown
@@ -43,7 +43,6 @@ enum SubscriptionTier: String, Codable {
 }
 
 extension SubscriptionTier {
-    
     /// UI label for Customer Plans ("Captain - Lite" / "Captain - Pro").
     var captainPlanMarketingLine: String {
         switch self {
@@ -51,7 +50,7 @@ extension SubscriptionTier {
         default: return "Captain - Lite"
         }
     }
-    
+
     /// `.unknown` maps to Pro only for paid users; otherwise Lite
     func captainPlanMarketingLine(resolvingUnknownUserKind kind: UserKind) -> String {
         switch self {

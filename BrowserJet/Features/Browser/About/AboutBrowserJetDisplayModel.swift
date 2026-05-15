@@ -11,7 +11,7 @@ enum AboutBrowserJetLicensePresentationStatus: Equatable {
     case active
     case trialActive
     case expired
-    
+
     var badgeTitle: String {
         switch self {
         case .active: return "Active"
@@ -19,7 +19,7 @@ enum AboutBrowserJetLicensePresentationStatus: Equatable {
         case .expired: return "Expired"
         }
     }
-    
+
     var expiryRowTitle: String {
         switch self {
         case .active: return "Expires"
@@ -39,14 +39,13 @@ struct AboutBrowserJetDisplayModel: Equatable {
     let appVersion: String
     let buildNumber: String
     let presentationStatus: AboutBrowserJetLicensePresentationStatus
-    
+
     var displayVersionLine: String {
         "Version \(appVersion) (\(buildNumber))"
     }
 }
 
 enum AboutBrowserJetContentBuilder {
-    
     static func canPresent(license: PersistedLicense?) -> Bool {
         guard let license else { return false }
         guard let auth = AuthenticationType(rawValue: license.authenticationType), auth == .verified else {
@@ -57,7 +56,7 @@ enum AboutBrowserJetContentBuilder {
         }
         return true
     }
-    
+
     @MainActor
     static func buildModel(
         license: PersistedLicense,
@@ -66,16 +65,16 @@ enum AboutBrowserJetContentBuilder {
         bundle: Bundle = .main
     ) -> AboutBrowserJetDisplayModel {
         let kind = UserKind(rawValue: license.userKind) ?? .trial
-        
+
         let planBase = captainPlanBaseName(license: license, kind: kind)
         let planDisplayName = kind == .trial ? "\(planBase) (Trial)" : planBase
-        
+
         let presentationStatus = presentationStatus(license: license, kind: kind, referenceNow: referenceNow)
         let expiryText = expiryDisplayString(license: license, kind: kind)
-        
+
         let displayUsername = LicenseAccountStore.displayUsername(from: license)
         let email = license.userEmail.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+
         return AboutBrowserJetDisplayModel(
             username: displayUsername,
             email: email,
@@ -88,7 +87,7 @@ enum AboutBrowserJetContentBuilder {
             presentationStatus: presentationStatus
         )
     }
-    
+
     private static func captainPlanBaseName(license: PersistedLicense, kind: UserKind) -> String {
         let tierRaw = license.tierRawValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let tierRawLower = tierRaw.lowercased()
@@ -109,7 +108,7 @@ enum AboutBrowserJetContentBuilder {
         let tierEnum = SubscriptionTier(rawValue: license.subscriptionTier) ?? .unknown
         return tierEnum.captainPlanMarketingLine(resolvingUnknownUserKind: kind)
     }
-    
+
     private static func presentationStatus(
         license: PersistedLicense,
         kind: UserKind,
@@ -123,7 +122,7 @@ enum AboutBrowserJetContentBuilder {
             return .trialActive
         }
     }
-    
+
     private static func isTrialExpired(license: PersistedLicense, referenceNow: Date) -> Bool {
         if license.trialExpired { return true }
         if let proxyExpiry = license.proxyExpiryDate {
@@ -131,7 +130,7 @@ enum AboutBrowserJetContentBuilder {
         }
         return false
     }
-    
+
     private static func expiryDisplayString(license: PersistedLicense, kind: UserKind) -> String {
         switch kind {
         case .paid:
@@ -147,11 +146,11 @@ enum AboutBrowserJetContentBuilder {
 
 private enum AboutDateFormatting {
     static let mediumDateTime: DateFormatter = {
-        let f = DateFormatter()
-        f.dateStyle = .medium
-        f.timeStyle = .short
-        f.locale = Locale(identifier: "en_US_POSIX")
-        f.timeZone = .current
-        return f
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = .current
+        return formatter
     }()
 }

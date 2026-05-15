@@ -11,12 +11,11 @@ import Sparkle
 
 @main
 struct BrowserJet: App {
-    
     private let themeManager = ThemeManager()
     private let sessionManager = SessionManager()
     private let updaterController: SPUStandardUpdaterController
     private let sparkleUpdaterDelegate = SparkleUpdaterDelegate()
-    
+
     var body: some Scene {
         Settings {
             EmptyView()
@@ -26,7 +25,7 @@ struct BrowserJet: App {
             }
         }
     }
-    
+
     init() {
         updaterController = SPUStandardUpdaterController(
             startingUpdater: true,
@@ -38,9 +37,9 @@ struct BrowserJet: App {
         FirebaseApp.configure()
         Task { @MainActor in
             await RemoteConfigManager.shared.fetchAndActivate()
-#if DEBUG
+            #if DEBUG
             RemoteConfigManager.shared.debugPrintAllValues()
-#endif
+            #endif
             let updatePolicy = AppUpdatePolicy.evaluateBuild()
             SparkleUpdateCoordinator.shared.applyPolicyResult(
                 updatePolicy,

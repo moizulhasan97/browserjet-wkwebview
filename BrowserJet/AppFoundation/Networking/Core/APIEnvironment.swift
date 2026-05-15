@@ -11,10 +11,19 @@ enum APIEnvironment {
     case production
     case development
 
+    /// Compile-time-safe URL constant. The literal is hard-coded and verified to parse,
+    /// so the otherwise-`Optional<URL>` initializer can never fail at runtime.
+    private static let serviceBaseURL: URL = {
+        guard let url = URL(string: "https://service.browserjet.com") else {
+            preconditionFailure("Hard-coded service base URL must be valid")
+        }
+        return url
+    }()
+
     var baseURL: URL {
         switch self {
         case .production, .development:
-            return URL(string: "https://service.browserjet.com")!
+            return Self.serviceBaseURL
         }
     }
 

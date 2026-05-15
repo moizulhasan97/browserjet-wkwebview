@@ -50,7 +50,6 @@ struct ValidationRule {
 // MARK: - Built-in Rules
 
 extension ValidationRule {
-
     /// `XXXX-XXXX-XXXX` where X is an uppercase letter or digit.
     static let licenseKey = ValidationRule(
         #"^[A-Z0-9]{24}$"#,
@@ -62,7 +61,7 @@ extension ValidationRule {
         #"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"#,
         defaultMessage: "Enter a valid email address"
     )
-    
+
     /// TODO: Confirm with Ebad bhai to match website regex.
     static let password = ValidationRule(
         #"^(?=.*[A-Za-z])(?=.*\d).{7,}$"#,

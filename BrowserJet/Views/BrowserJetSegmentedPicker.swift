@@ -5,11 +5,9 @@
 //  Created by Moiz Ul Hasan on 22/02/2026.
 //
 
-
 import SwiftUI
 
 struct BrowserJetSegmentedPicker<Option: Hashable>: View {
-
     @Environment(\.appTheme)
     private var theme
 
@@ -59,7 +57,6 @@ private enum ActivationMode: String, CaseIterable, Hashable {
 }
 
 #Preview("Segmented Picker") {
-    
     StatefulPreviewWrapper(ActivationMode.activate) { selection in
         BrowserJetSegmentedPicker(
             options: ActivationMode.allCases,

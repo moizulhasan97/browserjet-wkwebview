@@ -8,7 +8,6 @@
 import Foundation
 
 struct VerifyKeyResponse {
-    
     var authenticationType: AuthenticationType = .notVerified
     var userExpiryDate: Date = .init()
     var version: Double = 0.0
@@ -27,91 +26,124 @@ struct VerifyKeyResponse {
     var subscriptionTier: SubscriptionTier = .unknown
     var tierRawValue: String = ""
     var has5TabTrialCode: Bool = false
-    
+
     init(csvData: Data) {
-        let raw = String(decoding: csvData, as: UTF8.self)
+        let raw = String(bytes: csvData, encoding: .utf8) ?? ""
         let components = raw.components(separatedBy: ",")
-        
+
         for (index, value) in components.enumerated() {
             guard let field = Field(rawValue: index) else { continue }
-            
             let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-            let lowercased = trimmed.lowercased()
-            
-            switch field {
-            case .authenticationType:
-                guard !trimmed.isEmpty else { continue }
-                authenticationType = AuthenticationType(rawValue: lowercased) ?? .notVerified
-                if authenticationType == .notVerified { return }
-                
-            case .userExpiryDate:
-                guard !trimmed.isEmpty else { continue }
-                userExpiryDate = DateFormatterProvider.date(from: trimmed) ?? .init()
-                
-            case .version:
-                guard !trimmed.isEmpty else { continue }
-                version = Double(trimmed) ?? 0.0
-                
-            case .numberOfLicenses:
-                guard !trimmed.isEmpty else { continue }
-                numberOfLicenses = Int(trimmed) ?? 0
-                
-            case .userEmail:
-                guard !trimmed.isEmpty else { continue }
-                userEmail = trimmed
-                
-            case .proxyEnabled:
-                guard !trimmed.isEmpty else { continue }
-                proxyEnabled = lowercased == "true"
-                
-            case .username:
-                guard !trimmed.isEmpty else { continue }
-                username = trimmed
-                
-            case .proxyPackage:
-                guard !trimmed.isEmpty else { continue }
-                proxyPackage = Int(trimmed) ?? 0
-                
-            case .proxyExpiryDate:
-                guard !trimmed.isEmpty else { continue }
-                proxyExpiryDate = DateFormatterProvider.date(from: trimmed) ?? .init()
-                
-            case .proxyTestDate:
-                guard !trimmed.isEmpty else { continue }
-                proxyTestDate = DateFormatterProvider.date(from: trimmed) ?? .init()
-                
-            case .userKind:
-                guard !trimmed.isEmpty else { continue }
-                userKind = UserKind(rawValue: lowercased) ?? .trial
-                
-            case .tierCode:
-                // Must parse even when empty (paid empty => .pro)
-                tierRawValue = trimmed
-                has5TabTrialCode = (lowercased == "5tab")
-                subscriptionTier = SubscriptionTier.fromBackend(rawValue: trimmed, userKind: userKind)
-                
-            case .firstNotificationMessage:
-                guard !trimmed.isEmpty else { continue }
-                firstNotificationMessage = trimmed
-                
-            case .secondNotificationMessage:
-                guard !trimmed.isEmpty else { continue }
-                secondNotificationMessage = trimmed
-                
-            case .userStatus:
-                guard !trimmed.isEmpty else { continue }
-                userStatus = UserStatus(rawValue: lowercased) ?? .rejected
-            }
+            let shouldStop = applyField(field, trimmed: trimmed)
+            if shouldStop { return }
+        }
+    }
+
+    /// Applies a single CSV field. Returns `true` when parsing should stop early
+    /// (currently only when authentication is reported as `notVerified`).
+    private mutating func applyField(_ field: Field, trimmed: String) -> Bool {
+        let lowercased = trimmed.lowercased()
+
+        if let stop = applyAuthenticationField(field, trimmed: trimmed, lowercased: lowercased) {
+            return stop
+        }
+        applyUserBasicsField(field, trimmed: trimmed, lowercased: lowercased)
+        applyProxyField(field, trimmed: trimmed, lowercased: lowercased)
+        applyTierField(field, trimmed: trimmed, lowercased: lowercased)
+        applyNotificationField(field, trimmed: trimmed, lowercased: lowercased)
+        return false
+    }
+
+    /// Returns `nil` when the field is not part of this group; otherwise a Bool indicating whether to stop parsing.
+    private mutating func applyAuthenticationField(
+        _ field: Field, trimmed: String, lowercased: String
+    ) -> Bool? {
+        switch field {
+        case .authenticationType:
+            guard !trimmed.isEmpty else { return false }
+            authenticationType = AuthenticationType(rawValue: lowercased) ?? .notVerified
+            return authenticationType == .notVerified
+        case .userStatus:
+            guard !trimmed.isEmpty else { return false }
+            userStatus = UserStatus(rawValue: lowercased) ?? .rejected
+            return false
+        case .userKind:
+            guard !trimmed.isEmpty else { return false }
+            userKind = UserKind(rawValue: lowercased) ?? .trial
+            return false
+        default:
+            return nil
+        }
+    }
+
+    private mutating func applyUserBasicsField(
+        _ field: Field, trimmed: String, lowercased: String
+    ) {
+        guard !trimmed.isEmpty else { return }
+        switch field {
+        case .userExpiryDate:
+            userExpiryDate = DateFormatterProvider.date(from: trimmed) ?? .init()
+        case .version:
+            version = Double(trimmed) ?? 0.0
+        case .numberOfLicenses:
+            numberOfLicenses = Int(trimmed) ?? 0
+        case .userEmail:
+            userEmail = trimmed
+        case .username:
+            username = trimmed
+        default:
+            break
+        }
+    }
+
+    private mutating func applyProxyField(
+        _ field: Field, trimmed: String, lowercased: String
+    ) {
+        guard !trimmed.isEmpty else { return }
+        switch field {
+        case .proxyEnabled:
+            proxyEnabled = lowercased == "true"
+        case .proxyPackage:
+            proxyPackage = Int(trimmed) ?? 0
+        case .proxyExpiryDate:
+            proxyExpiryDate = DateFormatterProvider.date(from: trimmed) ?? .init()
+        case .proxyTestDate:
+            proxyTestDate = DateFormatterProvider.date(from: trimmed) ?? .init()
+        default:
+            break
+        }
+    }
+
+    private mutating func applyTierField(
+        _ field: Field, trimmed: String, lowercased: String
+    ) {
+        // Must parse even when empty (paid empty => .pro)
+        guard field == .tierCode else { return }
+        tierRawValue = trimmed
+        has5TabTrialCode = (lowercased == "5tab")
+        subscriptionTier = SubscriptionTier.fromBackend(rawValue: trimmed, userKind: userKind)
+    }
+
+    private mutating func applyNotificationField(
+        _ field: Field, trimmed: String, lowercased: String
+    ) {
+        guard !trimmed.isEmpty else { return }
+        switch field {
+        case .firstNotificationMessage:
+            firstNotificationMessage = trimmed
+        case .secondNotificationMessage:
+            secondNotificationMessage = trimmed
+        default:
+            break
         }
     }
 }
 
 extension VerifyKeyResponse {
-    
     func isUserLicenseExpired(referenceNow: Date) -> Bool {
         !(referenceNow <= userExpiryDate)
     }
-    
+
     func isTrialAccessExpiredByProxyDate(referenceNow: Date) -> Bool {
         switch userKind {
         case .paid:

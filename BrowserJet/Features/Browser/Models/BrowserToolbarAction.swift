@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 16/02/2026.
 //
 
-
 import Foundation
 
 enum BrowserToolbarAction: Hashable {
@@ -34,7 +33,7 @@ extension BrowserToolbarAction {
         case .screenshot:          return "viewfinder"
         }
     }
-    
+
     var accessibilityTitle: String {
         switch self {
         case .back: return "Back"
@@ -48,7 +47,7 @@ extension BrowserToolbarAction {
         case .screenshot:          return "Screenshot"
         }
     }
-    
+
     var tooltip: String {
         accessibilityTitle
     }

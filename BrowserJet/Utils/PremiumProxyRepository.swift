@@ -9,7 +9,6 @@ import Foundation
 
 @MainActor
 final class PremiumProxyRepository: ObservableObject {
-
     static let shared = PremiumProxyRepository()
 
     private let proxyService: ProxyService

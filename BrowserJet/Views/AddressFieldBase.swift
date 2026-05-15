@@ -71,8 +71,7 @@ struct AddressFieldBase<Left: View, Right: View>: View {
         )
     }
 
-    @ViewBuilder
-    private var inputField: some View {
+    @ViewBuilder private var inputField: some View {
         ZStack(alignment: .leading) {
             if text.wrappedValue.isEmpty {
                 Text(placeholder)

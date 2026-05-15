@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 20/02/2026.
 //
 
-
 import Foundation
 
 enum BrowserMoreMenuItem: Hashable, CaseIterable {

@@ -122,9 +122,8 @@ private struct ButtonTypePreviewRow: View {
             title: title,
             type: type,
             height: 48,
-            isDisabled: isDisabled,
-            action: {}
-        )
+            isDisabled: isDisabled
+        ) {}
     }
 }
 

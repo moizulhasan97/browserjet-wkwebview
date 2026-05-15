@@ -15,10 +15,12 @@ enum BrowserJetTextFieldType: Equatable {
 }
 
 struct BrowserJetTextField<Left: View, Right: View>: View {
-
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
-    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.isEnabled)
+    private var isEnabled
 
     @FocusState private var isFocused: Bool
     @State private var isRevealed: Bool = false
@@ -88,7 +90,6 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
         )
 
         VStack(alignment: .leading, spacing: title == nil ? 0 : titleSpacing) {
-
             if let title {
                 Text(title)
                     .font(designSystem.typography.textBody1.font)
@@ -102,17 +103,16 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
                 font: style.font,
                 fontColor: isEnabled ? style.textColor : style.textDisabledColor,
                 isSecure: isSecure && !isRevealed,
-                left: left,
-                right: {
-                    HStack(spacing: 6) {
-                        right()
-                        validationIndicator
-                        if isSecure {
-                            revealToggle
-                        }
+                left: left
+            ) {
+                HStack(spacing: 6) {
+                    right()
+                    validationIndicator
+                    if isSecure {
+                        revealToggle
                     }
                 }
-            )
+            }
             .padding(style.contentInsets)
             .background(background(for: style))
             .overlay(border(for: style))
@@ -152,8 +152,7 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
 
     // MARK: - Validation Indicator
 
-    @ViewBuilder
-    private var validationIndicator: some View {
+    @ViewBuilder private var validationIndicator: some View {
         switch currentValidationState {
         case .valid:
             Image(systemName: "checkmark.circle.fill")
@@ -175,8 +174,8 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
     // MARK: - Styling
 
     private func background(for style: any BrowserJetTextFieldStyleProtocol) -> some View {
-        let bg = isEnabled ? style.backgroundColor : style.backgroundDisabledColor
-        return CornerRadiusShape(cornerRadius: style.cornerRadius).fill(bg)
+        let backgroundColor = isEnabled ? style.backgroundColor : style.backgroundDisabledColor
+        return CornerRadiusShape(cornerRadius: style.cornerRadius).fill(backgroundColor)
     }
 
     private func border(for style: any BrowserJetTextFieldStyleProtocol) -> some View {
@@ -202,8 +201,8 @@ private struct CornerRadiusShape: InsettableShape {
 
     func path(in rect: CGRect) -> Path {
         switch cornerRadius {
-        case .fixed(let r):
-            return RoundedRectangle(cornerRadius: max(0, r - insetAmount), style: .continuous).path(in: rect)
+        case .fixed(let radius):
+            return RoundedRectangle(cornerRadius: max(0, radius - insetAmount), style: .continuous).path(in: rect)
         case .capsule:
             return Capsule().path(in: rect)
         }
@@ -234,7 +233,6 @@ private struct TextFieldPreviewHost: View {
 
     var body: some View {
         VStack(spacing: 20) {
-
             BrowserJetTextField(
                 type: .launcherAddress,
                 title: "Address",

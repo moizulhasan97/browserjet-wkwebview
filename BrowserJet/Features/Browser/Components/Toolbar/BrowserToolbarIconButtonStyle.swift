@@ -5,11 +5,11 @@
 //  Created by Moiz Ul Hasan on 20/02/2026.
 //
 
-
 import SwiftUI
 
 struct BrowserToolbarIconButtonStyle: View {
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
 
     let systemImageName: String
     let tooltip: String

@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 16/02/2026.
 //
 
-
 import SwiftUI
 
 struct BrowserChromeView: View {
@@ -13,15 +12,15 @@ struct BrowserChromeView: View {
     let menu: BrowserMenuBuilder
     let onToolbarAction: (BrowserToolbarAction) -> Void
     let onMoreMenuSelect: (BrowserMoreMenuItem) -> Void
-    var onDuplicateTabs: ((Int) -> Void)? = nil
-    
+    var onDuplicateTabs: ((Int) -> Void)?
+
     @Environment(\.appTheme)
     private var theme
 
     private var enabledToolbarActions: Set<BrowserToolbarAction>? {
         state.isTrialLockActive ? [.reload] : nil
     }
-    
+
     private var visibleMoreMenuItems: [BrowserMoreMenuItem] {
         state.isTrialLockActive ? [.about] : menu.moreMenuItems
     }
@@ -62,7 +61,7 @@ struct BrowserChromeView: View {
     }
 }
 
-// swiftlint:disable all
+// swiftlint:disable force_unwrapping
 #Preview("Browser Chrome – Light") {
     let sessionManager = SessionManager()
 
@@ -72,7 +71,6 @@ struct BrowserChromeView: View {
         proxies: [],
         userAgent: nil,
         sessionManager: sessionManager,
-        // swiftlint:disable:next force_unwrapping
         initialURL: URL(string: "https://google.com")!,
         initialTabCount: 2
     )
@@ -109,10 +107,11 @@ struct BrowserChromeView: View {
     return BrowserChromeView(
         state: state,
         menu: .default,
-        onToolbarAction: {_ in},
-        onMoreMenuSelect: {_ in}
+        onToolbarAction: { _ in },
+        onMoreMenuSelect: { _ in }
     )
     .background(AppBackgroundStyle.browserJetGradient.makeView())
     .environmentObject(sessionManager)
     .environment(\.appTheme, BrowserJetLightTheme())
 }
+// swiftlint:enable force_unwrapping

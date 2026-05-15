@@ -9,7 +9,8 @@ import SwiftUI
 
 // MARK: - White Card
 struct InfoAlertChrome<Content: View>: View {
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
 
     private let minWidth: CGFloat
     private let maxWidth: CGFloat
@@ -62,8 +63,10 @@ struct InfoAlertProgressView: View {
 
 // MARK: - Title + message + OK
 struct InfoAlertView: View {
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
 
     let title: String
     let message: String
@@ -125,20 +128,18 @@ struct InfoAlertView: View {
     InfoAlertView(
         title: "Error",
         message: "Something went wrong. Please try again.",
-        buttonTitle: "OK",
-        onDismiss: {}
-    )
-    .environment(\.appTheme, BrowserJetDarkTheme())
-    .environment(\.designSystem, DesignSystem())
+        buttonTitle: "OK"
+    ) {}
+        .environment(\.appTheme, BrowserJetDarkTheme())
+        .environment(\.designSystem, DesignSystem())
 }
 
 #Preview("Success") {
     InfoAlertView(
         title: "Success",
         message: "Your license has been shifted to this device.",
-        buttonTitle: "OK",
-        onDismiss: {}
-    )
-    .environment(\.appTheme, BrowserJetDarkTheme())
-    .environment(\.designSystem, DesignSystem())
+        buttonTitle: "OK"
+    ) {}
+        .environment(\.appTheme, BrowserJetDarkTheme())
+        .environment(\.designSystem, DesignSystem())
 }

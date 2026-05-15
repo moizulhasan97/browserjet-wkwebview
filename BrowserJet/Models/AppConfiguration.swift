@@ -16,14 +16,14 @@ struct AppConfiguration {
     let duplicateTabCounts: [Int]
     let maxBrowserTabs: Int
     // More-menu URLs
-    //let paymentCardURL: URL
-    //let buyLicensesURL: URL
-    //let contactUsURL: URL
-    //let twitterURL: URL
+    // let paymentCardURL: URL
+    // let buyLicensesURL: URL
+    // let contactUsURL: URL
+    // let twitterURL: URL
     // Blocked VPNs for trial users
     let trialBlockedVPNs: Set<VPNType>
     let vpnAllowedRegions: [VPNType: [RegionType]]
-    
+
     init(
         isUserAgentEnabled: Bool,
         defaultSearchAddress: String,
@@ -32,10 +32,10 @@ struct AppConfiguration {
         vpnConfigurations: [VPNConfiguration],
         duplicateTabCounts: [Int],
         maxBrowserTabs: Int,
-        //paymentCardURL: URL,
-        //buyLicensesURL: URL,
-        //contactUsURL: URL,
-        //twitterURL: URL,
+        // paymentCardURL: URL,
+        // buyLicensesURL: URL,
+        // contactUsURL: URL,
+        // twitterURL: URL,
         trialBlockedVPNs: Set<VPNType>,
         vpnAllowedRegions: [VPNType: [RegionType]]
     ) {
@@ -46,10 +46,10 @@ struct AppConfiguration {
         self.vpnConfigurations = vpnConfigurations
         self.duplicateTabCounts = duplicateTabCounts
         self.maxBrowserTabs = maxBrowserTabs
-        //self.paymentCardURL = paymentCardURL
-        //self.buyLicensesURL = buyLicensesURL
-        //self.contactUsURL = contactUsURL
-        //self.twitterURL = twitterURL
+        // self.paymentCardURL = paymentCardURL
+        // self.buyLicensesURL = buyLicensesURL
+        // self.contactUsURL = contactUsURL
+        // self.twitterURL = twitterURL
         self.trialBlockedVPNs = trialBlockedVPNs
         self.vpnAllowedRegions = vpnAllowedRegions
     }
@@ -59,7 +59,7 @@ extension AppConfiguration {
     var sessionIsolationModeValue: SessionIsolationMode {
         sessionIsolationMode
     }
-    
+
     var userAgentValue: String? {
         guard isUserAgentEnabled else { return nil }
         return nil
@@ -95,20 +95,20 @@ extension AppConfiguration {
             ],
             duplicateTabCounts: Array(1...10),
             maxBrowserTabs: 5,
-            //paymentCardURL: URL(string: "https://www.google.com/payment")!,
-            //buyLicensesURL: URL(string: "https://www.google.com/buy")!,
-            //contactUsURL: URL(string: "https://browserjet.com/contact")!,
-            //twitterURL: URL(string: "https://twitter.com/browserjet")!,
+            // paymentCardURL: URL(string: "https://www.google.com/payment")!,
+            // buyLicensesURL: URL(string: "https://www.google.com/buy")!,
+            // contactUsURL: URL(string: "https://browserjet.com/contact")!,
+            // twitterURL: URL(string: "https://twitter.com/browserjet")!,
             trialBlockedVPNs: [.vpn1],
             vpnAllowedRegions: [
                 .vpn1: [.uk, .us, .ca],
-                .vpn2: [.uk, .us, .ca],
+                .vpn2: [.uk, .us, .ca]
             ]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config
     }()
-    
+
     static let development: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: false,
@@ -137,14 +137,14 @@ extension AppConfiguration {
             ],
             duplicateTabCounts: Array(1...10),
             maxBrowserTabs: 5,
-            //paymentCardURL: URL(string: "https://www.google.com/payment")!,
-            //buyLicensesURL: URL(string: "https://www.google.com/buy")!,
-            //contactUsURL: URL(string: "https://browserjet.com/contact")!,
-            //twitterURL: URL(string: "https://twitter.com/browserjet")!,
+            // paymentCardURL: URL(string: "https://www.google.com/payment")!,
+            // buyLicensesURL: URL(string: "https://www.google.com/buy")!,
+            // contactUsURL: URL(string: "https://browserjet.com/contact")!,
+            // twitterURL: URL(string: "https://twitter.com/browserjet")!,
             trialBlockedVPNs: [.vpn1],
             vpnAllowedRegions: [
                 .vpn1: [.uk, .us, .ca],
-                .vpn2: [.uk, .us, .ca],
+                .vpn2: [.uk, .us, .ca]
             ]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")

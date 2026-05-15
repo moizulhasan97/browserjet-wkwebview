@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum StorageKeys {
     static let licenseKey = "LicenseKey"
     static let userEmail = "UserEmail"

@@ -38,21 +38,21 @@ struct LauncherView: View {
     @ObservedObject private var accountStore = LicenseAccountStore.shared
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
-    
+
     private var presets: [LauncherTabPreset] {
         config.launcherTabPresets.filter { $0.rawValue <= config.maxBrowserTabs }
     }
     private typealias Constants = LauncherViewConstants
 
     init(appConfiguration: AppConfiguration) {
-            self.config = appConfiguration
-            _viewModel = StateObject(
-                wrappedValue: LauncherViewModel(
-                    defaultSearchAddress: appConfiguration.defaultSearchAddress,
-                    appConfiguration: appConfiguration
-                )
+        self.config = appConfiguration
+        _viewModel = StateObject(
+            wrappedValue: LauncherViewModel(
+                defaultSearchAddress: appConfiguration.defaultSearchAddress,
+                appConfiguration: appConfiguration
             )
-        }
+        )
+    }
 
     var body: some View {
         VStack(spacing: Constants.mainStackSpacing) {
@@ -188,8 +188,7 @@ private extension LauncherView {
         }
     }
 
-    @ViewBuilder
-    private var premiumStatusFootnotes: some View {
+    @ViewBuilder private var premiumStatusFootnotes: some View {
         if premiumRepository.isLoading {
             HStack(alignment: .center, spacing: 8) {
                 ProgressView()
@@ -263,8 +262,7 @@ private extension LauncherView {
         }
     }
 
-    @ViewBuilder
-    private var selectVPNRow: some View {
+    @ViewBuilder private var selectVPNRow: some View {
         if viewModel.availableVPNs.isEmpty {
             HStack {
                 getLabel("Select VPN")
@@ -294,7 +292,8 @@ private extension LauncherView {
                 if let selected, viewModel.availableVPNs.contains(selected) {
                     return selected
                 }
-                return viewModel.availableVPNs.first!
+                // Fallback only when no VPNs are available; this view is hidden in that state.
+                return viewModel.availableVPNs.first ?? .vpn1
             },
             set: { viewModel.updateSelectedVPN($0) }
         )

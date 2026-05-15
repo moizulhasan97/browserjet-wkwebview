@@ -9,10 +9,11 @@ import SwiftUI
 
 // MARK: - Window Root (theme bridge)
 struct BrowserJetWindowRoot: View {
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorScheme)
+    private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
     @ObservedObject private var forceGate = ForceUpdateGate.shared
-    
+
     var body: some View {
         Group {
             if forceGate.isBlocking {
@@ -39,10 +40,13 @@ private enum AppEntryPhase {
 struct BrowserJetRootView: View {
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
-    @Environment(\.appConfiguration) private var appConfiguration: AppConfiguration
-    @Environment(\.appTheme) private var theme
-    @Environment(\.designSystem) private var designSystem
-    
+    @Environment(\.appConfiguration)
+    private var appConfiguration: AppConfiguration
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.designSystem)
+    private var designSystem
+
     private let coordinator = LicenseActivationCoordinator()
     private let keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
     @State private var phase: AppEntryPhase = Self.initialPhaseFromStoredKey()
@@ -50,7 +54,7 @@ struct BrowserJetRootView: View {
     @State private var bootstrapVerifyOutcome: VerifyOutcome?
     @State private var showBootstrapShiftSuccessAlert: Bool = false
     @State private var bootstrapPaymentAlert: PaymentAlertItem?
-    
+
     var body: some View {
         Group {
             if phase == .activation {
@@ -70,7 +74,7 @@ struct BrowserJetRootView: View {
             handleBootstrapVerifyOutcome(outcome)
         }
     }
-    
+
     private var activationFullChrome: some View {
         VStack(spacing: 0) {
             if let msg = storedKeyVerifyFailureMessage {
@@ -88,22 +92,20 @@ struct BrowserJetRootView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppBackgroundStyle.browserJetGradient.makeView())
     }
-    
-    @ViewBuilder
-    private var compactBootstrapChrome: some View {
+
+    @ViewBuilder private var compactBootstrapChrome: some View {
         if phase == .verifyingStoredKey {
             InfoAlertProgressView()
-        } else if case .shiftRequired(let shiftKey, let shiftEmail) = bootstrapVerifyOutcome {
+        } else if case let .shiftRequired(shiftKey, shiftEmail) = bootstrapVerifyOutcome {
             InfoAlertChrome(minWidth: 420, maxWidth: 480) {
                 VStack(alignment: .leading, spacing: DesignMetrics.sectionSpacing) {
                     ShiftLicenseView(
                         key: shiftKey,
-                        email: shiftEmail,
-                        onShiftSucceeded: {
-                            bootstrapVerifyOutcome = nil
-                            showBootstrapShiftSuccessAlert = true
-                        }
-                    )
+                        email: shiftEmail
+                    ) {
+                        bootstrapVerifyOutcome = nil
+                        showBootstrapShiftSuccessAlert = true
+                    }
                     .id("\(shiftKey)|\(shiftEmail)")
                 }
             }
@@ -111,32 +113,30 @@ struct BrowserJetRootView: View {
             InfoAlertView(
                 title: ActivationMessages.ShiftSuccess.title,
                 message: ActivationMessages.ShiftSuccess.message,
-                buttonTitle: ActivationMessages.okButtonTitle,
-                onDismiss: {
-                    showBootstrapShiftSuccessAlert = false
-                    Task { await verifyPersistedLicenseKey(emptyKeyUserMessage: "License key missing after shift.") }
-                }
-            )
+                buttonTitle: ActivationMessages.okButtonTitle
+            ) {
+                showBootstrapShiftSuccessAlert = false
+                Task { await verifyPersistedLicenseKey(emptyKeyUserMessage: "License key missing after shift.") }
+            }
         } else if let alert = bootstrapPaymentAlert {
             InfoAlertView(
                 title: alert.title,
                 message: alert.message,
-                buttonTitle: ActivationMessages.okButtonTitle,
-                onDismiss: {
-                    bootstrapPaymentAlert = nil
-                    WindowManager.shared.showBrowserForTrialExpired(
-                        paymentURL: alert.url,
-                        themeManager: themeManager,
-                        sessionManager: sessionManager,
-                        appConfiguration: appConfiguration
-                    )
-                }
-            )
+                buttonTitle: ActivationMessages.okButtonTitle
+            ) {
+                bootstrapPaymentAlert = nil
+                WindowManager.shared.showBrowserForTrialExpired(
+                    paymentURL: alert.url,
+                    themeManager: themeManager,
+                    sessionManager: sessionManager,
+                    appConfiguration: appConfiguration
+                )
+            }
         } else {
             InfoAlertProgressView(message: ActivationMessages.bootstrapLoadingProgress)
         }
     }
-    
+
     private var activationWindowLayout: WindowManager.ActivationLayout {
         if phase == .activation {
             return .fullForm
@@ -152,11 +152,11 @@ struct BrowserJetRootView: View {
         }
         return .progressOnly
     }
-    
+
     private func syncActivationWindowFrame() {
         WindowManager.shared.resizeActivationWindowToFit(activationWindowLayout)
     }
-    
+
     private func handleBootstrapVerifyOutcome(_ outcome: VerifyOutcome?) {
         guard let outcome else {
             syncActivationWindowFrame()
@@ -189,7 +189,7 @@ struct BrowserJetRootView: View {
         }
         syncActivationWindowFrame()
     }
-    
+
     private static func initialPhaseFromStoredKey() -> AppEntryPhase {
         guard let raw = UserDefaults.standard.object(forKey: StorageKeys.licenseKey) as? String else {
             return .activation
@@ -197,12 +197,12 @@ struct BrowserJetRootView: View {
         let key = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         return key.isEmpty ? .activation : .verifyingStoredKey
     }
-    
+
     @MainActor
     private func runInitialEntry() async {
         await verifyPersistedLicenseKey(emptyKeyUserMessage: nil)
     }
-    
+
     @MainActor
     private func verifyPersistedLicenseKey(emptyKeyUserMessage: String?) async {
         let raw = keyValueStore.object(forKey: StorageKeys.licenseKey) as? String ?? ""
@@ -214,7 +214,7 @@ struct BrowserJetRootView: View {
             phase = .activation
             return
         }
-        
+
         phase = .verifyingStoredKey
         do {
             let outcome = try await coordinator.completeActivation(key: key)

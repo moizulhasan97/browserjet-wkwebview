@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct ChangeLicenseKeyView: View {
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
-    @Environment(\.dismiss) private var dismiss
-    
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.dismiss)
+    private var dismiss
+
     @ObservedObject var viewModel: ChangeLicenseKeyViewModel
-    
+
     var body: some View {
         InfoAlertChrome(minWidth: 420, maxWidth: 500) {
             VStack(alignment: .leading, spacing: DesignMetrics.sectionSpacing) {
@@ -24,13 +27,13 @@ struct ChangeLicenseKeyView: View {
             }
         }
     }
-    
+
     private var header: some View {
         VStack(alignment: .leading, spacing: DesignMetrics.rowSpacing) {
             Text("Change License Key")
                 .font(designSystem.typography.title1.font)
                 .foregroundStyle(theme.textPrimary)
-            
+
             Text("Enter your new BrowserJet license key to replace the current key on this device.")
                 .font(designSystem.typography.textBody1.font)
                 .foregroundStyle(theme.textFieldSecondary)
@@ -38,7 +41,7 @@ struct ChangeLicenseKeyView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var keyField: some View {
         VStack(alignment: .leading, spacing: 6) {
             BrowserJetTextField(
@@ -55,7 +58,7 @@ struct ChangeLicenseKeyView: View {
             .onChange(of: viewModel.licenseKey) { _, _ in
                 viewModel.onLicenseKeyChanged()
             }
-            
+
             if let sameKeyMessage = viewModel.sameKeyMessage {
                 Text(sameKeyMessage)
                     .font(designSystem.typography.textBody2.font)
@@ -64,20 +67,19 @@ struct ChangeLicenseKeyView: View {
             }
         }
     }
-    
+
     private var actions: some View {
         HStack(spacing: 12) {
             BrowserJetAppButton(
                 title: "Cancel",
                 type: .secondaryLarge,
                 height: 44,
-                isDisabled: false,
-                action: {
-                    dismiss()
-                }
-            )
+                isDisabled: false
+            ) {
+                dismiss()
+            }
             .keyboardShortcut(.cancelAction)
-            
+
             BrowserJetAppButton(
                 title: viewModel.isLoading ? "Please wait..." : "Change Key",
                 type: .primaryLarge,
@@ -90,9 +92,8 @@ struct ChangeLicenseKeyView: View {
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
-    
-    @ViewBuilder
-    private var errorText: some View {
+
+    @ViewBuilder private var errorText: some View {
         if let message = viewModel.errorMessage {
             Text(message)
                 .font(designSystem.typography.textBody2.font)

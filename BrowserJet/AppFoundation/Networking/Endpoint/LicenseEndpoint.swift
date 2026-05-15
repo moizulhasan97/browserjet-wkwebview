@@ -8,81 +8,76 @@
 import Foundation
 
 enum LicenseEndpoint: EndpointProtocol {
-    
+    /// Shared payload for both `shiftLicenseKey` and `sendEmailToUser` (kept in one type so each
+    /// enum case has a single associated value, satisfying `enum_case_associated_values_count`).
+    struct ShiftPayload {
+        let key: String
+        let newPcName: String
+        let newMacAddress: String
+        let email: String
+        let oldPcName: String
+    }
+
     case verifyKey(key: String, pcName: String, macAddress: String)
     case generateKey(email: String, password: String)
     case checkExpiry(String)
     case getOldPCDetails(String)
-    case shiftLicenseKey(key: String, newPcName: String, newMacAddress: String, email: String, oldPcName: String)
-    case sendEmailToUser(key: String, newPcName: String, newMacAddress: String, email: String, oldPcName: String)
+    case shiftLicenseKey(ShiftPayload)
+    case sendEmailToUser(ShiftPayload)
     case updateToDatabase(key: String)
     case forgotPassword(email: String)
     case verifyMac(key: String, macAddress: String)
-    
+
     var baseURL: URL { APIEnvironment.current.baseURL }
-    
+
     var path: String { "/License.ashx" }
-    
+
     var method: HTTPMethod { .get }
-    
+
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .verifyKey(let key, let pcName, let macAddress):
+        case let .verifyKey(key, pcName, macAddress):
             return [
                 .init(name: "pcname", value: pcName),
                 .init(name: "MAC", value: macAddress),
                 .init(name: "MethodName", value: "VerifyKey"),
                 .init(name: "Key", value: key)
             ]
-        case .generateKey(let email, let password):
+        case let .generateKey(email, password):
             return [
                 .init(name: "MethodName", value: "UserRegistration"),
                 .init(name: "Email", value: email),
                 .init(name: "Password", value: password)
             ]
-        case .checkExpiry(let key):
+        case let .checkExpiry(key):
             return [
                 .init(name: "MethodName", value: "expcheck"),
                 .init(name: "Key", value: key)
             ]
-        case .getOldPCDetails(let key):
+        case let .getOldPCDetails(key):
             return [
                 .init(name: "MethodName", value: "getpcdetails"),
                 .init(name: "Key", value: key)
             ]
-        case .shiftLicenseKey(let key, let newPcName, let newMacAddress, let email, let oldPcName):
-            return [
-                .init(name: "MethodName", value: "updatemachine"),
-                .init(name: "Key", value: key),
-                .init(name: "NewMachine", value: newPcName),
-                .init(name: "MacAddress", value: newMacAddress),
-                .init(name: "Email", value: email),
-                .init(name: "machine", value: oldPcName),
-            ]
-            
-        case .sendEmailToUser(let key, let newPcName, let newMacAddress, let email, let oldPcName):
-            return [
-                .init(name: "MethodName", value: "Sendmailtouser"),
-                .init(name: "Key", value: key),
-                .init(name: "NewMachine", value: newPcName),
-                .init(name: "MacAddress", value: newMacAddress),
-                .init(name: "Email", value: email),
-                .init(name: "machine", value: oldPcName),
-            ]
-            
-        case .updateToDatabase(let key):
+        case let .shiftLicenseKey(payload):
+            return shiftQueryItems(methodName: "updatemachine", payload: payload)
+
+        case let .sendEmailToUser(payload):
+            return shiftQueryItems(methodName: "Sendmailtouser", payload: payload)
+
+        case let .updateToDatabase(key):
             return [
                 .init(name: "MethodName", value: "UpdateToMac"),
-                .init(name: "UserKey", value: key),
+                .init(name: "UserKey", value: key)
             ]
-            
-        case .forgotPassword(let email):
+
+        case let .forgotPassword(email):
             return [
                 .init(name: "Email", value: email),
-                .init(name: "GetKey", value: "Forgot"),
+                .init(name: "GetKey", value: "Forgot")
             ]
-            
-        case .verifyMac(let key, let macAddress):
+
+        case let .verifyMac(key, macAddress):
             return [
                 .init(name: "MAC", value: macAddress),
                 .init(name: "MethodName", value: "VerifyMac"),
@@ -91,7 +86,18 @@ enum LicenseEndpoint: EndpointProtocol {
             ]
         }
     }
-    
+
+    private func shiftQueryItems(methodName: String, payload: ShiftPayload) -> [URLQueryItem] {
+        [
+            .init(name: "MethodName", value: methodName),
+            .init(name: "Key", value: payload.key),
+            .init(name: "NewMachine", value: payload.newPcName),
+            .init(name: "MacAddress", value: payload.newMacAddress),
+            .init(name: "Email", value: payload.email),
+            .init(name: "machine", value: payload.oldPcName)
+        ]
+    }
+
     // used for both
     // - license renewal
     // - trial expired
@@ -106,10 +112,10 @@ enum LicenseEndpoint: EndpointProtocol {
     }
 }
 
-//private extension CharacterSet {
+// private extension CharacterSet {
 //    static var urlQueryValueAllowed: CharacterSet {
 //        var set = CharacterSet.urlQueryAllowed
 //        set.remove(charactersIn: "&+")
 //        return set
 //    }
-//}
+// }

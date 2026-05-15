@@ -15,7 +15,7 @@ protocol AppTypography {
 
     var heading1: Typography { get }
     var heading4: Typography { get }
-    
+
     // UI / Buttons
     var button: Typography { get }
 

@@ -7,7 +7,6 @@ import Foundation
 
 @MainActor
 final class VPN1ProxyRepository: ObservableObject {
-
     static let shared = VPN1ProxyRepository()
 
     private let proxyService: ProxyService

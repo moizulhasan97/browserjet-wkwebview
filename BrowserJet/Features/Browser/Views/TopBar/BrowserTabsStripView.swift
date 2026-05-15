@@ -106,70 +106,9 @@ struct BrowserTabsStripView: View {
                     }
                     .animation(.spring(response: 0.4, dampingFraction: 0.8), value: state.tabs.count)
                 }
-
-                // Left fade gradient for overflow
-//                if canScrollLeft {
-//                    LinearGradient(
-//                        colors: [
-//                            theme.surfaceCard.opacity(0.8),
-//                            Color.clear
-//                        ],
-//                        startPoint: .leading,
-//                        endPoint: .trailing
-//                    )
-//                    .frame(width: fadeGradientWidth)
-//                    .allowsHitTesting(false)
-//                }
-//                
-//                // Right fade gradient for overflow
-//                if canScrollRight {
-//                    LinearGradient(
-//                        colors: [
-//                            Color.clear,
-//                            theme.surfaceCard.opacity(0.8)
-//                        ],
-//                        startPoint: .leading,
-//                        endPoint: .trailing
-//                    )
-//                    .frame(width: fadeGradientWidth)
-//                    .frame(maxWidth: .infinity, alignment: .trailing)
-//                    .allowsHitTesting(false)
-//                }
             }
         }
         .frame(height: stripHeight)
-//        .background(
-//            // Modern glass morphism background
-//            ZStack {
-//                theme.surfaceCard.opacity(0.75)
-//                
-//                LinearGradient(
-//                    colors: [
-//                        theme.surfaceCard.opacity(0.85),
-//                        theme.surfaceCard.opacity(0.65)
-//                    ],
-//                    startPoint: .top,
-//                    endPoint: .bottom
-//                )
-//            }
-//        )
-//        .overlay(
-//            // Elegant separator line at bottom
-//            Rectangle()
-//                .frame(height: 1)
-//                .foregroundStyle(
-//                    LinearGradient(
-//                        colors: [
-//                            theme.divider.opacity(0.3),
-//                            theme.divider.opacity(0.15)
-//                        ],
-//                        startPoint: .leading,
-//                        endPoint: .trailing
-//                    )
-//                ),
-//            alignment: .bottom
-//        )
-        // .shadow(color: .red, radius: 20, y: 1)
     }
 
     private func updateScrollIndicators(geometry: GeometryProxy, contentWidth: CGFloat) {
@@ -198,7 +137,7 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
     }
 }
 
-// swiftlint:disable all
+// swiftlint:disable force_unwrapping
 #Preview("BrowserTabsStripView") {
     let themeManager = ThemeManager()
     let sessionManager = SessionManager(maxSessions: 10)
@@ -215,15 +154,10 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
     )
 
     // Add a few more tabs so we can see shrinking behavior
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://www.google.com")!)
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://seatgeek.com")!)
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://ticketmaster.com")!)
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://apple.com")!)
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://github.com")!)
 
     // Optional: set a selected tab
@@ -237,3 +171,4 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
         .environmentObject(themeManager)
         .environment(\.appTheme, BrowserJetLightTheme())
 }
+// swiftlint:enable force_unwrapping

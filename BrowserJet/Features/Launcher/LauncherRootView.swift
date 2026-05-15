@@ -14,7 +14,7 @@ struct LauncherRootView: View {
     @EnvironmentObject private var themeManager: ThemeManager
     @ObservedObject private var forceGate = ForceUpdateGate.shared
     let appConfiguration: AppConfiguration
-    
+
     var body: some View {
         AppLogger.debug("LauncherRootView body computed - ColorScheme: \(colorScheme == .dark ? "dark" : "light")")
         return Group {

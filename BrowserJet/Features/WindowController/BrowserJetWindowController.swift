@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 12/02/2026.
 //
 
-
 import AppKit
 import SwiftUI
 
@@ -147,8 +146,8 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         let isTitledWindow = window.styleMask.contains(.titled)
 
         if isResizable,
-           isTitledWindow,
-           let screen = window.screen ?? NSScreen.main {
+            isTitledWindow,
+            let screen = window.screen ?? NSScreen.main {
             window.setFrame(screen.visibleFrame, display: true, animate: false)
         }
 
