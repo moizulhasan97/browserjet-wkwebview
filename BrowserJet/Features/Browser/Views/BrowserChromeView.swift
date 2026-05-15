@@ -21,6 +21,10 @@ struct BrowserChromeView: View {
     private var enabledToolbarActions: Set<BrowserToolbarAction>? {
         state.isTrialLockActive ? [.reload] : nil
     }
+    
+    private var visibleMoreMenuItems: [BrowserMoreMenuItem] {
+        state.isTrialLockActive ? [.about] : menu.moreMenuItems
+    }
 
     var body: some View {
         HStack(spacing: 10) {
@@ -47,8 +51,8 @@ struct BrowserChromeView: View {
                     onDuplicateTabs: onDuplicateTabs
                 )
                 BrowserMoreMenuView(
-                    items: menu.moreMenuItems,
-                    isDisabled: state.isTrialLockActive
+                    items: visibleMoreMenuItems,
+                    isDisabled: false
                 ) { item in
                     onMoreMenuSelect(item)
                 }

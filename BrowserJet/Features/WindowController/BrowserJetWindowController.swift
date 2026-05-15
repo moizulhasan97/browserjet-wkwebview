@@ -138,17 +138,24 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
     func show() {
         AppLogger.debug("Showing window")
         NSApp.activate(ignoringOtherApps: true)
-        window?.makeKeyAndOrderFront(nil)
 
-        if let window,
-           !window.styleMask.contains(.borderless),
-           window.styleMask.contains(.resizable) {
-            window.zoom(nil)
+        guard let window else { return }
+
+        window.makeKeyAndOrderFront(nil)
+
+        let isResizable = window.styleMask.contains(.resizable)
+        let isTitledWindow = window.styleMask.contains(.titled)
+
+        if isResizable,
+           isTitledWindow,
+           let screen = window.screen ?? NSScreen.main {
+            window.setFrame(screen.visibleFrame, display: true, animate: false)
         }
 
         DispatchQueue.main.async {
             self.window?.makeFirstResponder(nil)
         }
+
         AppLogger.info("Window activated and made key")
     }
 

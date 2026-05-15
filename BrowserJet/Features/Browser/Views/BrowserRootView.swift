@@ -19,6 +19,7 @@ private struct SelectedTabWebView: View {
     var body: some View {
         WebViewContainer(tab: tab, onOpenInNewTab: onOpenInNewTab)
             .id(tab.webViewID)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -84,6 +85,7 @@ struct BrowserRootView: View {
                 onMoreMenuSelect: handleMoreMenuItem,
                 onDuplicateTabs: duplicateSelectedTab
             )
+            .frame(maxWidth: .infinity)
             
             if let tab = state.selectedTab {
                 SelectedTabWebView(tab: tab) { url in
@@ -93,10 +95,13 @@ struct BrowserRootView: View {
                         state.addTab(url: url)
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 EmptyView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppBackgroundStyle.browserJetGradient.makeView())
         .task {
             await BrowserLicenseBackgroundMonitor.run()
