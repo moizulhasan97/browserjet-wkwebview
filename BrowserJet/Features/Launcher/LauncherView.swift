@@ -38,6 +38,8 @@ struct LauncherView: View {
     @ObservedObject private var accountStore = LicenseAccountStore.shared
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
+    @Environment(\.colorScheme)
+    private var colorScheme
 
     private var presets: [LauncherTabPreset] {
         config.launcherTabPresets.filter { $0.rawValue <= config.maxBrowserTabs }
@@ -63,7 +65,11 @@ struct LauncherView: View {
                 .padding(.top, Constants.launchButtonTopPadding)
         }
         .padding()
-        .background(AppBackgroundStyle.browserJetGradient.makeView())
+        .background(
+            AppBackgroundStyle
+                .brandGradient(for: themeManager.resolvedColorScheme(for: colorScheme))
+                .makeView()
+        )
         .onAppear {
             viewModel.onAppear()
             // Initialize address only if empty

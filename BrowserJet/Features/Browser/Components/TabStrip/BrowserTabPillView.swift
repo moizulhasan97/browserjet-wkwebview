@@ -130,31 +130,29 @@ extension BrowserTabPillView {
     var background: some View {
         Group {
             if isSelected {
-                // Selected tab: glass morphism effect with subtle gradient
+                // Selected tab: elevated control surface with a subtle vertical sheen
                 ZStack {
-                    // Base glass effect
-                    theme.surfaceCard.opacity(0.85)
+                    theme.surfaceControl
 
-                    // Subtle gradient overlay for depth
                     LinearGradient(
                         colors: [
-                            theme.surfaceCard.opacity(0.9),
-                            theme.surfaceCard.opacity(0.75)
+                            theme.surfaceControl.opacity(0.0),
+                            Color.white.opacity(0.04)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 }
             } else {
-                // Inactive tabs: subtle background with hover effect
+                // Inactive tabs: card surface, slightly lifted on hover
                 ZStack {
-                    theme.surfaceCard.opacity(0.4)
+                    theme.surfaceCard.opacity(isHovering ? 0.85 : 0.55)
 
                     if isHovering {
                         LinearGradient(
                             colors: [
-                                theme.surfaceCard.opacity(0.6),
-                                theme.surfaceCard.opacity(0.5)
+                                Color.white.opacity(0.03),
+                                Color.white.opacity(0.0)
                             ],
                             startPoint: .top,
                             endPoint: .bottom

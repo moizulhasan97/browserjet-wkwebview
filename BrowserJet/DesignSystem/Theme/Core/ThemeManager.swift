@@ -16,7 +16,7 @@ final class ThemeManager: ObservableObject {
         case dark
     }
 
-    @Published var mode: Mode = .system {
+    @Published var mode: Mode = .dark {
         didSet {
             AppLogger.info("Theme mode changed to: \(mode)")
         }
@@ -46,6 +46,17 @@ final class ThemeManager: ObservableObject {
         case .dark:
             AppLogger.debug("Theme resolved: dark (forced)")
             return darkTheme
+        }
+    }
+
+    /// Resolves the effective color scheme honoring the forced mode setting.
+    /// Use this when a view needs a `ColorScheme` (e.g. picking a background) that
+    /// matches the active theme rather than the system appearance.
+    func resolvedColorScheme(for colorScheme: ColorScheme) -> ColorScheme {
+        switch mode {
+        case .system: return colorScheme
+        case .light: return .light
+        case .dark: return .dark
         }
     }
 }

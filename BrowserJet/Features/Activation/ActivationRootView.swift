@@ -40,6 +40,8 @@ struct ActivationRootView: View {
     @EnvironmentObject private var sessionManager: SessionManager
     @Environment(\.appConfiguration)
     private var appConfiguration: AppConfiguration
+    @Environment(\.colorScheme)
+    private var colorScheme
 
     @StateObject private var viewModel = ActivationViewModel()
 
@@ -70,7 +72,11 @@ struct ActivationRootView: View {
             }
         }
         .padding()
-        .background(AppBackgroundStyle.browserJetGradient.makeView())
+        .background(
+            AppBackgroundStyle
+                .brandGradient(for: themeManager.resolvedColorScheme(for: colorScheme))
+                .makeView()
+        )
         .loadingOverlay(isLoading: viewModel.isLoading)
         .onChange(of: viewModel.verifyOutcome) { _, outcome in
             handleVerifyOutcome(outcome)

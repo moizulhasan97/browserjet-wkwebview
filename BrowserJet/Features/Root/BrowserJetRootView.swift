@@ -46,6 +46,8 @@ struct BrowserJetRootView: View {
     private var theme
     @Environment(\.designSystem)
     private var designSystem
+    @Environment(\.colorScheme)
+    private var colorScheme
 
     private let coordinator = LicenseActivationCoordinator()
     private let keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
@@ -90,7 +92,11 @@ struct BrowserJetRootView: View {
             ActivationRootView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(AppBackgroundStyle.browserJetGradient.makeView())
+        .background(
+            AppBackgroundStyle
+                .brandGradient(for: themeManager.resolvedColorScheme(for: colorScheme))
+                .makeView()
+        )
     }
 
     @ViewBuilder private var compactBootstrapChrome: some View {

@@ -12,6 +12,8 @@ struct AboutBrowserJetView: View {
     private var theme
     @Environment(\.designSystem)
     private var designSystem
+    @Environment(\.colorScheme)
+    private var colorScheme
 
     @State private var isLicenseKeyVisible = false
     @State private var licenseKeyCopyShowsCheckmark = false
@@ -41,7 +43,7 @@ struct AboutBrowserJetView: View {
             footerView
         }
         .frame(width: 520)
-        .background(AppBackgroundStyle.browserJetGradient.makeView())
+        .background(AppBackgroundStyle.brandGradient(for: colorScheme).makeView())
     }
 
     private var headerView: some View {
