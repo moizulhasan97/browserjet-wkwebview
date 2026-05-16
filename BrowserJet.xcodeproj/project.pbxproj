@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		741EB8100864414EB9E1849C /* BrowserTabPillShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5ACA9592E1B48DAA9223F65 /* BrowserTabPillShapes.swift */; };
+		AC1354060D144E8D9C8F2FA8 /* TabNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */; };
 		AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */; };
 		AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DE2F4653D300A12964 /* VPNProvider.swift */; };
 		AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */; };
@@ -89,14 +91,12 @@
 		AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5B42F43729700B33610 /* BrowserTabItem.swift */; };
 		AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5B82F4372CB00B33610 /* BrowserConnectionBadgeView.swift */; };
 		AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5BB2F43744200B33610 /* BrowserTabPillView.swift */; };
-		741EB8100864414EB9E1849C /* BrowserTabPillShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5ACA9592E1B48DAA9223F65 /* BrowserTabPillShapes.swift */; };
 		AF69F5C12F43747800B33610 /* BrowserToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5C02F43747800B33610 /* BrowserToolbarView.swift */; };
 		AF69F5C32F43748800B33610 /* BrowserChromeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5C22F43748800B33610 /* BrowserChromeView.swift */; };
 		AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5C42F43751E00B33610 /* SessionIsolationMode.swift */; };
 		AF69F5C92F43763B00B33610 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5C82F43763B00B33610 /* SessionManager.swift */; };
 		AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CC2F4376A200B33610 /* AuthProxy.swift */; };
 		AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CE2F4376C000B33610 /* TabModel.swift */; };
-		AC1354060D144E8D9C8F2FA8 /* TabNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */; };
 		AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */; };
 		AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */; };
 		AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */; };
@@ -121,6 +121,11 @@
 		AF99BFC52FA013500096FAE9 /* ForceUpdateBlockingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC42FA0134E0096FAE9 /* ForceUpdateBlockingOverlay.swift */; };
 		AF99BFC72FA02F000096FAE9 /* SparkleUpdaterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC62FA02EFF0096FAE9 /* SparkleUpdaterDelegate.swift */; };
 		AF99BFC92FA27D550096FAE9 /* DatatudePoolConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99BFC82FA27D530096FAE9 /* DatatudePoolConfig.swift */; };
+		AF9D9BB02FB7FA860047856A /* ShortcutsAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BAF2FB7FA820047856A /* ShortcutsAvailability.swift */; };
+		AF9D9BB32FB7FAE40047856A /* BrowserCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB22FB7FAE20047856A /* BrowserCommands.swift */; };
+		AF9D9BB52FB7FFA80047856A /* ActiveBrowserStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB42FB7FFA60047856A /* ActiveBrowserStateProvider.swift */; };
+		AF9D9BB72FB8019D0047856A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB62FB8019B0047856A /* AppDelegate.swift */; };
+		AF9D9BB92FB806820047856A /* AboutPanelOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB82FB806800047856A /* AboutPanelOptionsBuilder.swift */; };
 		AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */; };
 		AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */; };
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
@@ -160,6 +165,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabNavigationDelegate.swift; sourceTree = "<group>"; };
 		AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNConfiguration.swift; sourceTree = "<group>"; };
 		AF0A09DE2F4653D300A12964 /* VPNProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNProvider.swift; sourceTree = "<group>"; };
 		AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameGenerator.swift; sourceTree = "<group>"; };
@@ -241,14 +247,12 @@
 		AF69F5B42F43729700B33610 /* BrowserTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabItem.swift; sourceTree = "<group>"; };
 		AF69F5B82F4372CB00B33610 /* BrowserConnectionBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserConnectionBadgeView.swift; sourceTree = "<group>"; };
 		AF69F5BB2F43744200B33610 /* BrowserTabPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabPillView.swift; sourceTree = "<group>"; };
-		C5ACA9592E1B48DAA9223F65 /* BrowserTabPillShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabPillShapes.swift; sourceTree = "<group>"; };
 		AF69F5C02F43747800B33610 /* BrowserToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarView.swift; sourceTree = "<group>"; };
 		AF69F5C22F43748800B33610 /* BrowserChromeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserChromeView.swift; sourceTree = "<group>"; };
 		AF69F5C42F43751E00B33610 /* SessionIsolationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionIsolationMode.swift; sourceTree = "<group>"; };
 		AF69F5C82F43763B00B33610 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		AF69F5CC2F4376A200B33610 /* AuthProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProxy.swift; sourceTree = "<group>"; };
 		AF69F5CE2F4376C000B33610 /* TabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabModel.swift; sourceTree = "<group>"; };
-		0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabNavigationDelegate.swift; sourceTree = "<group>"; };
 		AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWindowState.swift; sourceTree = "<group>"; };
 		AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyConfigurationFactory.swift; sourceTree = "<group>"; };
 		AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabsStripView.swift; sourceTree = "<group>"; };
@@ -272,6 +276,11 @@
 		AF99BFC42FA0134E0096FAE9 /* ForceUpdateBlockingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateBlockingOverlay.swift; sourceTree = "<group>"; };
 		AF99BFC62FA02EFF0096FAE9 /* SparkleUpdaterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleUpdaterDelegate.swift; sourceTree = "<group>"; };
 		AF99BFC82FA27D530096FAE9 /* DatatudePoolConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatatudePoolConfig.swift; sourceTree = "<group>"; };
+		AF9D9BAF2FB7FA820047856A /* ShortcutsAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsAvailability.swift; sourceTree = "<group>"; };
+		AF9D9BB22FB7FAE20047856A /* BrowserCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCommands.swift; sourceTree = "<group>"; };
+		AF9D9BB42FB7FFA60047856A /* ActiveBrowserStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveBrowserStateProvider.swift; sourceTree = "<group>"; };
+		AF9D9BB62FB8019B0047856A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AF9D9BB82FB806800047856A /* AboutPanelOptionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPanelOptionsBuilder.swift; sourceTree = "<group>"; };
 		AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabsPopoverView.swift; sourceTree = "<group>"; };
 		AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuItem.swift; sourceTree = "<group>"; };
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
@@ -311,6 +320,7 @@
 		AFF4DA022F7451720028293B /* PaymentAlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAlertItem.swift; sourceTree = "<group>"; };
 		AFF4DA072F74895C0028293B /* RecoverAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverAccountView.swift; sourceTree = "<group>"; };
 		AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverAccountViewModel.swift; sourceTree = "<group>"; };
+		C5ACA9592E1B48DAA9223F65 /* BrowserTabPillShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabPillShapes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,6 +371,7 @@
 		AF2017112FABFD2A0058705F /* About */ = {
 			isa = PBXGroup;
 			children = (
+				AF9D9BB82FB806800047856A /* AboutPanelOptionsBuilder.swift */,
 				AF2017162FABFDBC0058705F /* AboutBrowserJetWindowController.swift */,
 				AF2017142FABFD9F0058705F /* AboutBrowserJetView.swift */,
 				AF2017122FABFD360058705F /* AboutBrowserJetDisplayModel.swift */,
@@ -578,6 +589,7 @@
 		AF69F5AA2F4370BF00B33610 /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				AF9D9BB12FB7FADA0047856A /* Commands */,
 				AF2017112FABFD2A0058705F /* About */,
 				AF20170A2FAB36640058705F /* ChangeKey */,
 				AF69F5D02F437A3100B33610 /* State */,
@@ -659,6 +671,7 @@
 		AF69F5C62F43762400B33610 /* AppFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				AF9D9BAE2FB7FA080047856A /* Shortcuts */,
 				AF127CF72F9ACA7800EE34E2 /* RemoteConfig */,
 				AF6086482F732CAA003931E2 /* Licensing */,
 				AF69F5D32F437A8200B33610 /* Networking */,
@@ -737,6 +750,7 @@
 		AF80C5BA2F4E74FE0064B8FD /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				AF9D9BB62FB8019B0047856A /* AppDelegate.swift */,
 				AF80C5BB2F4E75040064B8FD /* Errors */,
 			);
 			path = Core;
@@ -768,6 +782,23 @@
 				AF99BFBE2FA00AD70096FAE9 /* CheckForUpdatesView.swift */,
 			);
 			path = SparkleSystemUI;
+			sourceTree = "<group>";
+		};
+		AF9D9BAE2FB7FA080047856A /* Shortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				AF9D9BB42FB7FFA60047856A /* ActiveBrowserStateProvider.swift */,
+				AF9D9BAF2FB7FA820047856A /* ShortcutsAvailability.swift */,
+			);
+			path = Shortcuts;
+			sourceTree = "<group>";
+		};
+		AF9D9BB12FB7FADA0047856A /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				AF9D9BB22FB7FAE20047856A /* BrowserCommands.swift */,
+			);
+			path = Commands;
 			sourceTree = "<group>";
 		};
 		AFE9764B2F5530AC00D270C8 /* ShiftLicense */ = {
@@ -1136,11 +1167,15 @@
 				AF2017172FABFDBE0058705F /* AboutBrowserJetWindowController.swift in Sources */,
 				AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */,
 				AF8267132FA9256A0036EFD5 /* BrowserLicenseBackgroundMonitor.swift in Sources */,
+				AF9D9BB92FB806820047856A /* AboutPanelOptionsBuilder.swift in Sources */,
 				AF401AC82F4D2C1600EF265C /* LicenseEnums.swift in Sources */,
+				AF9D9BB72FB8019D0047856A /* AppDelegate.swift in Sources */,
 				AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */,
 				AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */,
+				AF9D9BB52FB7FFA80047856A /* ActiveBrowserStateProvider.swift in Sources */,
 				AF401AAF2F4D1A5B00EF265C /* APIError.swift in Sources */,
 				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
+				AF9D9BB32FB7FAE40047856A /* BrowserCommands.swift in Sources */,
 				AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */,
 				AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */,
 				AF56EF132F3DFC9800E49C58 /* CornerRadiusModifier.swift in Sources */,
@@ -1161,6 +1196,7 @@
 				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
 				AF2017102FAB498E0058705F /* URLConstants.swift in Sources */,
 				AF99BFC32FA013370096FAE9 /* ForceUpdateGate.swift in Sources */,
+				AF9D9BB02FB7FA860047856A /* ShortcutsAvailability.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
 				AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */,

@@ -148,6 +148,8 @@ final class RemoteConfigManager: ObservableObject {
         switch key {
         case .forceUpdateEnabled, .optionalUpdateEnabled:
             return false as NSNumber
+        case .shortcutsEnabled:
+            return true as NSNumber
         default:
             return nil
         }

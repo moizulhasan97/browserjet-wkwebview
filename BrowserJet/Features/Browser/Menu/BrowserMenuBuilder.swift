@@ -15,7 +15,7 @@ struct BrowserMenuBuilder {
     static let `default` = BrowserMenuBuilder(
         leading: [.back, .forward, .reload],
         trailing: [.newTab, .burnProxyAndReload, .duplicateToTabsMenu, .refreshAllTabs, .accountManager, .screenshot],
-        moreMenuItems: [.paymentCard, .buyLicenses, .contactUs, .changeKey, .about, .twitter]
+        moreMenuItems: [.paymentCard, .buyLicenses, .contactUs, .changeKey, /*.about,*/ .twitter]
     )
 
     /// Trial expired: only refresh allowed; no new tab, no VPN, no more menu.

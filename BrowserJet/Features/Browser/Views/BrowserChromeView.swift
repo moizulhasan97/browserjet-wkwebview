@@ -13,18 +13,18 @@ struct BrowserChromeView: View {
     let onToolbarAction: (BrowserToolbarAction) -> Void
     let onMoreMenuSelect: (BrowserMoreMenuItem) -> Void
     var onDuplicateTabs: ((Int) -> Void)?
-
+    
     @Environment(\.appTheme)
     private var theme
-
+    
     private var enabledToolbarActions: Set<BrowserToolbarAction>? {
         state.isTrialLockActive ? [.reload] : nil
     }
-
+    
     private var visibleMoreMenuItems: [BrowserMoreMenuItem] {
-        state.isTrialLockActive ? [.about] : menu.moreMenuItems
+        state.isTrialLockActive ? /*[.about] :*/ [] : menu.moreMenuItems
     }
-
+    
     var body: some View {
         HStack(spacing: 10) {
             BrowserToolbarView(
@@ -32,16 +32,20 @@ struct BrowserChromeView: View {
                 enabledActions: enabledToolbarActions,
                 onAction: onToolbarAction
             )
-
+            
             if let tab = state.selectedTab {
-                BrowserAddressBarView(tab: tab, isLocked: state.isTrialLockActive)
-                    .frame(maxWidth: .infinity)
+                BrowserAddressBarView(
+                    tab: tab,
+                    isLocked: state.isTrialLockActive,
+                    focusToken: state.focusAddressBarToken
+                )
+                .frame(maxWidth: .infinity)
             }
-
+            
             BrowserConnectionBadgeView(proxyType: state.proxyType)
                 .opacity(state.isTrialLockActive ? 0.6 : 1)
                 .allowsHitTesting(false)
-
+            
             HStack(spacing: 10) {
                 BrowserToolbarView(
                     actions: menu.trailing,
@@ -64,7 +68,7 @@ struct BrowserChromeView: View {
 // swiftlint:disable force_unwrapping
 #Preview("Browser Chrome – Light") {
     let sessionManager = SessionManager()
-
+    
     let state = BrowserWindowState(
         proxyType: .local,
         isolationMode: .perTab,
@@ -74,7 +78,7 @@ struct BrowserChromeView: View {
         initialURL: URL(string: "https://google.com")!,
         initialTabCount: 2
     )
-
+    
     // Add some sample tabs for preview
     state.tabs = [
         TabModel(
@@ -102,7 +106,7 @@ struct BrowserChromeView: View {
             userAgent: nil
         )
     ]
-
+    
     state.selectedTabID = state.tabs.first?.id
     return BrowserChromeView(
         state: state,
