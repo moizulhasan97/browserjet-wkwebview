@@ -72,11 +72,7 @@ struct ActivationRootView: View {
             }
         }
         .padding()
-        .background(
-            AppBackgroundStyle
-                .brandGradient(for: themeManager.resolvedColorScheme(for: colorScheme))
-                .makeView()
-        )
+        .brandThemedWindow(for: themeManager.resolvedColorScheme(for: colorScheme))
         .loadingOverlay(isLoading: viewModel.isLoading)
         .onChange(of: viewModel.verifyOutcome) { _, outcome in
             handleVerifyOutcome(outcome)

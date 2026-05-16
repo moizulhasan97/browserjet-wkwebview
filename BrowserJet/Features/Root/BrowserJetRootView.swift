@@ -92,11 +92,7 @@ struct BrowserJetRootView: View {
             ActivationRootView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            AppBackgroundStyle
-                .brandGradient(for: themeManager.resolvedColorScheme(for: colorScheme))
-                .makeView()
-        )
+        .brandThemedWindow(for: themeManager.resolvedColorScheme(for: colorScheme))
     }
 
     @ViewBuilder private var compactBootstrapChrome: some View {

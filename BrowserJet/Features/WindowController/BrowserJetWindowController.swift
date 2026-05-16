@@ -74,7 +74,10 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
             window.title = ""
             window.titleVisibility = .hidden
         }
-        window.titlebarAppearsTransparent = borderlessChrome
+        // Title bar is always transparent so the SwiftUI brand gradient can render
+        // continuously through the title-bar safe area; AppKit still draws the
+        // standard traffic lights on top.
+        window.titlebarAppearsTransparent = true
         window.isMovableByWindowBackground = borderlessChrome
 
         window.isOpaque = false
@@ -119,7 +122,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
             }
             window.styleMask = mask
             window.titleVisibility = .hidden
-            window.titlebarAppearsTransparent = false
+            window.titlebarAppearsTransparent = true
             window.isMovableByWindowBackground = false
             window.standardWindowButton(.zoomButton)?.isEnabled = false
         }

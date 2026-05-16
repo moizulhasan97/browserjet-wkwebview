@@ -49,3 +49,21 @@ extension AppBackgroundStyle {
         colorScheme == .dark ? .browserJetDarkGradient : .browserJetGradient
     }
 }
+
+extension View {
+    /// Paints the brand gradient as the window background, extends it under the
+    /// (transparent) title bar, and bridges the resolved color scheme to the
+    /// underlying `NSWindow` so AppKit chrome (traffic lights, etc.) tints to match.
+    /// Pass the *resolved* scheme (i.e. honoring `ThemeManager.mode`), not the raw
+    /// system `colorScheme`.
+    func brandThemedWindow(for resolvedScheme: ColorScheme) -> some View {
+        self
+            .background(
+                AppBackgroundStyle
+                    .brandGradient(for: resolvedScheme)
+                    .makeView()
+                    .ignoresSafeArea(.all, edges: .top)
+            )
+            .preferredColorScheme(resolvedScheme)
+    }
+}

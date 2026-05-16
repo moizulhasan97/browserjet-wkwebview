@@ -115,11 +115,7 @@ struct BrowserRootView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            AppBackgroundStyle
-                .brandGradient(for: themeManager.resolvedColorScheme(for: colorScheme))
-                .makeView()
-        )
+        .brandThemedWindow(for: themeManager.resolvedColorScheme(for: colorScheme))
         .task {
             await BrowserLicenseBackgroundMonitor.run()
         }
