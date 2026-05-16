@@ -8,6 +8,47 @@
 import AppKit
 import SwiftUI
 
+/// NSWindow subclass that forwards title-bar double-clicks to the standard
+/// macOS title-bar action even when SwiftUI subviews (e.g. the tab strip's
+/// `ScrollView`) cover the title bar via `.fullSizeContentView`.
+///
+/// AppKit only invokes the title-bar action when its hit-test lands on the
+/// title bar's drag region; here the SwiftUI `NSClipView` swallows the
+/// double-click first, so we re-implement the behavior by reading the user's
+/// `AppleActionOnDoubleClick` preference and calling the matching window
+/// action when a double-click lands in the top tab-strip band.
+private final class BrowserJetWindow: NSWindow {
+    /// Height of the band at the top of the window (standard title bar + custom
+    /// tab strip) within which a double-click should emulate the macOS
+    /// title-bar double-click action. Matches `BrowserTabsStripView.stripHeight`.
+    private static let titleBarDoubleClickBand: CGFloat = 44
+
+    override func sendEvent(_ event: NSEvent) {
+        if event.type == .leftMouseDown,
+           event.clickCount == 2,
+           styleMask.contains(.titled),
+           styleMask.contains(.fullSizeContentView) {
+            let distFromTop = frame.height - event.locationInWindow.y
+            if distFromTop >= 0, distFromTop <= Self.titleBarDoubleClickBand {
+                performTitleBarDoubleClickAction()
+            }
+        }
+        super.sendEvent(event)
+    }
+
+    private func performTitleBarDoubleClickAction() {
+        let action = UserDefaults.standard.string(forKey: "AppleActionOnDoubleClick") ?? "Maximize"
+        switch action {
+        case "Minimize":
+            performMiniaturize(nil)
+        case "None":
+            break
+        default:
+            performZoom(nil)
+        }
+    }
+}
+
 protocol ShowableWindowController: AnyObject {
     func show()
     func close()
@@ -48,7 +89,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
             return mask
         }()
 
-        let window = NSWindow(
+        let window = BrowserJetWindow(
             contentRect: NSRect(origin: .zero, size: size),
             styleMask: styleMask,
             backing: .buffered,
