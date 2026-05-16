@@ -50,20 +50,37 @@ extension AppBackgroundStyle {
     }
 }
 
+private struct BrandThemedWindowModifier: ViewModifier {
+  @Environment(\.colorScheme) private var colorScheme
+  let themeManager: ThemeManager?
+  func body(content: Content) -> some View {
+      let resolved = themeManager?.resolvedColorScheme(for: colorScheme) ?? colorScheme
+      let styled = content
+          .background(
+              AppBackgroundStyle
+                  .brandGradient(for: resolved)
+                  .makeView()
+                  .ignoresSafeArea(.all, edges: .top)
+          )
+      switch themeManager?.mode {
+      case .light:
+          styled.preferredColorScheme(.light)
+      case .dark:
+          styled.preferredColorScheme(.dark)
+      case .system, .none:
+          // nil `themeManager` or `.system`: do not pin — follow macOS Appearance.
+          styled
+      }
+  }
+}
+
 extension View {
-    /// Paints the brand gradient as the window background, extends it under the
-    /// (transparent) title bar, and bridges the resolved color scheme to the
-    /// underlying `NSWindow` so AppKit chrome (traffic lights, etc.) tints to match.
-    /// Pass the *resolved* scheme (i.e. honoring `ThemeManager.mode`), not the raw
-    /// system `colorScheme`.
-    func brandThemedWindow(for resolvedScheme: ColorScheme) -> some View {
-        self
-            .background(
-                AppBackgroundStyle
-                    .brandGradient(for: resolvedScheme)
-                    .makeView()
-                    .ignoresSafeArea(.all, edges: .top)
-            )
-            .preferredColorScheme(resolvedScheme)
-    }
+  /// Brand gradient + traffic-light tint. Follows system appearance when `mode == .system`.
+  func brandThemedWindow(themeManager: ThemeManager) -> some View {
+      modifier(BrandThemedWindowModifier(themeManager: themeManager))
+  }
+  /// Standalone windows without `ThemeManager` (e.g. About) — always follows system.
+  func brandThemedWindow() -> some View {
+      modifier(BrandThemedWindowModifier(themeManager: nil))
+  }
 }

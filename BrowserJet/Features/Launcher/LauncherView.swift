@@ -16,9 +16,6 @@ private enum LauncherViewConstants {
     // Cards
     static let cardInterItemSpacing: CGFloat = 20.0
 
-    // Buttons
-    static let launchButtonHeight: CGFloat = 48.0
-
     // Pickers
     static let noOfTabsPickerWidth: CGFloat = 50.0
     static let vpnPickerWidth: CGFloat = 70.0
@@ -65,7 +62,7 @@ struct LauncherView: View {
                 .padding(.top, Constants.launchButtonTopPadding)
         }
         .padding()
-        .brandThemedWindow(for: themeManager.resolvedColorScheme(for: colorScheme))
+        .brandThemedWindow(themeManager: themeManager)
         .onAppear {
             viewModel.onAppear()
             // Initialize address only if empty
@@ -95,7 +92,6 @@ struct LauncherView: View {
         BrowserJetAppButton(
             title: "Launch",
             type: .primaryLarge,
-            height: Constants.launchButtonHeight,
             isDisabled: !viewModel.isLaunchAllowed(),
             action: showBrowser
         )
@@ -123,13 +119,13 @@ private extension LauncherView {
     }
 
     private var username: some View {
-        Text("Welcome \(accountStore.username)")
+        Text("Welcome, \(accountStore.username)")
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.title1.font)
     }
 
     private var logoDescription: some View {
-        Image(.icLogoDescription)
+        BrowserJetLogoMark(iconSize: 38, style: .leading)
     }
 }
 

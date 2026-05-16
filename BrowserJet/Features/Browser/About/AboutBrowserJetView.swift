@@ -43,7 +43,7 @@ struct AboutBrowserJetView: View {
             footerView
         }
         .frame(width: 520)
-        .brandThemedWindow(for: colorScheme)
+        .brandThemedWindow()
     }
 
     private var headerView: some View {

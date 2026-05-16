@@ -16,9 +16,16 @@ struct BrowserChromeView: View {
     
     @Environment(\.appTheme)
     private var theme
-    
+
+    /// Aligns the leading edge of the chrome with the macOS traffic-light cluster.
+    /// On a `.titled, .fullSizeContentView` window the red close button sits at
+    /// roughly x=7…21pt (center ≈ 14pt). 14pt puts the back button's visible
+    /// edge under the red light's center, matching Safari/Finder convention.
+    /// The trailing edge mirrors it.
+    private static let trafficLightAlignedInset: CGFloat = 14
+
     private var enabledToolbarActions: Set<BrowserToolbarAction>? {
-        state.isTrialLockActive ? [.reload] : nil
+        state.isTrialLockActive ? [.reload, .stop] : nil
     }
     
     private var visibleMoreMenuItems: [BrowserMoreMenuItem] {
@@ -27,19 +34,26 @@ struct BrowserChromeView: View {
     
     var body: some View {
         HStack(spacing: 10) {
-            BrowserToolbarView(
-                actions: menu.leading,
-                enabledActions: enabledToolbarActions,
-                onAction: onToolbarAction
-            )
-            
             if let tab = state.selectedTab {
+                LeadingToolbar(
+                    tab: tab,
+                    actions: menu.leading,
+                    enabledActions: enabledToolbarActions,
+                    onAction: onToolbarAction
+                )
+
                 BrowserAddressBarView(
                     tab: tab,
                     isLocked: state.isTrialLockActive,
                     focusToken: state.focusAddressBarToken
                 )
                 .frame(maxWidth: .infinity)
+            } else {
+                BrowserToolbarView(
+                    actions: menu.leading,
+                    enabledActions: enabledToolbarActions,
+                    onAction: onToolbarAction
+                )
             }
             
             BrowserConnectionBadgeView(proxyType: state.proxyType)
@@ -61,7 +75,31 @@ struct BrowserChromeView: View {
                 }
             }
         }
-        .padding(.vertical, 4)
+        .padding(.top, 4)
+        .padding(.bottom, 9)
+        .padding(.horizontal, Self.trafficLightAlignedInset)
+    }
+}
+
+/// Wraps the leading toolbar so it observes the selected tab's loading state
+/// and swaps the `.reload` action for `.stop` while the page is loading.
+private struct LeadingToolbar: View {
+    @ObservedObject var tab: TabModel
+    let actions: [BrowserToolbarAction]
+    let enabledActions: Set<BrowserToolbarAction>?
+    let onAction: (BrowserToolbarAction) -> Void
+
+    private var resolvedActions: [BrowserToolbarAction] {
+        guard tab.isLoading else { return actions }
+        return actions.map { $0 == .reload ? .stop : $0 }
+    }
+
+    var body: some View {
+        BrowserToolbarView(
+            actions: resolvedActions,
+            enabledActions: enabledActions,
+            onAction: onAction
+        )
     }
 }
 

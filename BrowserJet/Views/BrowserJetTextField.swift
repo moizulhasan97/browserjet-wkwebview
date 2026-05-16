@@ -126,7 +126,7 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
             // Inline failure message — only shown when text is actively wrong
             if currentValidationState == .invalid, let message = rule?.defaultMessage, !message.isEmpty {
                 Text(message)
-                    .font(designSystem.typography.textBody1.font.leading(.tight))
+                    .font(designSystem.typography.textBody2.font.leading(.tight))
                     .foregroundStyle(theme.danger)
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
@@ -143,7 +143,7 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
             }
         } label: {
             Image(systemName: isRevealed ? "eye.slash" : "eye")
-                .font(.system(size: 14, weight: .regular))
+                .font(.system(size: 12, weight: .regular))
                 .foregroundStyle(theme.textPrimary.opacity(isRevealed ? 0.7 : 0.4))
         }
         .buttonStyle(.plain)
@@ -156,13 +156,13 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
         switch currentValidationState {
         case .valid:
             Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(.green)
                 .transition(.opacity.combined(with: .scale(scale: 0.85)))
 
         case .invalid:
             Image(systemName: "xmark.circle.fill")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(theme.danger)
                 .transition(.opacity.combined(with: .scale(scale: 0.85)))
 

@@ -121,7 +121,6 @@ private struct ButtonTypePreviewRow: View {
         BrowserJetAppButton(
             title: title,
             type: type,
-            height: 48,
             isDisabled: isDisabled
         ) {}
     }

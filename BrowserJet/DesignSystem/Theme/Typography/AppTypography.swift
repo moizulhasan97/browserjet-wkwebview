@@ -21,5 +21,6 @@ protocol AppTypography {
 
     // textfield (launcher)
     var launcherField: Typography { get }
+    var activationField: Typography { get }
     var textCaption: Typography { get }
 }

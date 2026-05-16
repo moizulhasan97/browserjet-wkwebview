@@ -11,6 +11,7 @@ enum BrowserToolbarAction: Hashable {
     case back
     case forward
     case reload
+    case stop
     case newTab
     case burnProxyAndReload
     case duplicateToTabsMenu
@@ -25,9 +26,10 @@ extension BrowserToolbarAction {
         case .back: return "chevron.left"
         case .forward: return "chevron.right"
         case .reload: return "arrow.clockwise"
-        case .newTab: return "plus.square.on.square"
+        case .stop:   return "xmark"
+        case .newTab: return "plus"
         case .burnProxyAndReload:  return "arrow.triangle.2.circlepath"
-        case .duplicateToTabsMenu: return "plus.square.on.square"
+        case .duplicateToTabsMenu: return "square.on.square"
         case .refreshAllTabs:      return "arrow.clockwise"
         case .accountManager:      return "person.2"
         case .screenshot:          return "viewfinder"
@@ -39,6 +41,7 @@ extension BrowserToolbarAction {
         case .back: return "Back"
         case .forward: return "Forward"
         case .reload: return "Reload"
+        case .stop:   return "Stop"
         case .newTab: return "New Tab"
         case .burnProxyAndReload:  return "Burn IP and reload"
         case .duplicateToTabsMenu: return "Duplicate tab"

@@ -56,7 +56,6 @@ struct ForceUpdateBlockingOverlay: View {
                             BrowserJetAppButton(
                                 title: "Update Now",
                                 type: .primaryLarge,
-                                height: 48,
                                 isDisabled: false
                             ) {
                                 gate.updateNowTapped()
@@ -66,7 +65,6 @@ struct ForceUpdateBlockingOverlay: View {
                                 BrowserJetAppButton(
                                     title: "Download manually",
                                     type: .secondaryLarge,
-                                    height: 44,
                                     isDisabled: false
                                 ) {
                                     gate.openManualDownloadPage()
@@ -76,7 +74,6 @@ struct ForceUpdateBlockingOverlay: View {
                             BrowserJetAppButton(
                                 title: "Quit BrowserJet",
                                 type: .destructivePrimaryLarge,
-                                height: 44,
                                 isDisabled: false
                             ) { gate.quitApplication() }
                                 .padding(.top, 4)

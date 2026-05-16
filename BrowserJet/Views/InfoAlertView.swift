@@ -51,7 +51,7 @@ struct InfoAlertProgressView: View {
     var body: some View {
         InfoAlertChrome {
             VStack(spacing: DesignMetrics.rowSpacing) {
-                Image(.icLogoDescription)
+                BrowserJetLogoMark(iconSize: 48, style: .center)
 
                 ProgressView(message)
                     .controlSize(.large)
@@ -88,7 +88,7 @@ struct InfoAlertView: View {
     var body: some View {
         InfoAlertChrome {
             VStack(spacing: DesignMetrics.sectionSpacing) {
-                Image(.icLogoDescription)
+                BrowserJetLogoMark(iconSize: 48, style: .center)
 
                 VStack(alignment: .center, spacing: DesignMetrics.rowSpacing) {
                     Text(title)
@@ -107,7 +107,6 @@ struct InfoAlertView: View {
                 BrowserJetAppButton(
                     title: buttonTitle,
                     type: .primaryLarge,
-                    height: 48,
                     isDisabled: false,
                     action: onDismiss
                 )

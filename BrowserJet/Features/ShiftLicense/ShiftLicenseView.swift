@@ -114,7 +114,6 @@ private struct ShiftDeviceRow: View {
                 BrowserJetAppButton(
                     title: "Shift",
                     type: .primaryLarge,
-                    height: 44,
                     isDisabled: isDisabled,
                     action: onShift
                 )

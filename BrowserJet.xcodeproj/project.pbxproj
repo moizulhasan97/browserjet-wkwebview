@@ -126,6 +126,7 @@
 		AF9D9BB52FB7FFA80047856A /* ActiveBrowserStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB42FB7FFA60047856A /* ActiveBrowserStateProvider.swift */; };
 		AF9D9BB72FB8019D0047856A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB62FB8019B0047856A /* AppDelegate.swift */; };
 		AF9D9BB92FB806820047856A /* AboutPanelOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB82FB806800047856A /* AboutPanelOptionsBuilder.swift */; };
+		AF9D9BBB2FB8ECD60047856A /* BrowserJetLogoMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BBA2FB8ECD40047856A /* BrowserJetLogoMark.swift */; };
 		AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */; };
 		AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */; };
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
@@ -281,6 +282,7 @@
 		AF9D9BB42FB7FFA60047856A /* ActiveBrowserStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveBrowserStateProvider.swift; sourceTree = "<group>"; };
 		AF9D9BB62FB8019B0047856A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AF9D9BB82FB806800047856A /* AboutPanelOptionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPanelOptionsBuilder.swift; sourceTree = "<group>"; };
+		AF9D9BBA2FB8ECD40047856A /* BrowserJetLogoMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetLogoMark.swift; sourceTree = "<group>"; };
 		AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabsPopoverView.swift; sourceTree = "<group>"; };
 		AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuItem.swift; sourceTree = "<group>"; };
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
@@ -888,6 +890,7 @@
 		AFF3EB0B2F3CACB100C6F08E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AF9D9BBA2FB8ECD40047856A /* BrowserJetLogoMark.swift */,
 				AFE976512F5543C800D270C8 /* InfoAlertView.swift */,
 				AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */,
 				AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */,
@@ -1244,6 +1247,7 @@
 				AF56EF072F3DEE3100E49C58 /* BrowserJetAppButton.swift in Sources */,
 				AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */,
 				AF56EEFB2F3CFA8E00E49C58 /* BrowserJetDivider.swift in Sources */,
+				AF9D9BBB2FB8ECD60047856A /* BrowserJetLogoMark.swift in Sources */,
 				AF56EEF92F3CD8A800E49C58 /* GlassPillToggle.swift in Sources */,
 				AF8267152FA94B420036EFD5 /* Time+Int.swift in Sources */,
 				AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */,

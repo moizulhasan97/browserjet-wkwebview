@@ -115,7 +115,7 @@ struct BrowserRootView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .brandThemedWindow(for: themeManager.resolvedColorScheme(for: colorScheme))
+        .brandThemedWindow(themeManager: themeManager)
         .task {
             await BrowserLicenseBackgroundMonitor.run()
         }
@@ -154,7 +154,7 @@ struct BrowserRootView: View {
     
     private func handleToolbarAction(_ action: BrowserToolbarAction) {
         guard let tab = state.selectedTab else { return }
-        if state.isTrialLockActive, action != .reload { return }
+        if state.isTrialLockActive, action != .reload, action != .stop { return }
         
         if handleNavigationAction(action, on: tab) { return }
         handleStateAction(action)
@@ -170,6 +170,9 @@ struct BrowserRootView: View {
             return true
         case .reload:
             tab.webView.reload()
+            return true
+        case .stop:
+            tab.webView.stopLoading()
             return true
         default:
             return false

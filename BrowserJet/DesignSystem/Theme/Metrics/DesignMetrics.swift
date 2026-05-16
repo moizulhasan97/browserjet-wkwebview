@@ -33,4 +33,9 @@ enum DesignMetrics {
     static let launcherAddressFieldHeight: CGFloat = 42 // launcher search bar
     static let browserAddressFieldHeight: CGFloat = 34 // launcher search bar
     static let buttonHeight: CGFloat = 64
+
+    /// Canonical height for `BrowserJetAppButton` across the app.
+    /// Sized for desktop input — wide enough to read as a prominent CTA,
+    /// short enough to feel native to macOS rather than iOS-touch.
+    static let primaryButtonHeight: CGFloat = 38
 }

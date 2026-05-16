@@ -16,7 +16,7 @@ final class ThemeManager: ObservableObject {
         case dark
     }
 
-    @Published var mode: Mode = .dark {
+    @Published var mode: Mode = .system {
         didSet {
             AppLogger.info("Theme mode changed to: \(mode)")
         }

@@ -73,7 +73,6 @@ struct ChangeLicenseKeyView: View {
             BrowserJetAppButton(
                 title: "Cancel",
                 type: .secondaryLarge,
-                height: 44,
                 isDisabled: false
             ) {
                 dismiss()
@@ -83,7 +82,6 @@ struct ChangeLicenseKeyView: View {
             BrowserJetAppButton(
                 title: viewModel.isLoading ? "Please wait..." : "Change Key",
                 type: .primaryLarge,
-                height: 44,
                 isDisabled: !viewModel.canSubmit
             ) {
                 viewModel.submit()

@@ -34,8 +34,8 @@ struct RecoverAccountView: View {
     private var formContent: some View {
         InfoAlertChrome(minWidth: 360, maxWidth: 440) {
             VStack(alignment: .leading, spacing: DesignMetrics.sectionSpacing) {
-                Image(.icLogoDescription)
-                    .frame(maxWidth: .infinity)
+                BrowserJetLogoMark(iconSize: 48, style: .center)
+                    //.frame(maxWidth: .infinity)
 
                 Text(ActivationMessages.AccountRecovery.headline)
                     .font(designSystem.typography.title1.font)
@@ -67,7 +67,6 @@ struct RecoverAccountView: View {
                 BrowserJetAppButton(
                     title: ActivationMessages.AccountRecovery.continueButton,
                     type: .primaryLarge,
-                    height: 48,
                     isDisabled: !viewModel.canContinue || viewModel.isLoading
                 ) {
                     Task {
@@ -85,7 +84,7 @@ struct RecoverAccountView: View {
     private var successContent: some View {
         InfoAlertChrome(minWidth: 360, maxWidth: 440) {
             VStack(spacing: DesignMetrics.sectionSpacing) {
-                Image(.icLogoDescription)
+                BrowserJetLogoMark(iconSize: 48, style: .center)
 
                 Text(ActivationMessages.AccountRecoverySuccess.title)
                     .font(designSystem.typography.title1.font)
@@ -103,7 +102,6 @@ struct RecoverAccountView: View {
                     BrowserJetAppButton(
                         title: ActivationMessages.AccountRecoverySuccess.openDashboard,
                         type: .primaryLarge,
-                        height: 48,
                         isDisabled: false
                     ) {
                         AppLogger.info("Open dashboard")
@@ -120,7 +118,6 @@ struct RecoverAccountView: View {
         BrowserJetAppButton(
             title: ActivationMessages.AccountRecovery.dismissSheet,
             type: .secondaryLarge,
-            height: 48,
             isDisabled: locksWhileLoading && viewModel.isLoading
         ) {
             dismiss()

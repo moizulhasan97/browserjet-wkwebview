@@ -21,12 +21,11 @@ struct ActivationWindowRoot: View {
 
 // MARK: - Constants
 private enum ActivationRootViewConstants {
-    static let mainVStackSpacing: CGFloat = 18.0
-    static let cardVStackSpacing: CGFloat = 18.0
-    static let titleSubtitleVStackSpacing: CGFloat = 8.0
-    static let sectionSpacing: CGFloat = 14.0
-    static let fieldSpacing: CGFloat = 14.0
-    static let buttonHeight: CGFloat = 48.0
+    static let mainVStackSpacing: CGFloat = 14.0
+    static let cardVStackSpacing: CGFloat = 14.0
+    static let titleSubtitleVStackSpacing: CGFloat = 6.0
+    static let sectionSpacing: CGFloat = 12.0
+    static let fieldSpacing: CGFloat = 10.0
 }
 
 // MARK: - View
@@ -72,7 +71,7 @@ struct ActivationRootView: View {
             }
         }
         .padding()
-        .brandThemedWindow(for: themeManager.resolvedColorScheme(for: colorScheme))
+        .brandThemedWindow(themeManager: themeManager)
         .loadingOverlay(isLoading: viewModel.isLoading)
         .onChange(of: viewModel.verifyOutcome) { _, outcome in
             handleVerifyOutcome(outcome)
@@ -187,7 +186,6 @@ private extension ActivationRootView {
             BrowserJetAppButton(
                 title: ActivationMessages.Mode.verifyButton,
                 type: .primaryLarge,
-                height: Constants.buttonHeight,
                 isDisabled: !viewModel.canVerifyKey
             ) {
                 viewModel.verifyKey()
@@ -228,7 +226,6 @@ private extension ActivationRootView {
             BrowserJetAppButton(
                 title: ActivationMessages.Mode.createKeyButton,
                 type: .primaryLarge,
-                height: Constants.buttonHeight,
                 isDisabled: !viewModel.canCreateKey
             ) {
                 viewModel.createKey()

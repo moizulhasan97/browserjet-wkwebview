@@ -64,9 +64,9 @@ struct ThemeTextFieldStyleProvider: TextFieldStyleProvider {
 
         case .activationField:
             return BrowserJetTextFieldStyle(
-                height: 44,
+                height: 34,
                 cornerRadius: .fixed(DesignMetrics.controlCornerRadius),
-                font: typography.launcherField.font,
+                font: typography.activationField.font,
                 backgroundColor: theme.surfaceControl,
                 backgroundDisabledColor: theme.surfaceControl.opacity(0.7),
                 backgroundHighlightedColor: theme.surfaceControl,

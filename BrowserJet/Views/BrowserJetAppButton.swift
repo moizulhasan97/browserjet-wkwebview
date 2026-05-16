@@ -21,7 +21,7 @@ struct BrowserJetAppButton: View {
         title: String,
         type: BrowserJetButtonStyle.ButtonType,
         width: CustomWidth = .full,
-        height: CGFloat = 68.0,
+        height: CGFloat = DesignMetrics.primaryButtonHeight,
         isDisabled: Bool = false,
         action: @escaping () -> Void
     ) {
