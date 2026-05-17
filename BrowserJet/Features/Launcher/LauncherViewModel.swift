@@ -166,6 +166,19 @@ final class LauncherViewModel: ObservableObject {
         settings.address = address
     }
 
+    /// Applies a saved Settings default URL when the launcher still shows the previous default (or is empty).
+    func applySavedStartURLIfMatchingDefault(newURL: String, previousDefaultURL: String) {
+        let current = settings.address.trimmingCharacters(in: .whitespacesAndNewlines)
+        let previous = previousDefaultURL.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard current.isEmpty || current == previous else {
+            AppLogger.debug(
+                "Launcher address not updated — user customized (\(current)) away from previous default (\(previous))"
+            )
+            return
+        }
+        updateAddress(newURL)
+    }
+
     func updateNumberOfTabs(_ preset: LauncherTabPreset) {
         AppLogger.info("Number of tabs changed to: \(preset.rawValue)")
         settings.numberOfTabs = preset

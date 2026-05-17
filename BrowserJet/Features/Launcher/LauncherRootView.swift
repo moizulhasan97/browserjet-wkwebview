@@ -14,7 +14,7 @@ struct LauncherRootView: View {
     @EnvironmentObject private var themeManager: ThemeManager
     @ObservedObject private var forceGate = ForceUpdateGate.shared
     let appConfiguration: AppConfiguration
-
+    
     var body: some View {
         AppLogger.debug("LauncherRootView body computed - ColorScheme: \(colorScheme == .dark ? "dark" : "light")")
         return Group {
@@ -25,8 +25,7 @@ struct LauncherRootView: View {
                     .environment(\.appConfiguration, appConfiguration)
             }
         }
-        .environment(\.appTheme, themeManager.theme(for: colorScheme))
-        .environment(\.designSystem, DesignSystem())
+        .browserJetThemedRoot(themeManager: themeManager, colorScheme: colorScheme)
         .task { @MainActor in
             let updatePolicy = AppUpdatePolicy.evaluateBuild()
             SparkleUpdateCoordinator.shared.applyPolicyResult(

@@ -59,8 +59,7 @@ struct BrowserRootView: View {
                 browserMainContent
             }
         }
-        .environment(\.appTheme, themeManager.theme(for: colorScheme))
-        .environment(\.designSystem, DesignSystem())
+        .browserJetThemedRoot(themeManager: themeManager, colorScheme: colorScheme)
         .onAppear {
             ActiveBrowserStateProvider.shared.current = state
         }
@@ -115,7 +114,6 @@ struct BrowserRootView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .brandThemedWindow(themeManager: themeManager)
         .task {
             await BrowserLicenseBackgroundMonitor.run()
         }
@@ -136,19 +134,6 @@ struct BrowserRootView: View {
             guard didSucceed else { return }
             showChangeKeySheet = false
             showChangeKeySuccessAlert = true
-        }
-        .alert(
-            "Close BrowserJet?",
-            isPresented: $state.showLastTabCloseConfirmation
-        ) {
-            Button("Quit BrowserJet", role: .destructive) {
-                state.confirmQuitFromLastTabClose()
-            }
-            Button("Cancel", role: .cancel) {
-                state.cancelLastTabClose()
-            }
-        } message: {
-            Text("Closing this tab will quit BrowserJet. Do you want to continue?")
         }
     }
     

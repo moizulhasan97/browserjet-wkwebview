@@ -38,10 +38,6 @@ final class BrowserWindowState: ObservableObject {
     @Published private(set) var closedTabsStack: [URL] = []
     private let closedTabsStackCap = 10
     
-    /// Set when we close tab on the last remaining tab. The view binds this
-    /// to a confirmation alert; confirming quits the app.
-    @Published var showLastTabCloseConfirmation: Bool = false
-    
     /// Bumped each time ⌘L is invoked. The address bar observes this token
     /// and grabs first-responder when it changes.
     @Published private(set) var focusAddressBarToken: UUID?
@@ -241,26 +237,16 @@ extension BrowserWindowState {
     func requestCloseTab(_ tabID: UUID) {
         guard !isTrialLockActive else { return }
         if tabs.count == 1 {
-            showLastTabCloseConfirmation = true
+            AppLogger.info("Quitting app: close last tab")
+            QuitConfirmationController.requestQuit()
             return
         }
         closeTab(tabID)
     }
-    
+
     func requestCloseSelectedTab() {
         guard let id = selectedTabID else { return }
         requestCloseTab(id)
-    }
-    
-    /// Called from the confirmation alert's "Quit" action.
-    func confirmQuitFromLastTabClose() {
-        showLastTabCloseConfirmation = false
-        AppLogger.info("Quitting app: user confirmed close of last tab")
-        NSApplication.shared.terminate(nil)
-    }
-    
-    func cancelLastTabClose() {
-        showLastTabCloseConfirmation = false
     }
     
     // MARK: Reopen-closed-tab stack

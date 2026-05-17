@@ -127,6 +127,11 @@
 		AF9D9BB72FB8019D0047856A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB62FB8019B0047856A /* AppDelegate.swift */; };
 		AF9D9BB92FB806820047856A /* AboutPanelOptionsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BB82FB806800047856A /* AboutPanelOptionsBuilder.swift */; };
 		AF9D9BBB2FB8ECD60047856A /* BrowserJetLogoMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BBA2FB8ECD40047856A /* BrowserJetLogoMark.swift */; };
+		AF9D9BBE2FB8F3A70047856A /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BBD2FB8F3A70047856A /* SettingsViewModel.swift */; };
+		AF9D9BC02FB8F3C30047856A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BBF2FB8F3C00047856A /* SettingsView.swift */; };
+		AF9D9BC22FB8FA490047856A /* ThemeWindowAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BC12FB8FA480047856A /* ThemeWindowAppearance.swift */; };
+		AF9D9BC42FB901170047856A /* LauncherStartURLPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BC32FB901140047856A /* LauncherStartURLPreferences.swift */; };
+		AF9D9BC82FB90180047856A /* QuitConfirmationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D9BC72FB90180047856A /* QuitConfirmationPreferences.swift */; };
 		AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */; };
 		AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */; };
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
@@ -283,6 +288,11 @@
 		AF9D9BB62FB8019B0047856A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AF9D9BB82FB806800047856A /* AboutPanelOptionsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPanelOptionsBuilder.swift; sourceTree = "<group>"; };
 		AF9D9BBA2FB8ECD40047856A /* BrowserJetLogoMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetLogoMark.swift; sourceTree = "<group>"; };
+		AF9D9BBD2FB8F3A70047856A /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		AF9D9BBF2FB8F3C00047856A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AF9D9BC12FB8FA480047856A /* ThemeWindowAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeWindowAppearance.swift; sourceTree = "<group>"; };
+		AF9D9BC32FB901140047856A /* LauncherStartURLPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherStartURLPreferences.swift; sourceTree = "<group>"; };
+		AF9D9BC72FB90180047856A /* QuitConfirmationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuitConfirmationPreferences.swift; sourceTree = "<group>"; };
 		AFA2C7D42F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabsPopoverView.swift; sourceTree = "<group>"; };
 		AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuItem.swift; sourceTree = "<group>"; };
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
@@ -803,6 +813,17 @@
 			path = Commands;
 			sourceTree = "<group>";
 		};
+		AF9D9BBC2FB8F39C0047856A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AF9D9BC32FB901140047856A /* LauncherStartURLPreferences.swift */,
+				AF9D9BC72FB90180047856A /* QuitConfirmationPreferences.swift */,
+				AF9D9BBF2FB8F3C00047856A /* SettingsView.swift */,
+				AF9D9BBD2FB8F3A70047856A /* SettingsViewModel.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		AFE9764B2F5530AC00D270C8 /* ShiftLicense */ = {
 			isa = PBXGroup;
 			children = (
@@ -875,6 +896,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AF9D9BBC2FB8F39C0047856A /* Settings */,
 				AF99BFBC2FA00AC40096FAE9 /* Update */,
 				AFF4DA062F74894B0028293B /* RecoverAccount */,
 				AFF4D9FF2F743A620028293B /* Root */,
@@ -982,6 +1004,7 @@
 		AFF3EB282F3CACB100C6F08E /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				AF9D9BC12FB8FA480047856A /* ThemeWindowAppearance.swift */,
 				AF56EEEA2F3CC30100E49C58 /* DesignSystem+Environment.swift */,
 				AF56EEE82F3CC2D200E49C58 /* DesignSystem.swift */,
 				AFF3EB252F3CACB100C6F08E /* AppTheme.swift */,
@@ -1144,6 +1167,7 @@
 				AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */,
 				AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */,
 				AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */,
+				AF9D9BBE2FB8F3A70047856A /* SettingsViewModel.swift in Sources */,
 				AF127CFB2F9ACA9800EE34E2 /* RemoteConfigManager.swift in Sources */,
 				AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */,
 				AFE976502F55343100D270C8 /* ShiftViewModel.swift in Sources */,
@@ -1151,6 +1175,7 @@
 				AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */,
 				AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */,
 				AFE976522F5543CB00D270C8 /* InfoAlertView.swift in Sources */,
+				AF9D9BC02FB8F3C30047856A /* SettingsView.swift in Sources */,
 				AFF3EB2D2F3CACB100C6F08E /* Typography.swift in Sources */,
 				AF99BFC12FA010830096FAE9 /* SparkleUpdateCoordinator.swift in Sources */,
 				AF69F5C92F43763B00B33610 /* SessionManager.swift in Sources */,
@@ -1178,6 +1203,7 @@
 				AF9D9BB52FB7FFA80047856A /* ActiveBrowserStateProvider.swift in Sources */,
 				AF401AAF2F4D1A5B00EF265C /* APIError.swift in Sources */,
 				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
+				AF9D9BC22FB8FA490047856A /* ThemeWindowAppearance.swift in Sources */,
 				AF9D9BB32FB7FAE40047856A /* BrowserCommands.swift in Sources */,
 				AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */,
 				AFF3EB342F3CACB100C6F08E /* FontProvider.swift in Sources */,
@@ -1185,6 +1211,8 @@
 				AF401ABF2F4D1BE900EF265C /* ProxyEndpoint.swift in Sources */,
 				AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */,
 				AF401ABB2F4D1B1100EF265C /* AppUpdateService.swift in Sources */,
+				AF9D9BC42FB901170047856A /* LauncherStartURLPreferences.swift in Sources */,
+				AF9D9BC82FB90180047856A /* QuitConfirmationPreferences.swift in Sources */,
 				AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */,
 				AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */,
 				AF7A10012F90010000E49C58 /* LauncherMessages.swift in Sources */,

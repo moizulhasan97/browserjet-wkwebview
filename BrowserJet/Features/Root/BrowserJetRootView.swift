@@ -22,8 +22,7 @@ struct BrowserJetWindowRoot: View {
                 BrowserJetRootView()
             }
         }
-        .environment(\.appTheme, themeManager.theme(for: colorScheme))
-        .environment(\.designSystem, DesignSystem())
+        .browserJetThemedRoot(themeManager: themeManager, colorScheme: colorScheme)
     }
 }
 
@@ -92,7 +91,6 @@ struct BrowserJetRootView: View {
             ActivationRootView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .brandThemedWindow(themeManager: themeManager)
     }
 
     @ViewBuilder private var compactBootstrapChrome: some View {

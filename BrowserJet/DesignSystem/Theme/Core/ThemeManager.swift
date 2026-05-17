@@ -10,15 +10,24 @@ import Combine
 
 @MainActor
 final class ThemeManager: ObservableObject {
-    enum Mode: Equatable {
+    enum Mode: String, Equatable, Hashable, CaseIterable {
         case system
         case light
         case dark
+
+        var displayName: String {
+            switch self {
+            case .system: return "System"
+            case .light: return "Light"
+            case .dark: return "Dark"
+            }
+        }
     }
 
-    @Published var mode: Mode = .system {
+    @Published var mode: Mode {
         didSet {
             AppLogger.info("Theme mode changed to: \(mode)")
+            ThemeWindowAppearance.apply(mode: mode)
         }
     }
 
@@ -27,12 +36,19 @@ final class ThemeManager: ObservableObject {
 
     init(
         lightTheme: any AppTheme = BrowserJetLightTheme(),
-        darkTheme: any AppTheme = BrowserJetDarkTheme()
+        darkTheme: any AppTheme = BrowserJetDarkTheme(),
+        keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
     ) {
         AppLogger.debug("ThemeManager initializing with light and dark themes")
         self.lightTheme = lightTheme
         self.darkTheme = darkTheme
+        self.mode = Self.loadPersistedMode(from: keyValueStore) ?? .light
         AppLogger.debug("ThemeManager initialized - Mode: \(mode)")
+    }
+
+    /// Call once `NSApp` is available (e.g. from `BrowserJet.init` on the main queue).
+    func applyWindowAppearance() {
+        ThemeWindowAppearance.apply(mode: mode)
     }
 
     func theme(for colorScheme: ColorScheme) -> any AppTheme {
@@ -49,14 +65,18 @@ final class ThemeManager: ObservableObject {
         }
     }
 
-    /// Resolves the effective color scheme honoring the forced mode setting.
-    /// Use this when a view needs a `ColorScheme` (e.g. picking a background) that
-    /// matches the active theme rather than the system appearance.
     func resolvedColorScheme(for colorScheme: ColorScheme) -> ColorScheme {
         switch mode {
         case .system: return colorScheme
         case .light: return .light
         case .dark: return .dark
         }
+    }
+
+    private static func loadPersistedMode(from store: KeyValueStoring) -> Mode? {
+        guard let raw = store.object(forKey: StorageKeys.appearanceMode) as? String else {
+            return nil
+        }
+        return Mode(rawValue: raw)
     }
 }

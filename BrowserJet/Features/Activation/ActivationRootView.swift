@@ -71,7 +71,6 @@ struct ActivationRootView: View {
             }
         }
         .padding()
-        .brandThemedWindow(themeManager: themeManager)
         .loadingOverlay(isLoading: viewModel.isLoading)
         .onChange(of: viewModel.verifyOutcome) { _, outcome in
             handleVerifyOutcome(outcome)

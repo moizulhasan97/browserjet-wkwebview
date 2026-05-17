@@ -27,60 +27,86 @@ extension AppBackgroundStyle {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-
+            
         case .browserJetDarkGradient:
             LinearGradient(
                 colors: [
-                    Color(red: 0.055, green: 0.063, blue: 0.078),  // #0E1014
-                    Color(red: 0.067, green: 0.075, blue: 0.082),  // #111315
-                    Color(red: 0.086, green: 0.102, blue: 0.125)   // #161A20
+                    Color(red: 0.055, green: 0.063, blue: 0.078),
+                    Color(red: 0.067, green: 0.075, blue: 0.082),
+                    Color(red: 0.086, green: 0.102, blue: 0.125)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-
+            
         case .solid(let color):
             color
         }
     }
-
-    /// Returns the brand gradient appropriate for the resolved color scheme.
+    
     static func brandGradient(for colorScheme: ColorScheme) -> AppBackgroundStyle {
         colorScheme == .dark ? .browserJetDarkGradient : .browserJetGradient
     }
 }
 
+// MARK: - ThemeManager-driven windows (launcher, browser, settings, activation)
+
 private struct BrandThemedWindowModifier: ViewModifier {
-  @Environment(\.colorScheme) private var colorScheme
-  let themeManager: ThemeManager?
-  func body(content: Content) -> some View {
-      let resolved = themeManager?.resolvedColorScheme(for: colorScheme) ?? colorScheme
-      let styled = content
-          .background(
-              AppBackgroundStyle
-                  .brandGradient(for: resolved)
-                  .makeView()
-                  .ignoresSafeArea(.all, edges: .top)
-          )
-      switch themeManager?.mode {
-      case .light:
-          styled.preferredColorScheme(.light)
-      case .dark:
-          styled.preferredColorScheme(.dark)
-      case .system, .none:
-          // nil `themeManager` or `.system`: do not pin — follow macOS Appearance.
-          styled
-      }
-  }
+    @ObservedObject var themeManager: ThemeManager
+    @Environment(\.colorScheme) private var colorScheme
+    
+    private var preferredScheme: ColorScheme? {
+        switch themeManager.mode {
+        case .light: return .light
+        case .dark: return .dark
+        case .system: return nil
+        }
+    }
+    
+    func body(content: Content) -> some View {
+        let resolved = themeManager.resolvedColorScheme(for: colorScheme)
+        let background = AppBackgroundStyle
+            .brandGradient(for: resolved)
+            .makeView()
+            .ignoresSafeArea()
+        
+        Group {
+            if let preferredScheme {
+                content
+                    .background(background)
+                    .preferredColorScheme(preferredScheme)
+            } else {
+                content.background(background)
+            }
+        }
+        .id(themeManager.mode)
+    }
+}
+
+// MARK: - System-following windows (About)
+
+private struct SystemBrandThemedWindowModifier: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+    
+    func body(content: Content) -> some View {
+        content
+            .background(
+                AppBackgroundStyle
+                    .brandGradient(for: colorScheme)
+                    .makeView()
+                    .ignoresSafeArea()
+            )
+    }
 }
 
 extension View {
-  /// Brand gradient + traffic-light tint. Follows system appearance when `mode == .system`.
-  func brandThemedWindow(themeManager: ThemeManager) -> some View {
-      modifier(BrandThemedWindowModifier(themeManager: themeManager))
-  }
-  /// Standalone windows without `ThemeManager` (e.g. About) — always follows system.
-  func brandThemedWindow() -> some View {
-      modifier(BrandThemedWindowModifier(themeManager: nil))
-  }
+    /// Brand gradient + color scheme. Re-renders when `themeManager.mode` changes.
+    func brandThemedWindow(themeManager: ThemeManager) -> some View {
+        modifier(BrandThemedWindowModifier(themeManager: themeManager))
+    }
+    
+    /// About and other windows without a shared `ThemeManager`.
+    func brandThemedWindow() -> some View {
+        modifier(SystemBrandThemedWindowModifier())
+    }
 }
