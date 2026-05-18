@@ -78,7 +78,7 @@ final class TabModel: ObservableObject, Identifiable {
 
         // Load the initial URL (skip blank)
         if startURL.absoluteString != "about:blank" {
-            load(startURL)
+            webView.load(URLRequest(url: startURL))
         }
     }
 
@@ -96,22 +96,8 @@ extension TabModel {
     }
 
     func load(_ input: String) {
-        let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-
-        if trimmed.contains("://"), let url = URL(string: trimmed) {
-            load(url); return
-        }
-
-        if trimmed.contains(".") && !trimmed.contains(" "),
-            let url = URL(string: "https://\(trimmed)") {
-            load(url); return
-        }
-
-        let encodedQuery = trimmed.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? trimmed
-        if let url = URL(string: "https://www.google.com/search?q=\(encodedQuery)") {
-            load(url)
-        }
+        guard let url = AddressBarURLResolver.resolve(input) else { return }
+        load(url)
     }
 }
 

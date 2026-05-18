@@ -158,8 +158,8 @@ final class WindowManager {
             generatedProxies = []
         }
 
-        let initialURL = URL(string: request.address)
-            ?? URL(string: appConfiguration.defaultSearchAddress)
+        let initialURL = AddressBarURLResolver.resolve(request.address)
+            ?? AddressBarURLResolver.resolve(appConfiguration.defaultSearchAddress)
             ?? URL(string: "https://www.google.com")
             ?? URL(string: "about:blank")
             ?? URL(fileURLWithPath: "/")

@@ -168,6 +168,7 @@
 		AFF4DA032F7451720028293B /* PaymentAlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA022F7451720028293B /* PaymentAlertItem.swift */; };
 		AFF4DA082F7489600028293B /* RecoverAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA072F74895C0028293B /* RecoverAccountView.swift */; };
 		AFF4DA0A2F7489680028293B /* RecoverAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */; };
+		AFF643F52FBBA8AD00D975A6 /* AddressBarURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF643F42FBBA8AB00D975A6 /* AddressBarURLResolver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -332,6 +333,7 @@
 		AFF4DA022F7451720028293B /* PaymentAlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAlertItem.swift; sourceTree = "<group>"; };
 		AFF4DA072F74895C0028293B /* RecoverAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverAccountView.swift; sourceTree = "<group>"; };
 		AFF4DA092F7489680028293B /* RecoverAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoverAccountViewModel.swift; sourceTree = "<group>"; };
+		AFF643F42FBBA8AB00D975A6 /* AddressBarURLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarURLResolver.swift; sourceTree = "<group>"; };
 		C5ACA9592E1B48DAA9223F65 /* BrowserTabPillShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabPillShapes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -517,6 +519,7 @@
 		AF56EF0C2F3DF84A00E49C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				AFF643F42FBBA8AB00D975A6 /* AddressBarURLResolver.swift */,
 				AF99BFB52F9FDF6E0096FAE9 /* AppUpdatePolicy.swift */,
 				AF127D012F9FBA8200EE34E2 /* AppUtils.swift */,
 				AF401AD02F4D37E500EF265C /* SystemInfo.swift */,
@@ -1302,6 +1305,7 @@
 				AF69F5E32F43A32100B33610 /* LauncherSettings+LaunchRequest.swift in Sources */,
 				AF2017132FABFD380058705F /* AboutBrowserJetDisplayModel.swift in Sources */,
 				AF99BFC52FA013500096FAE9 /* ForceUpdateBlockingOverlay.swift in Sources */,
+				AFF643F52FBBA8AD00D975A6 /* AddressBarURLResolver.swift in Sources */,
 				AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */,
 				AFCA5CF42F75BC4C007A8578 /* DecryptedPremiumProxy.swift in Sources */,
 				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
