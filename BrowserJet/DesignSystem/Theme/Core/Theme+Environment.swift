@@ -19,7 +19,7 @@ extension EnvironmentValues {
 }
 
 extension View {
-    /// Single place to inject semantic theme, design system, window gradient, and force refresh on committed mode change.
+    /// Single place to inject semantic theme, design system, window gradient, and refresh on cancel/commit.
     func browserJetThemedRoot(
         themeManager: ThemeManager,
         colorScheme: ColorScheme
@@ -27,6 +27,6 @@ extension View {
         environment(\.appTheme, themeManager.theme(for: colorScheme))
             .environment(\.designSystem, DesignSystem())
             .brandThemedWindow(themeManager: themeManager)
-            .id(themeManager.mode)
+            .id(themeManager.appearanceIdentity)
     }
 }

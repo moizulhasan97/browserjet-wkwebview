@@ -5,6 +5,7 @@
 //  Created by Moiz Ul Hasan on 22/01/2026.
 //
 
+import AppKit
 import SwiftUI
 
 @MainActor
@@ -28,7 +29,8 @@ final class ThemeManager: ObservableObject {
     
     @Published private(set) var mode: Mode
     @Published private var previewMode: Mode?
-    
+    @Published private(set) var appearanceRevision = 0
+
     private let lightTheme: any AppTheme
     private let darkTheme: any AppTheme
     private let store: KeyValueStoring
@@ -36,7 +38,12 @@ final class ThemeManager: ObservableObject {
     var activeMode: Mode {
         previewMode ?? mode
     }
-    
+
+    /// Stable view identity for themed roots; bumps on cancel/commit to refresh stuck `preferredColorScheme`.
+    var appearanceIdentity: String {
+        "\(mode.rawValue)-\(appearanceRevision)"
+    }
+
     init(
         lightTheme: any AppTheme = BrowserJetLightTheme(),
         darkTheme: any AppTheme = BrowserJetDarkTheme(),
@@ -68,29 +75,33 @@ final class ThemeManager: ObservableObject {
     func cancelPreview() {
         previewMode = nil
         ThemeWindowAppearance.apply(mode: mode)
+        appearanceRevision += 1
     }
-    
+
     func commit(_ mode: Mode) {
         self.mode = mode
         self.previewMode = nil
         store.set(mode.rawValue, forKey: StorageKeys.appearanceMode)
         ThemeWindowAppearance.apply(mode: mode)
+        appearanceRevision += 1
         AppLogger.info("Theme mode committed: \(mode)")
     }
-    
+
     func theme(for colorScheme: ColorScheme) -> any AppTheme {
-        switch activeMode {
-        case .system: return colorScheme == .dark ? darkTheme : lightTheme
-        case .light:  return lightTheme
-        case .dark:   return darkTheme
-        }
+        resolvedColorScheme(for: colorScheme) == .dark ? darkTheme : lightTheme
     }
-    
+
     func resolvedColorScheme(for colorScheme: ColorScheme) -> ColorScheme {
         switch activeMode {
-        case .system: return colorScheme
+        case .system: return systemColorScheme()
         case .light:  return .light
         case .dark:   return .dark
         }
+    }
+
+    private func systemColorScheme() -> ColorScheme {
+        guard let app = NSApp else { return .light }
+        let best = app.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua])
+        return best == .darkAqua ? .dark : .light
     }
 }

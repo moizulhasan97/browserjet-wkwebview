@@ -12,10 +12,14 @@ import SwiftUI
 struct SettingsRootView: View {
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
-    
+
+    private var resolvedColorScheme: ColorScheme {
+        themeManager.resolvedColorScheme(for: colorScheme)
+    }
+
     var body: some View {
         SettingsView(themeManager: themeManager)
-            .browserJetThemedRoot(themeManager: themeManager, colorScheme: colorScheme)
+            .browserJetThemedRoot(themeManager: themeManager, colorScheme: resolvedColorScheme)
             .frame(minWidth: 520, minHeight: 400)
     }
 }

@@ -73,7 +73,7 @@ private struct BrandThemedWindowModifier: ViewModifier {
         content
             .background(background)
             .preferredColorScheme(preferredScheme)
-            .id(themeManager.mode)
+            .id(themeManager.appearanceIdentity)
     }
 }
 
