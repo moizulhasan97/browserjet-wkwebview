@@ -54,32 +54,26 @@ extension AppBackgroundStyle {
 private struct BrandThemedWindowModifier: ViewModifier {
     @ObservedObject var themeManager: ThemeManager
     @Environment(\.colorScheme) private var colorScheme
-    
+
     private var preferredScheme: ColorScheme? {
-        switch themeManager.mode {
-        case .light: return .light
-        case .dark: return .dark
+        switch themeManager.activeMode {
+        case .light:  return .light
+        case .dark:   return .dark
         case .system: return nil
         }
     }
-    
+
     func body(content: Content) -> some View {
         let resolved = themeManager.resolvedColorScheme(for: colorScheme)
         let background = AppBackgroundStyle
             .brandGradient(for: resolved)
             .makeView()
             .ignoresSafeArea()
-        
-        Group {
-            if let preferredScheme {
-                content
-                    .background(background)
-                    .preferredColorScheme(preferredScheme)
-            } else {
-                content.background(background)
-            }
-        }
-        .id(themeManager.mode)
+
+        content
+            .background(background)
+            .preferredColorScheme(preferredScheme)
+            .id(themeManager.mode)
     }
 }
 

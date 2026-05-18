@@ -19,15 +19,15 @@ final class SettingsViewModel: ObservableObject {
     
     @Published private(set) var committedOpenBlankPage: Bool
     @Published var draftOpenBlankPage: Bool
-
+    
     @Published private(set) var committedConfirmBeforeQuit: Bool
     @Published var draftConfirmBeforeQuit: Bool
-
+    
     private let themeManager: ThemeManager
     private let store: KeyValueStoring
     private let urlPreferences: LauncherStartURLPreferences
     private let quitPreferences: QuitConfirmationPreferences
-
+    
     var hasUnsavedChanges: Bool {
         draftMode != committedMode
         || draftDefaultURL != committedDefaultURL
@@ -52,49 +52,56 @@ final class SettingsViewModel: ObservableObject {
         self.store = store
         self.urlPreferences = LauncherStartURLPreferences(store: store)
         self.quitPreferences = QuitConfirmationPreferences(store: store)
-
-        let current = themeManager.mode
-        committedMode = current
-        draftMode = current
         
-        let url = urlPreferences.defaultStartURL
-        committedDefaultURL = url
-        draftDefaultURL = url
+        let currentMode = themeManager.mode
+        self.committedMode = currentMode
+        self.draftMode = currentMode
         
-        let blank = urlPreferences.openBlankPage
-        committedOpenBlankPage = blank
-        draftOpenBlankPage = blank
-
-        let confirmQuit = quitPreferences.confirmBeforeQuit
-        committedConfirmBeforeQuit = confirmQuit
-        draftConfirmBeforeQuit = confirmQuit
+        let currentURL = urlPreferences.defaultStartURL
+        self.committedDefaultURL = currentURL
+        self.draftDefaultURL = currentURL
+        
+        let currentOpenBlankPage = urlPreferences.openBlankPage
+        self.committedOpenBlankPage = currentOpenBlankPage
+        self.draftOpenBlankPage = currentOpenBlankPage
+        
+        let currentConfirmBeforeQuit = quitPreferences.confirmBeforeQuit
+        self.committedConfirmBeforeQuit = currentConfirmBeforeQuit
+        self.draftConfirmBeforeQuit = currentConfirmBeforeQuit
     }
     
-    func applyDraft(_ mode: ThemeManager.Mode) {
-        guard draftMode != mode else { return }
-        draftMode = mode
-        themeManager.mode = mode
+    func syncAppearancePreview(to mode: ThemeManager.Mode) {
+        if mode == committedMode {
+            themeManager.cancelPreview()
+        } else {
+            themeManager.preview(mode)
+        }
     }
     
     func setDraftOpenBlankPage(_ value: Bool) {
         draftOpenBlankPage = value
+        if value {
+            draftDefaultURL = LauncherStartURLPreferences.blankPageURL
+        }
     }
-
+    
     func setDraftConfirmBeforeQuit(_ value: Bool) {
         draftConfirmBeforeQuit = value
     }
-
+    
     func cancel() {
         draftMode = committedMode
-        themeManager.mode = committedMode
         draftDefaultURL = committedDefaultURL
         draftOpenBlankPage = committedOpenBlankPage
         draftConfirmBeforeQuit = committedConfirmBeforeQuit
+        themeManager.cancelPreview()
     }
     
     func save() {
-        let urlPrefsChanged = draftDefaultURL != committedDefaultURL
-            || draftOpenBlankPage != committedOpenBlankPage
+        let urlPrefsChanged =
+        draftDefaultURL != committedDefaultURL ||
+        draftOpenBlankPage != committedOpenBlankPage
+        
         let previousEffectiveURL = LauncherStartURLPreferences.effectiveStartURL(
             openBlankPage: committedOpenBlankPage,
             defaultStartURL: committedDefaultURL,
@@ -103,26 +110,26 @@ final class SettingsViewModel: ObservableObject {
         let newEffectiveURL = LauncherStartURLPreferences.effectiveStartURL(
             openBlankPage: draftOpenBlankPage,
             defaultStartURL: draftOpenBlankPage
-                ? LauncherStartURLPreferences.blankPageURL
-                : draftDefaultURL,
+            ? LauncherStartURLPreferences.blankPageURL
+            : draftDefaultURL,
             fallbackConfigurationURL: ""
         )
-
-        store.set(draftMode.rawValue, forKey: StorageKeys.appearanceMode)
+        
+        themeManager.commit(draftMode)
         committedMode = draftMode
-
+        
         urlPreferences.save(
             openBlankPage: draftOpenBlankPage,
             defaultStartURL: draftOpenBlankPage
-                ? LauncherStartURLPreferences.blankPageURL
-                : draftDefaultURL
+            ? LauncherStartURLPreferences.blankPageURL
+            : draftDefaultURL
         )
         committedDefaultURL = draftDefaultURL
         committedOpenBlankPage = draftOpenBlankPage
-
+        
         quitPreferences.save(confirmBeforeQuit: draftConfirmBeforeQuit)
         committedConfirmBeforeQuit = draftConfirmBeforeQuit
-
+        
         if urlPrefsChanged {
             let payload = LauncherStartURLPreferencesSavePayload(
                 newEffectiveURL: newEffectiveURL,
@@ -134,7 +141,7 @@ final class SettingsViewModel: ObservableObject {
                 userInfo: [LauncherStartURLPreferences.savePayloadUserInfoKey: payload]
             )
         }
-
+        
         AppLogger.info(
             """
             Settings saved — appearance: \(draftMode), openBlank: \(draftOpenBlankPage), \

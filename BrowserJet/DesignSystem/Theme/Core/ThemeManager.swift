@@ -6,77 +6,91 @@
 //
 
 import SwiftUI
-import Combine
 
 @MainActor
 final class ThemeManager: ObservableObject {
-    enum Mode: String, Equatable, Hashable, CaseIterable {
+    
+    enum Mode: String, Equatable, Hashable, CaseIterable, Identifiable {
         case system
         case light
         case dark
-
+        
+        var id: String { rawValue }
+        
         var displayName: String {
             switch self {
             case .system: return "System"
-            case .light: return "Light"
-            case .dark: return "Dark"
+            case .light:  return "Light"
+            case .dark:   return "Dark"
             }
         }
     }
-
-    @Published var mode: Mode {
-        didSet {
-            AppLogger.info("Theme mode changed to: \(mode)")
-            ThemeWindowAppearance.apply(mode: mode)
-        }
-    }
-
+    
+    @Published private(set) var mode: Mode
+    @Published private var previewMode: Mode?
+    
     private let lightTheme: any AppTheme
     private let darkTheme: any AppTheme
-
+    private let store: KeyValueStoring
+    
+    var activeMode: Mode {
+        previewMode ?? mode
+    }
+    
     init(
         lightTheme: any AppTheme = BrowserJetLightTheme(),
         darkTheme: any AppTheme = BrowserJetDarkTheme(),
-        keyValueStore: KeyValueStoring = UserDefaultsKeyValueStore()
+        store: KeyValueStoring = UserDefaultsKeyValueStore()
     ) {
-        AppLogger.debug("ThemeManager initializing with light and dark themes")
         self.lightTheme = lightTheme
         self.darkTheme = darkTheme
-        self.mode = Self.loadPersistedMode(from: keyValueStore) ?? .light
-        AppLogger.debug("ThemeManager initialized - Mode: \(mode)")
+        self.store = store
+        
+        if let raw = store.object(forKey: StorageKeys.appearanceMode) as? String,
+           let saved = Mode(rawValue: raw) {
+            self.mode = saved
+        } else {
+            self.mode = .system
+        }
+        AppLogger.debug("ThemeManager initialized - Mode: \(self.mode)")
     }
-
+    
     /// Call once `NSApp` is available (e.g. from `BrowserJet.init` on the main queue).
     func applyWindowAppearance() {
         ThemeWindowAppearance.apply(mode: mode)
     }
-
+    
+    /// SwiftUI-only preview (colors / gradient). Avoids AppKit window rebuilds that reset radio pickers.
+    func preview(_ mode: Mode) {
+        previewMode = mode
+    }
+    
+    func cancelPreview() {
+        previewMode = nil
+        ThemeWindowAppearance.apply(mode: mode)
+    }
+    
+    func commit(_ mode: Mode) {
+        self.mode = mode
+        self.previewMode = nil
+        store.set(mode.rawValue, forKey: StorageKeys.appearanceMode)
+        ThemeWindowAppearance.apply(mode: mode)
+        AppLogger.info("Theme mode committed: \(mode)")
+    }
+    
     func theme(for colorScheme: ColorScheme) -> any AppTheme {
-        switch mode {
-        case .system:
-            AppLogger.debug("Theme resolved: \(colorScheme == .dark ? "dark" : "light") (system)")
-            return colorScheme == .dark ? darkTheme : lightTheme
-        case .light:
-            AppLogger.debug("Theme resolved: light (forced)")
-            return lightTheme
-        case .dark:
-            AppLogger.debug("Theme resolved: dark (forced)")
-            return darkTheme
+        switch activeMode {
+        case .system: return colorScheme == .dark ? darkTheme : lightTheme
+        case .light:  return lightTheme
+        case .dark:   return darkTheme
         }
     }
-
+    
     func resolvedColorScheme(for colorScheme: ColorScheme) -> ColorScheme {
-        switch mode {
+        switch activeMode {
         case .system: return colorScheme
-        case .light: return .light
-        case .dark: return .dark
+        case .light:  return .light
+        case .dark:   return .dark
         }
-    }
-
-    private static func loadPersistedMode(from store: KeyValueStoring) -> Mode? {
-        guard let raw = store.object(forKey: StorageKeys.appearanceMode) as? String else {
-            return nil
-        }
-        return Mode(rawValue: raw)
     }
 }

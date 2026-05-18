@@ -473,6 +473,7 @@
 				AF56EF0C2F3DF84A00E49C58 /* Helpers */,
 				AF56EEF12F3CCDA900E49C58 /* Extensions */,
 				AFF3EB0E2F3CACB100C6F08E /* Logging */,
+				AF9D9BCB2FB90200047856A /* Debug */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -822,6 +823,13 @@
 				AF9D9BBD2FB8F3A70047856A /* SettingsViewModel.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		AF9D9BCB2FB90200047856A /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		AFE9764B2F5530AC00D270C8 /* ShiftLicense */ = {

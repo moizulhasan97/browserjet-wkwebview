@@ -10,8 +10,7 @@ import SwiftUI
 // MARK: - App Settings scene root
 
 struct SettingsRootView: View {
-    @Environment(\.colorScheme)
-    private var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
     
     var body: some View {
@@ -24,13 +23,8 @@ struct SettingsRootView: View {
 // MARK: - Settings content
 
 struct SettingsView: View {
-    @Environment(\.appTheme)
-    private var theme
-    
-    @Environment(\.designSystem)
-    private var designSystem
-    
-    @EnvironmentObject private var themeManager: ThemeManager
+    @Environment(\.appTheme) private var theme
+    @Environment(\.designSystem) private var designSystem
     
     @StateObject private var viewModel: SettingsViewModel
     
@@ -53,6 +47,9 @@ struct SettingsView: View {
                     .overlay(theme.divider)
                 footer
             }
+        }
+        .onChange(of: viewModel.draftMode) { _, newMode in
+            viewModel.syncAppearancePreview(to: newMode)
         }
     }
     
@@ -80,7 +77,7 @@ struct SettingsView: View {
                 .font(designSystem.typography.textBody1.font)
                 .foregroundStyle(theme.textPrimary)
             
-            Picker("", selection: appearanceSelection) {
+            Picker("", selection: $viewModel.draftMode) {
                 Text("System").tag(ThemeManager.Mode.system)
                 Text("Light").tag(ThemeManager.Mode.light)
                 Text("Dark").tag(ThemeManager.Mode.dark)
@@ -128,7 +125,7 @@ struct SettingsView: View {
             )
         }
     }
-
+    
     private var confirmBeforeQuitRow: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -148,13 +145,6 @@ struct SettingsView: View {
                 .foregroundStyle(theme.textFieldSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
-    }
-
-    private var appearanceSelection: Binding<ThemeManager.Mode> {
-        Binding(
-            get: { viewModel.draftMode },
-            set: { viewModel.applyDraft($0) }
-        )
     }
     
     private var footer: some View {
