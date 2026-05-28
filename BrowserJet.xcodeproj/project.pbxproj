@@ -52,6 +52,7 @@
 		AF498D2F2F4AB8AD004C03B3 /* ProxyPoolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */; };
 		AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */; };
 		AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */; };
+		AFACTIV22F60002004C03B3 /* ActivationWindowSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */; };
 		AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */; };
 		AF498D3A2F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */; };
 		AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */; };
@@ -214,6 +215,7 @@
 		AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyPoolService.swift; sourceTree = "<group>"; };
 		AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticAuthProxyProvider.swift; sourceTree = "<group>"; };
 		AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationRootView.swift; sourceTree = "<group>"; };
+		AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationWindowSizing.swift; sourceTree = "<group>"; };
 		AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationViewModel.swift; sourceTree = "<group>"; };
 		AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetSegmentedPicker.swift; sourceTree = "<group>"; };
 		AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 			children = (
 				AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */,
 				AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */,
+				AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */,
 				AFE976552F55586D00D270C8 /* ActivationMessages.swift */,
 			);
 			path = Activation;
@@ -1320,6 +1323,7 @@
 				AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */,
 				AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */,
 				AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */,
+				AFACTIV22F60002004C03B3 /* ActivationWindowSizing.swift in Sources */,
 				AF401AD12F4D37E500EF265C /* SystemInfo.swift in Sources */,
 				AFF4DA012F743A6C0028293B /* BrowserJetRootView.swift in Sources */,
 				AF60864A2F732CB2003931E2 /* LicenseActivationCoordinator.swift in Sources */,

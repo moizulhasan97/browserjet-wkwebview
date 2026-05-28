@@ -68,6 +68,13 @@ struct BrowserJetRootView: View {
         .onChange(of: phase) { _, _ in syncActivationWindowFrame() }
         .onChange(of: showBootstrapShiftSuccessAlert) { _, _ in syncActivationWindowFrame() }
         .onChange(of: bootstrapPaymentAlert?.id) { _, _ in syncActivationWindowFrame() }
+        .onChange(of: storedKeyVerifyFailureMessage) { _, _ in
+            guard phase == .activation else { return }
+            syncActivationWindowFrame()
+        }
+        .onPreferenceChange(ActivationMeasuredContentSizeKey.self) { size in
+            applyActivationContentSize(size)
+        }
         .task {
             await runInitialEntry()
         }
@@ -90,7 +97,9 @@ struct BrowserJetRootView: View {
             }
             ActivationRootView()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(width: ActivationWindowMetrics.contentWidth)
+        .fixedSize(horizontal: false, vertical: true)
+        .reportActivationContentSize()
     }
 
     @ViewBuilder private var compactBootstrapChrome: some View {
@@ -155,6 +164,11 @@ struct BrowserJetRootView: View {
 
     private func syncActivationWindowFrame() {
         WindowManager.shared.resizeActivationWindowToFit(activationWindowLayout)
+    }
+
+    private func applyActivationContentSize(_ size: CGSize) {
+        guard phase == .activation, size.height > 0 else { return }
+        WindowManager.shared.resizeActivationFullFormToContentHeight(size.height)
     }
 
     private func handleBootstrapVerifyOutcome(_ outcome: VerifyOutcome?) {

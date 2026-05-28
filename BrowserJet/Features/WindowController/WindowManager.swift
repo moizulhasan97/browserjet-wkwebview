@@ -19,11 +19,11 @@ final class WindowManager {
         case infoAlert
         case shiftLicense
 
-        var contentSize: NSSize {
+        /// Fixed content size for compact bootstrap layouts. Full form uses measured height instead.
+        var contentSize: NSSize? {
             switch self {
             case .fullForm:
-                // Match `showLauncher` (500×639) so activation and post-verify launcher share the same frame.
-                return NSSize(width: 500, height: 300)
+                return nil
             case .progressOnly:
                 return NSSize(width: 400, height: 220)
             case .infoAlert:
@@ -36,6 +36,7 @@ final class WindowManager {
 
     private var launcherWC: (any ShowableWindowController)?
     private var browserWC: (any ShowableWindowController)?
+    private var lastActivationFullFormContentHeight: CGFloat?
 
     /// Same size and behavior as launcher-opened browser (show() calls zoom for maximize).
     private let browserWindowSize = NSSize(width: 1200, height: 780)
@@ -51,7 +52,27 @@ final class WindowManager {
         guard let windowController = launcherWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
         let compact = layout != .fullForm
         windowController.setActivationChromeBorderless(compact)
-        windowController.applyFixedContentSize(layout.contentSize)
+        guard let contentSize = layout.contentSize else { return }
+        lastActivationFullFormContentHeight = nil
+        windowController.applyFixedContentSize(contentSize)
+    }
+
+    /// Sizes the activation window to fit measured full-form content (no ScrollView).
+    func resizeActivationFullFormToContentHeight(_ measuredHeight: CGFloat) {
+        guard measuredHeight > 0,
+              let windowController = launcherWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
+
+        let height = ActivationWindowMetrics.clampedContentHeight(measuredHeight)
+        if let last = lastActivationFullFormContentHeight, abs(last - height) < 1 {
+            return
+        }
+        lastActivationFullFormContentHeight = height
+
+        windowController.setActivationChromeBorderless(false)
+        windowController.applyFixedContentSize(
+            NSSize(width: ActivationWindowMetrics.contentWidth, height: height)
+        )
+        AppLogger.debug("Activation full form resized to content height \(height)")
     }
 
     func showActivation(
@@ -62,9 +83,12 @@ final class WindowManager {
         AppLogger.info("showActivation called")
         if launcherWC == nil {
             let storedKey = Self.hasStoredLicenseKey()
-            let initialSize = storedKey
-            ? ActivationLayout.progressOnly.contentSize
-            : ActivationLayout.fullForm.contentSize
+            let initialSize: NSSize = if storedKey {
+                ActivationLayout.progressOnly.contentSize
+                ?? NSSize(width: 400, height: 220)
+            } else {
+                ActivationWindowMetrics.placeholderContentSize
+            }
             AppLogger.info(
                 """
                 Creating activation window - storedKey: \(storedKey), \
