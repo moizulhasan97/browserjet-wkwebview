@@ -29,6 +29,19 @@ struct BrowserCommands: Commands {
     }
     
     var body: some Commands {
+        // MARK: Close (Cmd+W) — replaces system Save/Close group (.saveItem)
+        CommandGroup(replacing: .saveItem) {
+            Button(state == nil ? "Close Window" : "Close Tab") {
+                if let state {
+                    state.requestCloseSelectedTab()
+                } else {
+                    NSApp.keyWindow?.close()
+                }
+            }
+            .keyboardShortcut("w", modifiers: .command)
+            .disabled(state == nil && NSApp.keyWindow == nil)
+        }
+
         // MARK: File menu — tab lifecycle
         CommandGroup(after: .newItem) {
             Divider()
@@ -36,20 +49,6 @@ struct BrowserCommands: Commands {
             Button("New Tab") { state?.addTab() }
                 .keyboardShortcut("t", modifiers: .command)
                 .disabled(!isAllowed)
-            
-            Button(state == nil ? "Close Window" : "Close Tab") {
-                if let state {
-                    state.requestCloseSelectedTab()
-                } else {
-                    // Browser isn't active. Close the focused window; with
-                    // applicationShouldTerminateAfterLastWindowClosed = true, this
-                    // quits the app when it was the last window.
-                    NSApp.keyWindow?.close()
-                }
-            }
-            // Let AppKit's built-in Cmd+W route through windowShouldClose so
-            // close behavior stays consistent with the active window state.
-            .disabled(state == nil && NSApp.keyWindow == nil)
             
             Button("Reopen Last Closed Tab") { state?.reopenLastClosedTab() }
                 .keyboardShortcut("t", modifiers: [.command, .shift])

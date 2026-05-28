@@ -57,7 +57,7 @@ struct BrowserTabsStripView: View {
                                     },
                                     onClose: {
                                         withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
-                                            state.closeTab(tab.id)
+                                            state.requestCloseTab(tab.id)
                                         }
                                     }
                                 )

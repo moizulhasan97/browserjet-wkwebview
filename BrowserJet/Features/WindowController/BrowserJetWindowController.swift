@@ -217,24 +217,8 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
 // MARK: - Last-window close confirmation
 extension BrowserJetWindowController {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        if shouldCloseSelectedTabInsteadOfWindow(for: sender) {
-            ActiveBrowserStateProvider.shared.current?.requestCloseSelectedTab()
-            return false
-        }
         guard isLastVisibleAppWindow(closing: sender) else { return true }
         return QuitConfirmationController.confirmClosingLastWindow()
-    }
-
-    private func shouldCloseSelectedTabInsteadOfWindow(for sender: NSWindow) -> Bool {
-        // Browser windows are the only resizable app windows. Intercepting
-        // close here makes Cmd+W behave like "Close Tab" whenever possible.
-        guard sender.styleMask.contains(.resizable),
-              let state = ActiveBrowserStateProvider.shared.current,
-              !state.isTrialLockActive,
-              state.tabs.count > 1 else {
-            return false
-        }
-        return true
     }
 
     private func isLastVisibleAppWindow(closing: NSWindow) -> Bool {
@@ -250,24 +234,8 @@ extension BrowserJetWindowController {
 final class BrowserJetWindowCloseDelegate: NSObject, NSWindowDelegate {
 
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        if shouldCloseSelectedTabInsteadOfWindow(for: sender) {
-            ActiveBrowserStateProvider.shared.current?.requestCloseSelectedTab()
-            return false
-        }
         guard isLastVisibleAppWindow(closing: sender) else { return true }
         return QuitConfirmationController.confirmClosingLastWindow()
-    }
-
-    private func shouldCloseSelectedTabInsteadOfWindow(for sender: NSWindow) -> Bool {
-        // Browser windows are the only resizable app windows. Intercepting
-        // close here makes Cmd+W behave like "Close Tab" whenever possible.
-        guard sender.styleMask.contains(.resizable),
-              let state = ActiveBrowserStateProvider.shared.current,
-              !state.isTrialLockActive,
-              state.tabs.count > 1 else {
-            return false
-        }
-        return true
     }
 
     private func isLastVisibleAppWindow(closing: NSWindow) -> Bool {
