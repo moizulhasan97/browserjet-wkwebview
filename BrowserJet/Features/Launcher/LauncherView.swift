@@ -16,10 +16,8 @@ private enum LauncherViewConstants {
     // Cards
     static let cardInterItemSpacing: CGFloat = 20.0
     
-    // Pickers
-    static let noOfTabsPickerWidth: CGFloat = 50.0
-    static let vpnPickerWidth: CGFloat = 70.0
-    static let regionPickerWidth: CGFloat = 50.0
+    // Pickers — shared width so trailing edges align across launcher rows
+    static let menuPickerWidth: CGFloat = 110.0
 }
 
 struct LauncherView: View {
@@ -178,7 +176,7 @@ private extension LauncherView {
                     set: { viewModel.updateNumberOfTabs($0) }
                 ),
                 isDisabled: false,
-                width: Constants.noOfTabsPickerWidth
+                width: Constants.menuPickerWidth
             ) { $0.rawValue.toString }
         }
     }
@@ -296,7 +294,7 @@ private extension LauncherView {
                     options: viewModel.availableVPNs,
                     selection: vpnPickerSelectionBinding,
                     isDisabled: !viewModel.settings.areVPNControlsEnabled || viewModel.availableVPNs.isEmpty,
-                    width: Constants.vpnPickerWidth
+                    width: Constants.menuPickerWidth
                 ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
             }
         }
@@ -330,7 +328,7 @@ private extension LauncherView {
                     set: { viewModel.updateSelectedRegion($0) }
                 ),
                 isDisabled: !viewModel.settings.areRegionControlsEnabled,
-                width: Constants.regionPickerWidth
+                width: Constants.menuPickerWidth
             ) { $0.rawValue }
         }
     }

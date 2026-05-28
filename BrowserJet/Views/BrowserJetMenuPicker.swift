@@ -43,7 +43,7 @@ struct BrowserJetMenuPicker<Option: Hashable>: View {
         .labelsHidden()
         .pickerStyle(.menu)
         .disabled(isDisabled)
-        .frame(width: width)
+        .frame(width: width, alignment: .trailing)
         .opacity((isEnabled && !isDisabled) ? 1 : 0.6)
     }
 }
