@@ -25,6 +25,7 @@ enum AppUtils {
         return URL(string: cleanedValue)
     }
 
+    @MainActor
     static func relaunchApplication() {
         let appPath = Bundle.main.bundlePath
 
@@ -39,7 +40,7 @@ enum AppUtils {
 
         do {
             try task.run()
-            NSApplication.shared.terminate(nil)
+            QuitConfirmationController.terminateWithoutConfirmation()
         } catch {
             AppLogger.error("Failed to relaunch app: \(error.localizedDescription)")
         }

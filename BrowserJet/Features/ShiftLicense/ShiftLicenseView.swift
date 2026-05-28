@@ -109,11 +109,13 @@ private struct ShiftDeviceRow: View {
                     .font(designSystem.typography.textBody1.font)
                     .foregroundStyle(theme.textPrimary)
                     .lineLimit(1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .layoutPriority(1)
+                    //.frame(maxWidth: .infinity, alignment: .leading)
 
                 BrowserJetAppButton(
                     title: "Shift",
                     type: .primaryLarge,
+                    width: .fixed(width: 120),
                     isDisabled: isDisabled,
                     action: onShift
                 )

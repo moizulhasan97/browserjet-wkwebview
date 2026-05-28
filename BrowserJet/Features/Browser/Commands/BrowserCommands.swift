@@ -47,7 +47,8 @@ struct BrowserCommands: Commands {
                     NSApp.keyWindow?.close()
                 }
             }
-            .keyboardShortcut("w", modifiers: .command)
+            // Let AppKit's built-in Cmd+W route through windowShouldClose so
+            // close behavior stays consistent with the active window state.
             .disabled(state == nil && NSApp.keyWindow == nil)
             
             Button("Reopen Last Closed Tab") { state?.reopenLastClosedTab() }

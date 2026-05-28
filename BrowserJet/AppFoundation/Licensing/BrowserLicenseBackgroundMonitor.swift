@@ -112,7 +112,7 @@ enum BrowserLicenseBackgroundMonitor {
         alert.addButton(withTitle: "OK")
         alert.runModal()
         try? await Task.sleep(nanoseconds: AppGraceShutdown.Timing.macMismatchQuit)
-        NSApplication.shared.terminate(nil)
+        QuitConfirmationController.terminateWithoutConfirmation()
     }
 
     @MainActor
@@ -126,7 +126,7 @@ enum BrowserLicenseBackgroundMonitor {
         alert.addButton(withTitle: "OK")
         alert.runModal()
         try? await Task.sleep(nanoseconds: AppGraceShutdown.Timing.keyExpiredQuit)
-        NSApplication.shared.terminate(nil)
+        QuitConfirmationController.terminateWithoutConfirmation()
     }
 
     private static func isAccessExpiredForBackground(response: VerifyKeyResponse, referenceNow: Date) -> Bool {
