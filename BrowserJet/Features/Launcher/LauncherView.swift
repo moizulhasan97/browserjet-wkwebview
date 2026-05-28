@@ -323,7 +323,10 @@ private extension LauncherView {
             BrowserJetMenuPicker(
                 options: viewModel.regionPickerOptions,
                 selection: Binding(
-                    get: { viewModel.settings.selectedRegion ?? .uk },
+                    get: {
+                        if viewModel.settings.selectedVPN == .vpn1 { return .us }
+                        return viewModel.settings.selectedRegion ?? .uk
+                    },
                     set: { viewModel.updateSelectedRegion($0) }
                 ),
                 isDisabled: !viewModel.settings.areRegionControlsEnabled,

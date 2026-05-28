@@ -197,6 +197,7 @@ final class LauncherViewModel: ObservableObject {
     }
 
     func updateSelectedRegion(_ region: RegionType) {
+        guard settings.selectedVPN != .vpn1 else { return }
         AppLogger.info("Region selection changed to: \(region.rawValue)")
         settings.selectedRegion = region
     }
@@ -215,6 +216,7 @@ final class LauncherViewModel: ObservableObject {
         policy: [VPNType: [RegionType]],
         preferred: RegionType = .uk
     ) -> RegionType {
+        if vpn == .vpn1 { return .us }
         let allowed = allowedRegions(for: vpn, policy: policy)
         if allowed.contains(preferred) { return preferred }
         return allowed.first ?? .uk
@@ -222,6 +224,10 @@ final class LauncherViewModel: ObservableObject {
 
     private func reconcileRegionForSelectedVPN() {
         guard let vpn = settings.selectedVPN else { return }
+        if vpn == .vpn1 {
+            settings.selectedRegion = .us
+            return
+        }
         let allowed = Self.allowedRegions(for: vpn, policy: vpnAllowedRegions)
         if let region = settings.selectedRegion, allowed.contains(region) { return }
         settings.selectedRegion = allowed.first

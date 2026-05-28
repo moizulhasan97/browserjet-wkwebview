@@ -27,7 +27,7 @@ struct LauncherSettings {
     }
 
     var areRegionControlsEnabled: Bool {
-        isVPNEnabled && !isPremiumProxyEnabled
+        isVPNEnabled && !isPremiumProxyEnabled && selectedVPN != .vpn1
     }
 }
 

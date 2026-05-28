@@ -101,7 +101,7 @@ extension AppConfiguration {
             // twitterURL: URL(string: "https://twitter.com/browserjet")!,
             trialBlockedVPNs: [.vpn1],
             vpnAllowedRegions: [
-                .vpn1: [.uk, .us, .ca],
+                .vpn1: [.us],
                 .vpn2: [.uk, .us, .ca]
             ]
         )
@@ -143,7 +143,7 @@ extension AppConfiguration {
             // twitterURL: URL(string: "https://twitter.com/browserjet")!,
             trialBlockedVPNs: [.vpn1],
             vpnAllowedRegions: [
-                .vpn1: [.uk, .us, .ca],
+                .vpn1: [.us],
                 .vpn2: [.uk, .us, .ca]
             ]
         )
