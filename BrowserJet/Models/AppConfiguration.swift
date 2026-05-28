@@ -102,7 +102,7 @@ extension AppConfiguration {
             trialBlockedVPNs: [.vpn1],
             vpnAllowedRegions: [
                 .vpn1: [.us],
-                .vpn2: [.uk, .us, .ca]
+                .vpn2: [.uk, .us, .ca, .it, .nz, .au, .uae, .nl]
             ]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
@@ -144,7 +144,7 @@ extension AppConfiguration {
             trialBlockedVPNs: [.vpn1],
             vpnAllowedRegions: [
                 .vpn1: [.us],
-                .vpn2: [.uk, .us, .ca]
+                .vpn2: [.uk, .us, .ca, .it, .nz, .au, .uae, .nl]
             ]
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
