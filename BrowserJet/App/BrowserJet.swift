@@ -14,7 +14,9 @@ struct BrowserJet: App {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     private let themeManager = ThemeManager()
-    private let sessionManager = SessionManager()
+    private let sessionManager = SessionManager(
+        maxSessions: AppEnvironment.currentConfiguration.maxBrowserTabs
+    )
     private let updaterController: SPUStandardUpdaterController
     private let sparkleUpdaterDelegate = SparkleUpdaterDelegate()
     

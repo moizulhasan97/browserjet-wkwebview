@@ -75,7 +75,7 @@ struct BrowserChromeView: View {
                 }
             }
         }
-        .padding(.top, 4)
+        .padding(.top, 10)
         .padding(.bottom, 9)
         .padding(.horizontal, Self.trafficLightAlignedInset)
     }
@@ -114,7 +114,8 @@ private struct LeadingToolbar: View {
         userAgent: nil,
         sessionManager: sessionManager,
         initialURL: URL(string: "https://google.com")!,
-        initialTabCount: 2
+        initialTabCount: 2,
+        maxBrowserTabs: 20
     )
     
     // Add some sample tabs for preview

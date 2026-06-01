@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+enum BrowserTabsStripMetrics {
+    /// Visible tab-strip row height.
+    static let visualHeight: CGFloat = 44
+    /// AppKit titlebar accessory container; extra space for shadows, scale, and padding.
+    static let accessoryHeight: CGFloat = 56
+    /// Vertical padding inside the horizontal tab scroll content (per side).
+    static let stripVerticalPadding: CGFloat = 4
+}
+
 struct BrowserTabsStripView: View {
     @ObservedObject var state: BrowserWindowState
     @EnvironmentObject private var sessionManager: SessionManager
@@ -22,7 +31,7 @@ struct BrowserTabsStripView: View {
     private let spacing: CGFloat = 6
     private let minTabWidth: CGFloat = 120
     private let maxTabWidth: CGFloat = 240
-    private let stripHeight: CGFloat = 44
+    private let stripHeight: CGFloat = BrowserTabsStripMetrics.visualHeight
     private let fadeGradientWidth: CGFloat = 40
 
     var body: some View {
@@ -61,6 +70,7 @@ struct BrowserTabsStripView: View {
                                         }
                                     }
                                 )
+                                .padding(.vertical, 2)
                                 .id(tab.id)
                                 .transition(.asymmetric(
                                     insertion: .opacity
@@ -71,7 +81,7 @@ struct BrowserTabsStripView: View {
                             }
                         }
                         .padding(.horizontal, horizontalPadding)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, BrowserTabsStripMetrics.stripVerticalPadding)
                         .background(
                             GeometryReader { contentGeometry in
                                 Color.clear
@@ -86,6 +96,7 @@ struct BrowserTabsStripView: View {
                             }
                         )
                     }
+                    .scrollClipDisabled(true)
                     .onPreferenceChange(ContentWidthPreferenceKey.self) { contentWidth in
                         updateScrollIndicators(geometry: geometry, contentWidth: contentWidth)
                     }
@@ -140,7 +151,7 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
 // swiftlint:disable force_unwrapping
 #Preview("BrowserTabsStripView") {
     let themeManager = ThemeManager()
-    let sessionManager = SessionManager(maxSessions: 10)
+    let sessionManager = SessionManager(maxSessions: 20)
 
     // Fake a BrowserWindowState with a few tabs
     let state = BrowserWindowState(
@@ -150,7 +161,8 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
         userAgent: nil,
         sessionManager: sessionManager,
         initialURL: URL(string: "https://www.google.com")!,
-        initialTabCount: 2
+        initialTabCount: 2,
+        maxBrowserTabs: 20
     )
 
     // Add a few more tabs so we can see shrinking behavior
@@ -164,7 +176,7 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
     state.selectedTabID = state.tabs.first?.id
 
     return BrowserTabsStripView(state: state)
-        .frame(width: 900, height: 42)
+        .frame(width: 900, height: BrowserTabsStripMetrics.visualHeight)
         .padding()
         .background(AppBackgroundStyle.browserJetGradient.makeView())
         .environmentObject(sessionManager)

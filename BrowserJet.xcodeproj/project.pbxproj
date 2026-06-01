@@ -80,6 +80,7 @@
 		AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */; };
 		AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */; };
 		AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */; };
+		AFACC1012FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */; };
 		AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF242F3E086A00E49C58 /* WindowManager.swift */; };
 		AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */; };
 		AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF292F3E131100E49C58 /* VPNType.swift */; };
@@ -243,6 +244,7 @@
 		AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherTabPreset.swift; sourceTree = "<group>"; };
 		AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetWindowController.swift; sourceTree = "<group>"; };
+		AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabStripTitlebarAccessoryController.swift; sourceTree = "<group>"; };
 		AF56EF242F3E086A00E49C58 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherRootView.swift; sourceTree = "<group>"; };
 		AF56EF282F3E0F1400E49C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -581,6 +583,7 @@
 			children = (
 				AF56EF242F3E086A00E49C58 /* WindowManager.swift */,
 				AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */,
+				AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */,
 			);
 			path = WindowController;
 			sourceTree = "<group>";
@@ -1317,6 +1320,7 @@
 				AF56EF1B2F3E02C900E49C58 /* BrowserJet.swift in Sources */,
 				AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */,
 				AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */,
+				AFACC1012FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift in Sources */,
 				AFF4DA032F7451720028293B /* PaymentAlertItem.swift in Sources */,
 				AF127D022F9FBA8800EE34E2 /* AppUtils.swift in Sources */,
 				AF69F5C12F43747800B33610 /* BrowserToolbarView.swift in Sources */,

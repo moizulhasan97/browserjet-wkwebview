@@ -13,15 +13,11 @@ import SwiftUI
 /// `ScrollView`) cover the title bar via `.fullSizeContentView`.
 ///
 /// AppKit only invokes the title-bar action when its hit-test lands on the
-/// title bar's drag region; here the SwiftUI `NSClipView` swallows the
-/// double-click first, so we re-implement the behavior by reading the user's
-/// `AppleActionOnDoubleClick` preference and calling the matching window
-/// action when a double-click lands in the top tab-strip band.
+/// title bar's drag region. Tab selection lives in an `NSTitlebarAccessoryViewController`,
+/// so this band covers only the traffic-light row above the tab strip.
 private final class BrowserJetWindow: NSWindow {
-    /// Height of the band at the top of the window (standard title bar + custom
-    /// tab strip) within which a double-click should emulate the macOS
-    /// title-bar double-click action. Matches `BrowserTabsStripView.stripHeight`.
-    private static let titleBarDoubleClickBand: CGFloat = 44
+    /// Height of the draggable titlebar row above the tab-strip accessory.
+    private static let titleBarDoubleClickBand: CGFloat = 28
     
     override func sendEvent(_ event: NSEvent) {
         if event.type == .leftMouseDown,
@@ -211,6 +207,26 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         AppLogger.debug("Closing window")
         window?.close()
         AppLogger.info("Window closed")
+    }
+
+    /// Hosts the tab strip in the native titlebar accessory area so tab interactions
+    /// are not intercepted by the window drag region.
+    func attachBrowserTabStripTitlebarAccessory(
+        state: BrowserWindowState,
+        themeManager: ThemeManager,
+        sessionManager: SessionManager
+    ) {
+        guard let window else { return }
+
+        let resolvedScheme = themeManager.resolvedColorScheme(for: .light)
+
+        let accessory = BrowserTabStripTitlebarAccessoryController(
+            state: state,
+            themeManager: themeManager,
+            sessionManager: sessionManager,
+            resolvedColorScheme: resolvedScheme
+        )
+        window.addTitlebarAccessoryViewController(accessory)
     }
 }
 

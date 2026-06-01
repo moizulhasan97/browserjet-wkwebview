@@ -195,7 +195,8 @@ final class WindowManager {
             userAgent: request.userAgent,
             sessionManager: sessionManager,
             initialURL: initialURL,
-            initialTabCount: request.numberOfTabs
+            initialTabCount: request.numberOfTabs,
+            maxBrowserTabs: appConfiguration.maxBrowserTabs
         )
 
         let rootView = BrowserRootView(
@@ -206,13 +207,19 @@ final class WindowManager {
             .environmentObject(sessionManager)
             .environmentObject(LicenseAccountStore.shared)
 
-        browserWC = BrowserJetWindowController(
+        let browserWindowController = BrowserJetWindowController(
             content: rootView,
             size: browserWindowSize,
             titleBarHidden: false,
             resizable: true,
             cornerRadius: browserCornerRadius
         )
+        browserWindowController.attachBrowserTabStripTitlebarAccessory(
+            state: state,
+            themeManager: themeManager,
+            sessionManager: sessionManager
+        )
+        browserWC = browserWindowController
 
         // Close launcher window before showing browser
         launcherWC?.close()
@@ -240,6 +247,7 @@ final class WindowManager {
             sessionManager: sessionManager,
             initialURL: paymentURL,
             initialTabCount: 1,
+            maxBrowserTabs: appConfiguration.maxBrowserTabs,
             isTrialLockActive: true
         )
         let rootView = BrowserRootView(
@@ -255,13 +263,19 @@ final class WindowManager {
         launcherWC = nil
         AppLogger.info("Activation window closed")
 
-        browserWC = BrowserJetWindowController(
+        let browserWindowController = BrowserJetWindowController(
             content: rootView,
             size: browserWindowSize,
             titleBarHidden: false,
             resizable: true,
             cornerRadius: browserCornerRadius
         )
+        browserWindowController.attachBrowserTabStripTitlebarAccessory(
+            state: state,
+            themeManager: themeManager,
+            sessionManager: sessionManager
+        )
+        browserWC = browserWindowController
         browserWC?.show()
         AppLogger.info("Browser window shown (payment only)")
     }

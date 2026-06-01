@@ -93,8 +93,8 @@ extension AppConfiguration {
                     )
                 )
             ],
-            duplicateTabCounts: Array(1...10),
-            maxBrowserTabs: 5,
+            duplicateTabCounts: Array(1...20),
+            maxBrowserTabs: 20,
             // paymentCardURL: URL(string: "https://www.google.com/payment")!,
             // buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             // contactUsURL: URL(string: "https://browserjet.com/contact")!,
@@ -105,7 +105,7 @@ extension AppConfiguration {
                 .vpn2: [.uk, .us, .ca, .it, .nz, .au, .uae, .nl]
             ]
         )
-        AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
+        AppLogger.info("Production configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config
     }()
 
@@ -135,8 +135,8 @@ extension AppConfiguration {
                     )
                 )
             ],
-            duplicateTabCounts: Array(1...10),
-            maxBrowserTabs: 5,
+            duplicateTabCounts: Array(1...20),
+            maxBrowserTabs: 20,
             // paymentCardURL: URL(string: "https://www.google.com/payment")!,
             // buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             // contactUsURL: URL(string: "https://browserjet.com/contact")!,

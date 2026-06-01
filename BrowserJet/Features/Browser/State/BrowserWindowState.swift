@@ -21,6 +21,7 @@ final class BrowserWindowState: ObservableObject {
     
     /// When true (trial expired), only one tab is allowed; add/close tab disabled; only refresh is useful.
     let isTrialLockActive: Bool
+    let maxBrowserTabs: Int
     
     // For `.perWindow`: share a single store and a single proxy (if needed)
     private lazy var perWindowProxy: AuthProxy? = {
@@ -50,6 +51,7 @@ final class BrowserWindowState: ObservableObject {
         sessionManager: SessionManager,
         initialURL: URL,
         initialTabCount: Int,
+        maxBrowserTabs: Int,
         isTrialLockActive: Bool = false
     ) {
         self.proxyType = proxyType
@@ -58,6 +60,7 @@ final class BrowserWindowState: ObservableObject {
         self.userAgent = userAgent
         self.sessionManager = sessionManager
         self.initialURL = initialURL
+        self.maxBrowserTabs = maxBrowserTabs
         self.isTrialLockActive = isTrialLockActive
         
         if !proxyType.isLocal {
@@ -317,15 +320,22 @@ extension BrowserWindowState {
     func duplicateSelectedTab(count: Int) -> Int {
         guard !isTrialLockActive else { return 0 }
         guard let selected = selectedTab else { return 0 }
+
+        let room = max(0, maxBrowserTabs - tabs.count)
+        let toCreate = min(max(0, count), room)
+        guard toCreate > 0 else { return 0 }
+
         let url = selected.webView.url
         ?? URL(string: selected.addressText)
         ?? URL(string: "about:blank")
         ?? URL(fileURLWithPath: "/")
-        for _ in 0..<max(1, count) {
+        for _ in 0..<toCreate {
             addTab(url: url)
         }
-        AppLogger.info("Duplicated tab \(count)x -> \(url.absoluteString)")
-        return count
+        AppLogger.info(
+            "Duplicated tab \(toCreate)x (requested \(count), room \(room)) -> \(url.absoluteString)"
+        )
+        return toCreate
     }
     
     // MARK: Zoom

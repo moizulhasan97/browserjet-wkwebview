@@ -87,9 +87,6 @@ struct BrowserRootView: View {
     
     private var browserMainContent: some View {
         VStack(spacing: 0) {
-            BrowserTabsStripView(state: state)
-                .frame(maxWidth: .infinity)
-            
             BrowserChromeView(
                 state: state,
                 menu: menu,
@@ -208,7 +205,7 @@ struct BrowserRootView: View {
     }
     
     private func open(_ url: URL) {
-        if sessionManager.canCreateSession && state.tabs.count < config.maxBrowserTabs {
+        if sessionManager.canCreateSession && state.tabs.count < state.maxBrowserTabs {
             state.addTab(url: url)
         } else {
             state.selectedTab?.load(url)
@@ -218,7 +215,7 @@ struct BrowserRootView: View {
 
 #Preview("BrowserRootView (Safe Preview)") {
     let theme = BrowserJetLightTheme()
-    let sessionManager = SessionManager(maxSessions: 10)
+    let sessionManager = SessionManager(maxSessions: 20)
     
     let state = BrowserWindowState(
         proxyType: .local,
@@ -228,7 +225,8 @@ struct BrowserRootView: View {
         sessionManager: sessionManager,
         // swiftlint:disable:next force_unwrapping
         initialURL: URL(string: "https://www.google.com")!,
-        initialTabCount: 2
+        initialTabCount: 2,
+        maxBrowserTabs: 20
     )
     
     state.addTab()
