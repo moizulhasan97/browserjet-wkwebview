@@ -65,6 +65,7 @@ final class TabModel: ObservableObject, Identifiable {
         config.websiteDataStore = dataStore
 
         self.webView = WKWebView(frame: .zero, configuration: config)
+        TabModel.configureAppearance(self.webView)
 
         if let userAgent = userAgent {
             self.webView.customUserAgent = userAgent
@@ -85,6 +86,20 @@ final class TabModel: ObservableObject, Identifiable {
     /// Update the callback for opening new tabs (can be set after initialization)
     func setOnOpenInNewTab(_ callback: @escaping (URL) -> Void) {
         navigationDelegate?.setOnOpenInNewTab(callback)
+    }
+}
+
+// MARK: - Appearance
+private extension TabModel {
+    /// Removes the opaque white backing from WKWebView so that blank new tabs
+    /// show the app gradient instead of flashing white on focus or during loads.
+    /// Pages that paint their own background (CSS `background-color`) are unaffected.
+    static func configureAppearance(_ webView: WKWebView) {
+        // Suppress the white opaque layer drawn by WKScrollView before content loads.
+        webView.setValue(false, forKey: "drawsBackground")
+        // Match the rubber-band / over-scroll area to the system window color so
+        // it adapts correctly when the user switches between light and dark mode.
+        webView.underPageBackgroundColor = .windowBackgroundColor
     }
 }
 
@@ -118,6 +133,7 @@ extension TabModel {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = newStore
         let newWebView = WKWebView(frame: .zero, configuration: config)
+        TabModel.configureAppearance(newWebView)
 
         if let userAgent {
             newWebView.customUserAgent = userAgent
