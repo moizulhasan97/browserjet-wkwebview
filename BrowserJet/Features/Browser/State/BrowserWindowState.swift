@@ -368,7 +368,7 @@ extension BrowserWindowState {
     func takeScreenshotOfSelectedTab() {
         guard let tab = selectedTab else { return }
         let config = WKSnapshotConfiguration()
-        tab.webView.takeSnapshot(with: config) { image, error in
+        tab.webView.takeSnapshot(with: config) { [weak self] image, error in
             if let error {
                 AppLogger.error("Screenshot failed: \(error.localizedDescription)")
                 return
@@ -383,20 +383,37 @@ extension BrowserWindowState {
                 AppLogger.error("Screenshot failed: could not encode PNG")
                 return
             }
-            let fileName = "BrowserJet-\(Int(Date().timeIntervalSince1970)).png"
-            guard let desktop = FileManager.default.urls(
-                for: .desktopDirectory, in: .userDomainMask
-            ).first else {
-                AppLogger.error("Screenshot failed: no Desktop directory")
-                return
+
+            DispatchQueue.main.async {
+                self?.presentSavePanel(pngData: png)
             }
-            let url = desktop.appendingPathComponent(fileName)
-            do {
-                try png.write(to: url)
-                AppLogger.info("Screenshot saved: \(url.path)")
-            } catch {
-                AppLogger.error("Screenshot save failed: \(error.localizedDescription)")
-            }
+        }
+    }
+
+    private func presentSavePanel(pngData: Data) {
+        let panel = NSSavePanel()
+        panel.title = "Save Screenshot"
+        panel.nameFieldLabel = "Save As:"
+        panel.nameFieldStringValue = "BrowserJet-\(Int(Date().timeIntervalSince1970)).png"
+        panel.allowedContentTypes = [.png]
+        panel.canCreateDirectories = true
+
+        // Default to Desktop
+        if let desktop = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first {
+            panel.directoryURL = desktop
+        }
+
+        guard panel.runModal() == .OK, let url = panel.url else {
+            AppLogger.info("Screenshot save cancelled by user")
+            return
+        }
+
+        do {
+            try pngData.write(to: url)
+            AppLogger.info("Screenshot saved: \(url.path)")
+            NSWorkspace.shared.activateFileViewerSelecting([url])
+        } catch {
+            AppLogger.error("Screenshot save failed: \(error.localizedDescription)")
         }
     }
 }
