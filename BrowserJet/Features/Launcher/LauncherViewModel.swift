@@ -202,10 +202,6 @@ final class LauncherViewModel: ObservableObject {
         settings.selectedRegion = region
     }
 
-    func didTapManageMyProxy() {
-        AppLogger.info("Manage My Proxy button tapped")
-    }
-
     private static func allowedRegions(for vpn: VPNType?, policy: [VPNType: [RegionType]]) -> [RegionType] {
         guard let vpn else { return RegionType.allCases }
         return policy[vpn] ?? RegionType.allCases

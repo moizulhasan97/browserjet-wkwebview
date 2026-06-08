@@ -185,11 +185,7 @@ private extension LauncherView {
     private var vpnCard: some View {
         CardContainer {
             VStack(spacing: Constants.cardInterItemSpacing) {
-                HStack {
-                    premiumProxyToggle
-                    Spacer()
-                    manageMyProxyButton
-                }
+                premiumProxyToggle
                 premiumStatusFootnotes
                 BrowserJetDivider()
                 HStack {
@@ -232,6 +228,7 @@ private extension LauncherView {
             )
             getLabel("Premium Proxy")
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     /// Disabled while VPN is off or GPP is still loading. If the list is empty after load, the user can tap ON to see “no premium proxies” messaging.
@@ -239,20 +236,6 @@ private extension LauncherView {
         if !viewModel.settings.isVPNEnabled || viewModel.availableVPNs.isEmpty { return true }
         if viewModel.settings.isPremiumProxyEnabled { return false }
         return premiumRepository.isLoading
-    }
-    
-    private var manageMyProxyButton: some View {
-        Button {
-            viewModel.didTapManageMyProxy()
-        } label: {
-            HStack {
-                Image(systemName: "gearshape")
-                    .font(.title3)
-                    .foregroundStyle(theme.accent)
-                getLabel("Manage My Proxy")
-            }
-        }
-        .buttonStyle(.plain)
     }
     
     private var vpnToggle: some View {

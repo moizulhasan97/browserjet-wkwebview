@@ -171,8 +171,6 @@ struct BrowserRootView: View {
             state.burnProxyAndReloadSelectedTab()
         case .refreshAllTabs:
             state.reloadAllTabs()
-        case .accountManager:
-            AppLogger.info("Account manager pressed")
         case .screenshot:
             state.takeScreenshotOfSelectedTab()
         default:

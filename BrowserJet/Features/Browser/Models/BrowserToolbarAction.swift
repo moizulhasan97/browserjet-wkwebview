@@ -16,7 +16,6 @@ enum BrowserToolbarAction: Hashable {
     case burnProxyAndReload
     case duplicateToTabsMenu
     case refreshAllTabs
-    case accountManager
     case screenshot
 }
 
@@ -31,7 +30,6 @@ extension BrowserToolbarAction {
         case .burnProxyAndReload:  return "arrow.triangle.2.circlepath"
         case .duplicateToTabsMenu: return "square.on.square"
         case .refreshAllTabs:      return "arrow.clockwise"
-        case .accountManager:      return "person.2"
         case .screenshot:          return "viewfinder"
         }
     }
@@ -46,7 +44,6 @@ extension BrowserToolbarAction {
         case .burnProxyAndReload:  return "Burn IP and reload"
         case .duplicateToTabsMenu: return "Duplicate tab"
         case .refreshAllTabs:      return "Refresh all tabs"
-        case .accountManager:      return "Account manager"
         case .screenshot:          return "Screenshot"
         }
     }

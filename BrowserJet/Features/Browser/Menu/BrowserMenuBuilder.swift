@@ -14,7 +14,7 @@ struct BrowserMenuBuilder {
 
     static let `default` = BrowserMenuBuilder(
         leading: [.back, .forward, .reload],
-        trailing: [.newTab, .burnProxyAndReload, .duplicateToTabsMenu, .refreshAllTabs, .accountManager, .screenshot],
+        trailing: [.newTab, .burnProxyAndReload, .duplicateToTabsMenu, .refreshAllTabs, .screenshot],
         moreMenuItems: [.paymentCard, .buyLicenses, .contactUs, .changeKey, /*.about,*/ .twitter]
     )
 
