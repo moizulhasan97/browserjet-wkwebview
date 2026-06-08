@@ -8,10 +8,6 @@
 import AppKit
 
 enum BrowserLicenseBackgroundMonitor {
-//    private static let verifyKeyPollInterval: UInt64 = 10.seconds
-//    //private static let checkExpiryPollInterval: UInt64 = 10.seconds //30.minutes
-//    private static let macFailureTerminateDelay: UInt64 = 10.seconds
-//    private static let keyExpiredTerminateDelay: UInt64 = 30.minutes
 
     static func run(
         licenseService: LicenseService = LicenseService(),
@@ -28,19 +24,12 @@ enum BrowserLicenseBackgroundMonitor {
             return
         }
 
-        // await withTaskGroup(of: Void.self) { group in
-        // group.addTask {
         await verifyKeyPollLoop(
             key: key,
             licenseService: licenseService,
             licenseStore: licenseStore,
             keyValueStore: keyValueStore
         )
-        // }
-        // group.addTask {
-        //     await checkExpiryPollLoop(key: key, licenseService: licenseService)
-        // }
-        // }
     }
 
     private static func trimmedLicenseKey(from store: KeyValueStoring) -> String? {
@@ -63,7 +52,6 @@ enum BrowserLicenseBackgroundMonitor {
                     await presentMacVerificationFailedAndQuit()
                     return
                 }
-                // TODO: - Remove this after confirming with Ebad bhai
                 let now = Date()
                 if Self.isAccessExpiredForBackground(response: response, referenceNow: now) {
                     AppLogger.info("BrowserLicenseBackgroundMonitor: access expired per VerifyKeyResponse")
@@ -84,49 +72,60 @@ enum BrowserLicenseBackgroundMonitor {
         }
     }
 
-    // private static func checkExpiryPollLoop(key: String, licenseService: LicenseService) async {
-    //     while !Task.isCancelled {
-    //         do {
-    //             try await Task.sleep(nanoseconds: checkExpiryPollInterval)
-    //             let expired = try await licenseService.checkKeyExpiry(key)
-    //             if expired {
-    //                 await presentKeyExpiredAndQuit()
-    //                 return
-    //             }
-    //         } catch is CancellationError {
-    //             return
-    //         } catch {
-    //             AppLogger.warning(
-    //                 "BrowserLicenseBackgroundMonitor: checkKeyExpiry poll failed — \(error.localizedDescription)"
-    //             )
-    //         }
-    //     }
-    // }
-
     @MainActor
-    private static func presentMacVerificationFailedAndQuit() async {
+    private static func presentGraceShutdownAlertAndQuit(
+        message: String,
+        style: NSAlert.Style,
+        delayNanoseconds: UInt64
+    ) {
         let alert = NSAlert()
         alert.messageText = AppGraceShutdown.alertTitle
-        alert.informativeText = AppGraceShutdown.macMismatchQuitMessage()
-        alert.alertStyle = .critical
+        alert.informativeText = message
+        alert.alertStyle = style
         alert.addButton(withTitle: "OK")
+
+        let delaySeconds = Double(delayNanoseconds) / 1_000_000_000
+        var terminated = false
+
+        var autoQuitTimer: Timer?
+        autoQuitTimer = Timer(timeInterval: delaySeconds, repeats: false) { _ in
+            NSApp.stopModal(withCode: .alertFirstButtonReturn)
+            DispatchQueue.main.async {
+                guard !terminated else { return }
+                terminated = true
+                QuitConfirmationController.terminateWithoutConfirmation()
+            }
+        }
+        RunLoop.main.add(autoQuitTimer!, forMode: .modalPanel)
+        RunLoop.main.add(autoQuitTimer!, forMode: .default)
+
         alert.runModal()
-        try? await Task.sleep(nanoseconds: AppGraceShutdown.Timing.macMismatchQuit)
+
+        autoQuitTimer?.invalidate()
+        autoQuitTimer = nil
+        guard !terminated else { return }
+        terminated = true
         QuitConfirmationController.terminateWithoutConfirmation()
     }
 
     @MainActor
-    private static func presentKeyExpiredAndQuit() async {
-        let alert = NSAlert()
-        alert.messageText = AppGraceShutdown.alertTitle
-        alert.informativeText = AppGraceShutdown.keyExpiredQuitMessage(
-            forDelayNanoseconds: AppGraceShutdown.Timing.keyExpiredQuit
+    private static func presentMacVerificationFailedAndQuit() async {
+        presentGraceShutdownAlertAndQuit(
+            message: AppGraceShutdown.macMismatchQuitMessage(),
+            style: .critical,
+            delayNanoseconds: AppGraceShutdown.Timing.macMismatchQuit
         )
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-        try? await Task.sleep(nanoseconds: AppGraceShutdown.Timing.keyExpiredQuit)
-        QuitConfirmationController.terminateWithoutConfirmation()
+    }
+
+    @MainActor
+    private static func presentKeyExpiredAndQuit() async {
+        presentGraceShutdownAlertAndQuit(
+            message: AppGraceShutdown.keyExpiredQuitMessage(
+                forDelayNanoseconds: AppGraceShutdown.Timing.keyExpiredQuit
+            ),
+            style: .informational,
+            delayNanoseconds: AppGraceShutdown.Timing.keyExpiredQuit
+        )
     }
 
     private static func isAccessExpiredForBackground(response: VerifyKeyResponse, referenceNow: Date) -> Bool {
