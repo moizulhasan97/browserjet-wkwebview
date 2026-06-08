@@ -27,22 +27,14 @@ enum AppUtils {
 
     @MainActor
     static func relaunchApplication() {
-        let appPath = Bundle.main.bundlePath
+        let appURL = Bundle.main.bundleURL
 
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/bin/sh")
-        task.arguments = [
-            "-c",
-            "sleep 1; /usr/bin/open -n \"$1\"",
-            "relauncher",
-            appPath
-        ]
-
-        do {
-            try task.run()
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.activates = true
+        configuration.createsNewApplicationInstance = true
+        NSWorkspace.shared.openApplication(at: appURL, configuration: configuration) { _, _ in }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             QuitConfirmationController.terminateWithoutConfirmation()
-        } catch {
-            AppLogger.error("Failed to relaunch app: \(error.localizedDescription)")
         }
     }
 }

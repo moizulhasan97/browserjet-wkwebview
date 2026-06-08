@@ -130,7 +130,9 @@ struct BrowserRootView: View {
         .onChange(of: changeKeyViewModel.didSucceed) { _, didSucceed in
             guard didSucceed else { return }
             showChangeKeySheet = false
-            showChangeKeySuccessAlert = true
+            Task { @MainActor in
+                showChangeKeySuccessAlert = true
+            }
         }
     }
     
@@ -179,13 +181,13 @@ struct BrowserRootView: View {
     }
     
     private func handleMoreMenuItem(_ item: BrowserMoreMenuItem) {
-//        if item == .about {
-//            AboutBrowserJetWindowController.shared.show(
-//                themeManager: themeManager,
-//                colorScheme: colorScheme
-//            )
-//            return
-//        }
+        //        if item == .about {
+        //            AboutBrowserJetWindowController.shared.show(
+        //                themeManager: themeManager,
+        //                colorScheme: colorScheme
+        //            )
+        //            return
+        //        }
         if state.isTrialLockActive { return }
         switch item {
         case .paymentCard:
@@ -199,8 +201,8 @@ struct BrowserRootView: View {
         case .changeKey:
             changeKeyViewModel.reset()
             showChangeKeySheet = true
-//        case .about:
-//            break
+            //        case .about:
+            //            break
         }
     }
     
