@@ -153,13 +153,16 @@ struct AboutBrowserJetView: View {
     }
 
     private var expiredWarningView: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .center, spacing: 10) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundStyle(theme.danger)
 
             Text("Your license has expired. BrowserJet access may be limited until you renew or change your key.")
                 .font(designSystem.typography.textBody1.font)
                 .foregroundStyle(theme.textPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .multilineTextAlignment(.leading)
 
             Spacer()
         }

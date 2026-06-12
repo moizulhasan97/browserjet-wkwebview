@@ -101,6 +101,7 @@ struct InfoAlertView: View {
                         .font(designSystem.typography.textBody1.font)
                         .foregroundStyle(theme.textFieldSecondary)
                         .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity)
                 }
 
