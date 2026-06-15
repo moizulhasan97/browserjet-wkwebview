@@ -204,6 +204,27 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
             self.window?.makeFirstResponder(nil)
         }
         
+        // #region agent log
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let win = self?.window else { return }
+            let cvSafeTop = win.contentView?.safeAreaInsets.top ?? -1
+            let vcSafeTop = win.contentViewController?.view.safeAreaInsets.top ?? -1
+            let clrHeight = win.contentLayoutRect.height
+            let frameHeight = win.frame.height
+            let titleBarH = frameHeight - clrHeight
+            let logPath = (NSHomeDirectory() as NSString).appendingPathComponent("Desktop/browserjet-debug-73aa8c.log")
+            let entry = "{\"sessionId\":\"73aa8c\",\"hypothesisId\":\"H1\",\"location\":\"BrowserJetWindowController.swift:show\",\"message\":\"AppKit safe area post-show\",\"data\":{\"contentViewSafeTop\":\(cvSafeTop),\"viewControllerSafeTop\":\(vcSafeTop),\"titleBarHeight\":\(titleBarH),\"frameHeight\":\(frameHeight),\"contentLayoutRectHeight\":\(clrHeight)},\"timestamp\":\(Int(Date().timeIntervalSince1970 * 1000))}\n"
+            if let data = entry.data(using: .utf8) {
+                if FileManager.default.fileExists(atPath: logPath) {
+                    if let handle = try? FileHandle(forWritingTo: URL(fileURLWithPath: logPath)) {
+                        handle.seekToEndOfFile(); handle.write(data); handle.closeFile()
+                    }
+                } else { try? data.write(to: URL(fileURLWithPath: logPath)) }
+            }
+            print("[BJ-DEBUG-73aa8c] AppKit show: cvSafeTop=\(cvSafeTop) vcSafeTop=\(vcSafeTop) titleBarH=\(titleBarH) frameH=\(frameHeight)")
+        }
+        // #endregion
+        
         AppLogger.info("Window activated and made key")
     }
     
