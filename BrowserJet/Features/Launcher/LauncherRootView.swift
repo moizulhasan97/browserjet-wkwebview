@@ -25,6 +25,7 @@ struct LauncherRootView: View {
                     .environment(\.appConfiguration, appConfiguration)
             }
         }
+        .ignoresSafeArea(.all, edges: .top)
         .browserJetThemedRoot(themeManager: themeManager, colorScheme: colorScheme)
         .task { @MainActor in
             let updatePolicy = AppUpdatePolicy.evaluateBuild()

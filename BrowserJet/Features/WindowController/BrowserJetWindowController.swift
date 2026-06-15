@@ -8,22 +8,6 @@
 import AppKit
 import SwiftUI
 
-// #region agent log
-private func debugLogWC(_ message: String, data: [String: Any] = [:], hypothesisId: String = "") {
-    let ts = Int(Date().timeIntervalSince1970 * 1000)
-    var payload: [String: Any] = ["sessionId": "73aa8c", "timestamp": ts, "location": "BrowserJetWindowController.swift", "message": message, "hypothesisId": hypothesisId]
-    data.forEach { payload[$0.key] = $0.value }
-    let prettyData = data.map { "\($0.key)=\($0.value)" }.sorted().joined(separator: " ")
-    print("[BJ-DEBUG-73aa8c] WC | \(message) | \(prettyData)")
-    let logPath = NSHomeDirectory() + "/Desktop/browserjet-debug-73aa8c.log"
-    if let json = try? JSONSerialization.data(withJSONObject: payload), let line = String(data: json, encoding: .utf8) {
-        let full = line + "\n"
-        if let fh = FileHandle(forWritingAtPath: logPath) { fh.seekToEndOfFile(); fh.write(Data(full.utf8)); fh.closeFile() }
-        else { try? Data(full.utf8).write(to: URL(fileURLWithPath: logPath)) }
-    }
-}
-// #endregion
-
 /// NSWindow subclass that forwards title-bar double-clicks to the standard
 /// macOS title-bar action even when SwiftUI subviews (e.g. the tab strip's
 /// `ScrollView`) cover the title bar via `.fullSizeContentView`.
@@ -64,7 +48,7 @@ private final class BrowserJetWindow: NSWindow {
 protocol ShowableWindowController: AnyObject {
     func show()
     func close()
-    /// Fixed-size windows only: shrink/grow content area and re-center (no-op for types that don’t support it).
+    /// Fixed-size windows only: shrink/grow content area and re-center (no-op for types that don't support it).
     func applyFixedContentSize(_ size: NSSize)
     /// Activation bootstrap only: hide titled window chrome so only the card is visible.
     func setActivationChromeBorderless(_ borderless: Bool)
@@ -172,9 +156,6 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
     
     func setActivationChromeBorderless(_ borderless: Bool) {
         guard let window else { return }
-        // #region agent log
-        debugLogWC("setActivationChromeBorderless called", data: ["borderless": borderless, "contentType": "\(type(of: self))", "currentStyleMask_raw": window.styleMask.rawValue, "isTitled": window.styleMask.contains(.titled)], hypothesisId: "B")
-        // #endregion
         if borderless {
             window.styleMask = [.borderless, .fullSizeContentView]
             window.titleVisibility = .hidden
@@ -208,26 +189,6 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         
         guard let window else { return }
         
-        // #region agent log
-        let styleMaskRaw = window.styleMask.rawValue
-        let isTitled = window.styleMask.contains(.titled)
-        let isBorderless = window.styleMask.rawValue == 0
-        let closeBtn = window.standardWindowButton(.closeButton)
-        let minBtn = window.standardWindowButton(.miniaturizeButton)
-        let zoomBtn = window.standardWindowButton(.zoomButton)
-        debugLogWC("show() called", data: [
-            "styleMask_raw": styleMaskRaw,
-            "isTitled": isTitled,
-            "isBorderless_real": isBorderless,
-            "frame": "\(window.frame)",
-            "contentType": "\(type(of: self))",
-            "closeBtn_isHidden": closeBtn?.isHidden as Any,
-            "closeBtn_frame": closeBtn.map { "\($0.frame)" } as Any,
-            "minBtn_isHidden": minBtn?.isHidden as Any,
-            "openWindowsCount": NSApp.windows.filter { $0.isVisible }.count
-        ], hypothesisId: "E-F")
-        // #endregion
-        
         window.makeKeyAndOrderFront(nil)
         
         let isResizable = window.styleMask.contains(.resizable)
@@ -242,23 +203,6 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         DispatchQueue.main.async {
             self.window?.makeFirstResponder(nil)
         }
-        
-        // #region agent log - delayed post-show check
-        let capturedWindow = window
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            guard let w = capturedWindow as? NSWindow else { return }
-            let closeHidden = w.standardWindowButton(.closeButton)?.isHidden
-            debugLogWC("post-show 600ms check [POST-FIX]", data: [
-                "styleMask_raw": w.styleMask.rawValue,
-                "isTitled": w.styleMask.contains(.titled),
-                "isBorderless_real": w.styleMask.rawValue == 0,
-                "frame": "\(w.frame)",
-                "isVisible": w.isVisible,
-                "closeBtn_isHidden": closeHidden as Any,
-                "openWindowsCount": NSApp.windows.filter { $0.isVisible }.count
-            ], hypothesisId: "F")
-        }
-        // #endregion
         
         AppLogger.info("Window activated and made key")
     }
