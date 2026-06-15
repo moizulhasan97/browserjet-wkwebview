@@ -9,6 +9,22 @@ import AppKit
 import Foundation
 import SwiftUI
 
+// #region agent log
+private func debugLogWM(_ message: String, data: [String: Any] = [:], hypothesisId: String = "") {
+    let ts = Int(Date().timeIntervalSince1970 * 1000)
+    var payload: [String: Any] = ["sessionId": "73aa8c", "timestamp": ts, "location": "WindowManager.swift", "message": message, "hypothesisId": hypothesisId]
+    data.forEach { payload[$0.key] = $0.value }
+    let prettyData = data.map { "\($0.key)=\($0.value)" }.sorted().joined(separator: " ")
+    print("[BJ-DEBUG-73aa8c] WM | \(message) | \(prettyData)")
+    let logPath = NSHomeDirectory() + "/Desktop/browserjet-debug-73aa8c.log"
+    if let json = try? JSONSerialization.data(withJSONObject: payload), let line = String(data: json, encoding: .utf8) {
+        let full = line + "\n"
+        if let fh = FileHandle(forWritingAtPath: logPath) { fh.seekToEndOfFile(); fh.write(Data(full.utf8)); fh.closeFile() }
+        else { try? Data(full.utf8).write(to: URL(fileURLWithPath: logPath)) }
+    }
+}
+// #endregion
+
 final class WindowManager {
     static let shared = WindowManager()
 
@@ -49,6 +65,11 @@ final class WindowManager {
     /// Shrinks or expands the activation window when root is `BrowserJetWindowRoot` (no-op for launcher/browser windows).
     /// Compact layouts use **borderless** `NSWindow` chrome so only the SwiftUI card (e.g. progress) is visible—no title bar behind it.
     func resizeActivationWindowToFit(_ layout: ActivationLayout) {
+        // #region agent log
+        let wcType = launcherWC.map { "\(type(of: $0))" } ?? "nil"
+        let guardPasses = launcherWC is BrowserJetWindowController<BrowserJetWindowRoot>
+        debugLogWM("resizeActivationWindowToFit called", data: ["layout": "\(layout)", "launcherWC_type": wcType, "guardPasses": guardPasses, "compact": layout != .fullForm], hypothesisId: "B")
+        // #endregion
         guard let windowController = launcherWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
         let compact = layout != .fullForm
         windowController.setActivationChromeBorderless(compact)
@@ -143,6 +164,13 @@ final class WindowManager {
                 cornerRadius: 18
             )
             AppLogger.debug("Launcher window controller created successfully")
+            // #region agent log
+            debugLogWM("showLauncher: new BrowserJetWindowController created", data: ["launcherWC_type": launcherWC.map { "\(type(of: $0))" } ?? "nil"], hypothesisId: "A")
+            // #endregion
+        } else {
+            // #region agent log
+            debugLogWM("showLauncher: launcherWC was NOT nil - reusing", data: ["launcherWC_type": launcherWC.map { "\(type(of: $0))" } ?? "nil"], hypothesisId: "A")
+            // #endregion
         }
         launcherWC?.show()
         AppLogger.info("Launcher window shown")
@@ -154,6 +182,9 @@ final class WindowManager {
         sessionManager: SessionManager,
         appConfiguration: AppConfiguration
     ) {
+        // #region agent log
+        debugLogWM("dismissActivationAndShowLauncher called", data: ["launcherWC_isNil": launcherWC == nil, "launcherWC_type": launcherWC.map { String(describing: type(of: $0)) } ?? "nil"], hypothesisId: "A")
+        // #endregion
         launcherWC?.close()
         launcherWC = nil
         AppLogger.info("Activation window closed")

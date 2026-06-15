@@ -8,6 +8,22 @@
 import AppKit
 import SwiftUI
 
+// #region agent log
+private func debugLogWC(_ message: String, data: [String: Any] = [:], hypothesisId: String = "") {
+    let ts = Int(Date().timeIntervalSince1970 * 1000)
+    var payload: [String: Any] = ["sessionId": "73aa8c", "timestamp": ts, "location": "BrowserJetWindowController.swift", "message": message, "hypothesisId": hypothesisId]
+    data.forEach { payload[$0.key] = $0.value }
+    let prettyData = data.map { "\($0.key)=\($0.value)" }.sorted().joined(separator: " ")
+    print("[BJ-DEBUG-73aa8c] WC | \(message) | \(prettyData)")
+    let logPath = NSHomeDirectory() + "/Desktop/browserjet-debug-73aa8c.log"
+    if let json = try? JSONSerialization.data(withJSONObject: payload), let line = String(data: json, encoding: .utf8) {
+        let full = line + "\n"
+        if let fh = FileHandle(forWritingAtPath: logPath) { fh.seekToEndOfFile(); fh.write(Data(full.utf8)); fh.closeFile() }
+        else { try? Data(full.utf8).write(to: URL(fileURLWithPath: logPath)) }
+    }
+}
+// #endregion
+
 /// NSWindow subclass that forwards title-bar double-clicks to the standard
 /// macOS title-bar action even when SwiftUI subviews (e.g. the tab strip's
 /// `ScrollView`) cover the title bar via `.fullSizeContentView`.
@@ -152,6 +168,9 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
     
     func setActivationChromeBorderless(_ borderless: Bool) {
         guard let window else { return }
+        // #region agent log
+        debugLogWC("setActivationChromeBorderless called", data: ["borderless": borderless, "contentType": "\(type(of: self))", "currentStyleMask_raw": window.styleMask.rawValue, "isTitled": window.styleMask.contains(.titled)], hypothesisId: "B")
+        // #endregion
         if borderless {
             window.styleMask = [.borderless, .fullSizeContentView]
             window.titleVisibility = .hidden
@@ -184,6 +203,13 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         NSApp.activate(ignoringOtherApps: true)
         
         guard let window else { return }
+        
+        // #region agent log
+        let styleMaskRaw = window.styleMask.rawValue
+        let isTitled = window.styleMask.contains(.titled)
+        let isBorderless = window.styleMask.contains(.borderless)
+        debugLogWC("show() called", data: ["styleMask_raw": styleMaskRaw, "isTitled": isTitled, "isBorderless": isBorderless, "frame": "\(window.frame)", "contentType": "\(type(of: self))"], hypothesisId: "B-C")
+        // #endregion
         
         window.makeKeyAndOrderFront(nil)
         
