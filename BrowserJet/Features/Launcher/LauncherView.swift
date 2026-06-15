@@ -63,16 +63,7 @@ struct LauncherView: View {
         // #region agent log
         .background(GeometryReader { proxy in
             Color.clear.onAppear {
-                let logPath = (NSHomeDirectory() as NSString).appendingPathComponent("Desktop/browserjet-debug-73aa8c.log")
-                let entry = "{\"sessionId\":\"73aa8c\",\"hypothesisId\":\"H1\",\"location\":\"LauncherView.swift:safeArea\",\"message\":\"SwiftUI content safe area\",\"data\":{\"safeAreaTop\":\(proxy.safeAreaInsets.top),\"safeAreaBottom\":\(proxy.safeAreaInsets.bottom),\"frameHeight\":\(proxy.size.height),\"frameWidth\":\(proxy.size.width)},\"timestamp\":\(Int(Date().timeIntervalSince1970 * 1000))}\n"
-                if let data = entry.data(using: .utf8) {
-                    if FileManager.default.fileExists(atPath: logPath) {
-                        if let handle = try? FileHandle(forWritingTo: URL(fileURLWithPath: logPath)) {
-                            handle.seekToEndOfFile(); handle.write(data); handle.closeFile()
-                        }
-                    } else { try? data.write(to: URL(fileURLWithPath: logPath)) }
-                }
-                print("[BJ-DEBUG-73aa8c] LauncherView safeAreaTop=\(proxy.safeAreaInsets.top) frameHeight=\(proxy.size.height)")
+                print("[BJ-DEBUG-73aa8c] H1 LauncherView safeAreaTop=\(proxy.safeAreaInsets.top) safeAreaBottom=\(proxy.safeAreaInsets.bottom) frameH=\(proxy.size.height) frameW=\(proxy.size.width)")
             }
         })
         // #endregion
