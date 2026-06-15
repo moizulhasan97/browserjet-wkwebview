@@ -60,13 +60,6 @@ struct LauncherView: View {
                 .padding(.top, Constants.launchButtonTopPadding)
         }
         .padding()
-        // #region agent log
-        .background(GeometryReader { proxy in
-            Color.clear.onAppear {
-                print("[BJ-DEBUG-73aa8c] H1 LauncherView safeAreaTop=\(proxy.safeAreaInsets.top) safeAreaBottom=\(proxy.safeAreaInsets.bottom) frameH=\(proxy.size.height) frameW=\(proxy.size.width)")
-            }
-        })
-        // #endregion
         .onAppear {
             viewModel.onAppear()
             applyDefaultStartURLIfNeeded()

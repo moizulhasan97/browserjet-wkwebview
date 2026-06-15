@@ -8,6 +8,22 @@
 import AppKit
 import SwiftUI
 
+// #region agent log
+private func debugLogWC(_ message: String, data: [String: Any] = [:], hypothesisId: String = "") {
+    let ts = Int(Date().timeIntervalSince1970 * 1000)
+    var payload: [String: Any] = ["sessionId": "73aa8c", "timestamp": ts, "location": "BrowserJetWindowController.swift", "message": message, "hypothesisId": hypothesisId]
+    data.forEach { payload[$0.key] = $0.value }
+    let prettyData = data.map { "\($0.key)=\($0.value)" }.sorted().joined(separator: " ")
+    print("[BJ-DEBUG-73aa8c] WC | \(message) | \(prettyData)")
+    let logPath = NSHomeDirectory() + "/Desktop/browserjet-debug-73aa8c.log"
+    if let json = try? JSONSerialization.data(withJSONObject: payload), let line = String(data: json, encoding: .utf8) {
+        let full = line + "\n"
+        if let fh = FileHandle(forWritingAtPath: logPath) { fh.seekToEndOfFile(); fh.write(Data(full.utf8)); fh.closeFile() }
+        else { try? Data(full.utf8).write(to: URL(fileURLWithPath: logPath)) }
+    }
+}
+// #endregion
+
 /// NSWindow subclass that forwards title-bar double-clicks to the standard
 /// macOS title-bar action even when SwiftUI subviews (e.g. the tab strip's
 /// `ScrollView`) cover the title bar via `.fullSizeContentView`.
@@ -48,7 +64,7 @@ private final class BrowserJetWindow: NSWindow {
 protocol ShowableWindowController: AnyObject {
     func show()
     func close()
-    /// Fixed-size windows only: shrink/grow content area and re-center (no-op for types that don't support it).
+    /// Fixed-size windows only: shrink/grow content area and re-center (no-op for types that don’t support it).
     func applyFixedContentSize(_ size: NSSize)
     /// Activation bootstrap only: hide titled window chrome so only the card is visible.
     func setActivationChromeBorderless(_ borderless: Bool)
@@ -77,10 +93,6 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         // swiftlint:disable:next line_length
         AppLogger.debug("Initializing BrowserJetWindowController - Size: \(size.width)x\(size.height), Resizable: \(resizable), CornerRadius: \(cornerRadius), borderless: \(borderlessChrome)")
         let hosting = NSHostingController(rootView: content)
-        // Prevent NSHostingController from auto-resizing the window via preferredContentSize.
-        // Without this, SwiftUI's ideal layout height can override window.maxSize and resize
-        // the window (e.g. launcher grows from 639→1122px on some displays).
-        hosting.sizingOptions = []
         
         let styleMask: NSWindow.StyleMask = {
             if borderlessChrome {
@@ -134,17 +146,6 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         
         window.center()
         
-        // On Sequoia 15.x, SwiftUI's .ignoresSafeArea() does not propagate through
-        // NSHostingController — the 28pt title-bar offset is applied by AppKit before
-        // SwiftUI ever lays out. Setting safeAreaRegions = [] eliminates the title-bar
-        // safe area at the source so SwiftUI content fills the full transparent title bar.
-        // Only applies to non-resizable titled windows (launcher / activation chrome).
-        if !borderlessChrome && !resizable {
-            if #available(macOS 13.3, *) {
-                hosting.safeAreaRegions = []
-            }
-        }
-        
         self.init(window: window)
         window.delegate = windowCloseDelegate
         AppLogger.debug("BrowserJetWindowController initialized successfully")
@@ -167,6 +168,9 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
     
     func setActivationChromeBorderless(_ borderless: Bool) {
         guard let window else { return }
+        // #region agent log
+        debugLogWC("setActivationChromeBorderless called", data: ["borderless": borderless, "contentType": "\(type(of: self))", "currentStyleMask_raw": window.styleMask.rawValue, "isTitled": window.styleMask.contains(.titled)], hypothesisId: "B")
+        // #endregion
         if borderless {
             window.styleMask = [.borderless, .fullSizeContentView]
             window.titleVisibility = .hidden
@@ -200,6 +204,13 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         
         guard let window else { return }
         
+        // #region agent log
+        let styleMaskRaw = window.styleMask.rawValue
+        let isTitled = window.styleMask.contains(.titled)
+        let isBorderless = window.styleMask.contains(.borderless)
+        debugLogWC("show() called", data: ["styleMask_raw": styleMaskRaw, "isTitled": isTitled, "isBorderless": isBorderless, "frame": "\(window.frame)", "contentType": "\(type(of: self))"], hypothesisId: "B-C")
+        // #endregion
+        
         window.makeKeyAndOrderFront(nil)
         
         let isResizable = window.styleMask.contains(.resizable)
@@ -214,18 +225,6 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         DispatchQueue.main.async {
             self.window?.makeFirstResponder(nil)
         }
-        
-        // #region agent log
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let win = self?.window else { return }
-            let cvSafeTop = win.contentView?.safeAreaInsets.top ?? -1
-            let vcSafeTop = win.contentViewController?.view.safeAreaInsets.top ?? -1
-            let clrHeight = win.contentLayoutRect.height
-            let frameHeight = win.frame.height
-            let titleBarH = frameHeight - clrHeight
-            print("[BJ-DEBUG-73aa8c] H1 AppKit post-fix: cvSafeTop=\(cvSafeTop) vcSafeTop=\(vcSafeTop) titleBarH=\(titleBarH) frameH=\(frameHeight) contentLayoutH=\(clrHeight)")
-        }
-        // #endregion
         
         AppLogger.info("Window activated and made key")
     }
