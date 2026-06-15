@@ -93,6 +93,10 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         // swiftlint:disable:next line_length
         AppLogger.debug("Initializing BrowserJetWindowController - Size: \(size.width)x\(size.height), Resizable: \(resizable), CornerRadius: \(cornerRadius), borderless: \(borderlessChrome)")
         let hosting = NSHostingController(rootView: content)
+        // Prevent NSHostingController from auto-resizing the window via preferredContentSize.
+        // Without this, SwiftUI's ideal layout height can override window.maxSize and resize
+        // the window (e.g. launcher grows from 639→1122px on some displays).
+        hosting.sizingOptions = []
         
         let styleMask: NSWindow.StyleMask = {
             if borderlessChrome {
@@ -244,7 +248,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
             guard let w = capturedWindow as? NSWindow else { return }
             let closeHidden = w.standardWindowButton(.closeButton)?.isHidden
-            debugLogWC("post-show 600ms check", data: [
+            debugLogWC("post-show 600ms check [POST-FIX]", data: [
                 "styleMask_raw": w.styleMask.rawValue,
                 "isTitled": w.styleMask.contains(.titled),
                 "isBorderless_real": w.styleMask.rawValue == 0,
