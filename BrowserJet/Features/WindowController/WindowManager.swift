@@ -183,7 +183,14 @@ final class WindowManager {
         appConfiguration: AppConfiguration
     ) {
         // #region agent log
-        debugLogWM("dismissActivationAndShowLauncher called", data: ["launcherWC_isNil": launcherWC == nil, "launcherWC_type": launcherWC.map { String(describing: type(of: $0)) } ?? "nil"], hypothesisId: "A")
+        let visibleWins = NSApp.windows.filter { $0.isVisible }
+        let sheetWins = NSApp.windows.filter { $0.isSheet }
+        debugLogWM("dismissActivationAndShowLauncher called", data: [
+            "launcherWC_isNil": launcherWC == nil,
+            "launcherWC_type": launcherWC.map { String(describing: type(of: $0)) } ?? "nil",
+            "visible_windows_count": visibleWins.count,
+            "sheet_windows_count": sheetWins.count
+        ], hypothesisId: "F")
         // #endregion
         launcherWC?.close()
         launcherWC = nil

@@ -207,8 +207,21 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         // #region agent log
         let styleMaskRaw = window.styleMask.rawValue
         let isTitled = window.styleMask.contains(.titled)
-        let isBorderless = window.styleMask.contains(.borderless)
-        debugLogWC("show() called", data: ["styleMask_raw": styleMaskRaw, "isTitled": isTitled, "isBorderless": isBorderless, "frame": "\(window.frame)", "contentType": "\(type(of: self))"], hypothesisId: "B-C")
+        let isBorderless = window.styleMask.rawValue == 0
+        let closeBtn = window.standardWindowButton(.closeButton)
+        let minBtn = window.standardWindowButton(.miniaturizeButton)
+        let zoomBtn = window.standardWindowButton(.zoomButton)
+        debugLogWC("show() called", data: [
+            "styleMask_raw": styleMaskRaw,
+            "isTitled": isTitled,
+            "isBorderless_real": isBorderless,
+            "frame": "\(window.frame)",
+            "contentType": "\(type(of: self))",
+            "closeBtn_isHidden": closeBtn?.isHidden as Any,
+            "closeBtn_frame": closeBtn.map { "\($0.frame)" } as Any,
+            "minBtn_isHidden": minBtn?.isHidden as Any,
+            "openWindowsCount": NSApp.windows.filter { $0.isVisible }.count
+        ], hypothesisId: "E-F")
         // #endregion
         
         window.makeKeyAndOrderFront(nil)
@@ -225,6 +238,23 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         DispatchQueue.main.async {
             self.window?.makeFirstResponder(nil)
         }
+        
+        // #region agent log - delayed post-show check
+        let capturedWindow = window
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            guard let w = capturedWindow as? NSWindow else { return }
+            let closeHidden = w.standardWindowButton(.closeButton)?.isHidden
+            debugLogWC("post-show 600ms check", data: [
+                "styleMask_raw": w.styleMask.rawValue,
+                "isTitled": w.styleMask.contains(.titled),
+                "isBorderless_real": w.styleMask.rawValue == 0,
+                "frame": "\(w.frame)",
+                "isVisible": w.isVisible,
+                "closeBtn_isHidden": closeHidden as Any,
+                "openWindowsCount": NSApp.windows.filter { $0.isVisible }.count
+            ], hypothesisId: "F")
+        }
+        // #endregion
         
         AppLogger.info("Window activated and made key")
     }
