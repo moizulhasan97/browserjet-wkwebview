@@ -134,6 +134,19 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
         
         window.center()
         
+        // Cancel the title-bar safe area at the AppKit layer so SwiftUI content fills
+        // the full window frame (including the transparent title-bar area).
+        // On macOS 16+ (Tahoe) SwiftUI's .ignoresSafeArea() propagates through NSHostingController,
+        // but on Sequoia 15.x the 28pt title-bar offset is applied by AppKit independently and
+        // .ignoresSafeArea() alone cannot override it. Setting a negative additionalSafeAreaInsets.top
+        // cancels this offset before the first layout pass on all macOS versions.
+        if !borderlessChrome && !resizable {
+            let titleBarH = window.frame.height - window.contentLayoutRect.height
+            if titleBarH > 0 {
+                hosting.additionalSafeAreaInsets.top = -titleBarH
+            }
+        }
+        
         self.init(window: window)
         window.delegate = windowCloseDelegate
         AppLogger.debug("BrowserJetWindowController initialized successfully")
@@ -161,6 +174,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
             window.titleVisibility = .hidden
             window.titlebarAppearsTransparent = true
             window.isMovableByWindowBackground = true
+            window.contentViewController?.additionalSafeAreaInsets.top = 0
         } else {
             var mask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .fullSizeContentView]
             if window.styleMask.contains(.resizable) {
@@ -171,6 +185,12 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
             window.titlebarAppearsTransparent = true
             window.isMovableByWindowBackground = false
             window.standardWindowButton(.zoomButton)?.isEnabled = false
+            // Re-apply the AppKit title-bar safe area cancellation after transitioning to titled.
+            DispatchQueue.main.async { [weak self] in
+                guard let win = self?.window, let vc = win.contentViewController else { return }
+                let titleBarH = win.frame.height - win.contentLayoutRect.height
+                vc.additionalSafeAreaInsets.top = titleBarH > 0 ? -titleBarH : 0
+            }
         }
         window.isOpaque = false
         window.backgroundColor = .clear
@@ -209,10 +229,11 @@ final class BrowserJetWindowController<Content: View>: NSWindowController,
             guard let win = self?.window else { return }
             let cvSafeTop = win.contentView?.safeAreaInsets.top ?? -1
             let vcSafeTop = win.contentViewController?.view.safeAreaInsets.top ?? -1
+            let additionalTop = win.contentViewController?.additionalSafeAreaInsets.top ?? -999
             let clrHeight = win.contentLayoutRect.height
             let frameHeight = win.frame.height
             let titleBarH = frameHeight - clrHeight
-            print("[BJ-DEBUG-73aa8c] H1 AppKit show: cvSafeTop=\(cvSafeTop) vcSafeTop=\(vcSafeTop) titleBarH=\(titleBarH) frameH=\(frameHeight) contentLayoutH=\(clrHeight)")
+            print("[BJ-DEBUG-73aa8c] H1 AppKit post-fix: cvSafeTop=\(cvSafeTop) vcSafeTop=\(vcSafeTop) additionalTop=\(additionalTop) titleBarH=\(titleBarH) frameH=\(frameHeight) contentLayoutH=\(clrHeight)")
         }
         // #endregion
         
