@@ -61,10 +61,14 @@ extension ShowableWindowController {
 }
 
 final class BrowserJetWindowController<Content: View>: NSWindowController, ShowableWindowController {
+    /// - Parameter size: Pass a fixed `NSSize` to pin the window to exact dimensions (existing
+    ///   behaviour for activation, launcher, and browser windows). Pass `nil` to let the window
+    ///   measure its own size from the SwiftUI content via `NSHostingController.sizingOptions =
+    ///   .preferredContentSize` — useful for content-driven panels like About.
     convenience init(
         titledWindowTitle: String? = nil,
         content: Content,
-        size: NSSize,
+        size: NSSize? = nil,
         titleBarHidden: Bool = false,
         resizable: Bool = false,
         cornerRadius: CGFloat = 16,
@@ -92,7 +96,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         }()
 
         let window = NSWindow(
-            contentRect: NSRect(origin: .zero, size: size),
+            contentRect: NSRect(origin: .zero, size: size ?? .zero),
             styleMask: styleMask,
             backing: .buffered,
             defer: false
@@ -114,31 +118,51 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         window.backgroundColor = .clear
         window.hasShadow = true
 
-        // MARK: - Hosting View
+        // MARK: - Hosting View + Size
 
-        if let contentView = window.contentView {
-            contentView.wantsLayer = true
-            contentView.layer?.cornerRadius = cornerRadius
-            contentView.layer?.masksToBounds = true
+        if let fixedSize = size {
+            // Fixed-size path: hosting view is added as a subview and clipped to the window.
+            if let contentView = window.contentView {
+                contentView.wantsLayer = true
+                contentView.layer?.cornerRadius = cornerRadius
+                contentView.layer?.masksToBounds = true
 
-            hosting.view.translatesAutoresizingMaskIntoConstraints = true
-            hosting.view.autoresizingMask = [.width, .height]
-            hosting.view.frame = contentView.bounds
+                hosting.view.translatesAutoresizingMaskIntoConstraints = true
+                hosting.view.autoresizingMask = [.width, .height]
+                hosting.view.frame = contentView.bounds
+                hosting.view.wantsLayer = true
+                hosting.view.layer?.cornerRadius = cornerRadius
+                hosting.view.layer?.masksToBounds = true
+
+                contentView.addSubview(hosting.view)
+            }
+
+            if !resizable {
+                window.setContentSize(fixedSize)
+                window.minSize = fixedSize
+                window.maxSize = fixedSize
+
+                if !borderlessChrome {
+                    window.standardWindowButton(.zoomButton)?.isEnabled = false
+                }
+            }
+        } else {
+            // Content-driven path: the window measures its own size from the SwiftUI
+            // view's preferred content size. No hardcoded height needed.
+            hosting.sizingOptions = .preferredContentSize
+            window.contentViewController = hosting
+
+            if let contentView = window.contentView {
+                contentView.wantsLayer = true
+                contentView.layer?.cornerRadius = cornerRadius
+                contentView.layer?.masksToBounds = true
+            }
+
             hosting.view.wantsLayer = true
             hosting.view.layer?.cornerRadius = cornerRadius
             hosting.view.layer?.masksToBounds = true
 
-            contentView.addSubview(hosting.view)
-        }
-
-        // MARK: - Size
-
-        if !resizable {
-            window.setContentSize(size)
-            window.minSize = size
-            window.maxSize = size
-
-            if !borderlessChrome {
+            if !resizable, !borderlessChrome {
                 window.standardWindowButton(.zoomButton)?.isEnabled = false
             }
         }
