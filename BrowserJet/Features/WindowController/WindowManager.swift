@@ -127,8 +127,10 @@ final class WindowManager {
         sessionManager: SessionManager,
         appConfiguration: AppConfiguration
     ) {
-        AppLogger.info("showLauncher called - Default address: \(appConfiguration.defaultSearchAddress)")
-        if launcherWC == nil {
+        launcherWC?.close()
+        launcherWC = nil
+        //AppLogger.info("showLauncher called - Default address: \(appConfiguration.defaultSearchAddress)")
+        //if launcherWC == nil {
             AppLogger.info("Creating new launcher window - Size: 500x639, Corner radius: 18")
             let rootView = LauncherRootView(appConfiguration: appConfiguration)
                 .environmentObject(themeManager)
@@ -143,7 +145,7 @@ final class WindowManager {
                 cornerRadius: 18
             )
             AppLogger.debug("Launcher window controller created successfully")
-        }
+        //}
         launcherWC?.show()
         AppLogger.info("Launcher window shown")
     }
