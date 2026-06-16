@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+enum BrowserTabsStripMetrics {
+    /// Visible tab-strip row height.
+    static let visualHeight: CGFloat = 44
+    /// AppKit titlebar accessory container; extra space for shadows, scale, and padding.
+    static let accessoryHeight: CGFloat = 56
+    /// Vertical padding inside the horizontal tab scroll content (per side).
+    static let stripVerticalPadding: CGFloat = 4
+}
+
 struct BrowserTabsStripView: View {
     @ObservedObject var state: BrowserWindowState
     @EnvironmentObject private var sessionManager: SessionManager
@@ -22,7 +31,7 @@ struct BrowserTabsStripView: View {
     private let spacing: CGFloat = 6
     private let minTabWidth: CGFloat = 120
     private let maxTabWidth: CGFloat = 240
-    private let stripHeight: CGFloat = 44
+    private let stripHeight: CGFloat = BrowserTabsStripMetrics.visualHeight
     private let fadeGradientWidth: CGFloat = 40
 
     var body: some View {
@@ -57,10 +66,11 @@ struct BrowserTabsStripView: View {
                                     },
                                     onClose: {
                                         withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
-                                            state.closeTab(tab.id)
+                                            state.requestCloseTab(tab.id)
                                         }
                                     }
                                 )
+                                .padding(.vertical, 2)
                                 .id(tab.id)
                                 .transition(.asymmetric(
                                     insertion: .opacity
@@ -71,7 +81,7 @@ struct BrowserTabsStripView: View {
                             }
                         }
                         .padding(.horizontal, horizontalPadding)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, BrowserTabsStripMetrics.stripVerticalPadding)
                         .background(
                             GeometryReader { contentGeometry in
                                 Color.clear
@@ -86,6 +96,7 @@ struct BrowserTabsStripView: View {
                             }
                         )
                     }
+                    .scrollClipDisabled(true)
                     .onPreferenceChange(ContentWidthPreferenceKey.self) { contentWidth in
                         updateScrollIndicators(geometry: geometry, contentWidth: contentWidth)
                     }
@@ -106,70 +117,9 @@ struct BrowserTabsStripView: View {
                     }
                     .animation(.spring(response: 0.4, dampingFraction: 0.8), value: state.tabs.count)
                 }
-
-                // Left fade gradient for overflow
-//                if canScrollLeft {
-//                    LinearGradient(
-//                        colors: [
-//                            theme.surfaceCard.opacity(0.8),
-//                            Color.clear
-//                        ],
-//                        startPoint: .leading,
-//                        endPoint: .trailing
-//                    )
-//                    .frame(width: fadeGradientWidth)
-//                    .allowsHitTesting(false)
-//                }
-//                
-//                // Right fade gradient for overflow
-//                if canScrollRight {
-//                    LinearGradient(
-//                        colors: [
-//                            Color.clear,
-//                            theme.surfaceCard.opacity(0.8)
-//                        ],
-//                        startPoint: .leading,
-//                        endPoint: .trailing
-//                    )
-//                    .frame(width: fadeGradientWidth)
-//                    .frame(maxWidth: .infinity, alignment: .trailing)
-//                    .allowsHitTesting(false)
-//                }
             }
         }
         .frame(height: stripHeight)
-//        .background(
-//            // Modern glass morphism background
-//            ZStack {
-//                theme.surfaceCard.opacity(0.75)
-//                
-//                LinearGradient(
-//                    colors: [
-//                        theme.surfaceCard.opacity(0.85),
-//                        theme.surfaceCard.opacity(0.65)
-//                    ],
-//                    startPoint: .top,
-//                    endPoint: .bottom
-//                )
-//            }
-//        )
-//        .overlay(
-//            // Elegant separator line at bottom
-//            Rectangle()
-//                .frame(height: 1)
-//                .foregroundStyle(
-//                    LinearGradient(
-//                        colors: [
-//                            theme.divider.opacity(0.3),
-//                            theme.divider.opacity(0.15)
-//                        ],
-//                        startPoint: .leading,
-//                        endPoint: .trailing
-//                    )
-//                ),
-//            alignment: .bottom
-//        )
-        // .shadow(color: .red, radius: 20, y: 1)
     }
 
     private func updateScrollIndicators(geometry: GeometryProxy, contentWidth: CGFloat) {
@@ -198,10 +148,10 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
     }
 }
 
-// swiftlint:disable all
+// swiftlint:disable force_unwrapping
 #Preview("BrowserTabsStripView") {
     let themeManager = ThemeManager()
-    let sessionManager = SessionManager(maxSessions: 10)
+    let sessionManager = SessionManager(maxSessions: 20)
 
     // Fake a BrowserWindowState with a few tabs
     let state = BrowserWindowState(
@@ -211,29 +161,26 @@ struct ContentOffsetPreferenceKey: PreferenceKey {
         userAgent: nil,
         sessionManager: sessionManager,
         initialURL: URL(string: "https://www.google.com")!,
-        initialTabCount: 2
+        initialTabCount: 2,
+        maxBrowserTabs: 20
     )
 
     // Add a few more tabs so we can see shrinking behavior
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://www.google.com")!)
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://seatgeek.com")!)
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://ticketmaster.com")!)
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://apple.com")!)
-    // swiftlint:disable:next force_unwrapping
     state.addTab(url: URL(string: "https://github.com")!)
 
     // Optional: set a selected tab
     state.selectedTabID = state.tabs.first?.id
 
     return BrowserTabsStripView(state: state)
-        .frame(width: 900, height: 42)
+        .frame(width: 900, height: BrowserTabsStripMetrics.visualHeight)
         .padding()
         .background(AppBackgroundStyle.browserJetGradient.makeView())
         .environmentObject(sessionManager)
         .environmentObject(themeManager)
         .environment(\.appTheme, BrowserJetLightTheme())
 }
+// swiftlint:enable force_unwrapping

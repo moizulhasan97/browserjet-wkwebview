@@ -8,7 +8,6 @@
 import Foundation
 
 enum ProxyEndpoint: EndpointProtocol {
-
     case premium(key: String)
     case vpn1(key: String)
 

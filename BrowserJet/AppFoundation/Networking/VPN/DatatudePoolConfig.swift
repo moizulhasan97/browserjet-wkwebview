@@ -16,7 +16,7 @@ struct DatatudePoolConfig: Hashable {
     /// datatude-{region}-numXXXXXXXX -> the number of X count
     /// 00000011, 00099999
     let counterDigitWidth: Int
-    
+
     init(
         host: String,
         port: UInt16,

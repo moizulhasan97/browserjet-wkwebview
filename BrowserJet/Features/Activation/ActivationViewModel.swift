@@ -9,6 +9,8 @@ import SwiftUI
 
 // MARK: - Verify outcome (post-verify routing)
 
+import Foundation
+
 enum VerifyOutcome: Equatable {
     case success
     case shiftRequired(key: String, email: String)
@@ -18,26 +20,6 @@ enum VerifyOutcome: Equatable {
 
 @MainActor
 final class ActivationViewModel: ObservableObject {
-
-    enum Mode: String, CaseIterable, Hashable {
-        case activate
-        case register
-
-        var displayLabel: String {
-            switch self {
-            case .activate: return ActivationMessages.Mode.useKey
-            case .register: return ActivationMessages.Mode.register
-            }
-        }
-
-        var buttonTitle: String {
-            switch self {
-            case .activate: return ActivationMessages.Mode.verifyButton
-            case .register: return ActivationMessages.Mode.createKeyButton
-            }
-        }
-    }
-
     // MARK: - Dependencies
 
     private let coordinator: LicenseActivationCoordinator
@@ -47,8 +29,6 @@ final class ActivationViewModel: ObservableObject {
     }
 
     // MARK: - State
-
-    @Published var mode: Mode = .activate
 
     @Published var licenseKey: String = ""
 
@@ -60,37 +40,59 @@ final class ActivationViewModel: ObservableObject {
     @Published var passwordValidation: RegexValidationState = .none
 
     @Published var isLoading: Bool = false
-    @Published var errorMessage: String? = nil
+    @Published var errorMessage: String?
 
-    @Published var verifyOutcome: VerifyOutcome? = nil
+    @Published var verifyOutcome: VerifyOutcome?
 
     @Published var showRecoverAccountSheet: Bool = false
 
-    var canSubmit: Bool {
-        switch mode {
-        case .activate:
-            return licenseKeyValidation == .valid
-        case .register:
-            return emailValidation == .valid && passwordValidation == .valid
-        }
+    // MARK: - Validation
+
+    var canVerifyKey: Bool {
+        licenseKeyValidation == .valid
+    }
+
+    var canCreateKey: Bool {
+        emailValidation == .valid && passwordValidation == .valid
     }
 
     // MARK: - Actions
 
-    func submit() {
+    func verifyKey() {
+        guard canVerifyKey else { return }
+
         Task {
             isLoading = true
             errorMessage = nil
             verifyOutcome = nil
+
             defer { isLoading = false }
 
             do {
-                switch mode {
-                case .activate:
-                    verifyOutcome = try await coordinator.completeActivation(key: licenseKey)
-                case .register:
-                    verifyOutcome = try await coordinator.generateKeyAndActivate(email: email, password: password)
-                }
+                let key = licenseKey.trimmingCharacters(in: .whitespacesAndNewlines)
+                verifyOutcome = try await coordinator.completeActivation(key: key)
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    func createKey() {
+        guard canCreateKey else { return }
+
+        Task {
+            isLoading = true
+            errorMessage = nil
+            verifyOutcome = nil
+
+            defer { isLoading = false }
+
+            do {
+                let cleanEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+                verifyOutcome = try await coordinator.generateKeyAndActivate(
+                    email: cleanEmail,
+                    password: password
+                )
             } catch {
                 errorMessage = error.localizedDescription
             }
@@ -102,7 +104,9 @@ final class ActivationViewModel: ObservableObject {
             isLoading = true
             errorMessage = nil
             verifyOutcome = nil
+
             defer { isLoading = false }
+
             do {
                 verifyOutcome = try await coordinator.completeActivation(key: key)
             } catch {

@@ -15,3 +15,12 @@ struct Heading1: Typography {
         .sfPro(weight: .semiBold)
     }
 }
+
+struct Heading4: Typography {
+    var size: CGFloat {
+        15.0
+    }
+    var fontProvider: FontProvider {
+        .sfPro(weight: .semiBold)
+    }
+}

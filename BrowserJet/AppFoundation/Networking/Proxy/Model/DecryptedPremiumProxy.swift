@@ -11,7 +11,7 @@ import Foundation
 
 struct VPN1ProxyDTO: Codable {
     let vpnID: Int
-    let ip: String
+    let ipAddress: String
     let port: String
     let username: String
     let password: String
@@ -19,7 +19,7 @@ struct VPN1ProxyDTO: Codable {
 
     enum CodingKeys: String, CodingKey {
         case vpnID = "VPN_ID"
-        case ip = "IP"
+        case ipAddress = "IP"
         case port = "Port"
         case username = "Username"
         case password = "Password"
@@ -29,7 +29,7 @@ struct VPN1ProxyDTO: Codable {
     func asDecryptedPremiumProxy() -> DecryptedPremiumProxy {
         DecryptedPremiumProxy(
             ipID: vpnID,
-            ip: ip,
+            ipAddress: ipAddress,
             port: Int(port) ?? 0,
             username: username,
             password: password,
@@ -40,7 +40,7 @@ struct VPN1ProxyDTO: Codable {
 
 struct DecryptedPremiumProxy: Codable, Hashable {
     let ipID: Int
-    let ip: String
+    let ipAddress: String
     let port: Int
     let username: String
     let password: String
@@ -48,7 +48,7 @@ struct DecryptedPremiumProxy: Codable, Hashable {
 
     enum CodingKeys: String, CodingKey {
         case ipID = "IP_ID"
-        case ip = "IP"
+        case ipAddress = "IP"
         case port
         case username
         case password
@@ -73,7 +73,7 @@ extension DecryptedPremiumProxy {
     /// Maps API row into WebKit proxy credentials.
     func asAuthProxy() -> AuthProxy {
         AuthProxy(
-            host: ip,
+            host: ipAddress,
             port: UInt16(clamping: port),
             username: username,
             password: password

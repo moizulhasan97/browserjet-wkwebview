@@ -5,11 +5,9 @@
 //  Created by Moiz Ul Hasan on 24/02/2026.
 //
 
-
 import Foundation
 
 enum AppUpdateEndpoint: EndpointProtocol {
-
     case latestVersion
 
     var baseURL: URL { APIEnvironment.current.baseURL }

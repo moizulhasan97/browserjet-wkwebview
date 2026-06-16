@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct BrowserJetLightTheme: AppTheme {
     // MARK: - Surfaces (Solid)
     let surfaceCard: Color = .white.opacity(0.96)
@@ -34,7 +33,7 @@ struct BrowserJetLightTheme: AppTheme {
     // MARK: - Badge
     let badgeBackground: Color = .black.opacity(0.70)
     let badgeText: Color = .white
-    
+
     // MARK: - Error
     let danger: Color = .E_5484_D
 }

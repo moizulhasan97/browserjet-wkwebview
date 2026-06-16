@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 22/02/2026.
 //
 
-
 import Foundation
 
 struct StaticAuthProxyProvider: AuthProxyProvider {

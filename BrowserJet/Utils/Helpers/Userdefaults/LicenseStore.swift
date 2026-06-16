@@ -8,7 +8,6 @@
 import Foundation
 
 final class LicenseStore {
-
     private let defaults: UserDefaults
     private let key = "com.browserjet.license"
 
@@ -30,7 +29,7 @@ final class LicenseStore {
 
     func load() -> PersistedLicense? {
         guard let data = defaults.data(forKey: key),
-              let model = try? PropertyListDecoder().decode(PersistedLicense.self, from: data) else {
+            let model = try? PropertyListDecoder().decode(PersistedLicense.self, from: data) else {
             return nil
         }
         return model

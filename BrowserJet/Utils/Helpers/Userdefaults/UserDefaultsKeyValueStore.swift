@@ -7,12 +7,15 @@
 
 import Foundation
 
-
 enum StorageKeys {
     static let licenseKey = "LicenseKey"
     static let userEmail = "UserEmail"
     static let launcherSettings = "LauncherSettings"
     static let updateKeyInDatabase = "UpdateKeyInDatabase"
+    static let appearanceMode = "AppearanceMode"
+    static let defaultStartURL = "DefaultStartURL"
+    static let openBlankPage = "OpenBlankPage"
+    static let confirmBeforeQuit = "ConfirmBeforeQuit"
 }
 
 protocol KeyValueStoring: AnyObject {

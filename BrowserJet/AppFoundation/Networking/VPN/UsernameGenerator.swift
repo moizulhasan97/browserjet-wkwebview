@@ -11,7 +11,7 @@ protocol UsernameGenerator {
 
 struct StaticUsernameGenerator: UsernameGenerator {
     let username: String
-    
+
     func generateUsername(for index: Int) -> String {
         username
     }
@@ -28,7 +28,7 @@ struct SequentialUsernameGenerator: UsernameGenerator {
 
 struct CustomUsernameGenerator: UsernameGenerator {
     let generator: (Int) -> String
-    
+
     func generateUsername(for index: Int) -> String {
         generator(index)
     }

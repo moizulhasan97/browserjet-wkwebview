@@ -10,4 +10,5 @@ enum LauncherTabPreset: Int, CaseIterable, Hashable {
     case three = 3
     case five = 5
     case ten = 10
+    case twenty = 20
 }

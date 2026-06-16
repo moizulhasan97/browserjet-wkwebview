@@ -5,117 +5,12 @@
 //  Created by Moiz Ul Hasan on 16/02/2026.
 //
 
-
 import SwiftUI
-
-// Type eraser for Shape protocol to allow conditional shape returns
-struct AnyShape: Shape {
-    private let _path: (CGRect) -> Path
-
-    init<S: Shape>(_ shape: S) {
-        _path = shape.path(in:)
-    }
-
-    func path(in rect: CGRect) -> Path {
-        _path(rect)
-    }
-}
-
-// Custom shape for selected tab: rounded top corners and slightly rounded bottom corners
-struct SelectedTabShape: Shape {
-    var topCornerRadius: CGFloat
-    var bottomCornerRadius: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let topRadius = min(topCornerRadius, rect.width / 2, rect.height / 2)
-        let bottomRadius = min(bottomCornerRadius, rect.width / 2, rect.height / 2)
-
-        // Start from left side, just below top-left corner
-        path.move(to: CGPoint(x: rect.minX, y: rect.minY + topRadius))
-
-        // Top-left rounded corner
-        path.addQuadCurve(
-            to: CGPoint(x: rect.minX + topRadius, y: rect.minY),
-            control: CGPoint(x: rect.minX, y: rect.minY)
-        )
-
-        // Top edge
-        path.addLine(to: CGPoint(x: rect.maxX - topRadius, y: rect.minY))
-
-        // Top-right rounded corner
-        path.addQuadCurve(
-            to: CGPoint(x: rect.maxX, y: rect.minY + topRadius),
-            control: CGPoint(x: rect.maxX, y: rect.minY)
-        )
-
-        // Right edge (straight down to bottom-right corner)
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - bottomRadius))
-
-        // Bottom-right rounded corner (for blend effect)
-        path.addQuadCurve(
-            to: CGPoint(x: rect.maxX - bottomRadius, y: rect.maxY),
-            control: CGPoint(x: rect.maxX, y: rect.maxY)
-        )
-
-        // Bottom edge
-        path.addLine(to: CGPoint(x: rect.minX + bottomRadius, y: rect.maxY))
-
-        // Bottom-left rounded corner (for blend effect)
-        path.addQuadCurve(
-            to: CGPoint(x: rect.minX, y: rect.maxY - bottomRadius),
-            control: CGPoint(x: rect.minX, y: rect.maxY)
-        )
-
-        // Left edge (closes the path)
-        path.closeSubpath()
-        return path
-    }
-}
-
-// Border shape for selected tab: only top and sides, no bottom
-struct SelectedTabBorderShape: Shape {
-    var topCornerRadius: CGFloat
-    var bottomCornerRadius: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let topRadius = min(topCornerRadius, rect.width / 2, rect.height / 2)
-        let bottomRadius = min(bottomCornerRadius, rect.width / 2, rect.height / 2)
-        let lineWidth: CGFloat = 0.5
-
-        // Start from left side, just below top-left corner
-        path.move(to: CGPoint(x: rect.minX, y: rect.minY + topRadius))
-
-        // Top-left rounded corner
-        path.addQuadCurve(
-            to: CGPoint(x: rect.minX + topRadius, y: rect.minY),
-            control: CGPoint(x: rect.minX, y: rect.minY)
-        )
-
-        // Top edge
-        path.addLine(to: CGPoint(x: rect.maxX - topRadius, y: rect.minY))
-
-        // Top-right rounded corner
-        path.addQuadCurve(
-            to: CGPoint(x: rect.maxX, y: rect.minY + topRadius),
-            control: CGPoint(x: rect.maxX, y: rect.minY)
-        )
-
-        // Right edge (straight down, but stop before bottom to avoid bottom border)
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - bottomRadius - lineWidth))
-
-        // Left edge (straight up from bottom, connecting back to start)
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY - bottomRadius - lineWidth))
-
-        return path
-    }
-}
 
 struct BrowserTabPillView: View {
     @Environment(\.appTheme)
     private var theme
-
+    
     @ObservedObject var tab: TabModel
     let isSelected: Bool
     let width: CGFloat
@@ -124,63 +19,76 @@ struct BrowserTabPillView: View {
     var isCloseDisabled: Bool = false
     let onSelect: () -> Void
     let onClose: () -> Void
-
+    
     @State private var isHovering: Bool = false
-
+    
     // MARK: - Thresholds (tune freely)
     private let compactThreshold: CGFloat = 140      // below this: favicon-only
     private let showCloseThreshold: CGFloat = 120    // below this: hide close even when not hovering
     private let pillCornerRadius: CGFloat = 10       // Corner radius for all tabs
-
+    
     var body: some View {
-        HStack(spacing: 8) {
-            faviconOrLoader
-
-            if !isCompact {
-                Text(tab.title)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(titleColor)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-            }
-
-            Spacer(minLength: 0)
-
+        ZStack(alignment: .trailing) {
+            selectButton
+            
             if shouldShowClose {
                 closeButton
+                    .padding(.trailing, 12)
                     .transition(.opacity.combined(with: .scale(scale: 0.85)))
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .frame(width: width, alignment: .leading)
-        .background(background)
-        .overlay(border)
-        .overlay(glowEffect)
-        .overlay(selectedIndicator)
-        .clipShape(tabClipShape)
-        .shadow(color: shadowColor, radius: shadowRadius, x: 0, y: shadowOffset)
-        .scaleEffect(isHovering && !isSelected ? 1.02 : 1.0)
-        .zIndex(isSelected ? 2 : (isHovering ? 1 : 0))
-        .contentShape(Rectangle())
-        .onTapGesture { onSelect() }
         .onHover { hovering in
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 isHovering = hovering
             }
         }
         .help(tab.title)
-        .accessibilityLabel("Tab: \(tab.title)")
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isHovering)
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isSelected)
     }
-
+    
+    private var selectButton: some View {
+        Button(action: onSelect) {
+            HStack(spacing: 8) {
+                faviconOrLoader
+                
+                if !isCompact {
+                    Text(tab.title)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(titleColor)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+                
+                Spacer(minLength: 0)
+                
+                if shouldShowClose {
+                    Color.clear
+                        .frame(width: 16, height: 16)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .frame(width: width, alignment: .leading)
+            .background(background)
+            .overlay(border)
+            .overlay(glowEffect)
+            .overlay(selectedIndicator)
+            .clipShape(tabClipShape)
+            .shadow(color: shadowColor, radius: shadowRadius, x: 0, y: shadowOffset)
+            .scaleEffect(isHovering && !isSelected ? 1.02 : 1.0)
+            .zIndex(isSelected ? 2 : (isHovering ? 1 : 0))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    
     // MARK: - Layout logic
-
+    
     private var isCompact: Bool {
         width < compactThreshold
     }
-
+    
     private var shouldShowClose: Bool {
         guard showCloseButton else { return false }
         // Chrome-ish:
@@ -191,12 +99,12 @@ struct BrowserTabPillView: View {
         }
         return isHovering || isSelected || isCloseDisabled
     }
-
+    
     private var tabClipShape: AnyShape {
         // All tabs use the same rounded rectangle shape
         AnyShape(RoundedRectangle(cornerRadius: pillCornerRadius, style: .continuous))
     }
-
+    
     private var selectedIndicator: some View {
         Group {
             if isSelected {
@@ -220,45 +128,44 @@ struct BrowserTabPillView: View {
             }
         }
     }
+}
 
-    // MARK: - Styling
-
-    private var titleColor: Color {
+// MARK: - Styling
+extension BrowserTabPillView {
+    var titleColor: Color {
         if isSelected {
             return theme.textPrimary.opacity(0.95)
         } else {
             return theme.textPrimary.opacity(isHovering ? 0.8 : 0.65)
         }
     }
-
-    private var background: some View {
+    
+    var background: some View {
         Group {
             if isSelected {
-                // Selected tab: glass morphism effect with subtle gradient
+                // Selected tab: elevated control surface with a subtle vertical sheen
                 ZStack {
-                    // Base glass effect
-                    theme.surfaceCard.opacity(0.85)
-
-                    // Subtle gradient overlay for depth
+                    theme.surfaceControl
+                    
                     LinearGradient(
                         colors: [
-                            theme.surfaceCard.opacity(0.9),
-                            theme.surfaceCard.opacity(0.75)
+                            theme.surfaceControl.opacity(0.0),
+                            Color.white.opacity(0.04)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 }
             } else {
-                // Inactive tabs: subtle background with hover effect
+                // Inactive tabs: card surface, slightly lifted on hover
                 ZStack {
-                    theme.surfaceCard.opacity(0.4)
-
+                    theme.surfaceCard.opacity(isHovering ? 0.85 : 0.55)
+                    
                     if isHovering {
                         LinearGradient(
                             colors: [
-                                theme.surfaceCard.opacity(0.6),
-                                theme.surfaceCard.opacity(0.5)
+                                Color.white.opacity(0.03),
+                                Color.white.opacity(0.0)
                             ],
                             startPoint: .top,
                             endPoint: .bottom
@@ -269,8 +176,8 @@ struct BrowserTabPillView: View {
             }
         }
     }
-
-    private var glowEffect: some View {
+    
+    var glowEffect: some View {
         Group {
             if isSelected {
                 // Subtle inner glow for selected tab
@@ -292,8 +199,8 @@ struct BrowserTabPillView: View {
             }
         }
     }
-
-    private var shadowColor: Color {
+    
+    var shadowColor: Color {
         if isSelected {
             return theme.accent.opacity(0.12)
         } else if isHovering {
@@ -302,8 +209,8 @@ struct BrowserTabPillView: View {
             return .black.opacity(0.04)
         }
     }
-
-    private var shadowRadius: CGFloat {
+    
+    var shadowRadius: CGFloat {
         if isSelected {
             return 8
         } else if isHovering {
@@ -312,16 +219,16 @@ struct BrowserTabPillView: View {
             return 2
         }
     }
-
-    private var shadowOffset: CGFloat {
+    
+    var shadowOffset: CGFloat {
         if isSelected {
             return 2
         } else {
             return 1
         }
     }
-
-    private var border: some View {
+    
+    var border: some View {
         Group {
             if isSelected {
                 // Selected tab: elegant border with gradient on all sides
@@ -348,8 +255,8 @@ struct BrowserTabPillView: View {
             }
         }
     }
-
-    private var closeButton: some View {
+    
+    var closeButton: some View {
         Button(
             action: {
                 guard !isCloseDisabled else { return }
@@ -359,21 +266,20 @@ struct BrowserTabPillView: View {
             },
             label: {
                 Image(systemName: "xmark")
-                .font(.system(size: 9, weight: .semibold))
-                .foregroundStyle(closeButtonColor)
-                .frame(width: 16, height: 16)
-                .background(closeButtonBackground)
-                .clipShape(Circle())
-                .scaleEffect(isHovering && !isCloseDisabled ? 1.1 : 1.0)
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(closeButtonColor)
+                    .frame(width: 16, height: 16)
+                    .background(closeButtonBackground)
+                    .clipShape(Circle())
+                    .scaleEffect(isHovering && !isCloseDisabled ? 1.1 : 1.0)
             }
         )
         .buttonStyle(.plain)
         .disabled(isCloseDisabled)
         .opacity(isCloseDisabled ? 0.5 : 1)
-        .accessibilityLabel("Close tab \(tab.title)")
     }
-
-    private var closeButtonColor: Color {
+    
+    var closeButtonColor: Color {
         if isCloseDisabled {
             return theme.textPrimary.opacity(0.45)
         }
@@ -383,8 +289,8 @@ struct BrowserTabPillView: View {
             return theme.textPrimary.opacity(isHovering ? 0.8 : 0.6)
         }
     }
-
-    private var closeButtonBackground: some View {
+    
+    var closeButtonBackground: some View {
         Group {
             if isCloseDisabled {
                 Color.clear
@@ -395,9 +301,8 @@ struct BrowserTabPillView: View {
             }
         }
     }
-
-    @ViewBuilder
-    private var faviconOrLoader: some View {
+    
+    @ViewBuilder var faviconOrLoader: some View {
         if tab.isLoading {
             ProgressView()
                 .controlSize(.small)

@@ -35,7 +35,7 @@ struct BrowserMoreMenuView: View {
 
 #Preview("More Menu") {
     BrowserMoreMenuView(items: BrowserMenuBuilder.default.moreMenuItems) { item in
-        print("Selected:", item.title)
+        AppLogger.debug("Selected: \(item.title)")
     }
     .padding()
     .background(Color.gray.opacity(0.2))

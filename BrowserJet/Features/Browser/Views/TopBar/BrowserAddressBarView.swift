@@ -17,6 +17,8 @@ struct BrowserAddressBarView: View {
     @ObservedObject var tab: TabModel
     /// When true (trial/license expired), bar shows URL but is read-only and visually disabled.
     var isLocked: Bool = false
+    /// Changes whenever ⌘L is pressed for this window. The bar focuses on change.
+    var focusToken: UUID?
     
     @State private var isHovering: Bool = false
     @FocusState private var isFocused: Bool
@@ -64,6 +66,7 @@ struct BrowserAddressBarView: View {
         .clipShape(Capsule())
         .overlay(pillBorder)
         .allowsHitTesting(!isLocked)
+        .focused($isFocused)
         .onHover { hovering in
             guard !isLocked else { return }
             withAnimation(.easeInOut(duration: 0.12)) {
@@ -78,6 +81,10 @@ struct BrowserAddressBarView: View {
             guard !isLocked else { return }
             tab.load(tab.addressText)
         }
+        .onChange(of: focusToken) { _, newValue in
+            guard newValue != nil, !isLocked else { return }
+            isFocused = true
+        }
     }
     
     private var leftIcon: some View {
@@ -87,8 +94,7 @@ struct BrowserAddressBarView: View {
             .frame(width: 18, height: 18)
     }
     
-    @ViewBuilder
-    private var rightClearButton: some View {
+    @ViewBuilder private var rightClearButton: some View {
         if shouldShowClear {
             Button {
                 tab.addressText = ""

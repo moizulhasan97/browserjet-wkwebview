@@ -12,7 +12,6 @@ import AppKit
 
 @MainActor
 final class ForceUpdateGate: ObservableObject {
-    
     static let shared = ForceUpdateGate()
     
     @Published private(set) var isBlocking = false
@@ -55,11 +54,11 @@ final class ForceUpdateGate: ObservableObject {
         NSWorkspace.shared.open(url)
     }
     
-    func quitApplication() {
-        NSApplication.shared.terminate(nil)
-    }
-    
     func updateNowTapped() {
         updaterController?.checkForUpdates(nil)
+    }
+    
+    func quitApplication() {
+        QuitConfirmationController.terminateWithoutConfirmation()
     }
 }

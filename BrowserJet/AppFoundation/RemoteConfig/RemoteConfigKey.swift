@@ -15,4 +15,11 @@ enum RemoteConfigKey: String, CaseIterable, Sendable {
     case macOSAppLatestBuildVersion = "macos_app_latest_build_version"
     case macOSAppMinimumSupportedBuildVersion = "macos_app_minimum_supported_build_version"
     case macOSManualDownloadURL = "macos_manual_download_url"
+    case baseServerURL = "base_server_url"
+    case baseWebURL = "base_web_url"
+    case updateCardPath = "update_card_path"
+    case buyMoreLicensesPath = "buy_more_licenses_path"
+    case contactUsPath = "contact_us_path"
+    case twitterURL = "twitter_url"
+    case shortcutsEnabled = "shortcuts_enabled"
 }

@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct ShiftLicenseView: View {
-    
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.dismiss)
+    private var dismiss
     @StateObject private var viewModel: ShiftViewModel
     private let key: String
     private let email: String
     var onShiftSucceeded: (() -> Void)?
-    
+
     init(
         key: String,
         email: String,
@@ -25,7 +27,9 @@ struct ShiftLicenseView: View {
         self.key = key
         self.email = email
         self.onShiftSucceeded = onShiftSucceeded
-        _viewModel = StateObject(wrappedValue: ShiftViewModel(key: key, email: email, onShiftSucceeded: onShiftSucceeded))
+        _viewModel = StateObject(
+            wrappedValue: ShiftViewModel(key: key, email: email, onShiftSucceeded: onShiftSucceeded)
+        )
     }
 
     var body: some View {
@@ -52,8 +56,7 @@ struct ShiftLicenseView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    @ViewBuilder
-    private var deviceRow: some View {
+    @ViewBuilder private var deviceRow: some View {
         if let pcName = viewModel.pcName, !pcName.isEmpty {
             ShiftDeviceRow(deviceName: pcName, isDisabled: viewModel.isLoading) {
                 viewModel.didTapShift()
@@ -76,23 +79,25 @@ struct ShiftLicenseView: View {
             .padding(.vertical, DesignMetrics.rowSpacing)
         } else {
             Text("No device name available.")
-                    .font(designSystem.typography.textBody1.font)
-                    .foregroundStyle(theme.textFieldSecondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, DesignMetrics.rowSpacing)
+                .font(designSystem.typography.textBody1.font)
+                .foregroundStyle(theme.textFieldSecondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, DesignMetrics.rowSpacing)
         }
     }
 }
 
 // MARK: - Device row
 private struct ShiftDeviceRow: View {
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
 
     let deviceName: String
     let isDisabled: Bool
     let onShift: () -> Void
-    
+
     var body: some View {
         CardContainer(padding: DesignMetrics.cardPadding) {
             HStack(spacing: DesignMetrics.cardPadding) {
@@ -104,12 +109,13 @@ private struct ShiftDeviceRow: View {
                     .font(designSystem.typography.textBody1.font)
                     .foregroundStyle(theme.textPrimary)
                     .lineLimit(1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .layoutPriority(1)
+                    //.frame(maxWidth: .infinity, alignment: .leading)
 
                 BrowserJetAppButton(
                     title: "Shift",
                     type: .primaryLarge,
-                    height: 44,
+                    width: .fixed(width: 120),
                     isDisabled: isDisabled,
                     action: onShift
                 )
@@ -124,7 +130,7 @@ private struct ShiftDeviceRow: View {
 }
 
 #Preview("ShiftLicenseView") {
-    ShiftLicenseView(key: "preview-key", email: "preview@example.com") //, getPCDetails: {_ in "desktop-preview-key"})
+    ShiftLicenseView(key: "preview-key", email: "preview@example.com") // , getPCDetails: {_ in "desktop-preview-key"})
         .environment(\.appTheme, BrowserJetDarkTheme())
         .environment(\.designSystem, DesignSystem())
         .frame(width: 440, height: 320)

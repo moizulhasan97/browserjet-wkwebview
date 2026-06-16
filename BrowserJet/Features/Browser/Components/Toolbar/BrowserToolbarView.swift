@@ -5,18 +5,18 @@
 //  Created by Moiz Ul Hasan on 16/02/2026.
 //
 
-
 import SwiftUI
 
 struct BrowserToolbarView: View {
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
     @State private var showingDuplicatePopover = false
     let actions: [BrowserToolbarAction]
     /// When non-nil, only these actions are enabled; others are visually disabled.
-    var enabledActions: Set<BrowserToolbarAction>? = nil
+    var enabledActions: Set<BrowserToolbarAction>?
     let onAction: (BrowserToolbarAction) -> Void
     /// Called when the user confirms a duplicate-tabs count from the popover.
-    var onDuplicateTabs: ((Int) -> Void)? = nil
+    var onDuplicateTabs: ((Int) -> Void)?
 
     @State private var hovering: BrowserToolbarAction?
 

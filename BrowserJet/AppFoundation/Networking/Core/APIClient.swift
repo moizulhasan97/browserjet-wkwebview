@@ -35,9 +35,8 @@ final class APIClient {
         logRequest(request)
         let (data, response) = try await session.data(for: request)
         try validate(response, data: data)
-        let text = String(decoding: data, as: UTF8.self)
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        return text
+        let raw = String(bytes: data, encoding: .utf8) ?? ""
+        return raw.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     func requestData(_ endpoint: some EndpointProtocol) async throws -> Data {
@@ -83,7 +82,7 @@ final class APIClient {
             AppLogger.error("APIClient invalid response - not an HTTPURLResponse")
             throw APIError.invalidResponse
         }
-        let body = String(decoding: data, as: UTF8.self)
+        let body = (String(bytes: data, encoding: .utf8) ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
         logResponse(statusCode: http.statusCode, body: body)
         switch http.statusCode {

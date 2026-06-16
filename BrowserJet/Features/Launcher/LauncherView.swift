@@ -12,46 +12,45 @@ private enum LauncherViewConstants {
     // Layout
     static let mainStackSpacing: CGFloat = 14.0
     static let launchButtonTopPadding: CGFloat = 10.0
-
+    
     // Cards
     static let cardInterItemSpacing: CGFloat = 20.0
-
-    // Buttons
-    static let launchButtonHeight: CGFloat = 48.0
-
-    // Pickers
-    static let noOfTabsPickerWidth: CGFloat = 50.0
-    static let vpnPickerWidth: CGFloat = 70.0
-    static let regionPickerWidth: CGFloat = 50.0
+    
+    // Pickers — shared width so trailing edges align across launcher rows
+    static let menuPickerWidth: CGFloat = 110.0
 }
 
 struct LauncherView: View {
     @Environment(\.designSystem)
     private var designSystem
-
+    
     @Environment(\.appTheme)
     private var theme
-
+    
     private let config: AppConfiguration
     @StateObject private var viewModel: LauncherViewModel
     @ObservedObject private var premiumRepository = PremiumProxyRepository.shared
+    @ObservedObject private var accountStore = LicenseAccountStore.shared
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
+    @Environment(\.colorScheme)
+    private var colorScheme
+    
     private var presets: [LauncherTabPreset] {
         config.launcherTabPresets.filter { $0.rawValue <= config.maxBrowserTabs }
     }
     private typealias Constants = LauncherViewConstants
-
+    
     init(appConfiguration: AppConfiguration) {
-            self.config = appConfiguration
-            _viewModel = StateObject(
-                wrappedValue: LauncherViewModel(
-                    defaultSearchAddress: appConfiguration.defaultSearchAddress,
-                    appConfiguration: appConfiguration
-                )
+        self.config = appConfiguration
+        _viewModel = StateObject(
+            wrappedValue: LauncherViewModel(
+                defaultSearchAddress: appConfiguration.defaultSearchAddress,
+                appConfiguration: appConfiguration
             )
-        }
-
+        )
+    }
+    
     var body: some View {
         VStack(spacing: Constants.mainStackSpacing) {
             userNameLogo
@@ -61,13 +60,21 @@ struct LauncherView: View {
                 .padding(.top, Constants.launchButtonTopPadding)
         }
         .padding()
-        .background(AppBackgroundStyle.browserJetGradient.makeView())
         .onAppear {
             viewModel.onAppear()
-            // Initialize address only if empty
-            if viewModel.settings.address.isEmpty {
-                viewModel.updateAddress(config.defaultSearchAddress)
+            applyDefaultStartURLIfNeeded()
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(for: .launcherStartURLPreferencesDidSave)
+        ) { notification in
+            guard let payload = notification.userInfo?[LauncherStartURLPreferences.savePayloadUserInfoKey]
+                as? LauncherStartURLPreferencesSavePayload else {
+                return
             }
+            viewModel.applySavedStartURLIfMatchingDefault(
+                newURL: payload.newEffectiveURL,
+                previousDefaultURL: payload.previousEffectiveURL
+            )
         }
         .onChange(of: premiumRepository.hasPremiumProxies) { _, hasProxies in
             if hasProxies {
@@ -80,23 +87,22 @@ struct LauncherView: View {
             }
         }
     }
-
+    
     private func getLabel(_ text: String) -> some View {
         Text(text)
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.textBody1.font)
     }
-
+    
     private var launchButton: some View {
         BrowserJetAppButton(
             title: "Launch",
             type: .primaryLarge,
-            height: Constants.launchButtonHeight,
             isDisabled: !viewModel.isLaunchAllowed(),
             action: showBrowser
         )
     }
-
+    
     private func showBrowser() {
         let request = viewModel.settings.makeLaunchRequest(appConfiguration: config)
         WindowManager.shared.showBrowser(
@@ -104,6 +110,17 @@ struct LauncherView: View {
             themeManager: themeManager,
             sessionManager: sessionManager,
             appConfiguration: config
+        )
+    }
+}
+
+// MARK: - Start URL
+private extension LauncherView {
+    func applyDefaultStartURLIfNeeded() {
+        guard viewModel.settings.address.isEmpty else { return }
+        let prefs = LauncherStartURLPreferences()
+        viewModel.updateAddress(
+            prefs.effectiveStartURL(fallbackConfigurationURL: config.defaultSearchAddress)
         )
     }
 }
@@ -117,15 +134,15 @@ private extension LauncherView {
             logoDescription
         }
     }
-
+    
     private var username: some View {
-        Text("Welcome Gabriel")
+        Text("Welcome, \(accountStore.username)")
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.title1.font)
     }
-
+    
     private var logoDescription: some View {
-        Image(.icLogoDescription)
+        BrowserJetLogoMark(iconSize: 38, style: .leading)
     }
 }
 
@@ -138,7 +155,7 @@ private extension LauncherView {
             set: { viewModel.updateAddress($0) }
         ))
     }
-
+    
     private var searchBarCard: some View {
         CardContainer {
             VStack(spacing: Constants.cardInterItemSpacing) {
@@ -147,7 +164,7 @@ private extension LauncherView {
             }
         }
     }
-
+    
     private var numberOfTabs: some View {
         HStack {
             getLabel("No. of Tabs")
@@ -159,20 +176,16 @@ private extension LauncherView {
                     set: { viewModel.updateNumberOfTabs($0) }
                 ),
                 isDisabled: false,
-                width: Constants.noOfTabsPickerWidth
+                width: Constants.menuPickerWidth
             ) { $0.rawValue.toString }
         }
     }
-
+    
     // Bottom card
     private var vpnCard: some View {
         CardContainer {
             VStack(spacing: Constants.cardInterItemSpacing) {
-                HStack {
-                    premiumProxyToggle
-                    Spacer()
-                    manageMyProxyButton
-                }
+                premiumProxyToggle
                 premiumStatusFootnotes
                 BrowserJetDivider()
                 HStack {
@@ -185,9 +198,8 @@ private extension LauncherView {
             }
         }
     }
-
-    @ViewBuilder
-    private var premiumStatusFootnotes: some View {
+    
+    @ViewBuilder private var premiumStatusFootnotes: some View {
         if premiumRepository.isLoading {
             HStack(alignment: .center, spacing: 8) {
                 ProgressView()
@@ -204,7 +216,7 @@ private extension LauncherView {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
-
+    
     private var premiumProxyToggle: some View {
         HStack {
             GlassPillToggle(
@@ -216,29 +228,16 @@ private extension LauncherView {
             )
             getLabel("Premium Proxy")
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
-
+    
     /// Disabled while VPN is off or GPP is still loading. If the list is empty after load, the user can tap ON to see “no premium proxies” messaging.
     private var premiumToggleDisabled: Bool {
         if !viewModel.settings.isVPNEnabled || viewModel.availableVPNs.isEmpty { return true }
         if viewModel.settings.isPremiumProxyEnabled { return false }
         return premiumRepository.isLoading
     }
-
-    private var manageMyProxyButton: some View {
-        Button {
-            viewModel.didTapManageMyProxy()
-        } label: {
-            HStack {
-                Image(systemName: "gearshape")
-                    .font(.title3)
-                    .foregroundStyle(theme.accent)
-                getLabel("Manage My Proxy")
-            }
-        }
-        .buttonStyle(.plain)
-    }
-
+    
     private var vpnToggle: some View {
         GlassPillToggle(
             isOn: Binding(
@@ -248,7 +247,7 @@ private extension LauncherView {
             isDisabled: viewModel.availableVPNs.isEmpty
         )
     }
-
+    
     private var selectVPNSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             selectVPNRow
@@ -260,9 +259,8 @@ private extension LauncherView {
             }
         }
     }
-
-    @ViewBuilder
-    private var selectVPNRow: some View {
+    
+    @ViewBuilder private var selectVPNRow: some View {
         if viewModel.availableVPNs.isEmpty {
             HStack {
                 getLabel("Select VPN")
@@ -279,12 +277,12 @@ private extension LauncherView {
                     options: viewModel.availableVPNs,
                     selection: vpnPickerSelectionBinding,
                     isDisabled: !viewModel.settings.areVPNControlsEnabled || viewModel.availableVPNs.isEmpty,
-                    width: Constants.vpnPickerWidth
+                    width: Constants.menuPickerWidth
                 ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
             }
         }
     }
-
+    
     private var vpnPickerSelectionBinding: Binding<VPNType> {
         Binding(
             get: {
@@ -292,12 +290,13 @@ private extension LauncherView {
                 if let selected, viewModel.availableVPNs.contains(selected) {
                     return selected
                 }
-                return viewModel.availableVPNs.first!
+                // Fallback only when no VPNs are available; this view is hidden in that state.
+                return viewModel.availableVPNs.first ?? .vpn1
             },
             set: { viewModel.updateSelectedVPN($0) }
         )
     }
-
+    
     private var selectionRegion: some View {
         HStack {
             getLabel("Select Region")
@@ -305,11 +304,14 @@ private extension LauncherView {
             BrowserJetMenuPicker(
                 options: viewModel.regionPickerOptions,
                 selection: Binding(
-                    get: { viewModel.settings.selectedRegion ?? .uk },
+                    get: {
+                        if viewModel.settings.selectedVPN == .vpn1 { return .us }
+                        return viewModel.settings.selectedRegion ?? .uk
+                    },
                     set: { viewModel.updateSelectedRegion($0) }
                 ),
                 isDisabled: !viewModel.settings.areRegionControlsEnabled,
-                width: Constants.regionPickerWidth
+                width: Constants.menuPickerWidth
             ) { $0.rawValue }
         }
     }

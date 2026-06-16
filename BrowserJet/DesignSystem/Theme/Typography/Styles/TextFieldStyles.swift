@@ -15,3 +15,12 @@ struct LauncherField: Typography {
         .sfPro(weight: .light)
     }
 }
+
+struct ActivationField: Typography {
+    var size: CGFloat {
+        14.0
+    }
+    var fontProvider: FontProvider {
+        .sfPro(weight: .regular)
+    }
+}

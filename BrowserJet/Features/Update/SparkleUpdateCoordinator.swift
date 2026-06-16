@@ -17,24 +17,23 @@ enum SparklePolicyApplicationContext: Sendable {
 
 @MainActor
 final class SparkleUpdateCoordinator {
-    
     static let shared = SparkleUpdateCoordinator()
-    
+
     private weak var updaterController: SPUStandardUpdaterController?
     private var didTriggerOptionalCheckThisSession = false
-    
+
     private init() {}
-    
+
     func register(_ controller: SPUStandardUpdaterController) {
         updaterController = controller
     }
-    
+
     func applyPolicyResult(_ result: AppUpdatePolicyResult, context: SparklePolicyApplicationContext) {
         guard let controller = updaterController else {
             AppLogger.warning("SparkleUpdateCoordinator: updater not registered — skipping checkForUpdates")
             return
         }
-        
+
         switch context {
         case .afterRemoteConfigFetch:
             switch result {
@@ -53,16 +52,21 @@ final class SparkleUpdateCoordinator {
             case .optionalUpdateAvailable, .upToDate:
                 break
             }
-            
+
         case .launcherAppeared:
             guard case .optionalUpdateAvailable = result else { return }
             guard !didTriggerOptionalCheckThisSession else { return }
             didTriggerOptionalCheckThisSession = true
-            AppLogger.info("SparkleUpdateCoordinator: optional update — single checkForUpdates this session (Sparkle handles Later/Skip)")
+            AppLogger.info(
+                """
+                SparkleUpdateCoordinator: optional update — single checkForUpdates this session \
+                (Sparkle handles Later/Skip)
+                """
+            )
             controller.checkForUpdates(nil)
         }
     }
-    
+
     private func activateForceUpdateGate(
         requiredMarketingKey: RemoteConfigKey,
         requiredBuildKey: RemoteConfigKey,

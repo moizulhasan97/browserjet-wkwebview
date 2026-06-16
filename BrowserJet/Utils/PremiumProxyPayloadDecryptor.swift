@@ -17,9 +17,9 @@ enum PremiumProxyDecryptError: Error {
 }
 
 private extension Data {
-    func decryptAES(key: Data, iv: Data, options: Int = kCCOptionPKCS7Padding) -> Data? {
+    func decryptAES(key: Data, iv initVector: Data, options: Int = kCCOptionPKCS7Padding) -> Data? {
         guard !isEmpty else { return nil }
-        return iv.withUnsafeBytes { ivBuf in
+        return initVector.withUnsafeBytes { ivBuf in
             key.withUnsafeBytes { keyBuf in
                 self.withUnsafeBytes { dataInBuf in
                     let outSize = count + kCCBlockSizeAES128 * 2
@@ -48,7 +48,6 @@ private extension Data {
 }
 
 enum PremiumProxyPayloadDecryptor {
-
     private static let keyString = "support BrowserJ"
     private static let ivString = "BrowserJet_AESIV"
 
@@ -90,7 +89,8 @@ enum PremiumProxyPayloadDecryptor {
         if let rows = try? JSONDecoder().decode([DecryptedPremiumProxy].self, from: data), !rows.isEmpty {
             return rows
         }
-        if let wrapped = try? JSONDecoder().decode(DecryptedPremiumProxies.self, from: data), !wrapped.premiumProxies.isEmpty {
+        if let wrapped = try? JSONDecoder().decode(DecryptedPremiumProxies.self, from: data),
+            !wrapped.premiumProxies.isEmpty {
             return wrapped.premiumProxies
         }
         return nil
@@ -115,20 +115,20 @@ enum PremiumProxyPayloadDecryptor {
         }
 
         if let obj = try? JSONSerialization.jsonObject(with: data) {
-            if let s = obj as? String {
-                return normalizeBase64Wrapper(s)
+            if let stringValue = obj as? String {
+                return normalizeBase64Wrapper(stringValue)
             }
             if let dict = obj as? [String: Any] {
                 for (_, value) in dict {
-                    if let s = value as? String, looksLikeBase64Payload(s) {
-                        return normalizeBase64Wrapper(s)
+                    if let stringValue = value as? String, looksLikeBase64Payload(stringValue) {
+                        return normalizeBase64Wrapper(stringValue)
                     }
                 }
             }
             if let arr = obj as? [Any] {
                 for item in arr {
-                    if let s = item as? String, looksLikeBase64Payload(s) {
-                        return normalizeBase64Wrapper(s)
+                    if let stringValue = item as? String, looksLikeBase64Payload(stringValue) {
+                        return normalizeBase64Wrapper(stringValue)
                     }
                 }
             }
@@ -137,32 +137,34 @@ enum PremiumProxyPayloadDecryptor {
         return normalizeBase64Wrapper(trimmed)
     }
 
-    private static func normalizeBase64Wrapper(_ s: String) -> String {
-        var t = s.trimmingCharacters(in: .whitespacesAndNewlines)
-        if t.count >= 2, t.hasPrefix("\""), t.hasSuffix("\"") {
-            t.removeFirst()
-            t.removeLast()
-            t = t.trimmingCharacters(in: .whitespacesAndNewlines)
+    private static func normalizeBase64Wrapper(_ candidate: String) -> String {
+        var normalized = candidate.trimmingCharacters(in: .whitespacesAndNewlines)
+        if normalized.count >= 2, normalized.hasPrefix("\""), normalized.hasSuffix("\"") {
+            normalized.removeFirst()
+            normalized.removeLast()
+            normalized = normalized.trimmingCharacters(in: .whitespacesAndNewlines)
         }
-        return t
+        return normalized
             .replacingOccurrences(of: "\n", with: "")
             .replacingOccurrences(of: "\r", with: "")
     }
 
-    private static func looksLikeBase64Payload(_ s: String) -> Bool {
-        let t = s.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard t.count >= 64 else { return false }
-        let allowed = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\n\r ")
-        return t.unicodeScalars.allSatisfy { allowed.contains($0) }
+    private static func looksLikeBase64Payload(_ candidate: String) -> Bool {
+        let trimmed = candidate.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.count >= 64 else { return false }
+        let allowed = CharacterSet(
+            charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\n\r "
+        )
+        return trimmed.unicodeScalars.allSatisfy { allowed.contains($0) }
     }
 
     // MARK: - AES
-    private static func dataFromBase64Lossy(_ b64: String) -> Data? {
-        if let d = Data(base64Encoded: b64, options: [.ignoreUnknownCharacters]) {
-            return d
+    private static func dataFromBase64Lossy(_ base64String: String) -> Data? {
+        if let decoded = Data(base64Encoded: base64String, options: [.ignoreUnknownCharacters]) {
+            return decoded
         }
-        let segments = b64.split { $0.isWhitespace }.map(String.init).filter { !$0.isEmpty }
-        return segments.max(by: { $0.count < $1.count }).flatMap {
+        let segments = base64String.split { $0.isWhitespace }.map(String.init).filter { !$0.isEmpty }
+        return segments.max { $0.count < $1.count }.flatMap {
             Data(base64Encoded: $0, options: [.ignoreUnknownCharacters])
         }
     }

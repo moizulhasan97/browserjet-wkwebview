@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 11/02/2026.
 //
 
-
 import SwiftUI
 
 struct BrowserJetMenuPicker<Option: Hashable>: View {
@@ -44,7 +43,7 @@ struct BrowserJetMenuPicker<Option: Hashable>: View {
         .labelsHidden()
         .pickerStyle(.menu)
         .disabled(isDisabled)
-        .frame(width: width)
+        .frame(width: width, alignment: .trailing)
         .opacity((isEnabled && !isDisabled) ? 1 : 0.6)
     }
 }

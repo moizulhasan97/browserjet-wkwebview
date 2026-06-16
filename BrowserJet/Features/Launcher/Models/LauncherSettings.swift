@@ -5,7 +5,6 @@
 //  Created by Moiz Ul Hasan on 12/02/2026.
 //
 
-
 struct LauncherSettings {
     // Required fields
     var address: String
@@ -28,7 +27,7 @@ struct LauncherSettings {
     }
 
     var areRegionControlsEnabled: Bool {
-        isVPNEnabled && !isPremiumProxyEnabled
+        isVPNEnabled && !isPremiumProxyEnabled && selectedVPN != .vpn1
     }
 }
 

@@ -16,8 +16,7 @@ final class SessionManager: ObservableObject {
         didSet { AppLogger.debug("Active sessions changed to: \(activeSessions)/\(maxSessions)") }
     }
 
-    // TODO: - Add reference to AppConfiguration.maxBrowserTabs
-    init(maxSessions: Int = 10) {
+    init(maxSessions: Int = AppConfiguration.production.maxBrowserTabs) {
         self.maxSessions = maxSessions
         self.slotInUse = Array(repeating: false, count: maxSessions)
         AppLogger.debug("SessionManager initialized - Max sessions: \(maxSessions)")

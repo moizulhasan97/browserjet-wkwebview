@@ -9,7 +9,6 @@ import SwiftUI
 
 @MainActor
 final class ShiftViewModel: ObservableObject {
-    
     @Published private(set) var pcName: String?
     @Published var isLoading = false
     @Published var errorMessage: String?
@@ -29,7 +28,7 @@ final class ShiftViewModel: ObservableObject {
         self.email = email
         self.onShiftSucceeded = onShiftSucceeded
     }
-    
+
     func onAppear() {
         fetchPCName()
     }
@@ -47,7 +46,7 @@ final class ShiftViewModel: ObservableObject {
             }
         }
     }
-    
+
     func didTapShift() {
         guard let oldPcName = pcName, !oldPcName.isEmpty else {
             errorMessage = "Device name is missing."

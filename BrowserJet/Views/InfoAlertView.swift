@@ -9,7 +9,8 @@ import SwiftUI
 
 // MARK: - White Card
 struct InfoAlertChrome<Content: View>: View {
-    @Environment(\.appTheme) private var theme
+    @Environment(\.appTheme)
+    private var theme
 
     private let minWidth: CGFloat
     private let maxWidth: CGFloat
@@ -50,7 +51,7 @@ struct InfoAlertProgressView: View {
     var body: some View {
         InfoAlertChrome {
             VStack(spacing: DesignMetrics.rowSpacing) {
-                Image(.icLogoDescription)
+                BrowserJetLogoMark(iconSize: 48, style: .center)
 
                 ProgressView(message)
                     .controlSize(.large)
@@ -62,8 +63,10 @@ struct InfoAlertProgressView: View {
 
 // MARK: - Title + message + OK
 struct InfoAlertView: View {
-    @Environment(\.designSystem) private var designSystem
-    @Environment(\.appTheme) private var theme
+    @Environment(\.designSystem)
+    private var designSystem
+    @Environment(\.appTheme)
+    private var theme
 
     let title: String
     let message: String
@@ -85,7 +88,7 @@ struct InfoAlertView: View {
     var body: some View {
         InfoAlertChrome {
             VStack(spacing: DesignMetrics.sectionSpacing) {
-                Image(.icLogoDescription)
+                BrowserJetLogoMark(iconSize: 48, style: .center)
 
                 VStack(alignment: .center, spacing: DesignMetrics.rowSpacing) {
                     Text(title)
@@ -98,13 +101,13 @@ struct InfoAlertView: View {
                         .font(designSystem.typography.textBody1.font)
                         .foregroundStyle(theme.textFieldSecondary)
                         .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity)
                 }
 
                 BrowserJetAppButton(
                     title: buttonTitle,
                     type: .primaryLarge,
-                    height: 48,
                     isDisabled: false,
                     action: onDismiss
                 )
@@ -125,20 +128,18 @@ struct InfoAlertView: View {
     InfoAlertView(
         title: "Error",
         message: "Something went wrong. Please try again.",
-        buttonTitle: "OK",
-        onDismiss: {}
-    )
-    .environment(\.appTheme, BrowserJetDarkTheme())
-    .environment(\.designSystem, DesignSystem())
+        buttonTitle: "OK"
+    ) {}
+        .environment(\.appTheme, BrowserJetDarkTheme())
+        .environment(\.designSystem, DesignSystem())
 }
 
 #Preview("Success") {
     InfoAlertView(
         title: "Success",
         message: "Your license has been shifted to this device.",
-        buttonTitle: "OK",
-        onDismiss: {}
-    )
-    .environment(\.appTheme, BrowserJetDarkTheme())
-    .environment(\.designSystem, DesignSystem())
+        buttonTitle: "OK"
+    ) {}
+        .environment(\.appTheme, BrowserJetDarkTheme())
+        .environment(\.designSystem, DesignSystem())
 }
