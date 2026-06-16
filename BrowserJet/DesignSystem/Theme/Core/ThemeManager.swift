@@ -10,14 +10,13 @@ import SwiftUI
 
 @MainActor
 final class ThemeManager: ObservableObject {
-    
     enum Mode: String, Equatable, Hashable, CaseIterable, Identifiable {
         case system
         case light
         case dark
-        
+
         var id: String { rawValue }
-        
+
         var displayName: String {
             switch self {
             case .system: return "System"
@@ -26,7 +25,7 @@ final class ThemeManager: ObservableObject {
             }
         }
     }
-    
+
     @Published private(set) var mode: Mode
     @Published private var previewMode: Mode?
     @Published private(set) var appearanceRevision = 0
@@ -34,7 +33,7 @@ final class ThemeManager: ObservableObject {
     private let lightTheme: any AppTheme
     private let darkTheme: any AppTheme
     private let store: KeyValueStoring
-    
+
     var activeMode: Mode {
         previewMode ?? mode
     }
@@ -52,26 +51,26 @@ final class ThemeManager: ObservableObject {
         self.lightTheme = lightTheme
         self.darkTheme = darkTheme
         self.store = store
-        
+
         if let raw = store.object(forKey: StorageKeys.appearanceMode) as? String,
-           let saved = Mode(rawValue: raw) {
+            let saved = Mode(rawValue: raw) {
             self.mode = saved
         } else {
             self.mode = .system
         }
         AppLogger.debug("ThemeManager initialized - Mode: \(self.mode)")
     }
-    
+
     /// Call once `NSApp` is available (e.g. from `BrowserJet.init` on the main queue).
     func applyWindowAppearance() {
         ThemeWindowAppearance.apply(mode: mode)
     }
-    
+
     /// SwiftUI-only preview (colors / gradient). Avoids AppKit window rebuilds that reset radio pickers.
     func preview(_ mode: Mode) {
         previewMode = mode
     }
-    
+
     func cancelPreview() {
         previewMode = nil
         ThemeWindowAppearance.apply(mode: mode)

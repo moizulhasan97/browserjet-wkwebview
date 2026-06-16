@@ -27,6 +27,6 @@ extension View {
         environment(\.appTheme, themeManager.theme(for: colorScheme))
             .environment(\.designSystem, DesignSystem())
             .brandThemedWindow(themeManager: themeManager)
-            //.id(themeManager.appearanceIdentity)
+            // .id(themeManager.appearanceIdentity)
     }
 }
