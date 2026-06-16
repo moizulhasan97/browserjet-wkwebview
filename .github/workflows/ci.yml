@@ -1,0 +1,48 @@
+name: BrowserJet macOS Build
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Resolve Swift Packages
+        run: |
+          xcodebuild \
+            -project BrowserJet.xcodeproj \
+            -scheme BrowserJet \
+            -resolvePackageDependencies
+
+      - name: Build (Debug)
+        run: |
+          xcodebuild \
+            -project BrowserJet.xcodeproj \
+            -scheme BrowserJet \
+            -configuration Debug \
+            -sdk macosx \
+            -destination 'platform=macOS' \
+            clean build \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Run SwiftLint
+        run: |
+          if command -v swiftlint >/dev/null; then
+            swiftlint lint --config .swiftlint.yml
+          else
+            echo "SwiftLint not installed, skipping..."
+          fi

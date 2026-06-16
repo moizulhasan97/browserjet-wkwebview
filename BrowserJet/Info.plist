@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleShortVersionString</key>
+    <string>$(MARKETING_VERSION)</string>
+    <key>CFBundleVersion</key>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>SUEnableInstallerLauncherService</key>
+    <true/>
+    <key>SUEnableDownloaderService</key>
+    <true/>
+    <key>SUFeedURL</key>
+    <string>https://moizulhasan97.github.io/BrowserJet-Updates/appcast.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>lPIfUXj8VHLPB9O98aTGNFf9nZAFG2kY5wrmRIpT8T0=</string>
+    <key>MACOS_MANUAL_DOWNLOAD_URL</key>
+    <string>$(MACOS_MANUAL_DOWNLOAD_URL)</string>
+</dict>
+</plist>
