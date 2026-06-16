@@ -105,6 +105,7 @@ final class WindowManager {
         activationWC?.show()
     }
 
+    @MainActor
     func dismissActivationAndShowLauncher(
         themeManager: ThemeManager,
         sessionManager: SessionManager,
@@ -120,6 +121,7 @@ final class WindowManager {
         )
     }
 
+    @MainActor
     func showLauncher(
         themeManager: ThemeManager,
         sessionManager: SessionManager,
@@ -133,15 +135,20 @@ final class WindowManager {
             .environmentObject(sessionManager)
             .environmentObject(LicenseAccountStore.shared)
 
+        let isTrialUser = LicenseAccountStore.shared.isTrialUser
+        let launcherHeight: CGFloat = isTrialUser ? 562 : 455
+        let intendedSize = NSSize(width: 500, height: launcherHeight)
+
         launcherWC = BrowserJetWindowController(
             content: rootView,
-            size: NSSize(width: 500, height: 455),
+            size: intendedSize,
             titleBarHidden: false,
             resizable: false,
             cornerRadius: 18
         )
 
         launcherWC?.show()
+
     }
 
     @MainActor
