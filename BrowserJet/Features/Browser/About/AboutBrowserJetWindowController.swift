@@ -43,15 +43,10 @@ final class AboutBrowserJetWindowController {
             self?.windowController?.close()
             self?.windowController = nil
         }
-
         let aboutWindowController = BrowserJetWindowController(
             titledWindowTitle: "About BrowserJet",
             content: root,
-            size: NSSize(width: 520, height: 560),
-            titleBarHidden: false,
-            resizable: false,
-            cornerRadius: 16,
-            borderlessChrome: false
+            cornerRadius: 16
         )
 
         windowController = aboutWindowController

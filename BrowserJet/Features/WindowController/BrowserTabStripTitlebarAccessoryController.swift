@@ -34,7 +34,7 @@ private struct BrowserTabStripTitlebarRoot: View {
 }
 
 @MainActor
-final class BrowserTabStripTitlebarAccessoryController: NSTitlebarAccessoryViewController {
+final class BrowserTabStripTitlebarAccessory: NSTitlebarAccessoryViewController {
     private let hostingController: NSHostingController<BrowserTabStripTitlebarRoot>
 
     init(

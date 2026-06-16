@@ -18,7 +18,7 @@ struct LauncherRootView: View {
 
     let appConfiguration: AppConfiguration
 
-    //private let titleBarCompensation: CGFloat = 28
+    // private let titleBarCompensation: CGFloat = 28
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -29,19 +29,19 @@ struct LauncherRootView: View {
                 .makeView()
                 .ignoresSafeArea()
 
-            //Group {
-                if forceGate.isBlocking {
-                    ForceUpdateBlockingOverlay()
-                } else {
-                    LauncherView(appConfiguration: appConfiguration)
-                        .environment(\.appConfiguration, appConfiguration)
-                }
-           // }
-            //.padding(.top, -titleBarCompensation)
+            // Group {
+            if forceGate.isBlocking {
+                ForceUpdateBlockingOverlay()
+            } else {
+                LauncherView(appConfiguration: appConfiguration)
+                    .environment(\.appConfiguration, appConfiguration)
+            }
+            // }
+            // .padding(.top, -titleBarCompensation)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .environment(\.appTheme, themeManager.theme(for: colorScheme))
         .environment(\.designSystem, DesignSystem())
-        //.brandThemedWindow(themeManager: themeManager)
+        // .brandThemedWindow(themeManager: themeManager)
     }
 }

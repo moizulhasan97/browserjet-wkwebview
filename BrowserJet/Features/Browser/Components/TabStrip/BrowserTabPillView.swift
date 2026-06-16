@@ -10,7 +10,7 @@ import SwiftUI
 struct BrowserTabPillView: View {
     @Environment(\.appTheme)
     private var theme
-    
+
     @ObservedObject var tab: TabModel
     let isSelected: Bool
     let width: CGFloat
@@ -19,18 +19,18 @@ struct BrowserTabPillView: View {
     var isCloseDisabled: Bool = false
     let onSelect: () -> Void
     let onClose: () -> Void
-    
+
     @State private var isHovering: Bool = false
-    
+
     // MARK: - Thresholds (tune freely)
     private let compactThreshold: CGFloat = 140      // below this: favicon-only
     private let showCloseThreshold: CGFloat = 120    // below this: hide close even when not hovering
     private let pillCornerRadius: CGFloat = 10       // Corner radius for all tabs
-    
+
     var body: some View {
         ZStack(alignment: .trailing) {
             selectButton
-            
+
             if shouldShowClose {
                 closeButton
                     .padding(.trailing, 12)
@@ -46,12 +46,12 @@ struct BrowserTabPillView: View {
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isHovering)
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isSelected)
     }
-    
+
     private var selectButton: some View {
         Button(action: onSelect) {
             HStack(spacing: 8) {
                 faviconOrLoader
-                
+
                 if !isCompact {
                     Text(tab.title)
                         .font(.system(size: 12, weight: .medium))
@@ -59,9 +59,9 @@ struct BrowserTabPillView: View {
                         .lineLimit(1)
                         .truncationMode(.tail)
                 }
-                
+
                 Spacer(minLength: 0)
-                
+
                 if shouldShowClose {
                     Color.clear
                         .frame(width: 16, height: 16)
@@ -82,13 +82,13 @@ struct BrowserTabPillView: View {
         }
         .buttonStyle(.plain)
     }
-    
+
     // MARK: - Layout logic
-    
+
     private var isCompact: Bool {
         width < compactThreshold
     }
-    
+
     private var shouldShowClose: Bool {
         guard showCloseButton else { return false }
         // Chrome-ish:
@@ -99,12 +99,12 @@ struct BrowserTabPillView: View {
         }
         return isHovering || isSelected || isCloseDisabled
     }
-    
+
     private var tabClipShape: AnyShape {
         // All tabs use the same rounded rectangle shape
         AnyShape(RoundedRectangle(cornerRadius: pillCornerRadius, style: .continuous))
     }
-    
+
     private var selectedIndicator: some View {
         Group {
             if isSelected {
@@ -139,14 +139,14 @@ extension BrowserTabPillView {
             return theme.textPrimary.opacity(isHovering ? 0.8 : 0.65)
         }
     }
-    
+
     var background: some View {
         Group {
             if isSelected {
                 // Selected tab: elevated control surface with a subtle vertical sheen
                 ZStack {
                     theme.surfaceControl
-                    
+
                     LinearGradient(
                         colors: [
                             theme.surfaceControl.opacity(0.0),
@@ -160,7 +160,7 @@ extension BrowserTabPillView {
                 // Inactive tabs: card surface, slightly lifted on hover
                 ZStack {
                     theme.surfaceCard.opacity(isHovering ? 0.85 : 0.55)
-                    
+
                     if isHovering {
                         LinearGradient(
                             colors: [
@@ -176,7 +176,7 @@ extension BrowserTabPillView {
             }
         }
     }
-    
+
     var glowEffect: some View {
         Group {
             if isSelected {
@@ -199,7 +199,7 @@ extension BrowserTabPillView {
             }
         }
     }
-    
+
     var shadowColor: Color {
         if isSelected {
             return theme.accent.opacity(0.12)
@@ -209,7 +209,7 @@ extension BrowserTabPillView {
             return .black.opacity(0.04)
         }
     }
-    
+
     var shadowRadius: CGFloat {
         if isSelected {
             return 8
@@ -219,7 +219,7 @@ extension BrowserTabPillView {
             return 2
         }
     }
-    
+
     var shadowOffset: CGFloat {
         if isSelected {
             return 2
@@ -227,7 +227,7 @@ extension BrowserTabPillView {
             return 1
         }
     }
-    
+
     var border: some View {
         Group {
             if isSelected {
@@ -255,7 +255,7 @@ extension BrowserTabPillView {
             }
         }
     }
-    
+
     var closeButton: some View {
         Button(
             action: {
@@ -278,7 +278,7 @@ extension BrowserTabPillView {
         .disabled(isCloseDisabled)
         .opacity(isCloseDisabled ? 0.5 : 1)
     }
-    
+
     var closeButtonColor: Color {
         if isCloseDisabled {
             return theme.textPrimary.opacity(0.45)
@@ -289,7 +289,7 @@ extension BrowserTabPillView {
             return theme.textPrimary.opacity(isHovering ? 0.8 : 0.6)
         }
     }
-    
+
     var closeButtonBackground: some View {
         Group {
             if isCloseDisabled {
@@ -301,7 +301,7 @@ extension BrowserTabPillView {
             }
         }
     }
-    
+
     @ViewBuilder var faviconOrLoader: some View {
         if tab.isLoading {
             ProgressView()

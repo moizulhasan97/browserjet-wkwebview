@@ -110,7 +110,7 @@ private struct ShiftDeviceRow: View {
                     .foregroundStyle(theme.textPrimary)
                     .lineLimit(1)
                     .layoutPriority(1)
-                    //.frame(maxWidth: .infinity, alignment: .leading)
+                    // .frame(maxWidth: .infinity, alignment: .leading)
 
                 BrowserJetAppButton(
                     title: "Shift",

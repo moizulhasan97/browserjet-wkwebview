@@ -11,7 +11,7 @@ import WebKit
 private struct SelectedTabWebView: View {
     @ObservedObject var tab: TabModel
     let onOpenInNewTab: (URL) -> Void
-    
+
     var body: some View {
         WebViewContainer(tab: tab, onOpenInNewTab: onOpenInNewTab)
             .id(tab.webViewID)
@@ -20,27 +20,26 @@ private struct SelectedTabWebView: View {
 }
 
 struct BrowserRootView: View {
-    
     @StateObject var state: BrowserWindowState
     @StateObject private var changeKeyViewModel = ChangeLicenseKeyViewModel()
-    
+
     @Environment(\.appConfiguration)
     private var config
-    
+
     @Environment(\.colorScheme)
     private var colorScheme
-    
+
     @EnvironmentObject private var sessionManager: SessionManager
     @EnvironmentObject private var themeManager: ThemeManager
-    
+
     @ObservedObject private var forceGate = ForceUpdateGate.shared
-    
+
     @State private var showChangeKeySheet: Bool = false
     @State private var showChangeKeySuccessAlert: Bool = false
-    
+
     private let keyValueStore: KeyValueStoring
     let menu: BrowserMenuBuilder
-    
+
     init(
         state: BrowserWindowState,
         menu: BrowserMenuBuilder,
@@ -50,7 +49,7 @@ struct BrowserRootView: View {
         self.menu = menu
         self.keyValueStore = keyValueStore
     }
-    
+
     var body: some View {
         Group {
             if forceGate.isBlocking {
@@ -69,14 +68,14 @@ struct BrowserRootView: View {
             }
         }
     }
-    
+
     private var currentUserEmail: String? {
         let email = (keyValueStore.object(forKey: StorageKeys.userEmail) as? String)?
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard let email, !email.isEmpty else { return nil }
         return email
     }
-    
+
     private func openIfAvailable(_ url: URL?) {
         guard let url else {
             AppLogger.warning("More menu URL unavailable")
@@ -84,18 +83,19 @@ struct BrowserRootView: View {
         }
         open(url)
     }
-    
+
     private var browserMainContent: some View {
         VStack(spacing: 0) {
             BrowserChromeView(
                 state: state,
                 menu: menu,
                 onToolbarAction: handleToolbarAction,
-                onMoreMenuSelect: handleMoreMenuItem,
-                onDuplicateTabs: { count in state.duplicateSelectedTab(count: count) }
-            )
+                onMoreMenuSelect: handleMoreMenuItem
+            ) { count in
+                state.duplicateSelectedTab(count: count)
+            }
             .frame(maxWidth: .infinity)
-            
+
             if let tab = state.selectedTab {
                 SelectedTabWebView(tab: tab) { url in
                     if state.isTrialLockActive {
@@ -135,15 +135,15 @@ struct BrowserRootView: View {
             }
         }
     }
-    
+
     private func handleToolbarAction(_ action: BrowserToolbarAction) {
         guard let tab = state.selectedTab else { return }
         if state.isTrialLockActive, action != .reload, action != .stop { return }
-        
+
         if handleNavigationAction(action, on: tab) { return }
         handleStateAction(action)
     }
-    
+
     private func handleNavigationAction(_ action: BrowserToolbarAction, on tab: TabModel) -> Bool {
         switch action {
         case .back:
@@ -162,7 +162,7 @@ struct BrowserRootView: View {
             return false
         }
     }
-    
+
     private func handleStateAction(_ action: BrowserToolbarAction) {
         switch action {
         case .newTab:
@@ -177,7 +177,7 @@ struct BrowserRootView: View {
             AppLogger.info("Toolbar action: \(action)")
         }
     }
-    
+
     private func handleMoreMenuItem(_ item: BrowserMoreMenuItem) {
         //        if item == .about {
         //            AboutBrowserJetWindowController.shared.show(
@@ -203,7 +203,7 @@ struct BrowserRootView: View {
             //            break
         }
     }
-    
+
     private func open(_ url: URL) {
         if sessionManager.canCreateSession && state.tabs.count < state.maxBrowserTabs {
             state.addTab(url: url)
@@ -216,7 +216,7 @@ struct BrowserRootView: View {
 #Preview("BrowserRootView (Safe Preview)") {
     let theme = BrowserJetLightTheme()
     let sessionManager = SessionManager(maxSessions: 20)
-    
+
     let state = BrowserWindowState(
         proxyType: .local,
         isolationMode: .perTab,
@@ -228,22 +228,22 @@ struct BrowserRootView: View {
         initialTabCount: 2,
         maxBrowserTabs: 20
     )
-    
+
     state.addTab()
     state.addTab()
     state.addTab()
-    
+
     return VStack(spacing: 0) {
         BrowserTabsStripView(state: state)
             .frame(maxWidth: .infinity)
-        
+
         BrowserChromeView(
             state: state,
             menu: .default,
             onToolbarAction: { _ in },
             onMoreMenuSelect: { _ in }
         )
-        
+
         Rectangle()
             .overlay {
                 Text("WebView (Preview Placeholder)")

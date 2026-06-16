@@ -8,7 +8,6 @@
 import AppKit
 
 enum BrowserLicenseBackgroundMonitor {
-
     static func run(
         licenseService: LicenseService = LicenseService(),
         licenseStore: LicenseStore = LicenseStore(),
@@ -87,8 +86,7 @@ enum BrowserLicenseBackgroundMonitor {
         let delaySeconds = Double(delayNanoseconds) / 1_000_000_000
         var terminated = false
 
-        var autoQuitTimer: Timer?
-        autoQuitTimer = Timer(timeInterval: delaySeconds, repeats: false) { _ in
+        let autoQuitTimer = Timer(timeInterval: delaySeconds, repeats: false) { _ in
             NSApp.stopModal(withCode: .alertFirstButtonReturn)
             DispatchQueue.main.async {
                 guard !terminated else { return }
@@ -96,13 +94,12 @@ enum BrowserLicenseBackgroundMonitor {
                 QuitConfirmationController.terminateWithoutConfirmation()
             }
         }
-        RunLoop.main.add(autoQuitTimer!, forMode: .modalPanel)
-        RunLoop.main.add(autoQuitTimer!, forMode: .default)
+        RunLoop.main.add(autoQuitTimer, forMode: .modalPanel)
+        RunLoop.main.add(autoQuitTimer, forMode: .default)
 
         alert.runModal()
 
-        autoQuitTimer?.invalidate()
-        autoQuitTimer = nil
+        autoQuitTimer.invalidate()
         guard !terminated else { return }
         terminated = true
         QuitConfirmationController.terminateWithoutConfirmation()

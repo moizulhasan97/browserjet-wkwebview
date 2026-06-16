@@ -9,6 +9,6 @@
 // https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
 
 #include "Base.xcconfig"
-MARKETING_VERSION = 3.8.2-dev
-CURRENT_PROJECT_VERSION = 7
+MARKETING_VERSION = 4.0.0-dev
+CURRENT_PROJECT_VERSION = 8
 APP_CONFIGURATION_NAME = Development

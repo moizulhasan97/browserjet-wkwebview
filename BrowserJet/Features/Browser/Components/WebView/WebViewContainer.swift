@@ -34,20 +34,20 @@ struct WebViewContainer: NSViewRepresentable {
             DispatchQueue.main.async {
                 if let resolvedURL = AddressBarURLResolver.resolve(tab.addressText) {
                     webView.load(URLRequest(url: resolvedURL))
-                }   
+                }
             }
         }
 
         return webView
     }
-    
+
     private func shouldReloadVisibleTab(webView: WKWebView, tab: TabModel) -> Bool {
-          let text = tab.addressText.trimmingCharacters(in: .whitespacesAndNewlines)
-          guard !text.isEmpty, text != "about:blank" else { return false }
-          // Init load ran before the view was in the window; retry once attached.
-          guard webView.url == nil else { return false }
-          return true
-      }
+        let text = tab.addressText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty, text != "about:blank" else { return false }
+        // Init load ran before the view was in the window; retry once attached.
+        guard webView.url == nil else { return false }
+        return true
+    }
 
     func updateNSView(_ nsView: WKWebView, context: Context) {
         // Update coordinator's tab reference when tab changes
