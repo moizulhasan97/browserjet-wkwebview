@@ -27,7 +27,7 @@ extension AppBackgroundStyle {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            
+
         case .browserJetDarkGradient:
             LinearGradient(
                 colors: [
@@ -38,12 +38,12 @@ extension AppBackgroundStyle {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            
+
         case .solid(let color):
             color
         }
     }
-    
+
     static func brandGradient(for colorScheme: ColorScheme) -> AppBackgroundStyle {
         colorScheme == .dark ? .browserJetDarkGradient : .browserJetGradient
     }
@@ -81,7 +81,7 @@ private struct BrandThemedWindowModifier: ViewModifier {
 
 private struct SystemBrandThemedWindowModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
-    
+
     func body(content: Content) -> some View {
         content
             .background(
@@ -98,7 +98,7 @@ extension View {
     func brandThemedWindow(themeManager: ThemeManager) -> some View {
         modifier(BrandThemedWindowModifier(themeManager: themeManager))
     }
-    
+
     /// About and other windows without a shared `ThemeManager`.
     func brandThemedWindow() -> some View {
         modifier(SystemBrandThemedWindowModifier())

@@ -29,13 +29,13 @@ struct SettingsRootView: View {
 struct SettingsView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.designSystem) private var designSystem
-    
+
     @StateObject private var viewModel: SettingsViewModel
-    
+
     init(themeManager: ThemeManager) {
         _viewModel = StateObject(wrappedValue: SettingsViewModel(themeManager: themeManager))
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -45,7 +45,7 @@ struct SettingsView: View {
                 .padding(20)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            
+
             if viewModel.hasUnsavedChanges {
                 Divider()
                     .overlay(theme.divider)
@@ -56,13 +56,13 @@ struct SettingsView: View {
             viewModel.syncAppearancePreview(to: newMode)
         }
     }
-    
+
     private var generalSection: some View {
         VStack(alignment: .leading, spacing: DesignMetrics.rowSpacing) {
             Text("General")
                 .font(designSystem.typography.heading4.font)
                 .foregroundStyle(theme.textPrimary)
-            
+
             CardContainer {
                 VStack(alignment: .leading, spacing: DesignMetrics.sectionSpacing) {
                     appearanceRow
@@ -74,13 +74,13 @@ struct SettingsView: View {
             }
         }
     }
-    
+
     private var appearanceRow: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Appearance")
                 .font(designSystem.typography.textBody1.font)
                 .foregroundStyle(theme.textPrimary)
-            
+
             Picker("", selection: $viewModel.draftMode) {
                 Text("System").tag(ThemeManager.Mode.system)
                 Text("Light").tag(ThemeManager.Mode.light)
@@ -91,11 +91,11 @@ struct SettingsView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var defaultURLSection: some View {
         VStack(alignment: .leading, spacing: DesignMetrics.rowSpacing) {
             openBlankPageRow
-            
+
             BrowserJetTextField(
                 type: .launcherAddress,
                 title: "Default URL",
@@ -104,7 +104,7 @@ struct SettingsView: View {
             )
             .disabled(viewModel.isDefaultURLFieldDisabled)
             .opacity(viewModel.isDefaultURLFieldDisabled ? 0.55 : 1)
-            
+
             if viewModel.isDefaultURLFieldDisabled {
                 Text("Launcher will start with \(LauncherStartURLPreferences.blankPageURL). You can still change the address on the launcher.")
                     .font(designSystem.typography.textCaption.font)
@@ -114,7 +114,7 @@ struct SettingsView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var openBlankPageRow: some View {
         HStack {
             Text("Open blank page")
@@ -129,7 +129,7 @@ struct SettingsView: View {
             )
         }
     }
-    
+
     private var confirmBeforeQuitRow: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -150,11 +150,11 @@ struct SettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
-    
+
     private var footer: some View {
         HStack(spacing: 12) {
             Spacer()
-            
+
             BrowserJetAppButton(
                 title: "Cancel",
                 type: .secondaryLarge,
@@ -164,7 +164,7 @@ struct SettingsView: View {
                 viewModel.cancel()
             }
             .keyboardShortcut(.cancelAction)
-            
+
             BrowserJetAppButton(
                 title: "Save",
                 type: .primaryLarge,

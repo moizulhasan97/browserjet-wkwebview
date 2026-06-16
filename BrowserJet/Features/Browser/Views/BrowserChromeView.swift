@@ -13,7 +13,7 @@ struct BrowserChromeView: View {
     let onToolbarAction: (BrowserToolbarAction) -> Void
     let onMoreMenuSelect: (BrowserMoreMenuItem) -> Void
     var onDuplicateTabs: ((Int) -> Void)?
-    
+
     @Environment(\.appTheme)
     private var theme
 
@@ -27,11 +27,11 @@ struct BrowserChromeView: View {
     private var enabledToolbarActions: Set<BrowserToolbarAction>? {
         state.isTrialLockActive ? [.reload, .stop] : nil
     }
-    
+
     private var visibleMoreMenuItems: [BrowserMoreMenuItem] {
         state.isTrialLockActive ? /*[.about] :*/ [] : menu.moreMenuItems
     }
-    
+
     var body: some View {
         HStack(spacing: 10) {
             if let tab = state.selectedTab {
@@ -55,11 +55,11 @@ struct BrowserChromeView: View {
                     onAction: onToolbarAction
                 )
             }
-            
+
             BrowserConnectionBadgeView(proxyType: state.proxyType)
                 .opacity(state.isTrialLockActive ? 0.6 : 1)
                 .allowsHitTesting(false)
-            
+
             HStack(spacing: 10) {
                 BrowserToolbarView(
                     actions: menu.trailing,
@@ -106,7 +106,7 @@ private struct LeadingToolbar: View {
 // swiftlint:disable force_unwrapping
 #Preview("Browser Chrome – Light") {
     let sessionManager = SessionManager()
-    
+
     let state = BrowserWindowState(
         proxyType: .local,
         isolationMode: .perTab,
@@ -117,7 +117,7 @@ private struct LeadingToolbar: View {
         initialTabCount: 2,
         maxBrowserTabs: 20
     )
-    
+
     // Add some sample tabs for preview
     state.tabs = [
         TabModel(
@@ -145,7 +145,7 @@ private struct LeadingToolbar: View {
             userAgent: nil
         )
     ]
-    
+
     state.selectedTabID = state.tabs.first?.id
     return BrowserChromeView(
         state: state,

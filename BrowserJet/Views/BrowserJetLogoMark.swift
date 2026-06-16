@@ -29,7 +29,7 @@ struct BrowserJetLogoMark: View {
                 .interpolation(.high)
                 .scaledToFit()
                 .frame(width: iconSize, height: iconSize)
-                //.accessibilityHidden(true)
+                // .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("BROWSERJET")
@@ -51,8 +51,8 @@ struct BrowserJetLogoMark: View {
             maxWidth: style == .center ? .infinity : nil,
             alignment: style == .center ? .center : .leading
         )
-        //.accessibilityElement(children: .combine)
-        //.accessibilityLabel("BrowserJet, Proxy Browser")
+        // .accessibilityElement(children: .combine)
+        // .accessibilityLabel("BrowserJet, Proxy Browser")
     }
 }
 

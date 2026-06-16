@@ -19,7 +19,7 @@ import SwiftUI
 private final class BrowserJetWindow: NSWindow {
     /// Height of the draggable titlebar row above the tab-strip accessory.
     private static let titleBarDoubleClickBand: CGFloat = 28
-    
+
     override func sendEvent(_ event: NSEvent) {
         if event.type == .leftMouseDown,
            event.clickCount == 2,
@@ -32,7 +32,7 @@ private final class BrowserJetWindow: NSWindow {
         }
         super.sendEvent(event)
     }
-    
+
     private func performTitleBarDoubleClickAction() {
         let action = UserDefaults.standard.string(forKey: "AppleActionOnDoubleClick") ?? "Maximize"
         switch action {
@@ -61,7 +61,6 @@ extension ShowableWindowController {
 }
 
 final class BrowserJetWindowController<Content: View>: NSWindowController, ShowableWindowController {
-
     convenience init(
         titledWindowTitle: String? = nil,
         content: Content,
@@ -241,7 +240,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         window?.close()
         AppLogger.info("Window closed")
     }
-    
+
     /// Hosts the tab strip in the native titlebar accessory area so tab interactions
     /// are not intercepted by the window drag region.
     func attachBrowserTabStripTitlebarAccessory(
@@ -281,7 +280,6 @@ extension BrowserJetWindowController {
 /// Must be non-generic so `NSWindowDelegate` methods are visible to Obj-C.
 @MainActor
 final class BrowserJetWindowCloseDelegate: NSObject, NSWindowDelegate {
-
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         guard isLastVisibleAppWindow(closing: sender) else { return true }
         return QuitConfirmationController.confirmClosingLastWindow()

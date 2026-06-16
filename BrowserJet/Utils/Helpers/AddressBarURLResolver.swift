@@ -13,20 +13,20 @@ enum AddressBarURLResolver {
     static func resolve(_ input: String) -> URL? {
         let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
-        
+
         if trimmed == "about:blank" {
             return URL(string: "about:blank")
         }
-        
+
         if trimmed.contains("://"), let url = URL(string: trimmed) {
             return url
         }
-        
+
         if trimmed.contains(".") && !trimmed.contains(" "),
            let url = URL(string: "https://\(trimmed)") {
             return url
         }
-        
+
         let encodedQuery = trimmed.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? trimmed
         return URL(string: "https://www.google.com/search?q=\(encodedQuery)")
     }

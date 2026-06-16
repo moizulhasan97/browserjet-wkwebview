@@ -10,8 +10,8 @@ import Foundation
 @MainActor
 final class ActiveBrowserStateProvider: ObservableObject {
     static let shared = ActiveBrowserStateProvider()
-    
+
     @Published var current: BrowserWindowState?
-    
+
     private init() {}
 }

@@ -26,21 +26,21 @@ struct LauncherStartURLPreferences {
     static let savePayloadUserInfoKey = "payload"
 
     private let store: KeyValueStoring
-    
+
     init(store: KeyValueStoring = UserDefaultsKeyValueStore()) {
         self.store = store
     }
-    
+
     var openBlankPage: Bool {
         store.object(forKey: StorageKeys.openBlankPage) as? Bool ?? false
     }
-    
+
     var defaultStartURL: String {
         let raw = store.object(forKey: StorageKeys.defaultStartURL) as? String
         let trimmed = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return trimmed.isEmpty ? Self.blankPageURL : trimmed
     }
-    
+
     /// Value to prefill the launcher address field when it is empty.
     func effectiveStartURL(fallbackConfigurationURL: String) -> String {
         Self.effectiveStartURL(

@@ -35,7 +35,7 @@ struct RecoverAccountView: View {
         InfoAlertChrome(minWidth: 360, maxWidth: 440) {
             VStack(alignment: .leading, spacing: DesignMetrics.sectionSpacing) {
                 BrowserJetLogoMark(iconSize: 48, style: .center)
-                    //.frame(maxWidth: .infinity)
+                    // .frame(maxWidth: .infinity)
 
                 Text(ActivationMessages.AccountRecovery.headline)
                     .font(designSystem.typography.title1.font)

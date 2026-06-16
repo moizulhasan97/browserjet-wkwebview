@@ -136,7 +136,7 @@ final class WindowManager {
             .environmentObject(LicenseAccountStore.shared)
 
         let isTrialUser = LicenseAccountStore.shared.isTrialUser
-        let launcherHeight: CGFloat = isTrialUser ? 562 : 530//506
+        let launcherHeight: CGFloat = isTrialUser ? 562 : 530// 506
         let intendedSize = NSSize(width: 500, height: launcherHeight)
 
         launcherWC = BrowserJetWindowController(
@@ -148,7 +148,6 @@ final class WindowManager {
         )
 
         launcherWC?.show()
-
     }
 
     @MainActor

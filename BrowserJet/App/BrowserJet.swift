@@ -11,7 +11,6 @@ import Sparkle
 
 @main
 struct BrowserJet: App {
-    
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     private let themeManager = ThemeManager()
     private let sessionManager = SessionManager(
@@ -19,7 +18,7 @@ struct BrowserJet: App {
     )
     private let updaterController: SPUStandardUpdaterController
     private let sparkleUpdaterDelegate = SparkleUpdaterDelegate()
-    
+
     var body: some Scene {
         Settings {
             SettingsRootView()
@@ -31,7 +30,7 @@ struct BrowserJet: App {
             BrowserCommands(themeManager: themeManager)
         }
     }
-    
+
     init() {
         updaterController = SPUStandardUpdaterController(
             startingUpdater: true,

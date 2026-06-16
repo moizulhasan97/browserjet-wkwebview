@@ -34,13 +34,13 @@ struct WebViewContainer: NSViewRepresentable {
             DispatchQueue.main.async {
                 if let resolvedURL = AddressBarURLResolver.resolve(tab.addressText) {
                     webView.load(URLRequest(url: resolvedURL))
-                }   
+                }
             }
         }
 
         return webView
     }
-    
+
     private func shouldReloadVisibleTab(webView: WKWebView, tab: TabModel) -> Bool {
           let text = tab.addressText.trimmingCharacters(in: .whitespacesAndNewlines)
           guard !text.isEmpty, text != "about:blank" else { return false }

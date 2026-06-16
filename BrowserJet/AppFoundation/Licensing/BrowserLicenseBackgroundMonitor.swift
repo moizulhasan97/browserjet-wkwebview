@@ -8,7 +8,6 @@
 import AppKit
 
 enum BrowserLicenseBackgroundMonitor {
-
     static func run(
         licenseService: LicenseService = LicenseService(),
         licenseStore: LicenseStore = LicenseStore(),

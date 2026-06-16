@@ -21,13 +21,13 @@ struct QuitConfirmationPreferences {
             store.set(newValue, forKey: StorageKeys.confirmBeforeQuit)
         }
     }
-    
+
     private let store: KeyValueStoring
-    
+
     init(store: KeyValueStoring = UserDefaultsKeyValueStore()) {
         self.store = store
     }
-    
+
     func save(confirmBeforeQuit: Bool) {
         store.set(confirmBeforeQuit, forKey: StorageKeys.confirmBeforeQuit)
     }
@@ -37,18 +37,18 @@ struct QuitConfirmationPreferences {
 enum QuitConfirmationController {
     /// Set when quit was already confirmed (e.g. closing the last window) or must not be confirmed (relaunch, license enforcement).
     private static var skipNextTerminationConfirmation = false
-    
+
     /// User-initiated quit (⌘Q, last tab ⌘W, etc.) — respects "Confirm before quitting".
     static func requestQuit() {
         NSApplication.shared.terminate(nil)
     }
-    
+
     /// Quit without the settings dialog (relaunch, MAC mismatch, key expired, force update).
     static func terminateWithoutConfirmation() {
         skipNextTerminationConfirmation = true
         NSApplication.shared.terminate(nil)
     }
-    
+
     /// Called from `windowShouldClose` when closing would leave no visible windows.
     /// Returns `true` if the window may close; `false` if the user cancelled (window stays open).
     static func confirmClosingLastWindow() -> Bool {
@@ -61,7 +61,7 @@ enum QuitConfirmationController {
         skipNextTerminationConfirmation = true
         return true
     }
-    
+
     static func applicationShouldTerminate() -> NSApplication.TerminateReply {
         if skipNextTerminationConfirmation {
             skipNextTerminationConfirmation = false
@@ -72,7 +72,7 @@ enum QuitConfirmationController {
         }
         return showQuitAlert() ? .terminateNow : .terminateCancel
     }
-    
+
     @discardableResult
     private static func showQuitAlert() -> Bool {
         let alert = NSAlert()
