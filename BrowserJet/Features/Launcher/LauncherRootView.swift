@@ -11,27 +11,37 @@ import SwiftUI
 struct LauncherRootView: View {
     @Environment(\.colorScheme)
     private var colorScheme
+
     @EnvironmentObject private var themeManager: ThemeManager
+
     @ObservedObject private var forceGate = ForceUpdateGate.shared
+
     let appConfiguration: AppConfiguration
-    
+
+    //private let titleBarCompensation: CGFloat = 28
+
     var body: some View {
-        AppLogger.debug("LauncherRootView body computed - ColorScheme: \(colorScheme == .dark ? "dark" : "light")")
-        return Group {
-            if forceGate.isBlocking {
-                ForceUpdateBlockingOverlay()
-            } else {
-                LauncherView(appConfiguration: appConfiguration)
-                    .environment(\.appConfiguration, appConfiguration)
-            }
+        ZStack(alignment: .top) {
+            AppBackgroundStyle
+                .brandGradient(
+                    for: themeManager.resolvedColorScheme(for: colorScheme)
+                )
+                .makeView()
+                .ignoresSafeArea()
+
+            //Group {
+                if forceGate.isBlocking {
+                    ForceUpdateBlockingOverlay()
+                } else {
+                    LauncherView(appConfiguration: appConfiguration)
+                        .environment(\.appConfiguration, appConfiguration)
+                }
+           // }
+            //.padding(.top, -titleBarCompensation)
         }
-        .browserJetThemedRoot(themeManager: themeManager, colorScheme: colorScheme)
-        .task { @MainActor in
-            let updatePolicy = AppUpdatePolicy.evaluateBuild()
-            SparkleUpdateCoordinator.shared.applyPolicyResult(
-                updatePolicy,
-                context: .launcherAppeared
-            )
-        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .environment(\.appTheme, themeManager.theme(for: colorScheme))
+        .environment(\.designSystem, DesignSystem())
+        //.brandThemedWindow(themeManager: themeManager)
     }
 }
