@@ -95,8 +95,9 @@ enum BrowserLicenseBackgroundMonitor {
                 QuitConfirmationController.terminateWithoutConfirmation()
             }
         }
-        RunLoop.main.add(autoQuitTimer!, forMode: .modalPanel)
-        RunLoop.main.add(autoQuitTimer!, forMode: .default)
+        guard let autoQuitTimer else { return }
+        RunLoop.main.add(autoQuitTimer, forMode: .modalPanel)
+        RunLoop.main.add(autoQuitTimer, forMode: .default)
 
         alert.runModal()
 

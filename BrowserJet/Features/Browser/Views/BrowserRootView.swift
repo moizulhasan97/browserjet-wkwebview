@@ -91,7 +91,9 @@ struct BrowserRootView: View {
                 menu: menu,
                 onToolbarAction: handleToolbarAction,
                 onMoreMenuSelect: handleMoreMenuItem
-            )                { count in state.duplicateSelectedTab(count: count) }
+            ) { count in
+                state.duplicateSelectedTab(count: count)
+            }
             .frame(maxWidth: .infinity)
 
             if let tab = state.selectedTab {

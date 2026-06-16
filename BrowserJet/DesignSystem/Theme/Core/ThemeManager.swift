@@ -53,7 +53,7 @@ final class ThemeManager: ObservableObject {
         self.store = store
 
         if let raw = store.object(forKey: StorageKeys.appearanceMode) as? String,
-           let saved = Mode(rawValue: raw) {
+            let saved = Mode(rawValue: raw) {
             self.mode = saved
         } else {
             self.mode = .system

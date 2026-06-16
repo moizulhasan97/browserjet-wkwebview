@@ -53,7 +53,8 @@ extension AppBackgroundStyle {
 
 private struct BrandThemedWindowModifier: ViewModifier {
     @ObservedObject var themeManager: ThemeManager
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorScheme)
+    private var colorScheme
 
     private var preferredScheme: ColorScheme? {
         switch themeManager.activeMode {
@@ -80,7 +81,8 @@ private struct BrandThemedWindowModifier: ViewModifier {
 // MARK: - System-following windows (About)
 
 private struct SystemBrandThemedWindowModifier: ViewModifier {
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorScheme)
+    private var colorScheme
 
     func body(content: Content) -> some View {
         content

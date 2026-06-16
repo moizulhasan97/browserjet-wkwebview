@@ -22,9 +22,9 @@ private final class BrowserJetWindow: NSWindow {
 
     override func sendEvent(_ event: NSEvent) {
         if event.type == .leftMouseDown,
-           event.clickCount == 2,
-           styleMask.contains(.titled),
-           styleMask.contains(.fullSizeContentView) {
+            event.clickCount == 2,
+            styleMask.contains(.titled),
+            styleMask.contains(.fullSizeContentView) {
             let distFromTop = frame.height - event.locationInWindow.y
             if distFromTop >= 0, distFromTop <= Self.titleBarDoubleClickBand {
                 performTitleBarDoubleClickAction()
@@ -252,7 +252,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
 
         let resolvedScheme = themeManager.resolvedColorScheme(for: .light)
 
-        let accessory = BrowserTabStripTitlebarAccessoryController(
+        let accessory = BrowserTabStripTitlebarAccessory(
             state: state,
             themeManager: themeManager,
             sessionManager: sessionManager,

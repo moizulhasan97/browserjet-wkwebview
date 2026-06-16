@@ -10,7 +10,8 @@ import SwiftUI
 // MARK: - App Settings scene root
 
 struct SettingsRootView: View {
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorScheme)
+    private var colorScheme
     @EnvironmentObject private var themeManager: ThemeManager
 
     private var resolvedColorScheme: ColorScheme {
@@ -27,8 +28,10 @@ struct SettingsRootView: View {
 // MARK: - Settings content
 
 struct SettingsView: View {
-    @Environment(\.appTheme) private var theme
-    @Environment(\.designSystem) private var designSystem
+    @Environment(\.appTheme)
+    private var theme
+    @Environment(\.designSystem)
+    private var designSystem
 
     @StateObject private var viewModel: SettingsViewModel
 
@@ -106,7 +109,12 @@ struct SettingsView: View {
             .opacity(viewModel.isDefaultURLFieldDisabled ? 0.55 : 1)
 
             if viewModel.isDefaultURLFieldDisabled {
-                Text("Launcher will start with \(LauncherStartURLPreferences.blankPageURL). You can still change the address on the launcher.")
+                Text(
+                    """
+                    Launcher will start with \(LauncherStartURLPreferences.blankPageURL). \
+                    You can still change the address on the launcher.
+                    """
+                )
                     .font(designSystem.typography.textCaption.font)
                     .foregroundStyle(theme.textFieldSecondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -144,7 +152,12 @@ struct SettingsView: View {
                     )
                 )
             }
-            Text("When enabled, BrowserJet asks for confirmation before quitting (⌘Q, closing the last tab, or closing the last window).")
+            Text(
+                """
+                When enabled, BrowserJet asks for confirmation before quitting \
+                (⌘Q, closing the last tab, or closing the last window).
+                """
+            )
                 .font(designSystem.typography.textCaption.font)
                 .foregroundStyle(theme.textFieldSecondary)
                 .fixedSize(horizontal: false, vertical: true)

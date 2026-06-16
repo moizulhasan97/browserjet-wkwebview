@@ -100,6 +100,7 @@
 		AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CC2F4376A200B33610 /* AuthProxy.swift */; };
 		AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CE2F4376C000B33610 /* TabModel.swift */; };
 		AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */; };
+		AF69F5F12F43A3700B33610 /* BrowserWindowState+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */; };
 		AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */; };
 		AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */; };
 		AF69F5E12F43A30A00B33610 /* LaunchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E02F43A30A00B33610 /* LaunchRequest.swift */; };
@@ -265,6 +266,7 @@
 		AF69F5CC2F4376A200B33610 /* AuthProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProxy.swift; sourceTree = "<group>"; };
 		AF69F5CE2F4376C000B33610 /* TabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabModel.swift; sourceTree = "<group>"; };
 		AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWindowState.swift; sourceTree = "<group>"; };
+		AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserWindowState+Screenshot.swift"; sourceTree = "<group>"; };
 		AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyConfigurationFactory.swift; sourceTree = "<group>"; };
 		AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabsStripView.swift; sourceTree = "<group>"; };
 		AF69F5E02F43A30A00B33610 /* LaunchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRequest.swift; sourceTree = "<group>"; };
@@ -725,6 +727,7 @@
 			isa = PBXGroup;
 			children = (
 				AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */,
+				AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -1235,6 +1238,7 @@
 				AF7A10012F90010000E49C58 /* LauncherMessages.swift in Sources */,
 				AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */,
 				AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */,
+				AF69F5F12F43A3700B33610 /* BrowserWindowState+Screenshot.swift in Sources */,
 				AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */,
 				741EB8100864414EB9E1849C /* BrowserTabPillShapes.swift in Sources */,
 				AF401AC52F4D2BE800EF265C /* DateFormatterProvider.swift in Sources */,

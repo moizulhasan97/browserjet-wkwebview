@@ -11,7 +11,8 @@ import Sparkle
 
 @main
 struct BrowserJet: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @NSApplicationDelegateAdaptor(AppDelegate.self)
+    private var appDelegate
     private let themeManager = ThemeManager()
     private let sessionManager = SessionManager(
         maxSessions: AppEnvironment.currentConfiguration.maxBrowserTabs
@@ -42,9 +43,9 @@ struct BrowserJet: App {
         FirebaseApp.configure()
         Task { @MainActor in
             await RemoteConfigManager.shared.fetchAndActivate()
-#if DEBUG
+            #if DEBUG
             RemoteConfigManager.shared.debugPrintAllValues()
-#endif
+            #endif
             let updatePolicy = AppUpdatePolicy.evaluateBuild()
             SparkleUpdateCoordinator.shared.applyPolicyResult(
                 updatePolicy,

@@ -44,19 +44,19 @@ final class WindowManager {
     private init() {}
 
     func resizeActivationWindowToFit(_ layout: ActivationLayout) {
-        guard let wc = activationWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
+        guard let windowController = activationWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
 
         let compact = layout != .fullForm
-        wc.setActivationChromeBorderless(compact)
+        windowController.setActivationChromeBorderless(compact)
 
         guard let contentSize = layout.contentSize else { return }
         lastActivationFullFormContentHeight = nil
-        wc.applyFixedContentSize(contentSize)
+        windowController.applyFixedContentSize(contentSize)
     }
 
     func resizeActivationFullFormToContentHeight(_ measuredHeight: CGFloat) {
         guard measuredHeight > 0,
-              let wc = activationWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
+            let windowController = activationWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
 
         let height = ActivationWindowMetrics.clampedContentHeight(measuredHeight)
 
@@ -66,8 +66,8 @@ final class WindowManager {
 
         lastActivationFullFormContentHeight = height
 
-        wc.setActivationChromeBorderless(false)
-        wc.applyFixedContentSize(
+        windowController.setActivationChromeBorderless(false)
+        windowController.applyFixedContentSize(
             NSSize(width: ActivationWindowMetrics.contentWidth, height: height)
         )
     }

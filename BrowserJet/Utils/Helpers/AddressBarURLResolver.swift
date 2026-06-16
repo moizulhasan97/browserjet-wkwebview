@@ -23,7 +23,7 @@ enum AddressBarURLResolver {
         }
 
         if trimmed.contains(".") && !trimmed.contains(" "),
-           let url = URL(string: "https://\(trimmed)") {
+            let url = URL(string: "https://\(trimmed)") {
             return url
         }
 

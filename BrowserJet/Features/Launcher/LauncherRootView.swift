@@ -30,13 +30,13 @@ struct LauncherRootView: View {
                 .ignoresSafeArea()
 
             // Group {
-                if forceGate.isBlocking {
-                    ForceUpdateBlockingOverlay()
-                } else {
-                    LauncherView(appConfiguration: appConfiguration)
-                        .environment(\.appConfiguration, appConfiguration)
-                }
-           // }
+            if forceGate.isBlocking {
+                ForceUpdateBlockingOverlay()
+            } else {
+                LauncherView(appConfiguration: appConfiguration)
+                    .environment(\.appConfiguration, appConfiguration)
+            }
+            // }
             // .padding(.top, -titleBarCompensation)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
