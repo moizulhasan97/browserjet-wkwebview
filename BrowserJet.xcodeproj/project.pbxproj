@@ -12,7 +12,6 @@
 		AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */; };
 		AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DE2F4653D300A12964 /* VPNProvider.swift */; };
 		AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */; };
-		AF127CEB2F9AC61D00EE34E2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF127CEA2F9AC61D00EE34E2 /* GoogleService-Info.plist */; };
 		AF127CF02F9AC70400EE34E2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = AF127CEF2F9AC70400EE34E2 /* FirebaseAnalytics */; };
 		AF127CF22F9AC70400EE34E2 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = AF127CF12F9AC70400EE34E2 /* FirebaseCore */; };
 		AF127CF42F9AC70400EE34E2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = AF127CF32F9AC70400EE34E2 /* FirebaseCrashlytics */; };
@@ -52,7 +51,6 @@
 		AF498D2F2F4AB8AD004C03B3 /* ProxyPoolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */; };
 		AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */; };
 		AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */; };
-		AFACTIV22F60002004C03B3 /* ActivationWindowSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */; };
 		AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */; };
 		AF498D3A2F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */; };
 		AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */; };
@@ -80,7 +78,6 @@
 		AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */; };
 		AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */; };
 		AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */; };
-		AFACC1012FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */; };
 		AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF242F3E086A00E49C58 /* WindowManager.swift */; };
 		AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */; };
 		AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF292F3E131100E49C58 /* VPNType.swift */; };
@@ -100,7 +97,6 @@
 		AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CC2F4376A200B33610 /* AuthProxy.swift */; };
 		AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CE2F4376C000B33610 /* TabModel.swift */; };
 		AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */; };
-		AF69F5F12F43A3700B33610 /* BrowserWindowState+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */; };
 		AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */; };
 		AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */; };
 		AF69F5E12F43A30A00B33610 /* LaunchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E02F43A30A00B33610 /* LaunchRequest.swift */; };
@@ -109,6 +105,7 @@
 		AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */; };
 		AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */; };
 		AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */; };
+		AF69F5F12F43A3700B33610 /* BrowserWindowState+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */; };
 		AF7A10012F90010000E49C58 /* LauncherMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7A10002F90010000E49C58 /* LauncherMessages.swift */; };
 		AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B42F4E71810064B8FD /* UserSession.swift */; };
 		AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */; };
@@ -139,6 +136,8 @@
 		AFA2C7D72F47EA6600F7C889 /* BrowserMoreMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */; };
 		AFA2C7D92F47EACB00F7C889 /* BrowserMoreMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */; };
 		AFA2C7DB2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */; };
+		AFACC1012FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */; };
+		AFACTIV22F60002004C03B3 /* ActivationWindowSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */; };
 		AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */; };
 		AFCA5CEC2F75B104007A8578 /* LicenseAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */; };
 		AFCA5CF02F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */; };
@@ -185,6 +184,7 @@
 		AF127CFD2F9FAFC500EE34E2 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		AF127CFF2F9FAFD400EE34E2 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		AF127D012F9FBA8200EE34E2 /* AppUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
+		AF1292392FEDEB3900EA3CB4 /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
 		AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyViewModel.swift; sourceTree = "<group>"; };
 		AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyView.swift; sourceTree = "<group>"; };
 		AF20170F2FAB498D0058705F /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
@@ -217,7 +217,6 @@
 		AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyPoolService.swift; sourceTree = "<group>"; };
 		AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticAuthProxyProvider.swift; sourceTree = "<group>"; };
 		AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationRootView.swift; sourceTree = "<group>"; };
-		AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationWindowSizing.swift; sourceTree = "<group>"; };
 		AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationViewModel.swift; sourceTree = "<group>"; };
 		AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetSegmentedPicker.swift; sourceTree = "<group>"; };
 		AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
@@ -245,7 +244,6 @@
 		AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherTabPreset.swift; sourceTree = "<group>"; };
 		AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetWindowController.swift; sourceTree = "<group>"; };
-		AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabStripTitlebarAccessoryController.swift; sourceTree = "<group>"; };
 		AF56EF242F3E086A00E49C58 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherRootView.swift; sourceTree = "<group>"; };
 		AF56EF282F3E0F1400E49C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -266,7 +264,6 @@
 		AF69F5CC2F4376A200B33610 /* AuthProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProxy.swift; sourceTree = "<group>"; };
 		AF69F5CE2F4376C000B33610 /* TabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabModel.swift; sourceTree = "<group>"; };
 		AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWindowState.swift; sourceTree = "<group>"; };
-		AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserWindowState+Screenshot.swift"; sourceTree = "<group>"; };
 		AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyConfigurationFactory.swift; sourceTree = "<group>"; };
 		AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabsStripView.swift; sourceTree = "<group>"; };
 		AF69F5E02F43A30A00B33610 /* LaunchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRequest.swift; sourceTree = "<group>"; };
@@ -275,6 +272,7 @@
 		AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContainer.swift; sourceTree = "<group>"; };
 		AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserAddressBarView.swift; sourceTree = "<group>"; };
 		AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingStyles.swift; sourceTree = "<group>"; };
+		AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserWindowState+Screenshot.swift"; sourceTree = "<group>"; };
 		AF7A10002F90010000E49C58 /* LauncherMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherMessages.swift; sourceTree = "<group>"; };
 		AF80C5B42F4E71810064B8FD /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 		AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeyValueStore.swift; sourceTree = "<group>"; };
@@ -304,6 +302,8 @@
 		AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuItem.swift; sourceTree = "<group>"; };
 		AFA2C7D82F47EACB00F7C889 /* BrowserMoreMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMoreMenuView.swift; sourceTree = "<group>"; };
 		AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarIconButtonStyle.swift; sourceTree = "<group>"; };
+		AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabStripTitlebarAccessoryController.swift; sourceTree = "<group>"; };
+		AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationWindowSizing.swift; sourceTree = "<group>"; };
 		AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyType.swift; sourceTree = "<group>"; };
 		AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseAccountStore.swift; sourceTree = "<group>"; };
 		AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumProxyPayloadDecryptor.swift; sourceTree = "<group>"; };
@@ -567,6 +567,7 @@
 				AF56EF1A2F3E02C400E49C58 /* BrowserJet.swift */,
 				AF56EF182F3E026E00E49C58 /* AppConfiguration+Environment.swift */,
 				AF127CEA2F9AC61D00EE34E2 /* GoogleService-Info.plist */,
+				AF1292392FEDEB3900EA3CB4 /* GoogleService-Info-dev.plist */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1085,6 +1086,7 @@
 				AFF3EB402F3CACD900C6F08E /* SwiftLint */,
 				AFF3EAC12F3CAC3A00C6F08E /* Sources */,
 				AFF3EAC22F3CAC3A00C6F08E /* Frameworks */,
+				AF12923B2FEDEC0A00EA3CB4 /* Firebase Plist Script */,
 				AFF3EAC32F3CAC3A00C6F08E /* Resources */,
 			);
 			buildRules = (
@@ -1147,7 +1149,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF56EEF72F3CCE4900E49C58 /* Colors.xcassets in Resources */,
-				AF127CEB2F9AC61D00EE34E2 /* GoogleService-Info.plist in Resources */,
 				AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1155,6 +1156,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		AF12923B2FEDEC0A00EA3CB4 /* Firebase Plist Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/BrowserJet/App/GoogleService-Info.plist",
+				"$(PROJECT_DIR)/BrowserJet/App/GoogleService-Info-dev.plist",
+			);
+			name = "Firebase Plist Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\nset -eu\n\nRESOURCES_DIR=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nmkdir -p \"${RESOURCES_DIR}\"\n\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n  cp \"${PROJECT_DIR}/BrowserJet/App/GoogleService-Info-dev.plist\" \\\n     \"${RESOURCES_DIR}/GoogleService-Info.plist\"\nelse\n  cp \"${PROJECT_DIR}/BrowserJet/App/GoogleService-Info.plist\" \\\n     \"${RESOURCES_DIR}/GoogleService-Info.plist\"\nfi\n";
+		};
 		AFF3EB402F3CACD900C6F08E /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
