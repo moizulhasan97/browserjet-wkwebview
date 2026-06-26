@@ -184,7 +184,7 @@ struct BrowserJetRootView: View {
         if phase == .activation {
             WindowManager.shared.resizeActivationFullFormToContentHeight(size.height)
         } else {
-            WindowManager.shared.resizeActivationWindowForCompactContent(size)
+            WindowManager.shared.resizeActivationWindowForCompactContent(size, layout: activationWindowLayout)
         }
     }
 
