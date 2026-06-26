@@ -69,7 +69,7 @@ struct BrowserChromeView: View {
                 )
                 BrowserMoreMenuView(
                     items: visibleMoreMenuItems,
-                    isDisabled: false
+                    isDisabled: state.isTrialLockActive
                 ) { item in
                     onMoreMenuSelect(item)
                 }
