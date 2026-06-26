@@ -149,6 +149,7 @@
 		AFE976502F55343100D270C8 /* ShiftViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */; };
 		AFE976522F5543CB00D270C8 /* InfoAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE976512F5543C800D270C8 /* InfoAlertView.swift */; };
 		AFE976562F55586D00D270C8 /* ActivationMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE976552F55586D00D270C8 /* ActivationMessages.swift */; };
+		AFEFE2092FEE27E400CAF5C3 /* AppUpdateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFEFE2082FEE27E400CAF5C3 /* AppUpdateConfig.swift */; };
 		AFF3EACD2F3CAC3C00C6F08E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */; };
 		AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB112F3CACB100C6F08E /* DesignMetrics.swift */; };
 		AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF3EB1A2F3CACB100C6F08E /* BrowserJetLightTheme.swift */; };
@@ -316,6 +317,7 @@
 		AFE9764F2F55342F00D270C8 /* ShiftViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShiftViewModel.swift; sourceTree = "<group>"; };
 		AFE976512F5543C800D270C8 /* InfoAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoAlertView.swift; sourceTree = "<group>"; };
 		AFE976552F55586D00D270C8 /* ActivationMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationMessages.swift; sourceTree = "<group>"; };
+		AFEFE2082FEE27E400CAF5C3 /* AppUpdateConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateConfig.swift; sourceTree = "<group>"; };
 		AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrowserJet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFF3EACC2F3CAC3C00C6F08E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFF3EACE2F3CAC3C00C6F08E /* BrowserJet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BrowserJet.entitlements; sourceTree = "<group>"; };
@@ -796,6 +798,7 @@
 		AF99BFBC2FA00AC40096FAE9 /* Update */ = {
 			isa = PBXGroup;
 			children = (
+				AFEFE2082FEE27E400CAF5C3 /* AppUpdateConfig.swift */,
 				AF99BFC62FA02EFF0096FAE9 /* SparkleUpdaterDelegate.swift */,
 				AF99BFC42FA0134E0096FAE9 /* ForceUpdateBlockingOverlay.swift */,
 				AF99BFC22FA013350096FAE9 /* ForceUpdateGate.swift */,
@@ -1346,6 +1349,7 @@
 				AFCA5CF42F75BC4C007A8578 /* DecryptedPremiumProxy.swift in Sources */,
 				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
 				AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */,
+				AFEFE2092FEE27E400CAF5C3 /* AppUpdateConfig.swift in Sources */,
 				AF56EF002F3D087000E49C58 /* BrowserJetButtonStyleProtocol.swift in Sources */,
 				AF56EF1B2F3E02C900E49C58 /* BrowserJet.swift in Sources */,
 				AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */,
