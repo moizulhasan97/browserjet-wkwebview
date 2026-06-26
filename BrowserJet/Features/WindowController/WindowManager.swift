@@ -189,7 +189,8 @@ final class WindowManager {
             maxBrowserTabs: appConfiguration.maxBrowserTabs
         )
 
-        let rootView = BrowserRootView(state: state, menu: .default)
+        let menu = BrowserMenuBuilder.from(RemoteConfigManager.shared.menuConfiguration)
+        let rootView = BrowserRootView(state: state, menu: menu)
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
             .environmentObject(LicenseAccountStore.shared)
@@ -235,7 +236,8 @@ final class WindowManager {
             isTrialLockActive: true
         )
 
-        let rootView = BrowserRootView(state: state, menu: .default)
+        let menu = BrowserMenuBuilder.from(RemoteConfigManager.shared.menuConfiguration)
+        let rootView = BrowserRootView(state: state, menu: menu)
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
             .environmentObject(LicenseAccountStore.shared)

@@ -138,7 +138,9 @@ struct BrowserRootView: View {
 
     private func handleToolbarAction(_ action: BrowserToolbarAction) {
         guard let tab = state.selectedTab else { return }
-        if state.isTrialLockActive, action != .reload, action != .stop { return }
+        if state.isTrialLockActive, !menu.trialAllowedToolbarActions.contains(action) {
+            return
+        }
 
         if handleNavigationAction(action, on: tab) { return }
         handleStateAction(action)
@@ -179,14 +181,9 @@ struct BrowserRootView: View {
     }
 
     private func handleMoreMenuItem(_ item: BrowserMoreMenuItem) {
-        //        if item == .about {
-        //            AboutBrowserJetWindowController.shared.show(
-        //                themeManager: themeManager,
-        //                colorScheme: colorScheme
-        //            )
-        //            return
-        //        }
-        if state.isTrialLockActive { return }
+        if state.isTrialLockActive, !menu.isMoreMenuItemAllowedWhenTrialLocked(item) {
+            return
+        }
         switch item {
         case .paymentCard:
             openIfAvailable(URLConstants.updateYourCardURL(email: currentUserEmail))
@@ -205,6 +202,10 @@ struct BrowserRootView: View {
     }
 
     private func open(_ url: URL) {
+        if state.isTrialLockActive {
+            state.selectedTab?.load(url)
+            return
+        }
         if sessionManager.canCreateSession && state.tabs.count < state.maxBrowserTabs {
             state.addTab(url: url)
         } else {
