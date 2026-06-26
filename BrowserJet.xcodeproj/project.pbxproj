@@ -19,6 +19,7 @@
 		AF127CF92F9ACA8100EE34E2 /* RemoteConfigKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127CF82F9ACA7E00EE34E2 /* RemoteConfigKey.swift */; };
 		AF127CFB2F9ACA9800EE34E2 /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127CFA2F9ACA9600EE34E2 /* RemoteConfigManager.swift */; };
 		AF127D022F9FBA8800EE34E2 /* AppUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127D012F9FBA8200EE34E2 /* AppUtils.swift */; };
+		AF12923D2FEDF37800EA3CB4 /* MenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12923C2FEDF37800EA3CB4 /* MenuConfiguration.swift */; };
 		AF20170C2FAB366F0058705F /* ChangeLicenseKeyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */; };
 		AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */; };
 		AF2017102FAB498E0058705F /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170F2FAB498D0058705F /* URLConstants.swift */; };
@@ -185,6 +186,7 @@
 		AF127CFF2F9FAFD400EE34E2 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		AF127D012F9FBA8200EE34E2 /* AppUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
 		AF1292392FEDEB3900EA3CB4 /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
+		AF12923C2FEDF37800EA3CB4 /* MenuConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuConfiguration.swift; sourceTree = "<group>"; };
 		AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyViewModel.swift; sourceTree = "<group>"; };
 		AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyView.swift; sourceTree = "<group>"; };
 		AF20170F2FAB498D0058705F /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
@@ -629,6 +631,7 @@
 		AF69F5AB2F43712700B33610 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				AF12923C2FEDF37800EA3CB4 /* MenuConfiguration.swift */,
 				AFA2C7D62F47EA6600F7C889 /* BrowserMoreMenuItem.swift */,
 				AF69F5AC2F43713000B33610 /* BrowserMenuBuilder.swift */,
 			);
@@ -1237,6 +1240,7 @@
 				AF2017172FABFDBE0058705F /* AboutBrowserJetWindowController.swift in Sources */,
 				AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */,
 				AF8267132FA9256A0036EFD5 /* BrowserLicenseBackgroundMonitor.swift in Sources */,
+				AF12923D2FEDF37800EA3CB4 /* MenuConfiguration.swift in Sources */,
 				AF9D9BB92FB806820047856A /* AboutPanelOptionsBuilder.swift in Sources */,
 				AF401AC82F4D2C1600EF265C /* LicenseEnums.swift in Sources */,
 				AF9D9BB72FB8019D0047856A /* AppDelegate.swift in Sources */,

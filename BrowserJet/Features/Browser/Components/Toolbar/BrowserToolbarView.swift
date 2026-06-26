@@ -7,11 +7,26 @@
 
 import SwiftUI
 
+struct ToolbarButtonDescriptor: Hashable {
+    let action: BrowserToolbarAction
+    let tooltip: String
+
+    init(action: BrowserToolbarAction, tooltip: String? = nil) {
+        self.action = action
+        self.tooltip = tooltip ?? action.tooltip
+    }
+
+    init(entry: TrailingToolbarEntry) {
+        action = entry.action
+        tooltip = entry.tooltip
+    }
+}
+
 struct BrowserToolbarView: View {
     @Environment(\.appTheme)
     private var theme
     @State private var showingDuplicatePopover = false
-    let actions: [BrowserToolbarAction]
+    let buttons: [ToolbarButtonDescriptor]
     /// When non-nil, only these actions are enabled; others are visually disabled.
     var enabledActions: Set<BrowserToolbarAction>?
     let onAction: (BrowserToolbarAction) -> Void
@@ -20,6 +35,30 @@ struct BrowserToolbarView: View {
 
     @State private var hovering: BrowserToolbarAction?
 
+    init(
+        actions: [BrowserToolbarAction],
+        enabledActions: Set<BrowserToolbarAction>? = nil,
+        onAction: @escaping (BrowserToolbarAction) -> Void,
+        onDuplicateTabs: ((Int) -> Void)? = nil
+    ) {
+        buttons = actions.map { ToolbarButtonDescriptor(action: $0) }
+        self.enabledActions = enabledActions
+        self.onAction = onAction
+        self.onDuplicateTabs = onDuplicateTabs
+    }
+
+    init(
+        entries: [TrailingToolbarEntry],
+        enabledActions: Set<BrowserToolbarAction>? = nil,
+        onAction: @escaping (BrowserToolbarAction) -> Void,
+        onDuplicateTabs: ((Int) -> Void)? = nil
+    ) {
+        buttons = entries.map(ToolbarButtonDescriptor.init(entry:))
+        self.enabledActions = enabledActions
+        self.onAction = onAction
+        self.onDuplicateTabs = onDuplicateTabs
+    }
+
     private func isActionEnabled(_ action: BrowserToolbarAction) -> Bool {
         guard let allowed = enabledActions else { return true }
         return allowed.contains(action)
@@ -27,26 +66,26 @@ struct BrowserToolbarView: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            ForEach(actions, id: \.self) { action in
+            ForEach(buttons, id: \.action) { button in
                 Button {
-                    guard isActionEnabled(action) else { return }
-                    if action == .duplicateToTabsMenu {
+                    guard isActionEnabled(button.action) else { return }
+                    if button.action == .duplicateToTabsMenu {
                         showingDuplicatePopover.toggle()
                     } else {
-                        onAction(action)
+                        onAction(button.action)
                     }
                 } label: {
                     BrowserToolbarIconButtonStyle(
-                        systemImageName: action.systemImageName,
-                        tooltip: action.accessibilityTitle
+                        systemImageName: button.action.systemImageName,
+                        tooltip: button.tooltip
                     )
                 }
                 .buttonStyle(.plain)
-                .disabled(!isActionEnabled(action))
-                .opacity(isActionEnabled(action) ? 1 : 0.5)
+                .disabled(!isActionEnabled(button.action))
+                .opacity(isActionEnabled(button.action) ? 1 : 0.5)
                 .popover(
                     isPresented: Binding(
-                        get: { showingDuplicatePopover && action == .duplicateToTabsMenu },
+                        get: { showingDuplicatePopover && button.action == .duplicateToTabsMenu },
                         set: { showingDuplicatePopover = $0 }
                     ),
                     arrowEdge: .bottom
@@ -56,11 +95,11 @@ struct BrowserToolbarView: View {
                         onDuplicateTabs?(count)
                     }
                 }
-                .accessibilityLabel(action.accessibilityTitle)
-                .help(action.tooltip)
+                .accessibilityLabel(button.tooltip)
+                .help(button.tooltip)
                 .onHover { isHovering in
                     withAnimation(.easeInOut(duration: 0.12)) {
-                        hovering = isHovering ? action : (hovering == action ? nil : hovering)
+                        hovering = isHovering ? button.action : (hovering == button.action ? nil : hovering)
                     }
                 }
             }
