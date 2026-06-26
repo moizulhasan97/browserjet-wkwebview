@@ -74,6 +74,19 @@ final class WindowManager {
         windowController.applyFixedContentSize(NSSize(width: 440, height: height))
     }
 
+    /// Content-driven resize for compact bootstrap chrome views (spinner, alerts, shift license)
+    func resizeActivationWindowForCompactContent(_ size: CGSize) {
+        guard size.height > 0, let windowController = activationWC else { return }
+        let maxScreenHeight = NSScreen.main.map {
+            $0.visibleFrame.height - ActivationWindowMetrics.screenVerticalMargin
+        } ?? size.height
+        let height = min(size.height, max(120, maxScreenHeight))
+        if let last = lastActivationFullFormContentHeight, abs(last - height) < 1 { return }
+        lastActivationFullFormContentHeight = height
+        let width = max(320, size.width)
+        windowController.applyFixedContentSize(NSSize(width: width, height: height))
+    }
+
     func resizeActivationFullFormToContentHeight(_ measuredHeight: CGFloat) {
         guard measuredHeight > 0,
             let windowController = activationWC else { return }

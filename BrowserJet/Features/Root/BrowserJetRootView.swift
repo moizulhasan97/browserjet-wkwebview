@@ -74,6 +74,7 @@ struct BrowserJetRootView: View {
                 activationFullChrome
             } else {
                 compactBootstrapChrome
+                    .reportActivationContentSize()
             }
         }
         .onAppear { syncActivationWindowFrame() }
@@ -179,8 +180,12 @@ struct BrowserJetRootView: View {
     }
 
     private func applyActivationContentSize(_ size: CGSize) {
-        guard phase == .activation, size.height > 0 else { return }
-        WindowManager.shared.resizeActivationFullFormToContentHeight(size.height)
+        guard size.height > 0 else { return }
+        if phase == .activation {
+            WindowManager.shared.resizeActivationFullFormToContentHeight(size.height)
+        } else {
+            WindowManager.shared.resizeActivationWindowForCompactContent(size)
+        }
     }
 
     private func handleBootstrapVerifyOutcome(_ outcome: VerifyOutcome?) {
