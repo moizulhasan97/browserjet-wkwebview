@@ -17,6 +17,7 @@ final class WindowManager {
         case progressOnly
         case infoAlert
         case shiftLicense
+        case forceUpdate
 
         var contentSize: NSSize? {
             switch self {
@@ -28,6 +29,8 @@ final class WindowManager {
                 return NSSize(width: 480, height: 580)
             case .shiftLicense:
                 return NSSize(width: 520, height: 460)
+            case .forceUpdate:
+                return NSSize(width: 480, height: 580)
             }
         }
     }
@@ -44,7 +47,7 @@ final class WindowManager {
     private init() {}
 
     func resizeActivationWindowToFit(_ layout: ActivationLayout) {
-        guard let windowController = activationWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
+        guard let windowController = activationWC else { return }
 
         let compact = layout != .fullForm
         windowController.setActivationChromeBorderless(compact)
@@ -54,9 +57,26 @@ final class WindowManager {
         windowController.applyFixedContentSize(contentSize)
     }
 
+    func resizeActivationWindowForForceUpdateIfPresent() {
+        guard activationWC != nil else { return }
+        resizeActivationWindowToFit(.forceUpdate)
+    }
+
+    /// Called with the measured height of the standalone force-update card so the
+    /// window can be shrunk to exactly fit the card (no gradient padding visible).
+    func resizeActivationWindowForForceUpdateContent(_ measuredHeight: CGFloat) {
+        guard measuredHeight > 0, let windowController = activationWC else { return }
+        let height = ActivationWindowMetrics.clampedContentHeight(measuredHeight)
+        // Only resize (and re-center) once per unique height to avoid repeated
+        // window.center() calls that would snap the window back on every layout pass.
+        if let last = lastActivationFullFormContentHeight, abs(last - height) < 1 { return }
+        lastActivationFullFormContentHeight = height
+        windowController.applyFixedContentSize(NSSize(width: 440, height: height))
+    }
+
     func resizeActivationFullFormToContentHeight(_ measuredHeight: CGFloat) {
         guard measuredHeight > 0,
-            let windowController = activationWC as? BrowserJetWindowController<BrowserJetWindowRoot> else { return }
+            let windowController = activationWC else { return }
 
         let height = ActivationWindowMetrics.clampedContentHeight(measuredHeight)
 

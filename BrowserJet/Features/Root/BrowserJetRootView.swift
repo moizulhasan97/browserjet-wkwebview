@@ -17,12 +17,24 @@ struct BrowserJetWindowRoot: View {
     var body: some View {
         Group {
             if forceGate.isBlocking {
-                ForceUpdateBlockingOverlay()
+                ForceUpdateBlockingOverlay(isDimmed: false)
             } else {
                 BrowserJetRootView()
             }
         }
         .browserJetThemedRoot(themeManager: themeManager, colorScheme: colorScheme)
+        .onAppear {
+            guard forceGate.isBlocking else { return }
+            WindowManager.shared.resizeActivationWindowForForceUpdateIfPresent()
+        }
+        .onPreferenceChange(ActivationMeasuredContentSizeKey.self) { size in
+            guard forceGate.isBlocking, size.height > 0 else { return }
+            WindowManager.shared.resizeActivationWindowForForceUpdateContent(size.height)
+        }
+        .onChange(of: forceGate.isBlocking) { _, isBlocking in
+            guard isBlocking else { return }
+            WindowManager.shared.resizeActivationWindowForForceUpdateIfPresent()
+        }
     }
 }
 
