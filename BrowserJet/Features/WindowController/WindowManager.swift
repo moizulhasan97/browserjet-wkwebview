@@ -40,6 +40,13 @@ final class WindowManager {
     private var browserWC: (any ShowableWindowController)?
 
     private var lastActivationFullFormContentHeight: CGFloat?
+    /// Set once compact card measurement has driven the window size. Prevents a subsequent
+    /// `syncActivationWindowFrame` (e.g. from an `onChange(of: phase)` that fires after
+    /// `onPreferenceChange`) from overwriting the content-driven size back to a fixed layout size.
+    private var compactContentSizeApplied = false
+    /// Tracks the last compact layout applied so we can detect real layout transitions and
+    /// reset `compactContentSizeApplied` when the user moves to a different compact state.
+    private var lastAppliedCompactLayout: ActivationLayout?
 
     private let browserWindowSize = NSSize(width: 1200, height: 780)
     private let browserCornerRadius: CGFloat = 18
@@ -53,7 +60,21 @@ final class WindowManager {
         windowController.setActivationChromeBorderless(compact)
 
         guard let contentSize = layout.contentSize else { return }
+
+        // For compact layouts, content measurement via reportActivationContentSize drives the
+        // final size. Skip the fixed-size override if measurement has already run for this
+        // specific layout — we don't want a later `syncActivationWindowFrame` call to undo it.
+        // If the layout has changed (e.g. spinner → payment alert), reset and apply the new
+        // initial size so the incoming card can be measured fresh.
+        if compact {
+            if compactContentSizeApplied, lastAppliedCompactLayout == layout { return }
+            lastAppliedCompactLayout = layout
+        } else {
+            lastAppliedCompactLayout = nil
+        }
+
         lastActivationFullFormContentHeight = nil
+        compactContentSizeApplied = false
         windowController.applyFixedContentSize(contentSize)
     }
 
@@ -74,8 +95,10 @@ final class WindowManager {
         windowController.applyFixedContentSize(NSSize(width: 440, height: height))
     }
 
-    /// Content-driven resize for compact bootstrap chrome views (spinner, alerts, shift license)
-    func resizeActivationWindowForCompactContent(_ size: CGSize) {
+    /// Content-driven resize for compact bootstrap chrome views (spinner, alerts, shift license).
+    /// `layout` is the caller's current `activationWindowLayout` — recorded here so that a
+    /// subsequent `syncActivationWindowFrame` call for the same layout is correctly skipped.
+    func resizeActivationWindowForCompactContent(_ size: CGSize, layout: ActivationLayout) {
         guard size.height > 0, let windowController = activationWC else { return }
         let maxScreenHeight = NSScreen.main.map {
             $0.visibleFrame.height - ActivationWindowMetrics.screenVerticalMargin
@@ -83,6 +106,8 @@ final class WindowManager {
         let height = min(size.height, max(120, maxScreenHeight))
         if let last = lastActivationFullFormContentHeight, abs(last - height) < 1 { return }
         lastActivationFullFormContentHeight = height
+        compactContentSizeApplied = true
+        lastAppliedCompactLayout = layout
         let width = max(320, size.width)
         windowController.applyFixedContentSize(NSSize(width: width, height: height))
     }
@@ -146,6 +171,9 @@ final class WindowManager {
     ) {
         activationWC?.close()
         activationWC = nil
+        lastActivationFullFormContentHeight = nil
+        compactContentSizeApplied = false
+        lastAppliedCompactLayout = nil
 
         showLauncher(
             themeManager: themeManager,
