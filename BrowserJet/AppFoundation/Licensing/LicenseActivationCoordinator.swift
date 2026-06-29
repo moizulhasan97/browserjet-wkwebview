@@ -49,13 +49,6 @@ final class LicenseActivationCoordinator {
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
 
-        // Task { @MainActor in
-        //     async let gpp: Void = PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
-        //     async let vpr: Void = VPN1ProxyRepository.shared.refreshFromNetworkIfPossible()
-        //     await gpp
-        //     await vpr
-        // }
-
         await licenseService.updateKeyInBackendIfNeeded(key: key, keyValueStore: keyValueStore)
 
         if userSession.userStatus == .rejected {
@@ -63,7 +56,9 @@ final class LicenseActivationCoordinator {
         }
 
         let emailForURL = (keyValueStore.object(forKey: StorageKeys.userEmail) as? String) ?? response.userEmail
-        let paymentURL = LicenseEndpoint.licenseExpiredPaymentURL(email: emailForURL)
+        let paymentURL = await MainActor.run {
+            URLConstants.licenseExpiredPaymentURL(email: emailForURL)
+        }
 
         if userSession.trialExpired {
             AppLogger.info("PAYMENT URL FOR TRIAL EXPIRED: \(paymentURL)")
