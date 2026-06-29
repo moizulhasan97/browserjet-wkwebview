@@ -97,25 +97,4 @@ enum LicenseEndpoint: EndpointProtocol {
             .init(name: "machine", value: payload.oldPcName)
         ]
     }
-
-    // used for both
-    // - license renewal
-    // - trial expired
-    static func licenseExpiredPaymentURL(email: String) -> URL {
-        let base = APIEnvironment.current.baseURL
-        var components = URLComponents(url: base.appendingPathComponent("License.ashx"), resolvingAgainstBaseURL: false)
-        components?.queryItems = [
-            URLQueryItem(name: "Method", value: "PayRenewal"),
-            URLQueryItem(name: "Email", value: email.trimmingCharacters(in: .whitespacesAndNewlines))
-        ]
-        return components?.url ?? base.appendingPathComponent("License.ashx")
-    }
 }
-
-// private extension CharacterSet {
-//    static var urlQueryValueAllowed: CharacterSet {
-//        var set = CharacterSet.urlQueryAllowed
-//        set.remove(charactersIn: "&+")
-//        return set
-//    }
-// }
