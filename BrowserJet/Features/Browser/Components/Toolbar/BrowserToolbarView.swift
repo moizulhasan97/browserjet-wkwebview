@@ -21,7 +21,6 @@ struct ToolbarButtonDescriptor: Hashable {
         tooltip = entry.tooltip
     }
 }
-
 struct BrowserToolbarView: View {
     @Environment(\.appTheme)
     private var theme
@@ -58,7 +57,6 @@ struct BrowserToolbarView: View {
         self.onAction = onAction
         self.onDuplicateTabs = onDuplicateTabs
     }
-
     private func isActionEnabled(_ action: BrowserToolbarAction) -> Bool {
         guard let allowed = enabledActions else { return true }
         return allowed.contains(action)

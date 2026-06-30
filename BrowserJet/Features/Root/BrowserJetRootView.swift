@@ -17,12 +17,24 @@ struct BrowserJetWindowRoot: View {
     var body: some View {
         Group {
             if forceGate.isBlocking {
-                ForceUpdateBlockingOverlay()
+                ForceUpdateBlockingOverlay(isDimmed: false)
             } else {
                 BrowserJetRootView()
             }
         }
         .browserJetThemedRoot(themeManager: themeManager, colorScheme: colorScheme)
+        .onAppear {
+            guard forceGate.isBlocking else { return }
+            WindowManager.shared.resizeActivationWindowForForceUpdateIfPresent()
+        }
+        .onPreferenceChange(ActivationMeasuredContentSizeKey.self) { size in
+            guard forceGate.isBlocking, size.height > 0 else { return }
+            WindowManager.shared.resizeActivationWindowForForceUpdateContent(size.height)
+        }
+        .onChange(of: forceGate.isBlocking) { _, isBlocking in
+            guard isBlocking else { return }
+            WindowManager.shared.resizeActivationWindowForForceUpdateIfPresent()
+        }
     }
 }
 
@@ -62,6 +74,7 @@ struct BrowserJetRootView: View {
                 activationFullChrome
             } else {
                 compactBootstrapChrome
+                    .reportActivationContentSize()
             }
         }
         .onAppear { syncActivationWindowFrame() }
@@ -99,7 +112,14 @@ struct BrowserJetRootView: View {
         }
         .frame(width: ActivationWindowMetrics.contentWidth)
         .fixedSize(horizontal: false, vertical: true)
-        .reportActivationContentSize()
+        // onGeometryChange fires reliably on every size change (grow and shrink),
+        // unlike GeometryReader+PreferenceKey which can miss shrink events due to
+        // stale max-accumulation in the preference tree.
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.size.height
+        } action: { newHeight in
+            WindowManager.shared.resizeActivationFullFormToContentHeight(newHeight)
+        }
     }
 
     @ViewBuilder private var compactBootstrapChrome: some View {
@@ -167,8 +187,10 @@ struct BrowserJetRootView: View {
     }
 
     private func applyActivationContentSize(_ size: CGSize) {
-        guard phase == .activation, size.height > 0 else { return }
-        WindowManager.shared.resizeActivationFullFormToContentHeight(size.height)
+        // Full-form sizing is now handled by onGeometryChange inside activationFullChrome directly.
+        // This handler covers compact bootstrap states only.
+        guard size.height > 0, phase != .activation else { return }
+        WindowManager.shared.resizeActivationWindowForCompactContent(size, layout: activationWindowLayout)
     }
 
     private func handleBootstrapVerifyOutcome(_ outcome: VerifyOutcome?) {
