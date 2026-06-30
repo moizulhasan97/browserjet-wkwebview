@@ -37,14 +37,9 @@ enum URLConstants {
         makeServerURL(path: remoteConfig.buyMoreLicensesPath, email: email)
     }
 
-    static func renewalPaymentURL(email: String?) -> URL? {
-        guard let base = baseServerURL else { return nil }
-        var components = URLComponents(url: base.appendingPathComponent("License.ashx"), resolvingAgainstBaseURL: false)
-        components?.queryItems = [
-            URLQueryItem(name: "Method", value: "PayRenewal"),
-            URLQueryItem(name: "Email", value: (email ?? "").trimmingCharacters(in: .whitespacesAndNewlines))
-        ]
-        return components?.url
+    static func licenseExpiredPaymentURL(email: String?) -> URL {
+        makeServerURL(path: remoteConfig.browserPurchasePath, email: email)
+        ?? fallbackLicenseExpiredPaymentURL(email: email)
     }
 
     private static func makeServerURL(path: String, email: String?) -> URL? {
@@ -58,5 +53,13 @@ enum URLConstants {
             URLQueryItem(name: "Email", value: (email ?? "").trimmingCharacters(in: .whitespacesAndNewlines))
         ]
         return components?.url
+    }
+
+    private static func fallbackLicenseExpiredPaymentURL(email: String?) -> URL {
+        var components = URLComponents(string: "https://service.browserjet.com/BrowserPurchase.aspx")!
+        components.queryItems = [
+            URLQueryItem(name: "Email", value: (email ?? "").trimmingCharacters(in: .whitespacesAndNewlines))
+        ]
+        return components.url!
     }
 }

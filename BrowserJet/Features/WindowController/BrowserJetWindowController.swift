@@ -177,9 +177,20 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
     func applyFixedContentSize(_ size: NSSize) {
         guard let window else { return }
 
+        // When the window uses fullSizeContentView with a visible title bar, SwiftUI
+        // lays out content within the safe area (below the title bar). The measured
+        // SwiftUI height therefore excludes the title bar. Add the title bar height so
+        // the window is tall enough for both the title bar overlay and the full content.
+        let titleBarAdjustment: CGFloat = {
+            guard window.styleMask.contains(.titled),
+                  window.styleMask.contains(.fullSizeContentView) else { return 0 }
+            return max(0, window.frame.height - window.contentLayoutRect.height)
+        }()
+
+        let adjusted = NSSize(width: size.width, height: size.height + titleBarAdjustment)
         let clamped = NSSize(
-            width: max(200, size.width),
-            height: max(120, size.height)
+            width: max(200, adjusted.width),
+            height: max(120, adjusted.height)
         )
 
         window.setContentSize(clamped)

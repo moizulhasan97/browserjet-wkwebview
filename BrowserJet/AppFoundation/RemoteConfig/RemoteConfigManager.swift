@@ -61,6 +61,10 @@ final class RemoteConfigManager: ObservableObject {
         normalizedPath(for: .buyMoreLicensesPath, fallback: "/MoreLicenses.aspx")
     }
 
+    var browserPurchasePath: String {
+        normalizedPath(for: .browserPurchasePath, fallback: "/BrowserPurchase.aspx")
+    }
+
     var contactUsPath: String {
         normalizedPath(for: .contactUsPath, fallback: "/contact")
     }
@@ -187,6 +191,8 @@ final class RemoteConfigManager: ObservableObject {
             return "/contact" as NSString
         case .twitterURL:
             return "https://twitter.com/browserjet" as NSString
+        case .browserPurchasePath:
+            return "/BrowserPurchase.aspx" as NSString
         default:
             // The earlier helpers exhaustively handle the boolean/version cases.
             return "" as NSString

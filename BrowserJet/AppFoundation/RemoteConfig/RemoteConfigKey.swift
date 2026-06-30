@@ -22,4 +22,5 @@ enum RemoteConfigKey: String, CaseIterable, Sendable {
     case contactUsPath = "contact_us_path"
     case twitterURL = "twitter_url"
     case shortcutsEnabled = "shortcuts_enabled"
+    case browserPurchasePath = "browser_purchase_path"
 }
