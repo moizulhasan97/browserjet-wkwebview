@@ -77,7 +77,11 @@ final class RemoteConfigManager: ObservableObject {
     var buyMoreLicensesPath: String {
         normalizedPath(for: .buyMoreLicensesPath, fallback: "/MoreLicenses.aspx")
     }
-    
+
+    var browserPurchasePath: String {
+        normalizedPath(for: .browserPurchasePath, fallback: "/BrowserPurchase.aspx")
+    }
+
     var contactUsPath: String {
         normalizedPath(for: .contactUsPath, fallback: "/contact")
     }
