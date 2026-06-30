@@ -9,7 +9,7 @@
 // https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
 
 #include "Base.xcconfig"
-MARKETING_VERSION = 4.0.0
-CURRENT_PROJECT_VERSION = 8
+MARKETING_VERSION = 4.0.1
+CURRENT_PROJECT_VERSION = 9
 APP_CONFIGURATION_NAME = Production
 SWIFTLINT_ENABLED = YES
