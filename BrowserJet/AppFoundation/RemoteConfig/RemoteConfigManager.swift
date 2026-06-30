@@ -90,10 +90,6 @@ final class RemoteConfigManager: ObservableObject {
         normalizedURLString(for: .twitterURL, fallback: "https://twitter.com/browserjet")
     }
     
-    var browserPurchasePath: String {
-        normalizedPath(for: .browserPurchasePath, fallback: "/BrowserPurchase.aspx")
-    }
-    
     private func normalizedURLString(for key: RemoteConfigKey, fallback: String) -> String {
         let raw = string(for: key).trimmingCharacters(in: .whitespacesAndNewlines)
         guard let url = URL(string: raw),
