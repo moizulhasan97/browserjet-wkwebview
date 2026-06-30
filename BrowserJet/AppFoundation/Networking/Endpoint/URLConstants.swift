@@ -10,38 +10,38 @@ import Foundation
 @MainActor
 enum URLConstants {
     private static var remoteConfig: RemoteConfigManager { .shared }
-    
+
     static var baseServerURL: URL? {
         URL(string: remoteConfig.baseServerURL)
     }
-    
+
     static var baseURL: URL? {
         URL(string: remoteConfig.baseWebURL)
     }
-    
+
     static var contactUsURL: URL? {
         guard let base = baseURL else { return nil }
         let trimmedPath = remoteConfig.contactUsPath.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
         return base.appendingPathComponent(trimmedPath)
     }
-    
+
     static var twitterURL: URL? {
         URL(string: remoteConfig.twitterURL)
     }
-    
+
     static func updateYourCardURL(email: String?) -> URL? {
         makeServerURL(path: remoteConfig.updateCardPath, email: email)
     }
-    
+
     static func buyMoreLicensesURL(email: String?) -> URL? {
         makeServerURL(path: remoteConfig.buyMoreLicensesPath, email: email)
     }
-    
+
     static func licenseExpiredPaymentURL(email: String?) -> URL {
         makeServerURL(path: remoteConfig.browserPurchasePath, email: email)
         ?? fallbackLicenseExpiredPaymentURL(email: email)
     }
-    
+
     private static func makeServerURL(path: String, email: String?) -> URL? {
         guard let base = baseServerURL else { return nil }
         let trimmedPath = path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
@@ -54,7 +54,7 @@ enum URLConstants {
         ]
         return components?.url
     }
-    
+
     private static func fallbackLicenseExpiredPaymentURL(email: String?) -> URL {
         var components = URLComponents(string: "https://service.browserjet.com/BrowserPurchase.aspx")!
         components.queryItems = [
