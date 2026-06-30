@@ -138,7 +138,10 @@ struct BrowserRootView: View {
 
     private func handleToolbarAction(_ action: BrowserToolbarAction) {
         guard let tab = state.selectedTab else { return }
-        if state.isTrialLockActive, action != .reload, action != .stop { return }
+        if state.isTrialLockActive {
+            let allowed = Set(menu.trailing).union([.reload, .stop])
+            guard allowed.contains(action) else { return }
+        }
 
         if handleNavigationAction(action, on: tab) { return }
         handleStateAction(action)
@@ -179,14 +182,6 @@ struct BrowserRootView: View {
     }
 
     private func handleMoreMenuItem(_ item: BrowserMoreMenuItem) {
-        //        if item == .about {
-        //            AboutBrowserJetWindowController.shared.show(
-        //                themeManager: themeManager,
-        //                colorScheme: colorScheme
-        //            )
-        //            return
-        //        }
-        if state.isTrialLockActive { return }
         switch item {
         case .paymentCard:
             openIfAvailable(URLConstants.updateYourCardURL(email: currentUserEmail))
@@ -199,8 +194,6 @@ struct BrowserRootView: View {
         case .changeKey:
             changeKeyViewModel.reset()
             showChangeKeySheet = true
-            //        case .about:
-            //            break
         }
     }
 

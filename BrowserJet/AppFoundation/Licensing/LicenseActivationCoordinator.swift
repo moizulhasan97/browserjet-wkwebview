@@ -84,6 +84,20 @@ final class LicenseActivationCoordinator {
             throw AppError.notVerified
         }
 
+        // Paid → trial downgrade prevention (Remote Config controlled)
+        let shouldPreventDowngrade = await MainActor.run {
+            RemoteConfigManager.shared.preventPaidToTrialDowngrade
+        }
+        
+        if shouldPreventDowngrade {
+            let currentUserKind = await MainActor.run {
+                LicenseAccountStore.shared.userKind
+            }
+            if currentUserKind == .paid, response.userKind == .trial {
+                throw AppError.downgradeNotAllowed
+            }
+        }
+        
         if let previousKey = keyValueStore.object(forKey: StorageKeys.licenseKey) as? String,
             previousKey != trimmedKey {
             await MainActor.run {

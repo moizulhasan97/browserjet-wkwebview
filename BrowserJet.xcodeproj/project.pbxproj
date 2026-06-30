@@ -19,6 +19,7 @@
 		AF127CF62F9AC70400EE34E2 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = AF127CF52F9AC70400EE34E2 /* FirebaseRemoteConfig */; };
 		AF127CF92F9ACA8100EE34E2 /* RemoteConfigKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127CF82F9ACA7E00EE34E2 /* RemoteConfigKey.swift */; };
 		AF127CFB2F9ACA9800EE34E2 /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127CFA2F9ACA9600EE34E2 /* RemoteConfigManager.swift */; };
+		AF127D012F9ACAB100EE34E2 /* MenuConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127D002F9ACAB000EE34E2 /* MenuConfig.swift */; };
 		AF127D022F9FBA8800EE34E2 /* AppUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF127D012F9FBA8200EE34E2 /* AppUtils.swift */; };
 		AF20170C2FAB366F0058705F /* ChangeLicenseKeyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */; };
 		AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */; };
@@ -182,6 +183,7 @@
 		AF127CEA2F9AC61D00EE34E2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AF127CF82F9ACA7E00EE34E2 /* RemoteConfigKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigKey.swift; sourceTree = "<group>"; };
 		AF127CFA2F9ACA9600EE34E2 /* RemoteConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigManager.swift; sourceTree = "<group>"; };
+		AF127D002F9ACAB000EE34E2 /* MenuConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuConfig.swift; sourceTree = "<group>"; };
 		AF127CFD2F9FAFC500EE34E2 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		AF127CFF2F9FAFD400EE34E2 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		AF127D012F9FBA8200EE34E2 /* AppUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 			isa = PBXGroup;
 			children = (
 				AF127CFA2F9ACA9600EE34E2 /* RemoteConfigManager.swift */,
+				AF127D002F9ACAB000EE34E2 /* MenuConfig.swift */,
 				AF127CF82F9ACA7E00EE34E2 /* RemoteConfigKey.swift */,
 			);
 			path = RemoteConfig;
@@ -1189,6 +1192,7 @@
 				AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */,
 				AF9D9BBE2FB8F3A70047856A /* SettingsViewModel.swift in Sources */,
 				AF127CFB2F9ACA9800EE34E2 /* RemoteConfigManager.swift in Sources */,
+				AF127D012F9ACAB100EE34E2 /* MenuConfig.swift in Sources */,
 				AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */,
 				AFE976502F55343100D270C8 /* ShiftViewModel.swift in Sources */,
 				AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */,

@@ -24,12 +24,9 @@ struct BrowserChromeView: View {
     /// The trailing edge mirrors it.
     private static let trafficLightAlignedInset: CGFloat = 14
 
-    private var enabledToolbarActions: Set<BrowserToolbarAction>? {
+    /// When trial/license expired, navigation controls stay visible but only reload/stop are interactive.
+    private var leadingEnabledActions: Set<BrowserToolbarAction>? {
         state.isTrialLockActive ? [.reload, .stop] : nil
-    }
-
-    private var visibleMoreMenuItems: [BrowserMoreMenuItem] {
-        state.isTrialLockActive ? /*[.about] :*/ [] : menu.moreMenuItems
     }
 
     var body: some View {
@@ -38,7 +35,7 @@ struct BrowserChromeView: View {
                 LeadingToolbar(
                     tab: tab,
                     actions: menu.leading,
-                    enabledActions: enabledToolbarActions,
+                    enabledActions: leadingEnabledActions,
                     onAction: onToolbarAction
                 )
 
@@ -51,7 +48,7 @@ struct BrowserChromeView: View {
             } else {
                 BrowserToolbarView(
                     actions: menu.leading,
-                    enabledActions: enabledToolbarActions,
+                    enabledActions: leadingEnabledActions,
                     onAction: onToolbarAction
                 )
             }
@@ -63,13 +60,12 @@ struct BrowserChromeView: View {
             HStack(spacing: 10) {
                 BrowserToolbarView(
                     actions: menu.trailing,
-                    enabledActions: enabledToolbarActions,
                     onAction: onToolbarAction,
                     onDuplicateTabs: onDuplicateTabs
                 )
                 BrowserMoreMenuView(
-                    items: visibleMoreMenuItems,
-                    isDisabled: state.isTrialLockActive
+                    items: menu.moreMenuItems,
+                    isDisabled: menu.moreMenuItems.isEmpty
                 ) { item in
                     onMoreMenuSelect(item)
                 }

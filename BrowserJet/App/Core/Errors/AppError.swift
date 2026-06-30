@@ -58,7 +58,7 @@ enum AppError: Error, LocalizedError {
     // MARK: - Auth / License
     case notVerified
     case licenseExpired
-
+    case downgradeNotAllowed
     // MARK: - Network
     case authenticationError
     case badRequest
@@ -98,7 +98,9 @@ enum AppError: Error, LocalizedError {
             return "Key not verified. Please try again."
         case .licenseExpired:
             return "All licences have expired. Please renew your purchase."
-
+        case .downgradeNotAllowed:
+            return "You cannot switch from a paid key to a trial key."
+            
         case .authenticationError:
             return "You need to be authenticated first."
         case .badRequest:

@@ -73,6 +73,19 @@ final class RemoteConfigManager: ObservableObject {
         normalizedURLString(for: .twitterURL, fallback: "https://twitter.com/browserjet")
     }
 
+    var preventPaidToTrialDowngrade: Bool {
+        bool(for: .preventPaidToTrialDowngrade)
+    }
+
+    var resolvedMenuConfig: MenuConfig {
+        let raw = string(for: .menuConfig)
+        guard let decoded = MenuConfig.decode(from: raw) else {
+            AppLogger.warning("RemoteConfig: menu_config invalid — using bundled defaults")
+            return .default
+        }
+        return decoded
+    }
+
     private func normalizedURLString(for key: RemoteConfigKey, fallback: String) -> String {
         let raw = string(for: key).trimmingCharacters(in: .whitespacesAndNewlines)
         guard let url = URL(string: raw),
@@ -154,6 +167,8 @@ final class RemoteConfigManager: ObservableObject {
             return false as NSNumber
         case .shortcutsEnabled:
             return true as NSNumber
+        case .preventPaidToTrialDowngrade:
+            return true as NSNumber
         default:
             return nil
         }
@@ -193,6 +208,8 @@ final class RemoteConfigManager: ObservableObject {
             return "https://twitter.com/browserjet" as NSString
         case .browserPurchasePath:
             return "/BrowserPurchase.aspx" as NSString
+        case .menuConfig:
+            return Self.defaultMenuConfigJSON as NSString
         default:
             // The earlier helpers exhaustively handle the boolean/version cases.
             return "" as NSString
@@ -209,4 +226,8 @@ final class RemoteConfigManager: ObservableObject {
             """)
         }
     }
+
+    private static let defaultMenuConfigJSON = """
+    {"schemaVersion":1,"trailingToolbarItems":[{"id":"new_tab","enabled":true,"order":1,"availableWhenTrialLocked":false},{"id":"burn_ip_reload","enabled":true,"order":2,"availableWhenTrialLocked":false},{"id":"duplicate_tab","enabled":true,"order":3,"availableWhenTrialLocked":false},{"id":"refresh_all_tabs","enabled":true,"order":4,"availableWhenTrialLocked":false},{"id":"screenshot","enabled":true,"order":5,"availableWhenTrialLocked":true}],"moreMenuItems":[{"id":"payment_card","enabled":true,"order":1,"availableWhenTrialLocked":false},{"id":"buy_more_licenses","enabled":true,"order":2,"availableWhenTrialLocked":false},{"id":"contact_us","enabled":true,"order":3,"availableWhenTrialLocked":true},{"id":"change_key","enabled":true,"order":4,"availableWhenTrialLocked":true},{"id":"twitter","enabled":true,"order":5,"availableWhenTrialLocked":true}]}
+    """
 }

@@ -250,10 +250,18 @@ final class WindowManager {
             maxBrowserTabs: appConfiguration.maxBrowserTabs
         )
 
-        let rootView = BrowserRootView(state: state, menu: .default)
-            .environmentObject(themeManager)
-            .environmentObject(sessionManager)
-            .environmentObject(LicenseAccountStore.shared)
+        let menu = BrowserMenuBuilder.from(
+            config: RemoteConfigManager.shared.resolvedMenuConfig,
+            isTrialLocked: false
+        )
+
+        let rootView = browserRootView(
+            state: state,
+            menu: menu,
+            themeManager: themeManager,
+            sessionManager: sessionManager,
+            appConfiguration: appConfiguration
+        )
 
         let browserWindowController = BrowserJetWindowController(
             content: rootView,
@@ -296,11 +304,18 @@ final class WindowManager {
             isTrialLockActive: true
         )
 
-        let rootView = BrowserRootView(state: state, menu: .default)
-            .environmentObject(themeManager)
-            .environmentObject(sessionManager)
-            .environmentObject(LicenseAccountStore.shared)
-            .environment(\.appConfiguration, appConfiguration)
+        let menu = BrowserMenuBuilder.from(
+            config: RemoteConfigManager.shared.resolvedMenuConfig,
+            isTrialLocked: true
+        )
+
+        let rootView = browserRootView(
+            state: state,
+            menu: menu,
+            themeManager: themeManager,
+            sessionManager: sessionManager,
+            appConfiguration: appConfiguration
+        )
 
         activationWC?.close()
         activationWC = nil
@@ -324,6 +339,21 @@ final class WindowManager {
 
         browserWC = browserWindowController
         browserWC?.show()
+    }
+
+    @MainActor
+    private func browserRootView(
+        state: BrowserWindowState,
+        menu: BrowserMenuBuilder,
+        themeManager: ThemeManager,
+        sessionManager: SessionManager,
+        appConfiguration: AppConfiguration
+    ) -> some View {
+        BrowserRootView(state: state, menu: menu)
+            .environmentObject(themeManager)
+            .environmentObject(sessionManager)
+            .environmentObject(LicenseAccountStore.shared)
+            .environment(\.appConfiguration, appConfiguration)
     }
 
     private static func hasStoredLicenseKey() -> Bool {
