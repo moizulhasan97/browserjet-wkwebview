@@ -249,6 +249,7 @@ final class WindowManager {
             initialTabCount: request.numberOfTabs,
             maxBrowserTabs: appConfiguration.maxBrowserTabs
         )
+
         let rootView = BrowserRootView(state: state, menu: .default)
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
@@ -294,7 +295,7 @@ final class WindowManager {
             maxBrowserTabs: appConfiguration.maxBrowserTabs,
             isTrialLockActive: true
         )
-        
+
         let rootView = BrowserRootView(state: state, menu: .default)
             .environmentObject(themeManager)
             .environmentObject(sessionManager)

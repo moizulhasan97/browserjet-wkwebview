@@ -30,15 +30,15 @@ enum AppUpdatePolicy {
     @MainActor
     static func evaluateBuild(remote: RemoteConfigManager = .shared) -> AppUpdatePolicyResult {
         let forceEnabled = remote.bool(for: .forceUpdateEnabled)
-        let config = remote.resolvedAppUpdateConfig
+        let optionalEnabled = remote.bool(for: .optionalUpdateEnabled)
 
         let minimum = VersionTuple(
-            marketing: config.minimumSupportedVersion,
-            build: config.minimumSupportedBuildVersion
+            marketing: remote.string(for: .macOSAppMinimumSupportedMarketingVersion),
+            build: remote.number(for: .macOSAppMinimumSupportedBuildVersion).intValue
         )
         let latest = VersionTuple(
-            marketing: config.latestVersion,
-            build: config.latestBuildVersion
+            marketing: remote.string(for: .macOSAppLatestMarketingVersion),
+            build: remote.number(for: .macOSAppLatestBuildVersion).intValue
         )
         let current = VersionTuple(
             marketing: AppUtils.getAppMarketingVersion(),
@@ -51,7 +51,7 @@ enum AppUpdatePolicy {
         AppLogger.info(
             """
             [AppUpdatePolicy] RC force_update_enabled=\(forceEnabled) \
-            optional_update_enabled=\(config.optionalUpdateEnabled)
+            optional_update_enabled=\(optionalEnabled)
             """
         )
 
@@ -68,7 +68,7 @@ enum AppUpdatePolicy {
             if forceEnabled {
                 return .forcedBelowLatest
             }
-            if config.optionalUpdateEnabled {
+            if optionalEnabled {
                 return .optionalUpdateAvailable
             }
             return .upToDate

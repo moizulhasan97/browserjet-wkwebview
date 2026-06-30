@@ -25,10 +25,11 @@ struct BrowserChromeView: View {
     private static let trafficLightAlignedInset: CGFloat = 14
 
     private var enabledToolbarActions: Set<BrowserToolbarAction>? {
-        state.isTrialLockActive ? menu.trialAllowedToolbarActions : nil
+        state.isTrialLockActive ? [.reload, .stop] : nil
     }
-    private var visibleMoreMenuEntries: [MoreMenuEntry] {
-        menu.visibleMoreMenuEntries(isTrialLocked: state.isTrialLockActive)
+
+    private var visibleMoreMenuItems: [BrowserMoreMenuItem] {
+        state.isTrialLockActive ? /*[.about] :*/ [] : menu.moreMenuItems
     }
 
     var body: some View {
@@ -61,14 +62,14 @@ struct BrowserChromeView: View {
 
             HStack(spacing: 10) {
                 BrowserToolbarView(
-                    entries: menu.trailingEntries,
+                    actions: menu.trailing,
                     enabledActions: enabledToolbarActions,
                     onAction: onToolbarAction,
                     onDuplicateTabs: onDuplicateTabs
                 )
                 BrowserMoreMenuView(
-                    entries: visibleMoreMenuEntries,
-                    isDisabled: false
+                    items: visibleMoreMenuItems,
+                    isDisabled: state.isTrialLockActive
                 ) { item in
                     onMoreMenuSelect(item)
                 }
