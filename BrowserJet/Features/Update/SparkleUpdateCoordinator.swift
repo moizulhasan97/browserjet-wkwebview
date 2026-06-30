@@ -38,9 +38,17 @@ final class SparkleUpdateCoordinator {
         case .afterRemoteConfigFetch:
             switch result {
             case .belowMinimum:
-                activateForceUpdateGate(forMinimum: true, logLabel: "below minimum — always required")
+                activateForceUpdateGate(
+                    requiredMarketingKey: .macOSAppMinimumSupportedMarketingVersion,
+                    requiredBuildKey: .macOSAppMinimumSupportedBuildVersion,
+                    logLabel: "below minimum — always required"
+                )
             case .forcedBelowLatest:
-                activateForceUpdateGate(forMinimum: false, logLabel: "below latest with force_update_enabled")
+                activateForceUpdateGate(
+                    requiredMarketingKey: .macOSAppLatestMarketingVersion,
+                    requiredBuildKey: .macOSAppLatestBuildVersion,
+                    logLabel: "below latest with force_update_enabled"
+                )
             case .optionalUpdateAvailable, .upToDate:
                 break
             }
@@ -59,17 +67,23 @@ final class SparkleUpdateCoordinator {
         }
     }
 
-    private func activateForceUpdateGate(forMinimum: Bool, logLabel: String) {
-        let config = RemoteConfigManager.shared.resolvedAppUpdateConfig
-        let reqMarketing = forMinimum ? config.minimumSupportedVersion : config.latestVersion
-        let reqBuild = forMinimum ? config.minimumSupportedBuildVersion : config.latestBuildVersion
+    private func activateForceUpdateGate(
+        requiredMarketingKey: RemoteConfigKey,
+        requiredBuildKey: RemoteConfigKey,
+        logLabel: String
+    ) {
+        let marketing = AppUtils.getAppMarketingVersion()
+        let build = AppUtils.getAppBuildVersion()
+        let remote = RemoteConfigManager.shared
+        let reqMarketing = remote.string(for: requiredMarketingKey)
+        let reqBuild = remote.number(for: requiredBuildKey).intValue
         AppLogger.info("SparkleUpdateCoordinator: \(logLabel) — activating forced update gate")
         ForceUpdateGate.shared.activateRequiredUpdate(
-            currentMarketing: AppUtils.getAppMarketingVersion(),
-            currentBuild: AppUtils.getAppBuildVersion(),
+            currentMarketing: marketing,
+            currentBuild: build,
             requiredMarketing: reqMarketing,
             requiredBuild: reqBuild,
-            manualDownloadURL: RemoteConfigManager.shared.resolvedManualDownloadURL
+            manualDownloadURL: remote.resolvedManualDownloadURL
         )
     }
 }

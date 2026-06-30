@@ -4,23 +4,21 @@
 //
 //  Created by Moiz Ul Hasan on 20/02/2026.
 //
+
 import SwiftUI
 
 struct BrowserMoreMenuView: View {
-    let entries: [MoreMenuEntry]
+    let items: [BrowserMoreMenuItem]
     var isDisabled: Bool = false
     let onSelect: (BrowserMoreMenuItem) -> Void
-    
+
     var body: some View {
         Menu {
-            ForEach(entries, id: \.item) { entry in
-                Button(entry.title) {
-                    onSelect(entry.item)
+            ForEach(items, id: \.self) { item in
+                Button(item.title) {
+                    onSelect(item)
                 }
-                .disabled(isDisabled)
-                .help(entry.tooltip)
-                .accessibilityLabel(entry.title)
-                .accessibilityHint(entry.tooltip)
+                .disabled(!item.isEnabled || isDisabled)
             }
         } label: {
             BrowserToolbarIconButtonStyle(
@@ -29,15 +27,15 @@ struct BrowserMoreMenuView: View {
             )
         }
         .buttonStyle(.plain)
-        .disabled(isDisabled || entries.isEmpty)
+        .disabled(isDisabled)
         .opacity(isDisabled ? 0.5 : 1)
         .accessibilityLabel("More")
     }
 }
 
 #Preview("More Menu") {
-    BrowserMoreMenuView(entries: BrowserMenuBuilder.default.moreMenuEntries) { item in
-        AppLogger.debug("Selected: \(item)")
+    BrowserMoreMenuView(items: BrowserMenuBuilder.default.moreMenuItems) { item in
+        AppLogger.debug("Selected: \(item.title)")
     }
     .padding()
     .background(Color.gray.opacity(0.2))

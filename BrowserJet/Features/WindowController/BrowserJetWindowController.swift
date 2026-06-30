@@ -176,6 +176,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
 
     func applyFixedContentSize(_ size: NSSize) {
         guard let window else { return }
+
         // When the window uses fullSizeContentView with a visible title bar, SwiftUI
         // lays out content within the safe area (below the title bar). The measured
         // SwiftUI height therefore excludes the title bar. Add the title bar height so
