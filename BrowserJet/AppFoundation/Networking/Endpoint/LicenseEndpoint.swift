@@ -17,7 +17,7 @@ enum LicenseEndpoint: EndpointProtocol {
         let email: String
         let oldPcName: String
     }
-
+    
     case verifyKey(key: String, pcName: String, macAddress: String)
     case generateKey(email: String, password: String)
     case checkExpiry(String)
@@ -27,13 +27,13 @@ enum LicenseEndpoint: EndpointProtocol {
     case updateToDatabase(key: String)
     case forgotPassword(email: String)
     case verifyMac(key: String, macAddress: String)
-
+    
     var baseURL: URL { APIEnvironment.current.baseURL }
-
+    
     var path: String { "/License.ashx" }
-
+    
     var method: HTTPMethod { .get }
-
+    
     var queryItems: [URLQueryItem]? {
         switch self {
         case let .verifyKey(key, pcName, macAddress):
@@ -61,22 +61,22 @@ enum LicenseEndpoint: EndpointProtocol {
             ]
         case let .shiftLicenseKey(payload):
             return shiftQueryItems(methodName: "updatemachine", payload: payload)
-
+            
         case let .sendEmailToUser(payload):
             return shiftQueryItems(methodName: "Sendmailtouser", payload: payload)
-
+            
         case let .updateToDatabase(key):
             return [
                 .init(name: "MethodName", value: "UpdateToMac"),
                 .init(name: "UserKey", value: key)
             ]
-
+            
         case let .forgotPassword(email):
             return [
                 .init(name: "Email", value: email),
                 .init(name: "GetKey", value: "Forgot")
             ]
-
+            
         case let .verifyMac(key, macAddress):
             return [
                 .init(name: "MAC", value: macAddress),
@@ -86,7 +86,7 @@ enum LicenseEndpoint: EndpointProtocol {
             ]
         }
     }
-
+    
     private func shiftQueryItems(methodName: String, payload: ShiftPayload) -> [URLQueryItem] {
         [
             .init(name: "MethodName", value: methodName),
@@ -97,7 +97,7 @@ enum LicenseEndpoint: EndpointProtocol {
             .init(name: "machine", value: payload.oldPcName)
         ]
     }
-
+    
     // used for both
     // - license renewal
     // - trial expired
@@ -111,11 +111,3 @@ enum LicenseEndpoint: EndpointProtocol {
         return components?.url ?? base.appendingPathComponent("License.ashx")
     }
 }
-
-// private extension CharacterSet {
-//    static var urlQueryValueAllowed: CharacterSet {
-//        var set = CharacterSet.urlQueryAllowed
-//        set.remove(charactersIn: "&+")
-//        return set
-//    }
-// }

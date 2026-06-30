@@ -52,6 +52,7 @@
 		AF498D2F2F4AB8AD004C03B3 /* ProxyPoolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */; };
 		AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */; };
 		AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */; };
+		AFACTIV22F60002004C03B3 /* ActivationWindowSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */; };
 		AF498D362F4B6D69004C03B3 /* ActivationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */; };
 		AF498D3A2F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */; };
 		AF56EEE52F3CBADE00E49C58 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */; };
@@ -79,6 +80,7 @@
 		AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */; };
 		AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */; };
 		AF56EF232F3E07B500E49C58 /* BrowserJetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */; };
+		AFACC1012FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */; };
 		AF56EF252F3E086A00E49C58 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF242F3E086A00E49C58 /* WindowManager.swift */; };
 		AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */; };
 		AF56EF2A2F3E131200E49C58 /* VPNType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF56EF292F3E131100E49C58 /* VPNType.swift */; };
@@ -98,6 +100,7 @@
 		AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CC2F4376A200B33610 /* AuthProxy.swift */; };
 		AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5CE2F4376C000B33610 /* TabModel.swift */; };
 		AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */; };
+		AF69F5F12F43A3700B33610 /* BrowserWindowState+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */; };
 		AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */; };
 		AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */; };
 		AF69F5E12F43A30A00B33610 /* LaunchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5E02F43A30A00B33610 /* LaunchRequest.swift */; };
@@ -220,6 +223,7 @@
 		AF498D2E2F4AB8AC004C03B3 /* ProxyPoolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyPoolService.swift; sourceTree = "<group>"; };
 		AF498D302F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticAuthProxyProvider.swift; sourceTree = "<group>"; };
 		AF498D332F4B6D61004C03B3 /* ActivationRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationRootView.swift; sourceTree = "<group>"; };
+		AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationWindowSizing.swift; sourceTree = "<group>"; };
 		AF498D352F4B6D68004C03B3 /* ActivationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationViewModel.swift; sourceTree = "<group>"; };
 		AF498D392F4B7119004C03B3 /* BrowserJetSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetSegmentedPicker.swift; sourceTree = "<group>"; };
 		AF56EEE42F3CBADE00E49C58 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
@@ -247,6 +251,7 @@
 		AF56EF1C2F3E045B00E49C58 /* LauncherTabPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherTabPreset.swift; sourceTree = "<group>"; };
 		AF56EF1F2F3E061600E49C58 /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		AF56EF222F3E07B500E49C58 /* BrowserJetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetWindowController.swift; sourceTree = "<group>"; };
+		AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabStripTitlebarAccessoryController.swift; sourceTree = "<group>"; };
 		AF56EF242F3E086A00E49C58 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		AF56EF262F3E0B7D00E49C58 /* LauncherRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherRootView.swift; sourceTree = "<group>"; };
 		AF56EF282F3E0F1400E49C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -267,6 +272,7 @@
 		AF69F5CC2F4376A200B33610 /* AuthProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProxy.swift; sourceTree = "<group>"; };
 		AF69F5CE2F4376C000B33610 /* TabModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabModel.swift; sourceTree = "<group>"; };
 		AF69F5D12F437A3600B33610 /* BrowserWindowState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserWindowState.swift; sourceTree = "<group>"; };
+		AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserWindowState+Screenshot.swift"; sourceTree = "<group>"; };
 		AF69F5D52F437AA600B33610 /* ProxyConfigurationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyConfigurationFactory.swift; sourceTree = "<group>"; };
 		AF69F5DA2F437B7F00B33610 /* BrowserTabsStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabsStripView.swift; sourceTree = "<group>"; };
 		AF69F5E02F43A30A00B33610 /* LaunchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRequest.swift; sourceTree = "<group>"; };

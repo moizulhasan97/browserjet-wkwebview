@@ -17,7 +17,6 @@ final class RemoteConfigManager: ObservableObject {
     @Published private(set) var lastFetchError: Error?
     
     private let remoteConfig: RemoteConfig
-    
     /// Manual download page: Remote Config when fetch succeeded and value is valid; otherwise `MACOS_DOWNLOAD_URL` from Info.plist (xcconfig).
     var resolvedManualDownloadURL: URL? {
         if lastFetchError != nil {
@@ -62,7 +61,6 @@ final class RemoteConfigManager: ObservableObject {
         }
         return .default
     }
-    
     // MARK: - URL Config Accessors
     var baseServerURL: String {
         normalizedURLString(for: .baseServerURL, fallback: "https://service.browserjet.com")
@@ -79,7 +77,11 @@ final class RemoteConfigManager: ObservableObject {
     var buyMoreLicensesPath: String {
         normalizedPath(for: .buyMoreLicensesPath, fallback: "/MoreLicenses.aspx")
     }
-    
+
+    var browserPurchasePath: String {
+        normalizedPath(for: .browserPurchasePath, fallback: "/BrowserPurchase.aspx")
+    }
+
     var contactUsPath: String {
         normalizedPath(for: .contactUsPath, fallback: "/contact")
     }
@@ -141,7 +143,6 @@ final class RemoteConfigManager: ObservableObject {
         
         remoteConfig.setDefaults(Self.defaultValues())
     }
-    
     /// Fetches from the server and applies activated values when appropriate.
     func fetchAndActivate() async {
         lastFetchError = nil
@@ -153,7 +154,6 @@ final class RemoteConfigManager: ObservableObject {
             lastFetchStatus = nil
         }
     }
-    
     // MARK: - Typed accessors
     func bool(for key: RemoteConfigKey) -> Bool {
         remoteConfig.configValue(forKey: key.rawValue).boolValue
@@ -170,7 +170,6 @@ final class RemoteConfigManager: ObservableObject {
     func data(for key: RemoteConfigKey) -> Data {
         remoteConfig.configValue(forKey: key.rawValue).dataValue
     }
-    
     // MARK: - Defaults
     private static func defaultValues() -> [String: NSObject] {
         var map: [String: NSObject] = [:]
@@ -214,6 +213,8 @@ final class RemoteConfigManager: ObservableObject {
             return "https://twitter.com/browserjet" as NSString
         case .menuConfig:
             return MenuConfiguration.defaultJSONString as NSString
+        case .browserPurchasePath:
+            return "/BrowserPurchase.aspx" as NSString
         default:
             // The earlier helpers exhaustively handle the boolean/version cases.
             return "" as NSString
