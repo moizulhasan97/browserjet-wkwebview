@@ -92,3 +92,8 @@ playground.xcworkspace
 *.app
 *.pkg
 *.zip
+
+####################################
+# Cursor AI
+####################################
+.cursor/
