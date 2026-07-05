@@ -42,6 +42,14 @@ final class CrashReportingManager: CrashReporting {
         crashlytics.setUserID(userID ?? "")
     }
 
+    func setUserID(fromLicenseKey licenseKey: String?) {
+        guard let licenseKey, !licenseKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            setUserID(nil)
+            return
+        }
+        setUserID(licenseKey.sha256Prefix(16))
+    }
+
     func checkForUnsentReports(completion: @escaping (Bool) -> Void) {
         crashlytics.checkForUnsentReports { hasReports in
             completion(hasReports)

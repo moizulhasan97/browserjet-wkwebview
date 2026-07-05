@@ -25,6 +25,7 @@
 		AF1682462FF9E20800BE5D69 /* CrashReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682452FF9E20800BE5D69 /* CrashReporting.swift */; };
 		AF1682482FF9E25B00BE5D69 /* CrashReportingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682472FF9E25B00BE5D69 /* CrashReportingManager.swift */; };
 		AF16824B2FF9E76E00BE5D69 /* CrashTestTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16824A2FF9E76E00BE5D69 /* CrashTestTrigger.swift */; };
+		AF1682532FFA0C4C00BE5D69 /* String+SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */; };
 		AF20170C2FAB366F0058705F /* ChangeLicenseKeyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */; };
 		AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */; };
 		AF2017102FAB498E0058705F /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170F2FAB498D0058705F /* URLConstants.swift */; };
@@ -198,6 +199,7 @@
 		AF1682452FF9E20800BE5D69 /* CrashReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporting.swift; sourceTree = "<group>"; };
 		AF1682472FF9E25B00BE5D69 /* CrashReportingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReportingManager.swift; sourceTree = "<group>"; };
 		AF16824A2FF9E76E00BE5D69 /* CrashTestTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashTestTrigger.swift; sourceTree = "<group>"; };
+		AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA256.swift"; sourceTree = "<group>"; };
 		AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyViewModel.swift; sourceTree = "<group>"; };
 		AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyView.swift; sourceTree = "<group>"; };
 		AF20170F2FAB498D0058705F /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
@@ -404,6 +406,14 @@
 			path = CrashReporting;
 			sourceTree = "<group>";
 		};
+		AF1682522FFA0C4C00BE5D69 /* String */ = {
+			isa = PBXGroup;
+			children = (
+				AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */,
+			);
+			path = String;
+			sourceTree = "<group>";
+		};
 		AF20170A2FAB36640058705F /* ChangeKey */ = {
 			isa = PBXGroup;
 			children = (
@@ -515,6 +525,7 @@
 		AF56EEF12F3CCDA900E49C58 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				AF1682522FFA0C4C00BE5D69 /* String */,
 				AF99BFBA2FA009AA0096FAE9 /* Bundle+Version.swift */,
 				AF56EF1E2F3E061300E49C58 /* Int */,
 				AF56EEF22F3CCDAE00E49C58 /* Color */,
@@ -1325,6 +1336,7 @@
 				AF99BFC32FA013370096FAE9 /* ForceUpdateGate.swift in Sources */,
 				AF9D9BB02FB7FA860047856A /* ShortcutsAvailability.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
+				AF1682532FFA0C4C00BE5D69 /* String+SHA256.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
 				AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */,
 				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,

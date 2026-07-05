@@ -42,6 +42,8 @@ struct BrowserJet: App {
         SparkleUpdateCoordinator.shared.register(updaterController)
         FirebaseApp.configure()
         CrashReportingManager.shared.configure()
+        let storedLicenseKey = UserDefaults.standard.object(forKey: StorageKeys.licenseKey) as? String
+        CrashReportingManager.shared.setUserID(fromLicenseKey: storedLicenseKey)
         CrashReportingManager.shared.log("app: launch started")
         Task { @MainActor in
             await RemoteConfigManager.shared.fetchAndActivate()

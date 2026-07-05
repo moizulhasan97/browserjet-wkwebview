@@ -23,6 +23,9 @@ protocol CrashReporting {
     /// Associates reports with a non-PII identifier (hashed license key or anonymous install ID).
     func setUserID(_ userID: String?)
 
+    /// Hashes the given license key and associates reports with that hash. 
+    func setUserID(fromLicenseKey licenseKey: String?)
+
     /// Reports whether an unsent report exists from a previous session.
     func checkForUnsentReports(completion: @escaping (Bool) -> Void)
 

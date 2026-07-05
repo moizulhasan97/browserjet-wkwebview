@@ -48,6 +48,7 @@ final class LicenseActivationCoordinator {
 
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
+        CrashReportingManager.shared.setUserID(fromLicenseKey: key)
         await licenseService.updateKeyInBackendIfNeeded(key: key, keyValueStore: keyValueStore)
 
         if userSession.userStatus == .rejected {
@@ -105,6 +106,7 @@ final class LicenseActivationCoordinator {
 
         keyValueStore.set(trimmedKey, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
+        CrashReportingManager.shared.setUserID(fromLicenseKey: trimmedKey)
 
         AppLogger.info("LicenseActivationCoordinator: change key successful, relaunch required")
     }
