@@ -22,6 +22,13 @@
 		AF12923D2FEDF37800EA3CB4 /* MenuConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12923C2FEDF37800EA3CB4 /* MenuConfiguration.swift */; };
 		AF1682412FF9C42D00BE5D69 /* FeatureFlagsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682402FF9C42D00BE5D69 /* FeatureFlagsConfig.swift */; };
 		AF1682432FF9CA2C00BE5D69 /* EndpointsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682422FF9CA2C00BE5D69 /* EndpointsConfig.swift */; };
+		AF1682462FF9E20800BE5D69 /* CrashReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682452FF9E20800BE5D69 /* CrashReporting.swift */; };
+		AF1682482FF9E25B00BE5D69 /* CrashReportingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682472FF9E25B00BE5D69 /* CrashReportingManager.swift */; };
+		AF16824B2FF9E76E00BE5D69 /* CrashTestTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16824A2FF9E76E00BE5D69 /* CrashTestTrigger.swift */; };
+		AF1682532FFA0C4C00BE5D69 /* String+SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */; };
+		AF16825F2FFA161400BE5D69 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16825B2FFA161400BE5D69 /* Analytics.swift */; };
+		AF1682602FFA161400BE5D69 /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16825C2FFA161400BE5D69 /* AnalyticsEvent.swift */; };
+		AF1682612FFA161400BE5D69 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16825D2FFA161400BE5D69 /* AnalyticsManager.swift */; };
 		AF20170C2FAB366F0058705F /* ChangeLicenseKeyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */; };
 		AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */; };
 		AF2017102FAB498E0058705F /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170F2FAB498D0058705F /* URLConstants.swift */; };
@@ -192,6 +199,13 @@
 		AF12923C2FEDF37800EA3CB4 /* MenuConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuConfiguration.swift; sourceTree = "<group>"; };
 		AF1682402FF9C42D00BE5D69 /* FeatureFlagsConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsConfig.swift; sourceTree = "<group>"; };
 		AF1682422FF9CA2C00BE5D69 /* EndpointsConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointsConfig.swift; sourceTree = "<group>"; };
+		AF1682452FF9E20800BE5D69 /* CrashReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporting.swift; sourceTree = "<group>"; };
+		AF1682472FF9E25B00BE5D69 /* CrashReportingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReportingManager.swift; sourceTree = "<group>"; };
+		AF16824A2FF9E76E00BE5D69 /* CrashTestTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashTestTrigger.swift; sourceTree = "<group>"; };
+		AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA256.swift"; sourceTree = "<group>"; };
+		AF16825B2FFA161400BE5D69 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		AF16825C2FFA161400BE5D69 /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
+		AF16825D2FFA161400BE5D69 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyViewModel.swift; sourceTree = "<group>"; };
 		AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyView.swift; sourceTree = "<group>"; };
 		AF20170F2FAB498D0058705F /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
@@ -389,6 +403,33 @@
 			path = RemoteConfig;
 			sourceTree = "<group>";
 		};
+		AF1682442FF9E1FE00BE5D69 /* CrashReporting */ = {
+			isa = PBXGroup;
+			children = (
+				AF1682472FF9E25B00BE5D69 /* CrashReportingManager.swift */,
+				AF1682452FF9E20800BE5D69 /* CrashReporting.swift */,
+			);
+			path = CrashReporting;
+			sourceTree = "<group>";
+		};
+		AF1682522FFA0C4C00BE5D69 /* String */ = {
+			isa = PBXGroup;
+			children = (
+				AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */,
+			);
+			path = String;
+			sourceTree = "<group>";
+		};
+		AF16825E2FFA161400BE5D69 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				AF16825B2FFA161400BE5D69 /* Analytics.swift */,
+				AF16825C2FFA161400BE5D69 /* AnalyticsEvent.swift */,
+				AF16825D2FFA161400BE5D69 /* AnalyticsManager.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
 		AF20170A2FAB36640058705F /* ChangeKey */ = {
 			isa = PBXGroup;
 			children = (
@@ -500,6 +541,7 @@
 		AF56EEF12F3CCDA900E49C58 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				AF1682522FFA0C4C00BE5D69 /* String */,
 				AF99BFBA2FA009AA0096FAE9 /* Bundle+Version.swift */,
 				AF56EF1E2F3E061300E49C58 /* Int */,
 				AF56EEF22F3CCDAE00E49C58 /* Color */,
@@ -707,6 +749,8 @@
 		AF69F5C62F43762400B33610 /* AppFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				AF16825E2FFA161400BE5D69 /* Analytics */,
+				AF1682442FF9E1FE00BE5D69 /* CrashReporting */,
 				AF9D9BAE2FB7FA080047856A /* Shortcuts */,
 				AF127CF72F9ACA7800EE34E2 /* RemoteConfig */,
 				AF6086482F732CAA003931E2 /* Licensing */,
@@ -853,6 +897,7 @@
 		AF9D9BCB2FB90200047856A /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				AF16824A2FF9E76E00BE5D69 /* CrashTestTrigger.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -1100,6 +1145,7 @@
 				AFF3EAC22F3CAC3A00C6F08E /* Frameworks */,
 				AF12923B2FEDEC0A00EA3CB4 /* Firebase Plist Script */,
 				AFF3EAC32F3CAC3A00C6F08E /* Resources */,
+				AF1682492FF9E51B00BE5D69 /* Crashlytics Upload Symbols */,
 			);
 			buildRules = (
 			);
@@ -1189,6 +1235,26 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\nset -eu\n\nRESOURCES_DIR=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nmkdir -p \"${RESOURCES_DIR}\"\n\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n  cp \"${PROJECT_DIR}/BrowserJet/App/GoogleService-Info-dev.plist\" \\\n     \"${RESOURCES_DIR}/GoogleService-Info.plist\"\nelse\n  cp \"${PROJECT_DIR}/BrowserJet/App/GoogleService-Info.plist\" \\\n     \"${RESOURCES_DIR}/GoogleService-Info.plist\"\nfi\n";
 		};
+		AF1682492FF9E51B00BE5D69 /* Crashlytics Upload Symbols */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Crashlytics Upload Symbols";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\nset -eu\n\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n  \"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nfi\n";
+		};
 		AFF3EB402F3CACD900C6F08E /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1246,6 +1312,7 @@
 				AFF3EB332F3CACB100C6F08E /* LogLevel.swift in Sources */,
 				AFE9764C2F5530AC00D270C8 /* ShiftLicenseView.swift in Sources */,
 				AF401AC32F4D1C5B00EF265C /* AppUpdateEndpoint.swift in Sources */,
+				AF1682462FF9E20800BE5D69 /* CrashReporting.swift in Sources */,
 				AF2017172FABFDBE0058705F /* AboutBrowserJetWindowController.swift in Sources */,
 				AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */,
 				AF8267132FA9256A0036EFD5 /* BrowserLicenseBackgroundMonitor.swift in Sources */,
@@ -1256,6 +1323,9 @@
 				AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */,
 				AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */,
 				AF9D9BB52FB7FFA80047856A /* ActiveBrowserStateProvider.swift in Sources */,
+				AF16825F2FFA161400BE5D69 /* Analytics.swift in Sources */,
+				AF1682602FFA161400BE5D69 /* AnalyticsEvent.swift in Sources */,
+				AF1682612FFA161400BE5D69 /* AnalyticsManager.swift in Sources */,
 				AF401AAF2F4D1A5B00EF265C /* APIError.swift in Sources */,
 				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
 				AF9D9BC22FB8FA490047856A /* ThemeWindowAppearance.swift in Sources */,
@@ -1286,6 +1356,7 @@
 				AF99BFC32FA013370096FAE9 /* ForceUpdateGate.swift in Sources */,
 				AF9D9BB02FB7FA860047856A /* ShortcutsAvailability.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
+				AF1682532FFA0C4C00BE5D69 /* String+SHA256.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
 				AF401AA82F4CF17000EF265C /* LoadingOverlayView.swift in Sources */,
 				AF56EF272F3E0B7D00E49C58 /* LauncherRootView.swift in Sources */,
@@ -1340,6 +1411,7 @@
 				AF401ABD2F4D1BC800EF265C /* LicenseEndpoint.swift in Sources */,
 				AF99BFC92FA27D550096FAE9 /* DatatudePoolConfig.swift in Sources */,
 				AF69F5E52F43A3B200B33610 /* BrowserRootView.swift in Sources */,
+				AF1682482FF9E25B00BE5D69 /* CrashReportingManager.swift in Sources */,
 				AF401ACC2F4D2C8400EF265C /* PersistedLicense.swift in Sources */,
 				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,
 				AF69F5E12F43A30A00B33610 /* LaunchRequest.swift in Sources */,
@@ -1350,6 +1422,7 @@
 				AF2017152FABFDA00058705F /* AboutBrowserJetView.swift in Sources */,
 				AF99BFBF2FA00AD90096FAE9 /* CheckForUpdatesView.swift in Sources */,
 				AF69F5E32F43A32100B33610 /* LauncherSettings+LaunchRequest.swift in Sources */,
+				AF16824B2FF9E76E00BE5D69 /* CrashTestTrigger.swift in Sources */,
 				AF2017132FABFD380058705F /* AboutBrowserJetDisplayModel.swift in Sources */,
 				AF99BFC52FA013500096FAE9 /* ForceUpdateBlockingOverlay.swift in Sources */,
 				AFF643F52FBBA8AD00D975A6 /* AddressBarURLResolver.swift in Sources */,

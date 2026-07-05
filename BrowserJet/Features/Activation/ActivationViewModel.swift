@@ -68,11 +68,15 @@ final class ActivationViewModel: ObservableObject {
 
             defer { isLoading = false }
 
+            AnalyticsManager.shared.log(.licenseVerifyAttempted)
             do {
                 let key = licenseKey.trimmingCharacters(in: .whitespacesAndNewlines)
-                verifyOutcome = try await coordinator.completeActivation(key: key)
+                let outcome = try await coordinator.completeActivation(key: key)
+                verifyOutcome = outcome
+                AnalyticsManager.shared.log(.licenseVerifySucceeded(outcome: Self.analyticsOutcomeName(outcome)))
             } catch {
                 errorMessage = error.localizedDescription
+                AnalyticsManager.shared.log(.licenseVerifyFailed(reason: Self.analyticsFailureReason(error)))
             }
         }
     }
@@ -87,14 +91,18 @@ final class ActivationViewModel: ObservableObject {
 
             defer { isLoading = false }
 
+            AnalyticsManager.shared.log(.trialSignupAttempted)
             do {
                 let cleanEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
-                verifyOutcome = try await coordinator.generateKeyAndActivate(
+                let outcome = try await coordinator.generateKeyAndActivate(
                     email: cleanEmail,
                     password: password
                 )
+                verifyOutcome = outcome
+                AnalyticsManager.shared.log(.trialSignupSucceeded)
             } catch {
                 errorMessage = error.localizedDescription
+                AnalyticsManager.shared.log(.trialSignupFailed(reason: Self.analyticsFailureReason(error)))
             }
         }
     }
@@ -117,5 +125,25 @@ final class ActivationViewModel: ObservableObject {
 
     func forgotPasswordTapped() {
         showRecoverAccountSheet = true
+        AnalyticsManager.shared.log(.forgotPasswordTapped)
+    }
+
+    // MARK: - Analytics helpers
+    private static func analyticsOutcomeName(_ outcome: VerifyOutcome) -> String {
+        switch outcome {
+        case .success: return "success"
+        case .shiftRequired: return "shift_required"
+        case .trialExpired: return "trial_expired"
+        case .licenseExpired: return "license_expired"
+        }
+    }
+    
+    private static func analyticsFailureReason(_ error: Error) -> String {
+        switch error {
+        case AppError.invalidInput: return "invalid_input"
+        case AppError.notVerified: return "not_verified"
+        case is APIError: return "api_error"
+        default: return "other"
+        }
     }
 }

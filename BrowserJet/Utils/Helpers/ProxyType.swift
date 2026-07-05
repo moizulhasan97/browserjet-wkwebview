@@ -49,6 +49,23 @@ extension ProxyType {
             }
         }
     }
+    
+    /// Diagnostic-only identifier for crash reporting — more specific than `statusTitle`.
+    var diagnosticIdentifier: String {
+        switch self {
+        case .local:
+            return "Local"
+        case .proxy(let source):
+            switch source {
+            case .builtIn(let vpn, let region):
+                return "\(vpn.rawValue.uppercased()) (\(region.rawValue))"
+            case .premium(let vpn, let region):
+                return "Premium \(vpn.rawValue.uppercased()) (\(region.rawValue))"
+            case .custom:
+                return "Custom"
+            }
+        }
+    }
 
     /// Temporary resolver (until API + storage exists).
     /// - For now: local => nil, proxy => pick proxies[slot] else first proxy.

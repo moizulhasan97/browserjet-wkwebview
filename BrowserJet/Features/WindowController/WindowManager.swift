@@ -161,6 +161,8 @@ final class WindowManager {
         }
 
         activationWC?.show()
+        CrashReportingManager.shared.log("window_manager: activation window shown")
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -209,6 +211,8 @@ final class WindowManager {
         )
 
         launcherWC?.show()
+        CrashReportingManager.shared.log("window_manager: launcher window shown")
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -238,6 +242,19 @@ final class WindowManager {
             ?? URL(string: "https://www.google.com")
             ?? URL(string: "about:blank")
             ?? URL(fileURLWithPath: "/")
+        
+        CrashReportingManager.shared.setCustomValue(
+            request.numberOfTabs,
+            forKey: CrashReportingManager.CustomKey.requestedTabCount
+        )
+        
+        AnalyticsManager.shared.log(
+            .browserLaunched(
+                connectionCategory: request.proxyType.statusTitle,
+                tabCount: request.numberOfTabs,
+                isolationMode: String(describing: request.isolationMode)
+            )
+        )
 
         let state = BrowserWindowState(
             proxyType: request.proxyType,
@@ -274,6 +291,8 @@ final class WindowManager {
         launcherWC = nil
 
         browserWC?.show()
+        CrashReportingManager.shared.log("window_manager: browser window shown (proxyType=\(request.proxyType.statusTitle))")
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -323,6 +342,8 @@ final class WindowManager {
 
         browserWC = browserWindowController
         browserWC?.show()
+        CrashReportingManager.shared.log("window_manager: browser window shown (trial-expired lock)")
+        refreshWindowCountCustomValue()
     }
 
     private static func hasStoredLicenseKey() -> Bool {
@@ -342,5 +363,13 @@ final class WindowManager {
         case .custom:
             return nil
         }
+    }
+    
+    private func refreshWindowCountCustomValue() {
+        let visibleWindowCount = NSApp.windows.filter { $0.isVisible && !$0.isSheet }.count
+        CrashReportingManager.shared.setCustomValue(
+            visibleWindowCount,
+            forKey: CrashReportingManager.CustomKey.openWindowCount
+        )
     }
 }

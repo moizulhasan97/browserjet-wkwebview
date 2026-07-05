@@ -48,12 +48,14 @@ enum BrowserLicenseBackgroundMonitor {
                 try await Task.sleep(nanoseconds: AppGraceShutdown.Timing.verifyKeyPollInterval)
                 let response = try await licenseService.verifyKey(key)
                 if response.userStatus == .rejected {
+                    CrashReportingManager.shared.log("license_monitor: mac/pc mismatch - forcing quit")
                     await presentMacVerificationFailedAndQuit()
                     return
                 }
                 let now = Date()
                 if Self.isAccessExpiredForBackground(response: response, referenceNow: now) {
                     AppLogger.info("BrowserLicenseBackgroundMonitor: access expired per VerifyKeyResponse")
+                    CrashReportingManager.shared.log("license_monitor: access expired - forcing quit")
                     await presentKeyExpiredAndQuit()
                     return
                 }

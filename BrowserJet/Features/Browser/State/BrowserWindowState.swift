@@ -7,6 +7,24 @@
 
 import Foundation
 import WebKit
+import Combine
+
+private enum BrowserWindowStateFault: Error, LocalizedError {
+    case tabNotFoundOnClose(UUID)
+    case tabNotFoundOnBurn(UUID)
+    case proxyPoolExhaustedForProxiedTab
+    
+    var errorDescription: String? {
+        switch self {
+        case .tabNotFoundOnClose(let id):
+            return "closeTab: no tab found for id \(id) - tab list out of sync with UI."
+        case .tabNotFoundOnBurn(let id):
+            return "burnProxyAndReload: no tab found for id \(id) - tab list out of sync with UI."
+        case .proxyPoolExhaustedForProxiedTab:
+            return "burnProxyAndReload: pool returned no replacement for a non-local, per-tab session."
+        }
+    }
+}
 
 @MainActor
 final class BrowserWindowState: ObservableObject {
@@ -32,8 +50,20 @@ final class BrowserWindowState: ObservableObject {
         makeNewDataStore(proxy: perWindowProxy)
     }()
 
-    @Published var tabs: [TabModel] = []
-    @Published var selectedTabID: UUID?
+    @Published var tabs: [TabModel] = [] {
+        didSet {
+            CrashReportingManager.shared.setCustomValue(
+                tabs.count,
+                forKey: CrashReportingManager.CustomKey.openTabCount
+            )
+        }
+    }
+    
+    @Published var selectedTabID: UUID? {
+        didSet { observeActiveTabURL() }
+    }
+    
+    private var activeTabURLCancellable: AnyCancellable?
 
     /// LIFO stack of recently closed tab URLs
     @Published private(set) var closedTabsStack: [URL] = []
@@ -62,7 +92,14 @@ final class BrowserWindowState: ObservableObject {
         self.initialURL = initialURL
         self.maxBrowserTabs = maxBrowserTabs
         self.isTrialLockActive = isTrialLockActive
-
+        CrashReportingManager.shared.setCustomValue(
+            String(describing: isolationMode),
+            forKey: CrashReportingManager.CustomKey.sessionIsolationMode
+        )
+        CrashReportingManager.shared.setCustomValue(
+            proxyType.diagnosticIdentifier,
+            forKey: CrashReportingManager.CustomKey.activeVPNType
+        )
         if !proxyType.isLocal {
             proxyPool.configure(provider: StaticAuthProxyProvider(proxies: proxies), rotation: rotation)
         }
@@ -75,6 +112,21 @@ final class BrowserWindowState: ObservableObject {
                 addTab(url: initialURL)
             }
         }
+    }
+    
+    private func observeActiveTabURL() {
+        activeTabURLCancellable = nil
+        guard let tab = tabs.first(where: { $0.id == selectedTabID }) else {
+            CrashReportingManager.shared.setCustomValue(nil, forKey: CrashReportingManager.CustomKey.activeTabURL)
+            return
+        }
+        activeTabURLCancellable = tab.$addressText
+            .sink { address in
+                CrashReportingManager.shared.setCustomValue(
+                    address,
+                    forKey: CrashReportingManager.CustomKey.activeTabURL
+                )
+            }
     }
 
     /// When trial/license expired we need one tab; addTab returns early when isTrialLockActive, so we add it here.
@@ -149,13 +201,17 @@ final class BrowserWindowState: ObservableObject {
 
         tabs.append(tab)
         selectedTabID = tab.id
+        AnalyticsManager.shared.log(.tabOpened)
     }
 
     /// Internal close — performs the actual removal. Use `requestCloseTab(_:)`
     /// for user-driven close so the last-tab quit confirmation is honored.
     func closeTab(_ tabID: UUID) {
         if isTrialLockActive && tabs.count <= 1 { return }
-        guard let index = tabs.firstIndex(where: { $0.id == tabID }) else { return }
+        guard let index = tabs.firstIndex(where: { $0.id == tabID }) else {
+            CrashReportingManager.shared.record(error: BrowserWindowStateFault.tabNotFoundOnClose(tabID))
+            return
+        }
         let closingTab = tabs[index]
         if let url = closingTab.webView.url ?? URL(string: closingTab.addressText) {
             pushClosedTab(url: url)
@@ -166,6 +222,7 @@ final class BrowserWindowState: ObservableObject {
         if !proxyType.isLocal {
             proxyPool.removeProxy(for: slot)
         }
+        AnalyticsManager.shared.log(.tabClosed)
         if tabs.isEmpty {
             addTab(url: initialURL)
         } else {
@@ -196,11 +253,15 @@ final class BrowserWindowState: ObservableObject {
             AppLogger.info("Burn ignored: not perTab isolation mode")
             return
         }
-        guard let tab = tabs.first(where: { $0.id == tabID }) else { return }
+        guard let tab = tabs.first(where: { $0.id == tabID }) else {
+            CrashReportingManager.shared.record(error: BrowserWindowStateFault.tabNotFoundOnBurn(tabID))
+            return
+        }
 
         let slot = tab.sessionSlot
         guard let newProxy = proxyPool.burnProxy(for: slot) else {
             AppLogger.warning("Burn failed: no proxies available")
+            CrashReportingManager.shared.record(error: BrowserWindowStateFault.proxyPoolExhaustedForProxiedTab)
             return
         }
 
@@ -217,6 +278,8 @@ final class BrowserWindowState: ObservableObject {
 
         // Replace the WKWebView entirely — this is the real burn
         tab.replaceWebView(newStore: newStore, url: currentURL, userAgent: userAgent)
+
+        AnalyticsManager.shared.log(.proxyBurned)
 
         AppLogger.info(
             """
@@ -264,6 +327,7 @@ extension BrowserWindowState {
         guard !isTrialLockActive else { return }
         guard let url = closedTabsStack.popLast() else { return }
         addTab(url: url)
+        AnalyticsManager.shared.log(.tabReopened)
     }
 
     // MARK: Tab navigation
@@ -335,6 +399,7 @@ extension BrowserWindowState {
         AppLogger.info(
             "Duplicated tab \(toCreate)x (requested \(count), room \(room)) -> \(url.absoluteString)"
         )
+        AnalyticsManager.shared.log(.tabDuplicated(count: toCreate))
         return toCreate
     }
 

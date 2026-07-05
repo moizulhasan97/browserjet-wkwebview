@@ -52,6 +52,7 @@ final class ShiftViewModel: ObservableObject {
             errorMessage = "Device name is missing."
             return
         }
+        AnalyticsManager.shared.log(.shiftLicenseTapped)
         Task {
             isLoading = true
             errorMessage = nil

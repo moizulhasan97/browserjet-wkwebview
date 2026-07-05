@@ -95,6 +95,7 @@ final class LauncherViewModel: ObservableObject {
             return
         }
         AppLogger.info("VPN toggled to: \(newValue)")
+        AnalyticsManager.shared.log(.vpnToggled(enabled: newValue))
         settings.isVPNEnabled = newValue
         if newValue {
             applyDefaultBuiltInVPNSelection()
@@ -153,6 +154,7 @@ final class LauncherViewModel: ObservableObject {
         }
         premiumProxyUnavailableMessage = nil
         AppLogger.info("Premium proxy toggled to: \(newValue)")
+        AnalyticsManager.shared.log(.premiumProxyToggled(enabled: newValue))
         settings.isPremiumProxyEnabled = newValue
     }
 

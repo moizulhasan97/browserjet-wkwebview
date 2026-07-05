@@ -97,6 +97,13 @@ final class SettingsViewModel: ObservableObject {
     }
 
     func save() {
+        // Field names only — never the URL value itself, per the Analytics privacy boundary.
+        var changedFields: [String] = []
+        if draftMode != committedMode { changedFields.append("appearance") }
+        if draftDefaultURL != committedDefaultURL { changedFields.append("default_url") }
+        if draftOpenBlankPage != committedOpenBlankPage { changedFields.append("open_blank_page") }
+        if draftConfirmBeforeQuit != committedConfirmBeforeQuit { changedFields.append("confirm_before_quit") }
+
         let urlPrefsChanged =
         draftDefaultURL != committedDefaultURL ||
         draftOpenBlankPage != committedOpenBlankPage
@@ -147,5 +154,9 @@ final class SettingsViewModel: ObservableObject {
             defaultURL: \(draftDefaultURL), confirmBeforeQuit: \(draftConfirmBeforeQuit)
             """
         )
+
+        if !changedFields.isEmpty {
+            AnalyticsManager.shared.log(.settingsSaved(changedFields: changedFields))
+        }
     }
 }
