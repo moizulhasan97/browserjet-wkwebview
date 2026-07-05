@@ -201,6 +201,7 @@ final class BrowserWindowState: ObservableObject {
 
         tabs.append(tab)
         selectedTabID = tab.id
+        AnalyticsManager.shared.log(.tabOpened)
     }
 
     /// Internal close — performs the actual removal. Use `requestCloseTab(_:)`
@@ -221,6 +222,7 @@ final class BrowserWindowState: ObservableObject {
         if !proxyType.isLocal {
             proxyPool.removeProxy(for: slot)
         }
+        AnalyticsManager.shared.log(.tabClosed)
         if tabs.isEmpty {
             addTab(url: initialURL)
         } else {
@@ -277,6 +279,8 @@ final class BrowserWindowState: ObservableObject {
         // Replace the WKWebView entirely — this is the real burn
         tab.replaceWebView(newStore: newStore, url: currentURL, userAgent: userAgent)
 
+        AnalyticsManager.shared.log(.proxyBurned)
+
         AppLogger.info(
             """
             Burned proxy for slot \(slot). \
@@ -323,6 +327,7 @@ extension BrowserWindowState {
         guard !isTrialLockActive else { return }
         guard let url = closedTabsStack.popLast() else { return }
         addTab(url: url)
+        AnalyticsManager.shared.log(.tabReopened)
     }
 
     // MARK: Tab navigation
@@ -394,6 +399,7 @@ extension BrowserWindowState {
         AppLogger.info(
             "Duplicated tab \(toCreate)x (requested \(count), room \(room)) -> \(url.absoluteString)"
         )
+        AnalyticsManager.shared.log(.tabDuplicated(count: toCreate))
         return toCreate
     }
 

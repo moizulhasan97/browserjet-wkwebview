@@ -42,15 +42,18 @@ struct BrowserJet: App {
         SparkleUpdateCoordinator.shared.register(updaterController)
         FirebaseApp.configure()
         CrashReportingManager.shared.configure()
+        AnalyticsManager.shared.configure()
         let storedLicenseKey = UserDefaults.standard.object(forKey: StorageKeys.licenseKey) as? String
         CrashReportingManager.shared.setUserID(fromLicenseKey: storedLicenseKey)
+        AnalyticsManager.shared.setUserID(fromLicenseKey: storedLicenseKey)
         CrashReportingManager.shared.log("app: launch started")
         Task { @MainActor in
             await RemoteConfigManager.shared.fetchAndActivate()
             let flags = RemoteConfigManager.shared.resolvedFeatureFlagsConfig
             CrashReportingManager.shared.applyRemoteFlag(enabled: flags.crashReportingEnabled)
+            AnalyticsManager.shared.applyRemoteFlag(enabled: flags.analyticsEnabled)
             CrashReportingManager.shared.setCustomValue(
-                flags.crashlyticsSummary,
+                flags.activeFeatureFlagsSummary,
                 forKey: CrashReportingManager.CustomKey.activeFeatureFlags
             )
             #if DEBUG

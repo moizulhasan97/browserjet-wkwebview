@@ -11,8 +11,6 @@ import Sparkle
 final class SparkleUpdaterDelegate: NSObject, SPUUpdaterDelegate {
     // MARK: - Update cycle
 
-    // TODO: Firebase — log update_check lifecycle (start/end, success/error).
-
     func updater(_ updater: SPUUpdater, didFinishUpdateCycleFor updateCheck: SPUUpdateCheck, error: Error?) {
         if let error {
             AppLogger.error("Sparkle: update cycle finished with error — \(error.localizedDescription)")
@@ -21,16 +19,18 @@ final class SparkleUpdaterDelegate: NSObject, SPUUpdaterDelegate {
             AppLogger.info("Sparkle: update cycle finished without error")
             CrashReportingManager.shared.log("sparkle: update cycle finished OK")
         }
+        AnalyticsManager.shared.log(.updateCheckCompleted(succeeded: error == nil))
     }
-    
+
     func updaterDidNotFindUpdate(_ updater: SPUUpdater) {
         AppLogger.info("Sparkle: no update found (or none offered)")
         CrashReportingManager.shared.log("sparkle: no update found")
     }
-    
+
     func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
         AppLogger.info("Sparkle: valid update found — \(item.displayVersionString)")
         CrashReportingManager.shared.log("sparkle: update found - \(item.displayVersionString)")
+        AnalyticsManager.shared.log(.updateFound(version: item.displayVersionString))
     }
     
     func updater(_ updater: SPUUpdater, failedToDownloadUpdate item: SUAppcastItem, error: Error) {

@@ -44,11 +44,16 @@ final class LicenseActivationCoordinator {
         licenseStore.save(response)
         await MainActor.run {
             LicenseAccountStore.shared.refresh()
+            AnalyticsManager.shared.setUserProperty(
+                LicenseAccountStore.shared.userKind?.rawValue,
+                forName: "user_kind"
+            )
         }
 
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
         CrashReportingManager.shared.setUserID(fromLicenseKey: key)
+        AnalyticsManager.shared.setUserID(fromLicenseKey: key)
         await licenseService.updateKeyInBackendIfNeeded(key: key, keyValueStore: keyValueStore)
 
         if userSession.userStatus == .rejected {
@@ -102,11 +107,16 @@ final class LicenseActivationCoordinator {
         licenseStore.save(response)
         await MainActor.run {
             LicenseAccountStore.shared.refresh()
+            AnalyticsManager.shared.setUserProperty(
+                LicenseAccountStore.shared.userKind?.rawValue,
+                forName: "user_kind"
+            )
         }
 
         keyValueStore.set(trimmedKey, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
         CrashReportingManager.shared.setUserID(fromLicenseKey: trimmedKey)
+        AnalyticsManager.shared.setUserID(fromLicenseKey: trimmedKey)
 
         AppLogger.info("LicenseActivationCoordinator: change key successful, relaunch required")
     }

@@ -247,6 +247,14 @@ final class WindowManager {
             request.numberOfTabs,
             forKey: CrashReportingManager.CustomKey.requestedTabCount
         )
+        
+        AnalyticsManager.shared.log(
+            .browserLaunched(
+                connectionCategory: request.proxyType.statusTitle,
+                tabCount: request.numberOfTabs,
+                isolationMode: String(describing: request.isolationMode)
+            )
+        )
 
         let state = BrowserWindowState(
             proxyType: request.proxyType,

@@ -26,6 +26,9 @@
 		AF1682482FF9E25B00BE5D69 /* CrashReportingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682472FF9E25B00BE5D69 /* CrashReportingManager.swift */; };
 		AF16824B2FF9E76E00BE5D69 /* CrashTestTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16824A2FF9E76E00BE5D69 /* CrashTestTrigger.swift */; };
 		AF1682532FFA0C4C00BE5D69 /* String+SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */; };
+		AF16825F2FFA161400BE5D69 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16825B2FFA161400BE5D69 /* Analytics.swift */; };
+		AF1682602FFA161400BE5D69 /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16825C2FFA161400BE5D69 /* AnalyticsEvent.swift */; };
+		AF1682612FFA161400BE5D69 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF16825D2FFA161400BE5D69 /* AnalyticsManager.swift */; };
 		AF20170C2FAB366F0058705F /* ChangeLicenseKeyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */; };
 		AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */; };
 		AF2017102FAB498E0058705F /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF20170F2FAB498D0058705F /* URLConstants.swift */; };
@@ -200,6 +203,9 @@
 		AF1682472FF9E25B00BE5D69 /* CrashReportingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReportingManager.swift; sourceTree = "<group>"; };
 		AF16824A2FF9E76E00BE5D69 /* CrashTestTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashTestTrigger.swift; sourceTree = "<group>"; };
 		AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA256.swift"; sourceTree = "<group>"; };
+		AF16825B2FFA161400BE5D69 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		AF16825C2FFA161400BE5D69 /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
+		AF16825D2FFA161400BE5D69 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		AF20170B2FAB366D0058705F /* ChangeLicenseKeyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyViewModel.swift; sourceTree = "<group>"; };
 		AF20170D2FAB36970058705F /* ChangeLicenseKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLicenseKeyView.swift; sourceTree = "<group>"; };
 		AF20170F2FAB498D0058705F /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
@@ -412,6 +418,16 @@
 				AF1682512FFA0C4C00BE5D69 /* String+SHA256.swift */,
 			);
 			path = String;
+			sourceTree = "<group>";
+		};
+		AF16825E2FFA161400BE5D69 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				AF16825B2FFA161400BE5D69 /* Analytics.swift */,
+				AF16825C2FFA161400BE5D69 /* AnalyticsEvent.swift */,
+				AF16825D2FFA161400BE5D69 /* AnalyticsManager.swift */,
+			);
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		AF20170A2FAB36640058705F /* ChangeKey */ = {
@@ -733,6 +749,7 @@
 		AF69F5C62F43762400B33610 /* AppFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				AF16825E2FFA161400BE5D69 /* Analytics */,
 				AF1682442FF9E1FE00BE5D69 /* CrashReporting */,
 				AF9D9BAE2FB7FA080047856A /* Shortcuts */,
 				AF127CF72F9ACA7800EE34E2 /* RemoteConfig */,
@@ -1306,6 +1323,9 @@
 				AF56EEE72F3CBB3A00E49C58 /* AddressFieldBase.swift in Sources */,
 				AF56EEEB2F3CC30800E49C58 /* DesignSystem+Environment.swift in Sources */,
 				AF9D9BB52FB7FFA80047856A /* ActiveBrowserStateProvider.swift in Sources */,
+				AF16825F2FFA161400BE5D69 /* Analytics.swift in Sources */,
+				AF1682602FFA161400BE5D69 /* AnalyticsEvent.swift in Sources */,
+				AF1682612FFA161400BE5D69 /* AnalyticsManager.swift in Sources */,
 				AF401AAF2F4D1A5B00EF265C /* APIError.swift in Sources */,
 				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
 				AF9D9BC22FB8FA490047856A /* ThemeWindowAppearance.swift in Sources */,
