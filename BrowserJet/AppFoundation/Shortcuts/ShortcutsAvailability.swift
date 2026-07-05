@@ -18,6 +18,6 @@ enum ShortcutsAvailability {
     static func isAllowed(for state: BrowserWindowState?) -> Bool {
         guard let state else { return false }
         guard !state.isTrialLockActive else { return false }
-        return RemoteConfigManager.shared.bool(for: .shortcutsEnabled)
+        return RemoteConfigManager.shared.resolvedFeatureFlagsConfig.shortcutsEnabled
     }
 }
