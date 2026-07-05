@@ -12,10 +12,10 @@ import FirebaseRemoteConfig
 @MainActor
 final class RemoteConfigManager: ObservableObject {
     static let shared = RemoteConfigManager()
-    
+
     @Published private(set) var lastFetchStatus: RemoteConfigFetchAndActivateStatus?
     @Published private(set) var lastFetchError: Error?
-    
+
     private let remoteConfig: RemoteConfig
     /// Manual download page: Remote Config when fetch succeeded and value is valid; otherwise `MACOS_DOWNLOAD_URL` from Info.plist (xcconfig).
     var resolvedManualDownloadURL: URL? {
@@ -38,7 +38,7 @@ final class RemoteConfigManager: ObservableObject {
         }
         return url
     }
-    
+
     /// Parses `app_update_config` JSON from Remote Config
     var resolvedAppUpdateConfig: AppUpdateConfig {
         let raw = string(for: .appUpdateConfig).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -56,56 +56,109 @@ final class RemoteConfigManager: ObservableObject {
                 }
                 return config
             } catch {
-                AppLogger.warning("RemoteConfig: app_update_config decode failed — \(error). Falling back to legacy keys.")
+                AppLogger.warning(
+                    "RemoteConfig: app_update_config decode failed — \(error). Falling back to legacy keys."
+                )
             }
         }
         return .default
     }
+
+    /// Parses `feature_flags_config` JSON from Remote Config
+    var resolvedFeatureFlagsConfig: FeatureFlagsConfig {
+        let raw = string(for: .featureFlagsConfig).trimmingCharacters(in: .whitespacesAndNewlines)
+        if !raw.isEmpty, let data = raw.data(using: .utf8) {
+            do {
+                let config = try JSONDecoder().decode(FeatureFlagsConfig.self, from: data)
+                guard config.isSupported else {
+                    AppLogger.warning(
+                        """
+                        RemoteConfig: feature_flags_config schemaVersion \(config.schemaVersion) is not \
+                        supported (max \(FeatureFlagsConfig.supportedSchemaVersion)). Falling back to legacy keys.
+                        """
+                    )
+                    return .default
+                }
+                return config
+            } catch {
+                AppLogger.warning(
+                    "RemoteConfig: feature_flags_config decode failed — \(error). Falling back to legacy keys."
+                )
+            }
+        }
+        return .default
+    }
+
+    /// Parses `endpoints_config` JSON from Remote Config
+    var resolvedEndpointsConfig: EndpointsConfig {
+        let raw = string(for: .endpointsConfig).trimmingCharacters(in: .whitespacesAndNewlines)
+        if !raw.isEmpty, let data = raw.data(using: .utf8) {
+            do {
+                let config = try JSONDecoder().decode(EndpointsConfig.self, from: data)
+                guard config.isSupported else {
+                    AppLogger.warning(
+                        """
+                        RemoteConfig: endpoints_config schemaVersion \(config.schemaVersion) is not \
+                        supported (max \(EndpointsConfig.supportedSchemaVersion)). Falling back to legacy keys.
+                        """
+                    )
+                    return .default
+                }
+                return config
+            } catch {
+                AppLogger.warning(
+                    "RemoteConfig: endpoints_config decode failed — \(error). Falling back to legacy keys."
+                )
+            }
+        }
+        return .default
+    }
+
     // MARK: - URL Config Accessors
     var baseServerURL: String {
-        normalizedURLString(for: .baseServerURL, fallback: "https://service.browserjet.com")
+        normalizedURLString(resolvedEndpointsConfig.baseServerURL, fallback: "https://service.browserjet.com")
     }
-    
+
     var baseWebURL: String {
-        normalizedURLString(for: .baseWebURL, fallback: "https://browserjet.com")
+        normalizedURLString(resolvedEndpointsConfig.baseWebURL, fallback: "https://browserjet.com")
     }
-    
+
     var updateCardPath: String {
-        normalizedPath(for: .updateCardPath, fallback: "/UpdateCard.aspx")
+        normalizedPath(resolvedEndpointsConfig.serverPaths.updateCard, fallback: "/UpdateCard.aspx")
     }
-    
+
     var buyMoreLicensesPath: String {
-        normalizedPath(for: .buyMoreLicensesPath, fallback: "/MoreLicenses.aspx")
+        normalizedPath(resolvedEndpointsConfig.serverPaths.buyMoreLicenses, fallback: "/MoreLicenses.aspx")
     }
 
     var browserPurchasePath: String {
-        normalizedPath(for: .browserPurchasePath, fallback: "/BrowserPurchase.aspx")
+        normalizedPath(resolvedEndpointsConfig.serverPaths.browserPurchase, fallback: "/BrowserPurchase.aspx")
     }
 
     var contactUsPath: String {
-        normalizedPath(for: .contactUsPath, fallback: "/contact")
+        normalizedPath(resolvedEndpointsConfig.webPaths.contactUs, fallback: "/contact")
     }
-    
+
     var twitterURL: String {
-        normalizedURLString(for: .twitterURL, fallback: "https://twitter.com/browserjet")
+        normalizedURLString(resolvedEndpointsConfig.externalLinks.twitter, fallback: "https://twitter.com/browserjet")
     }
-    
-    private func normalizedURLString(for key: RemoteConfigKey, fallback: String) -> String {
-        let raw = string(for: key).trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let url = URL(string: raw),
+
+    private func normalizedURLString(_ raw: String, fallback: String) -> String {
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let url = URL(string: trimmed),
               let scheme = url.scheme?.lowercased(),
               scheme == "https" || scheme == "http" else {
             return fallback
         }
-        return raw
+        return trimmed
     }
-    
-    private func normalizedPath(for key: RemoteConfigKey, fallback: String) -> String {
-        let raw = string(for: key).trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !raw.isEmpty else { return fallback }
-        return raw.hasPrefix("/") ? raw : "/\(raw)"
+
+    private func normalizedPath(_ raw: String, fallback: String) -> String {
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return fallback }
+        return trimmed.hasPrefix("/") ? trimmed : "/\(trimmed)"
     }
-    
+
     // MARK: - Menu Config Accessor
     var menuConfiguration: MenuConfiguration {
         let raw = string(for: .menuConfig).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -129,10 +182,10 @@ final class RemoteConfigManager: ObservableObject {
             return .default
         }
     }
-    
+
     private init() {
         remoteConfig = RemoteConfig.remoteConfig()
-        
+
         let settings = RemoteConfigSettings()
 #if DEBUG
         settings.minimumFetchInterval = 0
@@ -140,7 +193,7 @@ final class RemoteConfigManager: ObservableObject {
         settings.minimumFetchInterval = 3_600
 #endif
         remoteConfig.configSettings = settings
-        
+
         remoteConfig.setDefaults(Self.defaultValues())
     }
     /// Fetches from the server and applies activated values when appropriate.
@@ -158,15 +211,15 @@ final class RemoteConfigManager: ObservableObject {
     func bool(for key: RemoteConfigKey) -> Bool {
         remoteConfig.configValue(forKey: key.rawValue).boolValue
     }
-    
+
     func string(for key: RemoteConfigKey) -> String {
         remoteConfig.configValue(forKey: key.rawValue).stringValue
     }
-    
+
     func number(for key: RemoteConfigKey) -> NSNumber {
         remoteConfig.configValue(forKey: key.rawValue).numberValue
     }
-    
+
     func data(for key: RemoteConfigKey) -> Data {
         remoteConfig.configValue(forKey: key.rawValue).dataValue
     }
@@ -178,49 +231,36 @@ final class RemoteConfigManager: ObservableObject {
         }
         return map
     }
-    
+
     private static func defaultValue(for key: RemoteConfigKey) -> NSObject {
         if let booleanDefault = booleanDefault(for: key) { return booleanDefault }
         return urlDefault(for: key)
     }
-    
+
     private static func booleanDefault(for key: RemoteConfigKey) -> NSObject? {
         switch key {
         case .forceUpdateEnabled:
             return false as NSNumber
-        case .shortcutsEnabled:
-            return true as NSNumber
         default:
             return nil
         }
     }
-    
+
     private static func urlDefault(for key: RemoteConfigKey) -> NSObject {
         switch key {
         case .appUpdateConfig:
             return AppUpdateConfig.defaultJSONString as NSString
-        case .baseServerURL:
-            return "https://service.browserjet.com" as NSString
-        case .baseWebURL:
-            return "https://browserjet.com" as NSString
-        case .updateCardPath:
-            return "/UpdateCard.aspx" as NSString
-        case .buyMoreLicensesPath:
-            return "/MoreLicenses.aspx" as NSString
-        case .contactUsPath:
-            return "/contact" as NSString
-        case .twitterURL:
-            return "https://twitter.com/browserjet" as NSString
         case .menuConfig:
             return MenuConfiguration.defaultJSONString as NSString
-        case .browserPurchasePath:
-            return "/BrowserPurchase.aspx" as NSString
+        case .featureFlagsConfig:
+            return FeatureFlagsConfig.defaultJSONString as NSString
+        case .endpointsConfig:
+            return EndpointsConfig.defaultJSONString as NSString
         default:
-            // The earlier helpers exhaustively handle the boolean/version cases.
             return "" as NSString
         }
     }
-    
+
     func debugPrintAllValues() {
         for key in RemoteConfigKey.allCases {
             let value = remoteConfig.configValue(forKey: key.rawValue)
