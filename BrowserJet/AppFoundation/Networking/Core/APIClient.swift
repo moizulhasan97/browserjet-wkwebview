@@ -10,11 +10,11 @@ import Foundation
 final class APIClient {
     static let shared = APIClient()
     private let session: URLSession
-
+    
     init(session: URLSession = .shared) {
         self.session = session
     }
-
+    
     func request<T: Decodable>(_ endpoint: some EndpointProtocol, as type: T.Type) async throws -> T {
         let request = try endpoint.asURLRequest()
         logRequest(request)
@@ -26,10 +26,11 @@ final class APIClient {
             return decoded
         } catch {
             AppLogger.error("APIClient decode failed - \(T.self): \(error.localizedDescription)")
+            CrashReportingManager.shared.record(error: error)
             throw error
         }
     }
-
+    
     func requestText(_ endpoint: some EndpointProtocol) async throws -> String {
         let request = try endpoint.asURLRequest()
         logRequest(request)
@@ -38,7 +39,7 @@ final class APIClient {
         let raw = String(bytes: data, encoding: .utf8) ?? ""
         return raw.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-
+    
     func requestData(_ endpoint: some EndpointProtocol) async throws -> Data {
         let request = try endpoint.asURLRequest()
         logRequest(request)
@@ -46,9 +47,9 @@ final class APIClient {
         try validate(response, data: data)
         return data
     }
-
+    
     // MARK: - Logging
-
+    
     private func logRequest(_ request: URLRequest) {
         var lines: [String] = []
         lines.append("◆ REQUEST")
@@ -62,7 +63,7 @@ final class APIClient {
         }
         AppLogger.info(separator() + "\n" + lines.joined(separator: "\n"))
     }
-
+    
     private func logResponse(statusCode: Int, body: String) {
         var lines: [String] = []
         lines.append("◆ RESPONSE")
@@ -70,16 +71,17 @@ final class APIClient {
         lines.append("  Body    : \(body.isEmpty ? "<empty>" : body)")
         AppLogger.info(lines.joined(separator: "\n") + "\n" + separator())
     }
-
+    
     private func separator() -> String {
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     }
-
+    
     // MARK: - Validation
-
+    
     private func validate(_ response: URLResponse, data: Data) throws {
         guard let http = response as? HTTPURLResponse else {
             AppLogger.error("APIClient invalid response - not an HTTPURLResponse")
+            CrashReportingManager.shared.record(error: APIError.invalidResponse)
             throw APIError.invalidResponse
         }
         let body = (String(bytes: data, encoding: .utf8) ?? "")
@@ -89,13 +91,17 @@ final class APIClient {
         case 200...299:
             return
         case 401...500:
+            // Not recorded as a non-fatal: this range includes expected outcomes
+            // (e.g. an invalid license key), not genuine bugs.
             AppLogger.warning("APIClient unauthorized - HTTP \(http.statusCode)")
             throw APIError.unauthorized
         case 501...599:
             AppLogger.error("APIClient server error - HTTP \(http.statusCode)")
+            CrashReportingManager.shared.record(error: APIError.serverError)
             throw APIError.serverError
         default:
             AppLogger.error("APIClient unexpected status - HTTP \(http.statusCode)")
+            CrashReportingManager.shared.record(error: APIError.invalidResponse)
             throw APIError.invalidResponse
         }
     }

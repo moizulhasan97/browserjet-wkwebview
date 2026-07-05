@@ -161,6 +161,7 @@ final class WindowManager {
         }
 
         activationWC?.show()
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -209,6 +210,7 @@ final class WindowManager {
         )
 
         launcherWC?.show()
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -274,6 +276,7 @@ final class WindowManager {
         launcherWC = nil
 
         browserWC?.show()
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -323,6 +326,7 @@ final class WindowManager {
 
         browserWC = browserWindowController
         browserWC?.show()
+        refreshWindowCountCustomValue()
     }
 
     private static func hasStoredLicenseKey() -> Bool {
@@ -342,5 +346,13 @@ final class WindowManager {
         case .custom:
             return nil
         }
+    }
+    
+    private func refreshWindowCountCustomValue() {
+        let visibleWindowCount = NSApp.windows.filter { $0.isVisible && !$0.isSheet }.count
+        CrashReportingManager.shared.setCustomValue(
+            visibleWindowCount,
+            forKey: CrashReportingManager.CustomKey.openWindowCount
+        )
     }
 }

@@ -41,8 +41,11 @@ struct BrowserJet: App {
         ForceUpdateGate.shared.register(updaterController: updaterController)
         SparkleUpdateCoordinator.shared.register(updaterController)
         FirebaseApp.configure()
+        CrashReportingManager.shared.configure()
         Task { @MainActor in
             await RemoteConfigManager.shared.fetchAndActivate()
+            let crashReportingEnabled = RemoteConfigManager.shared.resolvedFeatureFlagsConfig.crashReportingEnabled
+            CrashReportingManager.shared.applyRemoteFlag(enabled: crashReportingEnabled)
             #if DEBUG
             RemoteConfigManager.shared.debugPrintAllValues()
             #endif

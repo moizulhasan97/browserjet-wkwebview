@@ -32,7 +32,14 @@ final class BrowserWindowState: ObservableObject {
         makeNewDataStore(proxy: perWindowProxy)
     }()
 
-    @Published var tabs: [TabModel] = []
+    @Published var tabs: [TabModel] = [] {
+        didSet {
+            CrashReportingManager.shared.setCustomValue(
+                tabs.count,
+                forKey: CrashReportingManager.CustomKey.openTabCount
+            )
+        }
+    }
     @Published var selectedTabID: UUID?
 
     /// LIFO stack of recently closed tab URLs
@@ -62,7 +69,14 @@ final class BrowserWindowState: ObservableObject {
         self.initialURL = initialURL
         self.maxBrowserTabs = maxBrowserTabs
         self.isTrialLockActive = isTrialLockActive
-
+        CrashReportingManager.shared.setCustomValue(
+            String(describing: isolationMode),
+            forKey: CrashReportingManager.CustomKey.sessionIsolationMode
+        )
+        CrashReportingManager.shared.setCustomValue(
+            proxyType.statusTitle,
+            forKey: CrashReportingManager.CustomKey.activeVPNType
+        )
         if !proxyType.isLocal {
             proxyPool.configure(provider: StaticAuthProxyProvider(proxies: proxies), rotation: rotation)
         }
