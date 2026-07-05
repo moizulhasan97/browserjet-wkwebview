@@ -45,7 +45,15 @@ final class VPN1ProxyRepository: ObservableObject {
             AppLogger.info("VPN1ProxyRepository: fetched \(proxies.count) VPN1 proxy row(s)")
         } catch {
             proxies = []
-            AppLogger.info("VPN1ProxyRepository: VPN1 fetch unavailable — \(error.localizedDescription)")
+            switch error {
+            case PremiumProxyDecryptError.emptyProxyList:
+                AppLogger.info("VPN1ProxyRepository: no VPN1 proxies allocated for this license")
+            case is PremiumProxyDecryptError:
+                AppLogger.error("VPN1ProxyRepository: payload decode/decrypt failed unexpectedly - \(error.localizedDescription)")
+                CrashReportingManager.shared.record(error: error)
+            default:
+                AppLogger.info("VPN1ProxyRepository: VPN1 fetch unavailable - \(error.localizedDescription)")
+            }
         }
     }
 

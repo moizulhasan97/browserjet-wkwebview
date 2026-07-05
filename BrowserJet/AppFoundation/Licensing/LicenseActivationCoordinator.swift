@@ -51,6 +51,7 @@ final class LicenseActivationCoordinator {
         await licenseService.updateKeyInBackendIfNeeded(key: key, keyValueStore: keyValueStore)
 
         if userSession.userStatus == .rejected {
+            CrashReportingManager.shared.log("license: activation outcome = shiftRequired")
             return .shiftRequired(key: key, email: response.userEmail)
         }
 
@@ -61,12 +62,15 @@ final class LicenseActivationCoordinator {
 
         if userSession.trialExpired {
             AppLogger.info("PAYMENT URL FOR TRIAL EXPIRED: \(paymentURL)")
+            CrashReportingManager.shared.log("license: activation outcome = trialExpired")
             return .trialExpired(paymentURL: paymentURL)
         }
         if userSession.hasLicenseExpired {
             AppLogger.info("PAYMENT URL FOR LICENSE EXPIRED: \(paymentURL)")
+            CrashReportingManager.shared.log("license: activation outcome = licenseExpired")
             return .licenseExpired(paymentURL: paymentURL)
         }
+        CrashReportingManager.shared.log("license: activation outcome = success")
         return .success
     }
 

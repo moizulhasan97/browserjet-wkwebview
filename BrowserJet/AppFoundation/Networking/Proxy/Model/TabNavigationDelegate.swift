@@ -9,6 +9,17 @@ import Foundation
 import AppKit
 import WebKit
 
+private enum WKWebViewFault: Error, LocalizedError {
+    case webContentProcessTerminated(tabID: UUID, url: String)
+
+    var errorDescription: String? {
+        switch self {
+        case .webContentProcessTerminated(let tabID, let url):
+            return "WKWebView WebContent process terminated for tab \(tabID) at \(url)"
+        }
+    }
+}
+
 // MARK: - Tab Navigation Delegate
 final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
     private weak var tab: TabModel?
@@ -170,13 +181,18 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         loadingTimeoutTask?.cancel()
         loadingTimeoutTask = nil
-
+        
         Task { @MainActor [weak self] in
             guard let tab = self?.tab else { return }
             tab.isLoading = false
             tab.canGoBack = webView.canGoBack
             tab.canGoForward = webView.canGoForward
             AppLogger.warning("Navigation failed for tab \(tab.id): \(error.localizedDescription)")
+            if (error as NSError).code != NSURLErrorCancelled {
+                CrashReportingManager.shared.log(
+                    "webview_nav_failed: \(webView.url?.absoluteString ?? "?") - \(error.localizedDescription)"
+                )
+            }
         }
     }
 
@@ -192,6 +208,11 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
             tab.canGoForward = webView.canGoForward
             tab.addressText = webView.url?.absoluteString ?? tab.addressText
             AppLogger.warning("Provisional navigation failed for tab \(tab.id): \(error.localizedDescription)")
+            if (error as NSError).code != NSURLErrorCancelled {
+                CrashReportingManager.shared.log(
+                    "webview_nav_failed: \(webView.url?.absoluteString ?? "?") - \(error.localizedDescription)"
+                )
+            }
         }
     }
 
@@ -243,6 +264,17 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         }
 
         decisionHandler(.allow)
+    }
+    
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        Task { @MainActor [weak self] in
+            guard let tab = self?.tab else { return }
+            let url = webView.url?.absoluteString ?? tab.addressText
+            AppLogger.error("WebContent process terminated for tab \(tab.id) at \(url)")
+            CrashReportingManager.shared.record(
+                error: WKWebViewFault.webContentProcessTerminated(tabID: tab.id, url: url)
+            )
+        }
     }
 
     private func isSeatGeekCheckoutURL(_ url: URL) -> Bool {

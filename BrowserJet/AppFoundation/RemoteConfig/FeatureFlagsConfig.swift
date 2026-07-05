@@ -17,6 +17,13 @@ struct FeatureFlagsConfig: Decodable {
     var isSupported: Bool {
         schemaVersion <= Self.supportedSchemaVersion
     }
+    
+    var crashlyticsSummary: String {
+        var active: [String] = []
+        if shortcutsEnabled { active.append("shortcuts") }
+        if crashReportingEnabled { active.append("crash_reporting") }
+        return active.isEmpty ? "none" : active.joined(separator: ",")
+    }
 
     init(
         schemaVersion: Int = 1,

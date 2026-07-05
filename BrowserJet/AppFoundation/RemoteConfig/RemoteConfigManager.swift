@@ -59,6 +59,7 @@ final class RemoteConfigManager: ObservableObject {
                 AppLogger.warning(
                     "RemoteConfig: app_update_config decode failed — \(error). Falling back to legacy keys."
                 )
+                CrashReportingManager.shared.record(error: error)
             }
         }
         return .default
@@ -84,6 +85,7 @@ final class RemoteConfigManager: ObservableObject {
                 AppLogger.warning(
                     "RemoteConfig: feature_flags_config decode failed — \(error). Falling back to legacy keys."
                 )
+                CrashReportingManager.shared.record(error: error)
             }
         }
         return .default
@@ -109,6 +111,7 @@ final class RemoteConfigManager: ObservableObject {
                 AppLogger.warning(
                     "RemoteConfig: endpoints_config decode failed — \(error). Falling back to legacy keys."
                 )
+                CrashReportingManager.shared.record(error: error)
             }
         }
         return .default
@@ -179,6 +182,7 @@ final class RemoteConfigManager: ObservableObject {
             return config
         } catch {
             AppLogger.warning("RemoteConfig: menu_config decode failed — \(error). Using default menu.")
+            CrashReportingManager.shared.record(error: error)
             return .default
         }
     }
@@ -199,14 +203,19 @@ final class RemoteConfigManager: ObservableObject {
     /// Fetches from the server and applies activated values when appropriate.
     func fetchAndActivate() async {
         lastFetchError = nil
+        CrashReportingManager.shared.log("remote_config: fetch started")
         do {
             let status = try await remoteConfig.fetchAndActivate()
             lastFetchStatus = status
+            CrashReportingManager.shared.log("remote_config: fetch succeeded - status \(status)")
         } catch {
             lastFetchError = error
             lastFetchStatus = nil
+            AppLogger.warning("RemoteConfig: fetchAndActivate failed - \(error.localizedDescription)")
+            CrashReportingManager.shared.log("remote_config: fetch failed - \(error.localizedDescription)")
         }
     }
+    
     // MARK: - Typed accessors
     func bool(for key: RemoteConfigKey) -> Bool {
         remoteConfig.configValue(forKey: key.rawValue).boolValue

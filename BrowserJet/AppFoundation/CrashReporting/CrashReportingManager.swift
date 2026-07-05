@@ -59,7 +59,6 @@ final class CrashReportingManager: CrashReporting {
 }
 
 extension CrashReportingManager {
-    /// Custom-key names, centralized so call sites don't hardcode strings.
     enum CustomKey {
         static let environment = "app_environment"
         static let appVersion = "app_version"
@@ -68,5 +67,8 @@ extension CrashReportingManager {
         static let activeVPNType = "active_vpn_type"
         static let openTabCount = "open_tab_count"
         static let openWindowCount = "open_window_count"
+        static let requestedTabCount = "requested_tab_count"
+        static let activeFeatureFlags = "active_feature_flags"
+        static let activeTabURL = "active_tab_url"
     }
 }

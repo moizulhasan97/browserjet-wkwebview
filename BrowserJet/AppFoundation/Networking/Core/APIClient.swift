@@ -18,7 +18,7 @@ final class APIClient {
     func request<T: Decodable>(_ endpoint: some EndpointProtocol, as type: T.Type) async throws -> T {
         let request = try endpoint.asURLRequest()
         logRequest(request)
-        let (data, response) = try await session.data(for: request)
+        let (data, response) = try await performRequest(request)
         try validate(response, data: data)
         do {
             let decoded = try JSONDecoder().decode(T.self, from: data)
@@ -30,24 +30,38 @@ final class APIClient {
             throw error
         }
     }
-    
+
     func requestText(_ endpoint: some EndpointProtocol) async throws -> String {
         let request = try endpoint.asURLRequest()
         logRequest(request)
-        let (data, response) = try await session.data(for: request)
+        let (data, response) = try await performRequest(request)
         try validate(response, data: data)
         let raw = String(bytes: data, encoding: .utf8) ?? ""
         return raw.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     func requestData(_ endpoint: some EndpointProtocol) async throws -> Data {
         let request = try endpoint.asURLRequest()
         logRequest(request)
-        let (data, response) = try await session.data(for: request)
+        let (data, response) = try await performRequest(request)
         try validate(response, data: data)
         return data
     }
-    
+
+    // MARK: - Transport
+
+    private func performRequest(_ request: URLRequest) async throws -> (Data, URLResponse) {
+        do {
+            return try await session.data(for: request)
+        } catch {
+            AppLogger.warning(
+                "APIClient transport failure - \(request.url?.host ?? "?") - \(error.localizedDescription)"
+            )
+            CrashReportingManager.shared.log("api_transport_failure: \(request.url?.host ?? "unknown-host")")
+            throw error
+        }
+    }
+
     // MARK: - Logging
     
     private func logRequest(_ request: URLRequest) {
