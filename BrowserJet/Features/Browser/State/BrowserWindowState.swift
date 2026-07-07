@@ -34,7 +34,7 @@ final class BrowserWindowState: ObservableObject {
     private let sessionManager: SessionManager
     let proxies: [AuthProxy]
     private let proxyPool = ProxyPoolService()
-    private let rotation: ProxyRotationType = .linear // for now; later derive from launcher
+    private let rotation: ProxyRotationType
     private let initialURL: URL
 
     /// When true (trial expired), only one tab is allowed; add/close tab disabled; only refresh is useful.
@@ -82,7 +82,8 @@ final class BrowserWindowState: ObservableObject {
         initialURL: URL,
         initialTabCount: Int,
         maxBrowserTabs: Int,
-        isTrialLockActive: Bool = false
+        isTrialLockActive: Bool = false,
+        rotation: ProxyRotationType = .linear
     ) {
         self.proxyType = proxyType
         self.isolationMode = isolationMode
@@ -92,6 +93,7 @@ final class BrowserWindowState: ObservableObject {
         self.initialURL = initialURL
         self.maxBrowserTabs = maxBrowserTabs
         self.isTrialLockActive = isTrialLockActive
+        self.rotation = rotation
         CrashReportingManager.shared.setCustomValue(
             String(describing: isolationMode),
             forKey: CrashReportingManager.CustomKey.sessionIsolationMode

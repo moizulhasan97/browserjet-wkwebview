@@ -15,7 +15,7 @@ enum ProxyType: Hashable {
 enum ProxySource: Hashable {
     case builtIn(vpn: VPNType, region: RegionType)
     case premium(vpn: VPNType, region: RegionType)
-    case custom
+    case custom(groupID: String, groupName: String)
 }
 
 extension ProxyType {
@@ -28,6 +28,13 @@ extension ProxyType {
     var isPremiumSession: Bool {
         guard case .proxy(let source) = self else { return false }
         if case .premium = source { return true }
+        return false
+    }
+
+    /// True when launcher resolved to a user-managed "Manage My Proxy" group.
+    var isCustomSession: Bool {
+        guard case .proxy(let source) = self else { return false }
+        if case .custom = source { return true }
         return false
     }
 

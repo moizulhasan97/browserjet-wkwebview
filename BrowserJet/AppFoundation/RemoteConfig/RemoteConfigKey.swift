@@ -13,4 +13,5 @@ enum RemoteConfigKey: String, CaseIterable, Sendable {
     case appUpdateConfig = "app_update_config"
     case featureFlagsConfig = "feature_flags_config"
     case endpointsConfig = "endpoints_config"
+    case manageMyProxyConfig = "manage_my_proxy_config"
 }

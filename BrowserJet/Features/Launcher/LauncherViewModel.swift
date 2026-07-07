@@ -10,34 +10,34 @@ import Combine
 @MainActor
 final class LauncherViewModel: ObservableObject {
     @Published var settings: LauncherSettings
-
+    
     /// Set when the user tries to enable Premium Proxy while the GPP list is empty; cleared when appropriate from the view.
     @Published var premiumProxyUnavailableMessage: String?
-
+    
     private let defaultSearchAddress: String
     let availableVPNs: [VPNType]
-
+    
     private(set) var isTrialUser: Bool = false
-
+    
     private let blockedVPNsForTrial: Set<VPNType>
     private let vpnAllowedRegions: [VPNType: [RegionType]]
-
+    
     var regionPickerOptions: [RegionType] {
         guard let vpn = settings.selectedVPN else { return RegionType.allCases }
         return vpnAllowedRegions[vpn] ?? RegionType.allCases
     }
-
+    
     init(defaultSearchAddress: String, appConfiguration: AppConfiguration) {
         AppLogger.debug("LauncherViewModel initializing with default address: \(defaultSearchAddress)")
-
+        
         LicenseAccountStore.shared.refresh()
         let trial = LicenseAccountStore.shared.isTrialUser
         let blocked = appConfiguration.trialBlockedVPNs
-
+        
         self.isTrialUser = trial
         self.blockedVPNsForTrial = blocked
         self.defaultSearchAddress = defaultSearchAddress
-
+        
         let allVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
         let filtered: [VPNType]
         if trial {
@@ -46,11 +46,11 @@ final class LauncherViewModel: ObservableObject {
             filtered = allVPNs
         }
         self.availableVPNs = filtered
-
+        
         self.vpnAllowedRegions = appConfiguration.vpnAllowedRegions
         let initialVPN = filtered.first
         let initialRegion = Self.pickInitialRegion(for: initialVPN, policy: appConfiguration.vpnAllowedRegions)
-
+        
         self.settings = LauncherSettings(
             address: "",
             numberOfTabs: .one,
@@ -59,10 +59,10 @@ final class LauncherViewModel: ObservableObject {
             selectedVPN: initialVPN,
             selectedRegion: initialRegion
         )
-
+        
         AppLogger.debug("LauncherViewModel initialized with default settings")
     }
-
+    
     func onAppear() {
         AppLogger.debug("LauncherView appeared")
         Task { @MainActor in
@@ -73,23 +73,34 @@ final class LauncherViewModel: ObservableObject {
             applyDefaultBuiltInVPNSelection()
             reconcileVPN1SelectionIfNeeded()
         }
+        // Custom proxy mode is intentionally NOT auto-resumed here: it's a per-launch choice.
+        // The user must reopen Manage My Proxy and tap "Use My Proxy" again this session, even
+        // if a group was active last time. Groups/proxies themselves still sync via Firestore —
+        // only "which one is currently active, and with what rotation" resets every launch.
     }
-
+    
     /// Launch is blocked when VPN + Premium is selected but the GPP list is empty, or VPN1 is selected without a VPR list.
     func isLaunchAllowed() -> Bool {
         guard settings.isValid else { return false }
+        if settings.isCustomProxyModeActive {
+            return !settings.customProxySnapshot.isEmpty
+        }
         if settings.isVPNEnabled && settings.isPremiumProxyEnabled {
             return PremiumProxyRepository.shared.hasPremiumProxies
         }
         if settings.isVPNEnabled,
-            !settings.isPremiumProxyEnabled,
-            settings.selectedVPN == .vpn1 {
+           !settings.isPremiumProxyEnabled,
+           settings.selectedVPN == .vpn1 {
             return VPN1ProxyRepository.shared.hasVPN1Proxies
         }
         return true
     }
-
+    
     func toggleVPN(_ newValue: Bool) {
+        guard !settings.isCustomProxyModeActive else {
+            AppLogger.warning("VPN toggle ignored — custom proxy mode is active")
+            return
+        }
         if newValue && availableVPNs.isEmpty {
             AppLogger.warning("VPN toggle ignored — no VPN options available")
             return
@@ -106,8 +117,7 @@ final class LauncherViewModel: ObservableObject {
             AppLogger.debug("VPN disabled, premium proxy also disabled")
         }
     }
-
-    /// Paid: prefer VPN1 when the VPR list loaded; otherwise VPN2 (CEF launcher default). Trial: first allowed tier.
+    
     private func applyDefaultBuiltInVPNSelection() {
         if isTrialUser {
             if let first = availableVPNs.first {
@@ -127,7 +137,7 @@ final class LauncherViewModel: ObservableObject {
         }
         reconcileRegionForSelectedVPN()
     }
-
+    
     /// If VPN1 is selected but VPR has no rows, fall back to VPN2.
     private func reconcileVPN1SelectionIfNeeded() {
         guard !isTrialUser else { return }
@@ -141,8 +151,12 @@ final class LauncherViewModel: ObservableObject {
         }
         reconcileRegionForSelectedVPN()
     }
-
+    
     func togglePremiumProxy(_ newValue: Bool) {
+        guard !settings.isCustomProxyModeActive else {
+            AppLogger.warning("Premium proxy toggle ignored — custom proxy mode is active")
+            return
+        }
         guard settings.isVPNEnabled else {
             AppLogger.warning("Attempted to toggle premium proxy without VPN enabled")
             return
@@ -157,17 +171,17 @@ final class LauncherViewModel: ObservableObject {
         AnalyticsManager.shared.log(.premiumProxyToggled(enabled: newValue))
         settings.isPremiumProxyEnabled = newValue
     }
-
+    
     func clearPremiumProxyUnavailableMessage() {
         premiumProxyUnavailableMessage = nil
     }
-
+    
     func updateAddress(_ address: String) {
         guard settings.address != address else { return }
         AppLogger.debug("Address updated to: \(address)")
         settings.address = address
     }
-
+    
     /// Applies a saved Settings default URL when the launcher still shows the previous default (or is empty).
     func applySavedStartURLIfMatchingDefault(newURL: String, previousDefaultURL: String) {
         let current = settings.address.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -180,12 +194,12 @@ final class LauncherViewModel: ObservableObject {
         }
         updateAddress(newURL)
     }
-
+    
     func updateNumberOfTabs(_ preset: LauncherTabPreset) {
         AppLogger.info("Number of tabs changed to: \(preset.rawValue)")
         settings.numberOfTabs = preset
     }
-
+    
     func updateSelectedVPN(_ vpn: VPNType) {
         if isTrialUser && blockedVPNsForTrial.contains(vpn) {
             AppLogger.warning("Blocked VPN selection for trial user: \(vpn.rawValue)")
@@ -197,18 +211,18 @@ final class LauncherViewModel: ObservableObject {
         settings.selectedVPN = vpn
         reconcileRegionForSelectedVPN()
     }
-
+    
     func updateSelectedRegion(_ region: RegionType) {
         guard settings.selectedVPN != .vpn1 else { return }
         AppLogger.info("Region selection changed to: \(region.rawValue)")
         settings.selectedRegion = region
     }
-
+    
     private static func allowedRegions(for vpn: VPNType?, policy: [VPNType: [RegionType]]) -> [RegionType] {
         guard let vpn else { return RegionType.allCases }
         return policy[vpn] ?? RegionType.allCases
     }
-
+    
     private static func pickInitialRegion(
         for vpn: VPNType?,
         policy: [VPNType: [RegionType]],
@@ -219,7 +233,7 @@ final class LauncherViewModel: ObservableObject {
         if allowed.contains(preferred) { return preferred }
         return allowed.first ?? .uk
     }
-
+    
     private func reconcileRegionForSelectedVPN() {
         guard let vpn = settings.selectedVPN else { return }
         if vpn == .vpn1 {
@@ -229,5 +243,36 @@ final class LauncherViewModel: ObservableObject {
         let allowed = Self.allowedRegions(for: vpn, policy: vpnAllowedRegions)
         if let region = settings.selectedRegion, allowed.contains(region) { return }
         settings.selectedRegion = allowed.first
+    }
+    
+    // MARK: - Manage My Proxy
+
+    /// Called from the "Manage My Proxy" window's success callback. `rotation` is whatever the
+    /// user had selected in that window this session (default `.linear`) — it is never read
+    /// from or written to Firestore; only the group itself (and its proxies) are synced.
+    func applyCustomProxyActivation(group: ProxyGroup, rotation: ProxyRotationType) {
+        settings.isVPNEnabled = false
+        settings.isPremiumProxyEnabled = false
+        premiumProxyUnavailableMessage = nil
+        settings.customProxyGroupID = group.id
+        settings.customProxyGroupName = group.name
+        settings.customProxyRotation = rotation
+        AppLogger.info("Custom proxy mode activated (rotation: \(rotation.rawValue))")
+        refreshCustomProxySnapshot(groupID: group.id)
+    }
+
+    func clearCustomProxyMode() {
+        guard settings.isCustomProxyModeActive else { return }
+        settings.clearCustomProxyMode()
+        AnalyticsManager.shared.log(.customProxyDeactivated)
+    }
+
+    private func refreshCustomProxySnapshot(groupID: String) {
+        Task { @MainActor in
+            let snapshot = await ManagedProxyRepository.shared.fetchAuthProxySnapshot(groupId: groupID)
+            // Guard against a stale write if the user disabled custom mode while this was in flight.
+            guard settings.customProxyGroupID == groupID else { return }
+            settings.customProxySnapshot = snapshot
+        }
     }
 }

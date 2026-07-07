@@ -10,6 +10,19 @@ import Foundation
 extension LauncherSettings {
     @MainActor
     func makeLaunchRequest(appConfiguration: AppConfiguration) -> LaunchRequest {
+        if isCustomProxyModeActive {
+            return LaunchRequest(
+                address: address,
+                numberOfTabs: numberOfTabs.rawValue,
+                proxyType: resolvedProxyType(),
+                isolationMode: appConfiguration.sessionIsolationModeValue,
+                userAgent: appConfiguration.userAgentValue,
+                selectedVPN: nil,
+                rotationMethod: customProxyRotation,
+                customProxies: customProxySnapshot
+            )
+        }
+        
         LicenseAccountStore.shared.refresh()
         let isTrialUser = LicenseAccountStore.shared.isTrialUser
         let sanitizedSelectedVPN: VPNType? = {
@@ -19,10 +32,10 @@ extension LauncherSettings {
             }
             return selectedVPN
         }()
-
+        
         let proxyType: ProxyType = {
             guard isTrialUser else { return resolvedProxyType() }
-
+            
             if case .proxy(let source) = resolvedProxyType() {
                 switch source {
                 case .builtIn(let vpn, _), .premium(let vpn, _):
@@ -35,7 +48,7 @@ extension LauncherSettings {
             }
             return resolvedProxyType()
         }()
-
+        
         return LaunchRequest(
             address: address,
             numberOfTabs: numberOfTabs.rawValue,

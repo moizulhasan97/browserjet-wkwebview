@@ -90,6 +90,32 @@ final class RemoteConfigManager: ObservableObject {
         }
         return .default
     }
+    
+    /// Parses `manage_my_proxy_config` JSON from Remote Config
+    var resolvedManageMyProxyConfig: ManageMyProxyConfig {
+        let raw = string(for: .manageMyProxyConfig).trimmingCharacters(in: .whitespacesAndNewlines)
+        if !raw.isEmpty, let data = raw.data(using: .utf8) {
+            do {
+                let config = try JSONDecoder().decode(ManageMyProxyConfig.self, from: data)
+                guard config.isSupported else {
+                    AppLogger.warning(
+                        """
+                        RemoteConfig: manage_my_proxy_config schemaVersion \(config.schemaVersion) is not \
+                        supported (max \(ManageMyProxyConfig.supportedSchemaVersion)). Falling back to legacy keys.
+                        """
+                    )
+                    return .default
+                }
+                return config
+            } catch {
+                AppLogger.warning(
+                    "RemoteConfig: manage_my_proxy_config decode failed — \(error). Falling back to legacy keys."
+                )
+                CrashReportingManager.shared.record(error: error)
+            }
+        }
+        return .default
+    }
 
     /// Parses `endpoints_config` JSON from Remote Config
     var resolvedEndpointsConfig: EndpointsConfig {
@@ -265,6 +291,8 @@ final class RemoteConfigManager: ObservableObject {
             return FeatureFlagsConfig.defaultJSONString as NSString
         case .endpointsConfig:
             return EndpointsConfig.defaultJSONString as NSString
+        case .manageMyProxyConfig:
+            return ManageMyProxyConfig.defaultJSONString as NSString
         default:
             return "" as NSString
         }

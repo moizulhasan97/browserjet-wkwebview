@@ -148,6 +148,25 @@
 		AFA2C7DB2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */; };
 		AFACC1012FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */; };
 		AFACTIV22F60002004C03B3 /* ActivationWindowSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */; };
+		AFBB491E2FFC484000CF406F /* ManageMyProxyConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB491D2FFC483F00CF406F /* ManageMyProxyConfig.swift */; };
+		AFBB49202FFC490000CF406F /* ManageMyProxyAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB491F2FFC48FA00CF406F /* ManageMyProxyAvailability.swift */; };
+		AFBB49232FFC499900CF406F /* ManagedProxyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49222FFC499700CF406F /* ManagedProxyModels.swift */; };
+		AFBB49252FFC49F500CF406F /* ManagedProxyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49242FFC49F300CF406F /* ManagedProxyError.swift */; };
+		AFBB49272FFC4A1C00CF406F /* ManagedProxyValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49262FFC4A1A00CF406F /* ManagedProxyValidator.swift */; };
+		AFBB49292FFC4A4100CF406F /* ProxyImportExportParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49282FFC4A4100CF406F /* ProxyImportExportParser.swift */; };
+		AFBB492B2FFC4A5A00CF406F /* ManagedProxyAccountIdentifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB492A2FFC4A5A00CF406F /* ManagedProxyAccountIdentifying.swift */; };
+		AFBB492D2FFC4A8B00CF406F /* ManagedProxyRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB492C2FFC4A8B00CF406F /* ManagedProxyRemoteDataSource.swift */; };
+		AFBB492F2FFC4AAF00CF406F /* ManagedProxyRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB492E2FFC4AAF00CF406F /* ManagedProxyRepository.swift */; };
+		AFBB49322FFC4B7D00CF406F /* ManageMyProxyMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49312FFC4B7D00CF406F /* ManageMyProxyMessages.swift */; };
+		AFBB49342FFC4B8900CF406F /* ManageMyProxyTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49332FFC4B8900CF406F /* ManageMyProxyTab.swift */; };
+		AFBB49362FFC4B9C00CF406F /* ProxyExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49352FFC4B9A00CF406F /* ProxyExportDocument.swift */; };
+		AFBB49382FFC4BA900CF406F /* ManageMyProxyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49372FFC4BA800CF406F /* ManageMyProxyViewModel.swift */; };
+		AFBB493A2FFC4BD200CF406F /* ManageMyProxyWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49392FFC4BD200CF406F /* ManageMyProxyWindowController.swift */; };
+		AFBB493C2FFC4BE200CF406F /* ManageMyProxyRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB493B2FFC4BE200CF406F /* ManageMyProxyRootView.swift */; };
+		AFBB493E2FFC4C0400CF406F /* ManageProxiesTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB493D2FFC4C0200CF406F /* ManageProxiesTabView.swift */; };
+		AFBB49412FFC4C2E00CF406F /* ManagedProxyRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49402FFC4C2E00CF406F /* ManagedProxyRowView.swift */; };
+		AFBB49432FFC4DD900CF406F /* AddProxiesTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49422FFC4DD700CF406F /* AddProxiesTabView.swift */; };
+		AFBB49462FFC56F500CF406F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AFBB49452FFC56F500CF406F /* FirebaseFirestore */; };
 		AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */; };
 		AFCA5CEC2F75B104007A8578 /* LicenseAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */; };
 		AFCA5CF02F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */; };
@@ -325,6 +344,24 @@
 		AFA2C7DA2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbarIconButtonStyle.swift; sourceTree = "<group>"; };
 		AFACC1002FACC0010058705F /* BrowserTabStripTitlebarAccessoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabStripTitlebarAccessoryController.swift; sourceTree = "<group>"; };
 		AFACTIV12F60001004C03B3 /* ActivationWindowSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationWindowSizing.swift; sourceTree = "<group>"; };
+		AFBB491D2FFC483F00CF406F /* ManageMyProxyConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyConfig.swift; sourceTree = "<group>"; };
+		AFBB491F2FFC48FA00CF406F /* ManageMyProxyAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyAvailability.swift; sourceTree = "<group>"; };
+		AFBB49222FFC499700CF406F /* ManagedProxyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyModels.swift; sourceTree = "<group>"; };
+		AFBB49242FFC49F300CF406F /* ManagedProxyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyError.swift; sourceTree = "<group>"; };
+		AFBB49262FFC4A1A00CF406F /* ManagedProxyValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyValidator.swift; sourceTree = "<group>"; };
+		AFBB49282FFC4A4100CF406F /* ProxyImportExportParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyImportExportParser.swift; sourceTree = "<group>"; };
+		AFBB492A2FFC4A5A00CF406F /* ManagedProxyAccountIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyAccountIdentifying.swift; sourceTree = "<group>"; };
+		AFBB492C2FFC4A8B00CF406F /* ManagedProxyRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyRemoteDataSource.swift; sourceTree = "<group>"; };
+		AFBB492E2FFC4AAF00CF406F /* ManagedProxyRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyRepository.swift; sourceTree = "<group>"; };
+		AFBB49312FFC4B7D00CF406F /* ManageMyProxyMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyMessages.swift; sourceTree = "<group>"; };
+		AFBB49332FFC4B8900CF406F /* ManageMyProxyTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyTab.swift; sourceTree = "<group>"; };
+		AFBB49352FFC4B9A00CF406F /* ProxyExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExportDocument.swift; sourceTree = "<group>"; };
+		AFBB49372FFC4BA800CF406F /* ManageMyProxyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyViewModel.swift; sourceTree = "<group>"; };
+		AFBB49392FFC4BD200CF406F /* ManageMyProxyWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyWindowController.swift; sourceTree = "<group>"; };
+		AFBB493B2FFC4BE200CF406F /* ManageMyProxyRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyRootView.swift; sourceTree = "<group>"; };
+		AFBB493D2FFC4C0200CF406F /* ManageProxiesTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProxiesTabView.swift; sourceTree = "<group>"; };
+		AFBB49402FFC4C2E00CF406F /* ManagedProxyRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyRowView.swift; sourceTree = "<group>"; };
+		AFBB49422FFC4DD700CF406F /* AddProxiesTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProxiesTabView.swift; sourceTree = "<group>"; };
 		AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyType.swift; sourceTree = "<group>"; };
 		AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseAccountStore.swift; sourceTree = "<group>"; };
 		AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumProxyPayloadDecryptor.swift; sourceTree = "<group>"; };
@@ -375,6 +412,7 @@
 				AF127CF22F9AC70400EE34E2 /* FirebaseCore in Frameworks */,
 				AF127CF02F9AC70400EE34E2 /* FirebaseAnalytics in Frameworks */,
 				AF127CF62F9AC70400EE34E2 /* FirebaseRemoteConfig in Frameworks */,
+				AFBB49462FFC56F500CF406F /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +433,8 @@
 		AF127CF72F9ACA7800EE34E2 /* RemoteConfig */ = {
 			isa = PBXGroup;
 			children = (
+				AFBB491F2FFC48FA00CF406F /* ManageMyProxyAvailability.swift */,
+				AFBB491D2FFC483F00CF406F /* ManageMyProxyConfig.swift */,
 				AF1682422FF9CA2C00BE5D69 /* EndpointsConfig.swift */,
 				AF1682402FF9C42D00BE5D69 /* FeatureFlagsConfig.swift */,
 				AF127CFA2F9ACA9600EE34E2 /* RemoteConfigManager.swift */,
@@ -749,6 +789,7 @@
 		AF69F5C62F43762400B33610 /* AppFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				AFBB49212FFC498B00CF406F /* ManagedProxy */,
 				AF16825E2FFA161400BE5D69 /* Analytics */,
 				AF1682442FF9E1FE00BE5D69 /* CrashReporting */,
 				AF9D9BAE2FB7FA080047856A /* Shortcuts */,
@@ -902,6 +943,51 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		AFBB49212FFC498B00CF406F /* ManagedProxy */ = {
+			isa = PBXGroup;
+			children = (
+				AFBB492E2FFC4AAF00CF406F /* ManagedProxyRepository.swift */,
+				AFBB492C2FFC4A8B00CF406F /* ManagedProxyRemoteDataSource.swift */,
+				AFBB492A2FFC4A5A00CF406F /* ManagedProxyAccountIdentifying.swift */,
+				AFBB49282FFC4A4100CF406F /* ProxyImportExportParser.swift */,
+				AFBB49262FFC4A1A00CF406F /* ManagedProxyValidator.swift */,
+				AFBB49242FFC49F300CF406F /* ManagedProxyError.swift */,
+				AFBB49222FFC499700CF406F /* ManagedProxyModels.swift */,
+			);
+			path = ManagedProxy;
+			sourceTree = "<group>";
+		};
+		AFBB49302FFC4B7400CF406F /* ManageMyProxy */ = {
+			isa = PBXGroup;
+			children = (
+				AFBB49422FFC4DD700CF406F /* AddProxiesTabView.swift */,
+				AFBB493F2FFC4C1E00CF406F /* Components */,
+				AFBB493D2FFC4C0200CF406F /* ManageProxiesTabView.swift */,
+				AFBB493B2FFC4BE200CF406F /* ManageMyProxyRootView.swift */,
+				AFBB49392FFC4BD200CF406F /* ManageMyProxyWindowController.swift */,
+				AFBB49372FFC4BA800CF406F /* ManageMyProxyViewModel.swift */,
+				AFBB49352FFC4B9A00CF406F /* ProxyExportDocument.swift */,
+				AFBB49332FFC4B8900CF406F /* ManageMyProxyTab.swift */,
+				AFBB49312FFC4B7D00CF406F /* ManageMyProxyMessages.swift */,
+			);
+			path = ManageMyProxy;
+			sourceTree = "<group>";
+		};
+		AFBB493F2FFC4C1E00CF406F /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				AFBB49402FFC4C2E00CF406F /* ManagedProxyRowView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		AFBB49442FFC56F500CF406F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		AFE9764B2F5530AC00D270C8 /* ShiftLicense */ = {
 			isa = PBXGroup;
 			children = (
@@ -915,6 +1001,7 @@
 			isa = PBXGroup;
 			children = (
 				AFF3EAD42F3CAC4800C6F08E /* BrowserJet */,
+				AFBB49442FFC56F500CF406F /* Frameworks */,
 				AFF3EAC62F3CAC3A00C6F08E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -974,6 +1061,7 @@
 		AFF3EB0A2F3CACB100C6F08E /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AFBB49302FFC4B7400CF406F /* ManageMyProxy */,
 				AF9D9BBC2FB8F39C0047856A /* Settings */,
 				AF99BFBC2FA00AC40096FAE9 /* Update */,
 				AFF4DA062F74894B0028293B /* RecoverAccount */,
@@ -1158,6 +1246,7 @@
 				AF127CF32F9AC70400EE34E2 /* FirebaseCrashlytics */,
 				AF127CF52F9AC70400EE34E2 /* FirebaseRemoteConfig */,
 				AF99BFB82FA002960096FAE9 /* Sparkle */,
+				AFBB49452FFC56F500CF406F /* FirebaseFirestore */,
 			);
 			productName = BrowserJet;
 			productReference = AFF3EAC52F3CAC3A00C6F08E /* BrowserJet.app */;
@@ -1284,6 +1373,7 @@
 				AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */,
 				AFA2C7DB2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift in Sources */,
 				AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */,
+				AFBB49342FFC4B8900CF406F /* ManageMyProxyTab.swift in Sources */,
 				AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */,
 				AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */,
 				AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */,
@@ -1314,8 +1404,10 @@
 				AF401AC32F4D1C5B00EF265C /* AppUpdateEndpoint.swift in Sources */,
 				AF1682462FF9E20800BE5D69 /* CrashReporting.swift in Sources */,
 				AF2017172FABFDBE0058705F /* AboutBrowserJetWindowController.swift in Sources */,
+				AFBB493A2FFC4BD200CF406F /* ManageMyProxyWindowController.swift in Sources */,
 				AF401AB92F4D1B0400EF265C /* ProxyService.swift in Sources */,
 				AF8267132FA9256A0036EFD5 /* BrowserLicenseBackgroundMonitor.swift in Sources */,
+				AFBB49292FFC4A4100CF406F /* ProxyImportExportParser.swift in Sources */,
 				AF12923D2FEDF37800EA3CB4 /* MenuConfiguration.swift in Sources */,
 				AF9D9BB92FB806820047856A /* AboutPanelOptionsBuilder.swift in Sources */,
 				AF401AC82F4D2C1600EF265C /* LicenseEnums.swift in Sources */,
@@ -1327,6 +1419,7 @@
 				AF1682602FFA161400BE5D69 /* AnalyticsEvent.swift in Sources */,
 				AF1682612FFA161400BE5D69 /* AnalyticsManager.swift in Sources */,
 				AF401AAF2F4D1A5B00EF265C /* APIError.swift in Sources */,
+				AFBB493E2FFC4C0400CF406F /* ManageProxiesTabView.swift in Sources */,
 				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
 				AF9D9BC22FB8FA490047856A /* ThemeWindowAppearance.swift in Sources */,
 				AF9D9BB32FB7FAE40047856A /* BrowserCommands.swift in Sources */,
@@ -1338,10 +1431,12 @@
 				AF401ABB2F4D1B1100EF265C /* AppUpdateService.swift in Sources */,
 				AF9D9BC42FB901170047856A /* LauncherStartURLPreferences.swift in Sources */,
 				AF9D9BC82FB90180047856A /* QuitConfirmationPreferences.swift in Sources */,
+				AFBB49202FFC490000CF406F /* ManageMyProxyAvailability.swift in Sources */,
 				AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */,
 				AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */,
 				AF7A10012F90010000E49C58 /* LauncherMessages.swift in Sources */,
 				AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */,
+				AFBB49432FFC4DD900CF406F /* AddProxiesTabView.swift in Sources */,
 				AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */,
 				AF69F5F12F43A3700B33610 /* BrowserWindowState+Screenshot.swift in Sources */,
 				AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */,
@@ -1349,12 +1444,14 @@
 				AF401AC52F4D2BE800EF265C /* DateFormatterProvider.swift in Sources */,
 				AF1682432FF9CA2C00BE5D69 /* EndpointsConfig.swift in Sources */,
 				AF69F5C32F43748800B33610 /* BrowserChromeView.swift in Sources */,
+				AFBB492F2FFC4AAF00CF406F /* ManagedProxyRepository.swift in Sources */,
 				AF80C5BD2F4E750E0064B8FD /* AppError.swift in Sources */,
 				AF69F5B02F43716300B33610 /* BrowserToolbarAction.swift in Sources */,
 				AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */,
 				AF2017102FAB498E0058705F /* URLConstants.swift in Sources */,
 				AF99BFC32FA013370096FAE9 /* ForceUpdateGate.swift in Sources */,
 				AF9D9BB02FB7FA860047856A /* ShortcutsAvailability.swift in Sources */,
+				AFBB491E2FFC484000CF406F /* ManageMyProxyConfig.swift in Sources */,
 				AF56EF162F3E01EC00E49C58 /* AppConfiguration.swift in Sources */,
 				AF1682532FFA0C4C00BE5D69 /* String+SHA256.swift in Sources */,
 				AF56EEFD2F3CFD0B00E49C58 /* BrowserJetMenuPicker.swift in Sources */,
@@ -1376,22 +1473,28 @@
 				AFF3EB392F3CACB100C6F08E /* Theme+Environment.swift in Sources */,
 				AFF4DA082F7489600028293B /* RecoverAccountView.swift in Sources */,
 				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
+				AFBB493C2FFC4BE200CF406F /* ManageMyProxyRootView.swift in Sources */,
 				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,
 				AC1354060D144E8D9C8F2FA8 /* TabNavigationDelegate.swift in Sources */,
 				AFCA5CEC2F75B104007A8578 /* LicenseAccountStore.swift in Sources */,
 				AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */,
+				AFBB49232FFC499900CF406F /* ManagedProxyModels.swift in Sources */,
 				AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */,
 				AFF4DA0A2F7489680028293B /* RecoverAccountViewModel.swift in Sources */,
+				AFBB49382FFC4BA900CF406F /* ManageMyProxyViewModel.swift in Sources */,
 				AF99BFC72FA02F000096FAE9 /* SparkleUpdaterDelegate.swift in Sources */,
 				AF69F5D62F437AAB00B33610 /* ProxyConfigurationFactory.swift in Sources */,
 				AF1682412FF9C42D00BE5D69 /* FeatureFlagsConfig.swift in Sources */,
 				AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */,
 				AF69F5B52F43729700B33610 /* BrowserTabItem.swift in Sources */,
+				AFBB492D2FFC4A8B00CF406F /* ManagedProxyRemoteDataSource.swift in Sources */,
 				AF56EF0E2F3DF85000E49C58 /* CornerRadius.swift in Sources */,
 				AF99BFBB2FA009B10096FAE9 /* Bundle+Version.swift in Sources */,
+				AFBB49412FFC4C2E00CF406F /* ManagedProxyRowView.swift in Sources */,
 				AF498D312F4AB8F1004C03B3 /* StaticAuthProxyProvider.swift in Sources */,
 				AF56EF102F3DFC8400E49C58 /* CustomWidth.swift in Sources */,
 				AF56EF192F3E027000E49C58 /* AppConfiguration+Environment.swift in Sources */,
+				AFBB49362FFC4B9C00CF406F /* ProxyExportDocument.swift in Sources */,
 				AF401AB12F4D1A7D00EF265C /* APIClient.swift in Sources */,
 				AF401AAA2F4CF18B00EF265C /* LoadingOverlayModifier.swift in Sources */,
 				AFF3EB3B2F3CACB100C6F08E /* ButtonStyles.swift in Sources */,
@@ -1400,6 +1503,7 @@
 				AFCA5CF02F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift in Sources */,
 				AFCA5CF22F75BC32007A8578 /* PremiumProxyRepository.swift in Sources */,
 				AFCC10022F90002007A8578 /* VPN1ProxyRepository.swift in Sources */,
+				AFBB49252FFC49F500CF406F /* ManagedProxyError.swift in Sources */,
 				AF56EF2C2F3E131C00E49C58 /* RegionType.swift in Sources */,
 				AF56EF072F3DEE3100E49C58 /* BrowserJetAppButton.swift in Sources */,
 				AF401AA62F4CEABD00EF265C /* ValidationRule.swift in Sources */,
@@ -1422,12 +1526,14 @@
 				AF2017152FABFDA00058705F /* AboutBrowserJetView.swift in Sources */,
 				AF99BFBF2FA00AD90096FAE9 /* CheckForUpdatesView.swift in Sources */,
 				AF69F5E32F43A32100B33610 /* LauncherSettings+LaunchRequest.swift in Sources */,
+				AFBB49272FFC4A1C00CF406F /* ManagedProxyValidator.swift in Sources */,
 				AF16824B2FF9E76E00BE5D69 /* CrashTestTrigger.swift in Sources */,
 				AF2017132FABFD380058705F /* AboutBrowserJetDisplayModel.swift in Sources */,
 				AF99BFC52FA013500096FAE9 /* ForceUpdateBlockingOverlay.swift in Sources */,
 				AFF643F52FBBA8AD00D975A6 /* AddressBarURLResolver.swift in Sources */,
 				AF69F5CD2F4376A200B33610 /* AuthProxy.swift in Sources */,
 				AFCA5CF42F75BC4C007A8578 /* DecryptedPremiumProxy.swift in Sources */,
+				AFBB492B2FFC4A5A00CF406F /* ManagedProxyAccountIdentifying.swift in Sources */,
 				AFF3EB3E2F3CACB100C6F08E /* ThemeManager.swift in Sources */,
 				AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */,
 				AFEFE2092FEE27E400CAF5C3 /* AppUpdateConfig.swift in Sources */,
@@ -1442,6 +1548,7 @@
 				AF69F5B92F4372CB00B33610 /* BrowserConnectionBadgeView.swift in Sources */,
 				AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */,
 				AF498D342F4B6D62004C03B3 /* ActivationRootView.swift in Sources */,
+				AFBB49322FFC4B7D00CF406F /* ManageMyProxyMessages.swift in Sources */,
 				AFACTIV22F60002004C03B3 /* ActivationWindowSizing.swift in Sources */,
 				AF401AD12F4D37E500EF265C /* SystemInfo.swift in Sources */,
 				AFF4DA012F743A6C0028293B /* BrowserJetRootView.swift in Sources */,
@@ -1729,6 +1836,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AF99BFB72FA002960096FAE9 /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
+		};
+		AFBB49452FFC56F500CF406F /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF127CEE2F9AC70400EE34E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

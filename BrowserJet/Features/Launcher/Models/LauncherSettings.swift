@@ -18,21 +18,40 @@ struct LauncherSettings {
     var selectedVPN: VPNType?
     var selectedRegion: RegionType?
 
+    // Manage My Proxy (custom) configuration
+    var customProxyGroupID: String?
+    var customProxyGroupName: String?
+    var customProxyRotation: ProxyRotationType = .linear
+    /// Refreshed by `LauncherViewModel` on appear and right after "Use My Proxy" succeeds.
+    var customProxySnapshot: [AuthProxy] = []
+
+    var isCustomProxyModeActive: Bool { customProxyGroupID != nil }
+
     var isValid: Bool {
         !address.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var areVPNControlsEnabled: Bool {
-        isVPNEnabled && !isPremiumProxyEnabled
+        isVPNEnabled && !isPremiumProxyEnabled && !isCustomProxyModeActive
     }
 
     var areRegionControlsEnabled: Bool {
-        isVPNEnabled && !isPremiumProxyEnabled && selectedVPN != .vpn1
+        isVPNEnabled && !isPremiumProxyEnabled && selectedVPN != .vpn1 && !isCustomProxyModeActive
+    }
+
+    mutating func clearCustomProxyMode() {
+        customProxyGroupID = nil
+        customProxyGroupName = nil
+        customProxySnapshot = []
     }
 }
 
 extension LauncherSettings {
     func resolvedProxyType() -> ProxyType {
+        if isCustomProxyModeActive, let groupID = customProxyGroupID {
+            return .proxy(.custom(groupID: groupID, groupName: customProxyGroupName ?? "Custom"))
+        }
+
         guard isVPNEnabled else { return .local }
 
         if isPremiumProxyEnabled, let region = selectedRegion, let vpn = selectedVPN {

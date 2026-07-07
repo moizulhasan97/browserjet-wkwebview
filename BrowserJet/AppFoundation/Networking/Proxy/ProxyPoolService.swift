@@ -7,9 +7,26 @@
 
 import Foundation
 
-enum ProxyRotationType: Hashable {
+enum ProxyRotationType: String, Hashable {
     case linear
     case random
+}
+
+extension ProxyRotationType {
+    var displayName: String {
+        switch self {
+        case .linear: return "Pick Proxies Linearly"
+        case .random: return "Pick Proxies Randomly"
+        }
+    }
+    
+    /// Short label for the launcher's status card ("Rotation: Linear" / "Rotation: Random").
+    var displayRotationLabel: String {
+        switch self {
+        case .linear: return "Linear"
+        case .random: return "Random"
+        }
+    }
 }
 
 protocol AuthProxyProvider {

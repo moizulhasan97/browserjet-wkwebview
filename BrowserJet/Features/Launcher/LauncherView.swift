@@ -12,10 +12,10 @@ private enum LauncherViewConstants {
     // Layout
     static let mainStackSpacing: CGFloat = 14.0
     static let launchButtonTopPadding: CGFloat = 10.0
-
+    
     // Cards
     static let cardInterItemSpacing: CGFloat = 20.0
-
+    
     // Pickers — shared width so trailing edges align across launcher rows
     static let menuPickerWidth: CGFloat = 110.0
 }
@@ -23,10 +23,10 @@ private enum LauncherViewConstants {
 struct LauncherView: View {
     @Environment(\.designSystem)
     private var designSystem
-
+    
     @Environment(\.appTheme)
     private var theme
-
+    
     private let config: AppConfiguration
     @StateObject private var viewModel: LauncherViewModel
     @ObservedObject private var premiumRepository = PremiumProxyRepository.shared
@@ -35,12 +35,12 @@ struct LauncherView: View {
     @EnvironmentObject private var sessionManager: SessionManager
     @Environment(\.colorScheme)
     private var colorScheme
-
+    
     private var presets: [LauncherTabPreset] {
         config.launcherTabPresets.filter { $0.rawValue <= config.maxBrowserTabs }
     }
     private typealias Constants = LauncherViewConstants
-
+    
     init(appConfiguration: AppConfiguration) {
         self.config = appConfiguration
         _viewModel = StateObject(
@@ -50,7 +50,7 @@ struct LauncherView: View {
             )
         )
     }
-
+    
     var body: some View {
         VStack(spacing: Constants.mainStackSpacing) {
             userNameLogo
@@ -68,7 +68,7 @@ struct LauncherView: View {
             NotificationCenter.default.publisher(for: .launcherStartURLPreferencesDidSave)
         ) { notification in
             guard let payload = notification.userInfo?[LauncherStartURLPreferences.savePayloadUserInfoKey]
-                as? LauncherStartURLPreferencesSavePayload else {
+                    as? LauncherStartURLPreferencesSavePayload else {
                 return
             }
             viewModel.applySavedStartURLIfMatchingDefault(
@@ -87,13 +87,13 @@ struct LauncherView: View {
             }
         }
     }
-
+    
     private func getLabel(_ text: String) -> some View {
         Text(text)
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.textBody1.font)
     }
-
+    
     private var launchButton: some View {
         BrowserJetAppButton(
             title: "Launch",
@@ -102,7 +102,7 @@ struct LauncherView: View {
             action: showBrowser
         )
     }
-
+    
     private func showBrowser() {
         let request = viewModel.settings.makeLaunchRequest(appConfiguration: config)
         WindowManager.shared.showBrowser(
@@ -134,13 +134,13 @@ private extension LauncherView {
             logoDescription
         }
     }
-
+    
     private var username: some View {
         Text("Welcome, \(accountStore.username)")
             .foregroundStyle(theme.textPrimary)
             .font(designSystem.typography.title1.font)
     }
-
+    
     private var logoDescription: some View {
         BrowserJetLogoMark(iconSize: 38, style: .leading)
     }
@@ -155,7 +155,7 @@ private extension LauncherView {
             set: { viewModel.updateAddress($0) }
         ))
     }
-
+    
     private var searchBarCard: some View {
         CardContainer {
             VStack(spacing: Constants.cardInterItemSpacing) {
@@ -164,7 +164,7 @@ private extension LauncherView {
             }
         }
     }
-
+    
     private var numberOfTabs: some View {
         HStack {
             getLabel("No. of Tabs")
@@ -180,13 +180,16 @@ private extension LauncherView {
             ) { $0.rawValue.toString }
         }
     }
-
+    
     // Bottom card
     private var vpnCard: some View {
         CardContainer {
             VStack(spacing: Constants.cardInterItemSpacing) {
                 premiumProxyToggle
                 premiumStatusFootnotes
+                if ManageMyProxyAvailability.isFeatureEnabled {
+                    customProxyRow
+                }
                 BrowserJetDivider()
                 HStack {
                     getLabel("VPN Status")
@@ -198,7 +201,7 @@ private extension LauncherView {
             }
         }
     }
-
+    
     @ViewBuilder private var premiumStatusFootnotes: some View {
         if premiumRepository.isLoading {
             HStack(alignment: .center, spacing: 8) {
@@ -216,9 +219,11 @@ private extension LauncherView {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
-
+    
     private var premiumProxyToggle: some View {
         HStack {
+            getLabel("Premium Proxy")
+            Spacer()
             GlassPillToggle(
                 isOn: Binding(
                     get: { viewModel.settings.isPremiumProxyEnabled },
@@ -226,28 +231,26 @@ private extension LauncherView {
                 ),
                 isDisabled: premiumToggleDisabled
             )
-            getLabel("Premium Proxy")
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
-
-    /// Disabled while VPN is off or GPP is still loading. If the list is empty after load, the user can tap ON to see “no premium proxies” messaging.
+    
     private var premiumToggleDisabled: Bool {
+        if viewModel.settings.isCustomProxyModeActive { return true }
         if !viewModel.settings.isVPNEnabled || viewModel.availableVPNs.isEmpty { return true }
         if viewModel.settings.isPremiumProxyEnabled { return false }
         return premiumRepository.isLoading
     }
-
+    
     private var vpnToggle: some View {
         GlassPillToggle(
             isOn: Binding(
                 get: { viewModel.settings.isVPNEnabled },
                 set: { viewModel.toggleVPN($0) }
             ),
-            isDisabled: viewModel.availableVPNs.isEmpty
+            isDisabled: viewModel.availableVPNs.isEmpty || viewModel.settings.isCustomProxyModeActive
         )
     }
-
+    
     private var selectVPNSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             selectVPNRow
@@ -259,7 +262,7 @@ private extension LauncherView {
             }
         }
     }
-
+    
     @ViewBuilder private var selectVPNRow: some View {
         if viewModel.availableVPNs.isEmpty {
             HStack {
@@ -282,7 +285,7 @@ private extension LauncherView {
             }
         }
     }
-
+    
     private var vpnPickerSelectionBinding: Binding<VPNType> {
         Binding(
             get: {
@@ -296,7 +299,7 @@ private extension LauncherView {
             set: { viewModel.updateSelectedVPN($0) }
         )
     }
-
+    
     private var selectionRegion: some View {
         HStack {
             getLabel("Select Region")
@@ -313,6 +316,57 @@ private extension LauncherView {
                 isDisabled: !viewModel.settings.areRegionControlsEnabled,
                 width: Constants.menuPickerWidth
             ) { $0.rawValue }
+        }
+    }
+    
+    // MARK: - Custom Proxy
+
+    private var customProxyRow: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 12) {
+                getLabel("Custom Proxy")
+                Spacer()
+                if viewModel.settings.isCustomProxyModeActive {
+                    disableCustomProxyButton
+                }
+                configureCustomProxyButton
+            }
+
+            Text(customProxyStatusText)
+                .font(designSystem.typography.textBody2.font)
+                .foregroundStyle(theme.textFieldSecondary)
+        }
+    }
+
+    private var configureCustomProxyButton: some View {
+        Button(action: openManageMyProxy) {
+            Text("Configure")
+                .font(designSystem.typography.textBody1.font)
+                .foregroundStyle(theme.accent)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var disableCustomProxyButton: some View {
+        Button(ManageMyProxyMessages.disableCustomProxy) {
+            viewModel.clearCustomProxyMode()
+        }
+        .buttonStyle(.plain)
+        .font(designSystem.typography.textBody1.font)
+        .foregroundStyle(theme.danger)
+    }
+
+    private var customProxyStatusText: String {
+        guard viewModel.settings.isCustomProxyModeActive else { return "Inactive" }
+        return "Active: \(viewModel.settings.customProxyGroupName ?? "—")"
+    }
+
+    private func openManageMyProxy() {
+        ManageMyProxyWindowController.shared.show(
+            themeManager: themeManager,
+            colorScheme: colorScheme
+        ) { group, rotation in
+            viewModel.applyCustomProxyActivation(group: group, rotation: rotation)
         }
     }
 }

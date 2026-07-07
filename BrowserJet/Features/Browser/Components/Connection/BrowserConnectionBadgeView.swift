@@ -37,7 +37,7 @@ struct BrowserConnectionBadgeView: View {
 #Preview {
     VStack(spacing: 12) {
         BrowserConnectionBadgeView(proxyType: .local)
-        BrowserConnectionBadgeView(proxyType: .proxy(.custom))
+        BrowserConnectionBadgeView(proxyType: .proxy(.custom(groupID: "ID", groupName: "Name")))
     }
     .padding()
     .environment(\.appTheme, BrowserJetLightTheme())

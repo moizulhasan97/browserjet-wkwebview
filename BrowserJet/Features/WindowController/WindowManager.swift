@@ -227,7 +227,9 @@ final class WindowManager {
 
         let generatedProxies: [AuthProxy]
 
-        if request.proxyType.isPremiumSession {
+        if request.proxyType.isCustomSession {
+            generatedProxies = request.customProxies
+        } else if request.proxyType.isPremiumSession {
             generatedProxies = PremiumProxyRepository.shared.authProxiesForSession()
         } else if request.selectedVPN == .vpn1 {
             generatedProxies = VPN1ProxyRepository.shared.authProxiesForSession()
@@ -264,7 +266,8 @@ final class WindowManager {
             sessionManager: sessionManager,
             initialURL: initialURL,
             initialTabCount: request.numberOfTabs,
-            maxBrowserTabs: appConfiguration.maxBrowserTabs
+            maxBrowserTabs: appConfiguration.maxBrowserTabs,
+            rotation: request.rotationMethod
         )
         let rootView = BrowserRootView(state: state, menu: .default)
             .environmentObject(themeManager)

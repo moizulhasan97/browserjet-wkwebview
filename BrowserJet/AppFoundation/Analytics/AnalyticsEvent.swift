@@ -33,6 +33,16 @@ enum AnalyticsEvent {
     case tabReopened
     case proxyBurned
 
+    // MARK: - Manage My Proxy
+    case manageMyProxyOpened
+    case proxyGroupAdded
+    case proxyGroupRemoved
+    case proxyAdded
+    case proxyRemoved
+    case proxiesImported(added: Int, skippedDuplicates: Int, invalid: Int)
+    case customProxyActivated(rotation: String)
+    case customProxyDeactivated
+
     // MARK: - Settings
     /// `changedFields` holds field *names* only (e.g. "default_url"), never their values.
     case settingsSaved(changedFields: [String])
@@ -64,6 +74,14 @@ extension AnalyticsEvent {
         case .tabDuplicated: return "tab_duplicated"
         case .tabReopened: return "tab_reopened"
         case .proxyBurned: return "proxy_burned"
+        case .manageMyProxyOpened: return "manage_my_proxy_opened"
+        case .proxyGroupAdded: return "proxy_group_added"
+        case .proxyGroupRemoved: return "proxy_group_removed"
+        case .proxyAdded: return "proxy_added"
+        case .proxyRemoved: return "proxy_removed"
+        case .proxiesImported: return "proxies_imported"
+        case .customProxyActivated: return "custom_proxy_activated"
+        case .customProxyDeactivated: return "custom_proxy_deactivated"
         case .settingsSaved: return "settings_saved"
         case .updateCheckCompleted: return "update_check_completed"
         case .updateFound: return "update_found"
@@ -89,6 +107,14 @@ extension AnalyticsEvent {
             ]
         case .tabDuplicated(let count):
             return ["count": count]
+        case .proxiesImported(let added, let skippedDuplicates, let invalid):
+            return [
+                "added": added,
+                "skipped_duplicates": skippedDuplicates,
+                "invalid": invalid
+            ]
+        case .customProxyActivated(let rotation):
+            return ["rotation": rotation]
         case .settingsSaved(let changedFields):
             return ["changed_fields": changedFields.joined(separator: ",")]
         case .updateCheckCompleted(let succeeded):
