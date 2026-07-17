@@ -40,6 +40,10 @@ final class WindowManager {
     private var browserWC: (any ShowableWindowController)?
 
     private var lastActivationFullFormContentHeight: CGFloat?
+    /// Last content height applied to the launcher window. Mirrors
+    /// `lastActivationFullFormContentHeight`'s de-dupe purpose: avoids redundant `setContentSize`
+    /// + `center()` calls on every SwiftUI layout pass when the height hasn't actually changed.
+    private var lastLauncherContentHeight: CGFloat?
     /// Set once compact card measurement has driven the window size. Prevents a subsequent
     /// `syncActivationWindowFrame` (e.g. from an `onChange(of: phase)` that fires after
     /// `onPreferenceChange`) from overwriting the content-driven size back to a fixed layout size.
@@ -110,6 +114,23 @@ final class WindowManager {
         lastAppliedCompactLayout = layout
         let width = max(320, size.width)
         windowController.applyFixedContentSize(NSSize(width: width, height: height))
+    }
+
+    /// Content-driven resize for the launcher window, called from `LauncherView`'s
+    /// `onGeometryChange` on every layout pass. Cards inside the launcher render rows
+    /// conditionally (Manage My Proxy, premium-proxy footnotes, trial footnote), so a fixed
+    /// window height silently clips content whenever a row is added or shown. Sizing off the
+    /// measured height keeps the (non-resizable) window exactly as tall as its content, for any
+    /// future rows too, without another hardcoded constant to maintain.
+    func resizeLauncherWindowToContentHeight(_ measuredHeight: CGFloat) {
+        guard measuredHeight > 0, let windowController = launcherWC else { return }
+        let height = ActivationWindowMetrics.clampedContentHeight(measuredHeight)
+        // De-dupe: skip redundant setContentSize + center() when height hasn't moved.
+        if let last = lastLauncherContentHeight, abs(last - height) < 1 { return }
+        lastLauncherContentHeight = height
+        windowController.applyFixedContentSize(
+            NSSize(width: ActivationWindowMetrics.contentWidth, height: height)
+        )
     }
 
     func resizeActivationFullFormToContentHeight(_ measuredHeight: CGFloat) {
@@ -192,15 +213,24 @@ final class WindowManager {
     ) {
         launcherWC?.close()
         launcherWC = nil
+        // Reset so the first `resizeLauncherWindowToContentHeight` call after this new window is
+        // created always applies (a stale height from a previous launcher instance would
+        // otherwise be de-duped away).
+        lastLauncherContentHeight = nil
 
         let rootView = LauncherRootView(appConfiguration: appConfiguration)
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
             .environmentObject(LicenseAccountStore.shared)
 
+        // Placeholder size shown for the single frame before LauncherView's `onGeometryChange`
+        // reports its measured height and `resizeLauncherWindowToContentHeight` snaps the window
+        // to the actual content — keeps this close to typical content height to avoid a visible
+        // jump. The window is not left at this fixed height: it self-corrects to fit whatever
+        // rows are actually visible (Manage My Proxy, premium-proxy footnotes, trial footnote).
         let isTrialUser = LicenseAccountStore.shared.isTrialUser
-        let launcherHeight: CGFloat = isTrialUser ? 562 : 530// 506
-        let intendedSize = NSSize(width: 500, height: launcherHeight)
+        let placeholderLauncherHeight: CGFloat = isTrialUser ? 562 : 530
+        let intendedSize = NSSize(width: ActivationWindowMetrics.contentWidth, height: placeholderLauncherHeight)
 
         launcherWC = BrowserJetWindowController(
             content: rootView,

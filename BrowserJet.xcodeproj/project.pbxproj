@@ -35,6 +35,12 @@
 		AF2017132FABFD380058705F /* AboutBrowserJetDisplayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2017122FABFD360058705F /* AboutBrowserJetDisplayModel.swift */; };
 		AF2017152FABFDA00058705F /* AboutBrowserJetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2017142FABFD9F0058705F /* AboutBrowserJetView.swift */; };
 		AF2017172FABFDBE0058705F /* AboutBrowserJetWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2017162FABFDBC0058705F /* AboutBrowserJetWindowController.swift */; };
+		AF204DD82FFDB3560071BB17 /* ImportExportCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF204DD62FFDB3560071BB17 /* ImportExportCardView.swift */; };
+		AF204DD92FFDB3560071BB17 /* AddGroupPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF204DD32FFDB3560071BB17 /* AddGroupPopoverView.swift */; };
+		AF204DDA2FFDB3560071BB17 /* AddProxyFormCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF204DD42FFDB3560071BB17 /* AddProxyFormCardView.swift */; };
+		AF204DDB2FFDB3560071BB17 /* ProxyListCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF204DD72FFDB3560071BB17 /* ProxyListCardView.swift */; };
+		AF204DDC2FFDB3560071BB17 /* GroupHeaderCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF204DD52FFDB3560071BB17 /* GroupHeaderCardView.swift */; };
+		AF204DDE2FFDB37B0071BB17 /* BrowserJetToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF204DDD2FFDB37B0071BB17 /* BrowserJetToast.swift */; };
 		AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */; };
 		AF401AA22F4CD7F800EF265C /* TextFieldStyleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */; };
 		AF401AA42F4CD89D00EF265C /* BrowserJetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */; };
@@ -158,14 +164,11 @@
 		AFBB492D2FFC4A8B00CF406F /* ManagedProxyRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB492C2FFC4A8B00CF406F /* ManagedProxyRemoteDataSource.swift */; };
 		AFBB492F2FFC4AAF00CF406F /* ManagedProxyRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB492E2FFC4AAF00CF406F /* ManagedProxyRepository.swift */; };
 		AFBB49322FFC4B7D00CF406F /* ManageMyProxyMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49312FFC4B7D00CF406F /* ManageMyProxyMessages.swift */; };
-		AFBB49342FFC4B8900CF406F /* ManageMyProxyTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49332FFC4B8900CF406F /* ManageMyProxyTab.swift */; };
 		AFBB49362FFC4B9C00CF406F /* ProxyExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49352FFC4B9A00CF406F /* ProxyExportDocument.swift */; };
 		AFBB49382FFC4BA900CF406F /* ManageMyProxyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49372FFC4BA800CF406F /* ManageMyProxyViewModel.swift */; };
 		AFBB493A2FFC4BD200CF406F /* ManageMyProxyWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49392FFC4BD200CF406F /* ManageMyProxyWindowController.swift */; };
 		AFBB493C2FFC4BE200CF406F /* ManageMyProxyRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB493B2FFC4BE200CF406F /* ManageMyProxyRootView.swift */; };
-		AFBB493E2FFC4C0400CF406F /* ManageProxiesTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB493D2FFC4C0200CF406F /* ManageProxiesTabView.swift */; };
 		AFBB49412FFC4C2E00CF406F /* ManagedProxyRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49402FFC4C2E00CF406F /* ManagedProxyRowView.swift */; };
-		AFBB49432FFC4DD900CF406F /* AddProxiesTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBB49422FFC4DD700CF406F /* AddProxiesTabView.swift */; };
 		AFBB49462FFC56F500CF406F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AFBB49452FFC56F500CF406F /* FirebaseFirestore */; };
 		AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */; };
 		AFCA5CEC2F75B104007A8578 /* LicenseAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */; };
@@ -231,6 +234,12 @@
 		AF2017122FABFD360058705F /* AboutBrowserJetDisplayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBrowserJetDisplayModel.swift; sourceTree = "<group>"; };
 		AF2017142FABFD9F0058705F /* AboutBrowserJetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBrowserJetView.swift; sourceTree = "<group>"; };
 		AF2017162FABFDBC0058705F /* AboutBrowserJetWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBrowserJetWindowController.swift; sourceTree = "<group>"; };
+		AF204DD32FFDB3560071BB17 /* AddGroupPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupPopoverView.swift; sourceTree = "<group>"; };
+		AF204DD42FFDB3560071BB17 /* AddProxyFormCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProxyFormCardView.swift; sourceTree = "<group>"; };
+		AF204DD52FFDB3560071BB17 /* GroupHeaderCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHeaderCardView.swift; sourceTree = "<group>"; };
+		AF204DD62FFDB3560071BB17 /* ImportExportCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportCardView.swift; sourceTree = "<group>"; };
+		AF204DD72FFDB3560071BB17 /* ProxyListCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyListCardView.swift; sourceTree = "<group>"; };
+		AF204DDD2FFDB37B0071BB17 /* BrowserJetToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetToast.swift; sourceTree = "<group>"; };
 		AF401A9F2F4CC78F00EF265C /* BrowserJetTextfieldStyleProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextfieldStyleProtocol.swift; sourceTree = "<group>"; };
 		AF401AA12F4CD7F600EF265C /* TextFieldStyleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStyleProvider.swift; sourceTree = "<group>"; };
 		AF401AA32F4CD89D00EF265C /* BrowserJetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserJetTextField.swift; sourceTree = "<group>"; };
@@ -354,14 +363,11 @@
 		AFBB492C2FFC4A8B00CF406F /* ManagedProxyRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyRemoteDataSource.swift; sourceTree = "<group>"; };
 		AFBB492E2FFC4AAF00CF406F /* ManagedProxyRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyRepository.swift; sourceTree = "<group>"; };
 		AFBB49312FFC4B7D00CF406F /* ManageMyProxyMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyMessages.swift; sourceTree = "<group>"; };
-		AFBB49332FFC4B8900CF406F /* ManageMyProxyTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyTab.swift; sourceTree = "<group>"; };
 		AFBB49352FFC4B9A00CF406F /* ProxyExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExportDocument.swift; sourceTree = "<group>"; };
 		AFBB49372FFC4BA800CF406F /* ManageMyProxyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyViewModel.swift; sourceTree = "<group>"; };
 		AFBB49392FFC4BD200CF406F /* ManageMyProxyWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyWindowController.swift; sourceTree = "<group>"; };
 		AFBB493B2FFC4BE200CF406F /* ManageMyProxyRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMyProxyRootView.swift; sourceTree = "<group>"; };
-		AFBB493D2FFC4C0200CF406F /* ManageProxiesTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProxiesTabView.swift; sourceTree = "<group>"; };
 		AFBB49402FFC4C2E00CF406F /* ManagedProxyRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedProxyRowView.swift; sourceTree = "<group>"; };
-		AFBB49422FFC4DD700CF406F /* AddProxiesTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProxiesTabView.swift; sourceTree = "<group>"; };
 		AFC3ECA72F3E6F5400DD4BF5 /* ProxyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyType.swift; sourceTree = "<group>"; };
 		AFCA5CEB2F75B104007A8578 /* LicenseAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseAccountStore.swift; sourceTree = "<group>"; };
 		AFCA5CEF2F75BC0D007A8578 /* PremiumProxyPayloadDecryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumProxyPayloadDecryptor.swift; sourceTree = "<group>"; };
@@ -960,14 +966,11 @@
 		AFBB49302FFC4B7400CF406F /* ManageMyProxy */ = {
 			isa = PBXGroup;
 			children = (
-				AFBB49422FFC4DD700CF406F /* AddProxiesTabView.swift */,
 				AFBB493F2FFC4C1E00CF406F /* Components */,
-				AFBB493D2FFC4C0200CF406F /* ManageProxiesTabView.swift */,
 				AFBB493B2FFC4BE200CF406F /* ManageMyProxyRootView.swift */,
 				AFBB49392FFC4BD200CF406F /* ManageMyProxyWindowController.swift */,
 				AFBB49372FFC4BA800CF406F /* ManageMyProxyViewModel.swift */,
 				AFBB49352FFC4B9A00CF406F /* ProxyExportDocument.swift */,
-				AFBB49332FFC4B8900CF406F /* ManageMyProxyTab.swift */,
 				AFBB49312FFC4B7D00CF406F /* ManageMyProxyMessages.swift */,
 			);
 			path = ManageMyProxy;
@@ -976,6 +979,11 @@
 		AFBB493F2FFC4C1E00CF406F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				AF204DD32FFDB3560071BB17 /* AddGroupPopoverView.swift */,
+				AF204DD42FFDB3560071BB17 /* AddProxyFormCardView.swift */,
+				AF204DD52FFDB3560071BB17 /* GroupHeaderCardView.swift */,
+				AF204DD62FFDB3560071BB17 /* ImportExportCardView.swift */,
+				AF204DD72FFDB3560071BB17 /* ProxyListCardView.swift */,
 				AFBB49402FFC4C2E00CF406F /* ManagedProxyRowView.swift */,
 			);
 			path = Components;
@@ -1078,6 +1086,7 @@
 		AFF3EB0B2F3CACB100C6F08E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AF204DDD2FFDB37B0071BB17 /* BrowserJetToast.swift */,
 				AF9D9BBA2FB8ECD40047856A /* BrowserJetLogoMark.swift */,
 				AFE976512F5543C800D270C8 /* InfoAlertView.swift */,
 				AF401AA72F4CF17000EF265C /* LoadingOverlayView.swift */,
@@ -1373,13 +1382,13 @@
 				AFF3EB2B2F3CACB100C6F08E /* DesignMetrics.swift in Sources */,
 				AFA2C7DB2F47EDB800F7C889 /* BrowserToolbarIconButtonStyle.swift in Sources */,
 				AFC3ECA82F3E6F5400DD4BF5 /* ProxyType.swift in Sources */,
-				AFBB49342FFC4B8900CF406F /* ManageMyProxyTab.swift in Sources */,
 				AFF3EB2C2F3CACB100C6F08E /* BrowserJetLightTheme.swift in Sources */,
 				AF56EF092F3DF56400E49C58 /* ButtonStyleProvider.swift in Sources */,
 				AF69F5C52F43751E00B33610 /* SessionIsolationMode.swift in Sources */,
 				AF9D9BBE2FB8F3A70047856A /* SettingsViewModel.swift in Sources */,
 				AF127CFB2F9ACA9800EE34E2 /* RemoteConfigManager.swift in Sources */,
 				AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */,
+				AF204DDE2FFDB37B0071BB17 /* BrowserJetToast.swift in Sources */,
 				AFE976502F55343100D270C8 /* ShiftViewModel.swift in Sources */,
 				AF20170E2FAB36980058705F /* ChangeLicenseKeyView.swift in Sources */,
 				AF69F5EA2F43A5C000B33610 /* WebViewContainer.swift in Sources */,
@@ -1419,7 +1428,6 @@
 				AF1682602FFA161400BE5D69 /* AnalyticsEvent.swift in Sources */,
 				AF1682612FFA161400BE5D69 /* AnalyticsManager.swift in Sources */,
 				AF401AAF2F4D1A5B00EF265C /* APIError.swift in Sources */,
-				AFBB493E2FFC4C0400CF406F /* ManageProxiesTabView.swift in Sources */,
 				AFA2C7D52F47E8AC00F7C889 /* DuplicateTabsPopoverView.swift in Sources */,
 				AF9D9BC22FB8FA490047856A /* ThemeWindowAppearance.swift in Sources */,
 				AF9D9BB32FB7FAE40047856A /* BrowserCommands.swift in Sources */,
@@ -1436,7 +1444,6 @@
 				AF56EF312F3E41E200E49C58 /* LauncherViewModel.swift in Sources */,
 				AF7A10012F90010000E49C58 /* LauncherMessages.swift in Sources */,
 				AF56EEF42F3CCDB500E49C58 /* Color+Init.swift in Sources */,
-				AFBB49432FFC4DD900CF406F /* AddProxiesTabView.swift in Sources */,
 				AF69F5D22F437A3600B33610 /* BrowserWindowState.swift in Sources */,
 				AF69F5F12F43A3700B33610 /* BrowserWindowState+Screenshot.swift in Sources */,
 				AF69F5BC2F43744200B33610 /* BrowserTabPillView.swift in Sources */,
@@ -1520,6 +1527,11 @@
 				AF56EF202F3E061600E49C58 /* Int+Extensions.swift in Sources */,
 				AF69F5E12F43A30A00B33610 /* LaunchRequest.swift in Sources */,
 				AF401AAD2F4D1A2200EF265C /* APIEnvironment.swift in Sources */,
+				AF204DD82FFDB3560071BB17 /* ImportExportCardView.swift in Sources */,
+				AF204DD92FFDB3560071BB17 /* AddGroupPopoverView.swift in Sources */,
+				AF204DDA2FFDB3560071BB17 /* AddProxyFormCardView.swift in Sources */,
+				AF204DDB2FFDB3560071BB17 /* ProxyListCardView.swift in Sources */,
+				AF204DDC2FFDB3560071BB17 /* GroupHeaderCardView.swift in Sources */,
 				AF56EEE92F3CC2D600E49C58 /* DesignSystem.swift in Sources */,
 				AF56EF2F2F3E327100E49C58 /* LauncherSettings.swift in Sources */,
 				AF69F5DB2F437B8000B33610 /* BrowserTabsStripView.swift in Sources */,

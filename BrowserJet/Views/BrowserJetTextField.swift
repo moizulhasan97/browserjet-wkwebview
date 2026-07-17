@@ -43,6 +43,12 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
     /// Bind this to a property on view model to react to validity changes
     var validationState: Binding<RegexValidationState>?
 
+    /// Optional external focus binding. When provided, this field's focus is driven by the
+    /// caller (e.g. to autofocus a specific field on appear, or coordinate focus across several
+    /// fields) instead of the field's own private `@FocusState`. Defaults to `nil`, so every
+    /// existing call site is unaffected.
+    var focusBinding: FocusState<Bool>.Binding?
+
     let left: () -> Left
     let right: () -> Right
 
@@ -57,6 +63,7 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
         isSecure: Bool = false,
         rule: ValidationRule? = nil,
         validationState: Binding<RegexValidationState>? = nil,
+        focusBinding: FocusState<Bool>.Binding? = nil,
         @ViewBuilder left: @escaping () -> Left = { EmptyView() },
         @ViewBuilder right: @escaping () -> Right = { EmptyView() }
     ) {
@@ -68,6 +75,7 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
         self.isSecure = isSecure
         self.rule = rule
         self.validationState = validationState
+        self.focusBinding = focusBinding
         self.left = left
         self.right = right
     }
@@ -117,7 +125,7 @@ struct BrowserJetTextField<Left: View, Right: View>: View {
             .background(background(for: style))
             .overlay(border(for: style))
             .clipShape(CornerRadiusShape(cornerRadius: style.cornerRadius))
-            .focused($isFocused)
+            .focused(focusBinding ?? $isFocused)
             .animation(.easeInOut(duration: 0.15), value: currentValidationState)
             .onChange(of: text) { _ in
                 validationState?.wrappedValue = currentValidationState

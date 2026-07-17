@@ -60,6 +60,16 @@ struct LauncherView: View {
                 .padding(.top, Constants.launchButtonTopPadding)
         }
         .padding()
+        // Measures the launcher's true content height so the (non-resizable) window can be
+        // grown or shrunk to fit — cards render/hide rows conditionally (Manage My Proxy,
+        // premium-proxy footnotes, trial footnote), so a hardcoded window height inevitably
+        // clips content whenever a new row is added. Fires on every layout pass, so this stays
+        // correct automatically as the launcher grows without further changes here.
+        .onGeometryChange(for: CGFloat.self) { proxy in
+            proxy.size.height
+        } action: { newHeight in
+            WindowManager.shared.resizeLauncherWindowToContentHeight(newHeight)
+        }
         .onAppear {
             viewModel.onAppear()
             applyDefaultStartURLIfNeeded()

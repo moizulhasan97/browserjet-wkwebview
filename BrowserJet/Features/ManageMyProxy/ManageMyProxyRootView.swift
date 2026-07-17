@@ -6,12 +6,11 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
-private enum ManageMyProxyRootConstants {
-    static let outerSpacing: CGFloat = 18
-    static let tabPickerWidth: CGFloat = 320
-}
-
+/// Single, unified screen (no tabs) — group selection, add proxy, import/export, and the proxy
+/// list all live here in one macOS-native pass, per the redesign: minimize interaction, reduce
+/// scrolling, make the primary action (Add Proxy) obvious.
 struct ManageMyProxyRootView: View {
     @Environment(\.appTheme)
     private var theme
@@ -21,29 +20,86 @@ struct ManageMyProxyRootView: View {
     @ObservedObject var viewModel: ManageMyProxyViewModel
     @ObservedObject private var repository = ManagedProxyRepository.shared
 
-    private typealias Constants = ManageMyProxyRootConstants
+    @FocusState private var isHostFieldFocused: Bool
 
     var body: some View {
-        VStack(spacing: Constants.outerSpacing) {
-            header
-            tabPicker
-
-            switch viewModel.selectedTab {
-            case .manageProxies:
-                ManageProxiesTabView(viewModel: viewModel)
-            case .addProxies:
-                AddProxiesTabView(viewModel: viewModel)
+        ScrollView {
+            VStack(spacing: DesignMetrics.sectionSpacing) {
+                header
+                GroupHeaderCardView(viewModel: viewModel)
+                AddProxyFormCardView(viewModel: viewModel, isHostFieldFocused: $isHostFieldFocused)
+                ImportExportCardView(viewModel: viewModel)
+                ProxyListCardView(viewModel: viewModel)
             }
-
-            Spacer(minLength: 0)
+            .padding(DesignMetrics.screenPadding)
         }
-        .padding(DesignMetrics.screenPadding)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(AppBackgroundStyle.brandGradient(for: .dark).makeView().ignoresSafeArea())
-        .onAppear { viewModel.onAppear() }
+        .browserJetToast($viewModel.toast)
+        .onAppear {
+            viewModel.onAppear()
+            isHostFieldFocused = true
+        }
         .onDisappear { viewModel.onDisappear() }
         .onChange(of: repository.groups) { _, newGroups in
             viewModel.handleGroupsChanged(newGroups)
+        }
+        .onChange(of: viewModel.refocusHostFieldToken) { _, _ in
+            isHostFieldFocused = true
+        }
+        .fileImporter(
+            isPresented: $viewModel.isImportPickerPresented,
+            allowedContentTypes: [.commaSeparatedText, .plainText],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                if let url = urls.first {
+                    viewModel.importFile(at: url)
+                }
+            case .failure(let error):
+                viewModel.toast = ToastMessage(text: error.localizedDescription, style: .error)
+            }
+        }
+        .fileExporter(
+            isPresented: $viewModel.isExportPickerPresented,
+            document: viewModel.exportDocument,
+            contentType: .commaSeparatedText,
+            defaultFilename: ManageMyProxyMessages.exportDefaultFileName
+        ) { result in
+            viewModel.handleExportResult(result)
+        }
+        .confirmationDialog(
+            "Delete this proxy?",
+            isPresented: Binding(
+                get: { viewModel.proxyPendingDeletion != nil },
+                set: { if !$0 { viewModel.proxyPendingDeletion = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) { viewModel.performDeleteProxy() }
+            Button("Cancel", role: .cancel) { viewModel.proxyPendingDeletion = nil }
+        }
+        .confirmationDialog(
+            "Delete all proxies in this group?",
+            isPresented: $viewModel.isDeleteAllConfirmationPresented,
+            titleVisibility: .visible
+        ) {
+            Button("Delete All", role: .destructive) { viewModel.performDeleteAllProxies() }
+            Button("Cancel", role: .cancel) { viewModel.isDeleteAllConfirmationPresented = false }
+        }
+        .confirmationDialog(
+            "Remove \"\(viewModel.groupPendingRemoval?.name ?? "")\"?",
+            isPresented: Binding(
+                get: { viewModel.groupPendingRemoval != nil },
+                set: { if !$0 { viewModel.groupPendingRemoval = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("Remove Group", role: .destructive) { viewModel.performRemoveGroup() }
+            Button("Cancel", role: .cancel) { viewModel.groupPendingRemoval = nil }
+        } message: {
+            Text("This deletes the group and all \(viewModel.groupPendingRemoval?.proxyCount ?? 0) proxies inside it. This can't be undone.")
         }
     }
 
@@ -58,13 +114,5 @@ struct ManageMyProxyRootView: View {
                 .foregroundStyle(theme.textFieldSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private var tabPicker: some View {
-        BrowserJetSegmentedPicker(
-            options: ManageMyProxyTab.allCases,
-            selection: $viewModel.selectedTab,
-            width: Constants.tabPickerWidth
-        ) { $0.rawValue }
     }
 }

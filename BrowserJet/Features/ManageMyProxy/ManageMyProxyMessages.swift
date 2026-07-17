@@ -12,24 +12,17 @@ enum ManageMyProxyMessages {
     // Groups
     static let noGroupsYet = "No groups yet — create one below."
     static let loadingGroups = "Loading your proxy groups…"
-    static let selectGroupPrompt = "Select a group to continue."
 
     // Proxies
-    static let noProxiesInGroup = "No proxies in this group yet. Add one below or import a file."
     static let loadingProxies = "Loading proxies…"
-
-    // Use My Proxy
-    static let useMyProxyNeedsGroup = "Select a group with at least one proxy to continue."
-    static let useMyProxyLoadingData = "Loading your proxy data…"
+    static let emptyStateTitle = "No proxies in this group yet."
+    static let emptyStateSubtitle = "Add one manually or import a CSV/TXT file."
 
     // Import
-    static let importFilePickerPrompt = "Choose a .csv or .txt file"
-    static let importFormatHint = "One proxy per line: IP,PORT,USERNAME,PASSWORD or IP:PORT:USERNAME:PASSWORD"
-    static let importSummaryTitle = "Import Complete"
+    static let importFormatHint = "Supported formats: CSV or TXT — IP,PORT,USERNAME,PASSWORD or IP:PORT:USERNAME:PASSWORD"
 
     // Export
     static let exportDefaultFileName = "browserjet-proxies.csv"
-    static let exportEmptyGroup = "This group has no proxies to export."
 
     // Status card (launcher)
     static let disableCustomProxy = "Disable"

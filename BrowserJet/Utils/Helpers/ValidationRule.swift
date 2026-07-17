@@ -67,4 +67,18 @@ extension ValidationRule {
         #"^(?=.*[A-Za-z])(?=.*\d).{7,}$"#,
         defaultMessage: "At least 8 characters, including a letter and a number"
     )
+
+    /// Any non-empty (post-trim) value — used where the field is required but has no format
+    /// beyond that (e.g. host, username, password). `evaluate` already returns `.empty` before
+    /// this regex runs, so this only needs to match once there's at least one character.
+    static let requiredField = ValidationRule(
+        #"^.+$"#,
+        defaultMessage: "This field is required"
+    )
+
+    /// Valid TCP port range, 1–65535.
+    static let proxyPort = ValidationRule(
+        #"^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$"#,
+        defaultMessage: "Port must be between 1 and 65535"
+    )
 }

@@ -11,6 +11,7 @@ struct BrowserJetAppButton: View {
     @Environment(\.appTheme)
     private var theme
     private let title: String
+    private let icon: String?
     private let type: BrowserJetButtonStyle.ButtonType
     private let width: CustomWidth
     private let height: CGFloat
@@ -19,6 +20,7 @@ struct BrowserJetAppButton: View {
 
     init(
         title: String,
+        icon: String? = nil,
         type: BrowserJetButtonStyle.ButtonType,
         width: CustomWidth = .full,
         height: CGFloat = DesignMetrics.primaryButtonHeight,
@@ -26,6 +28,7 @@ struct BrowserJetAppButton: View {
         action: @escaping () -> Void
     ) {
         self.title = title
+        self.icon = icon
         self.type = type
         self.width = width
         self.height = height
@@ -36,6 +39,9 @@ struct BrowserJetAppButton: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 8) {
+                if let icon {
+                    Image(systemName: icon)
+                }
                 Text(title)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)

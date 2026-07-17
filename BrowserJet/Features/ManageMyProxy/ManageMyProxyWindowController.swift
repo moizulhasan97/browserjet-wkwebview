@@ -40,7 +40,7 @@ final class ManageMyProxyWindowController {
         let controller = BrowserJetWindowController(
             titledWindowTitle: ManageMyProxyMessages.windowTitle,
             content: root,
-            size: NSSize(width: 640, height: 680),
+            size: NSSize(width: 720, height: 800),
             resizable: false,
             cornerRadius: 18
         )

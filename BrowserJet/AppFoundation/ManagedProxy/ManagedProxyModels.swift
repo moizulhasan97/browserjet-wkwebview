@@ -122,8 +122,4 @@ struct ProxyImportSummary: Hashable {
     let invalidSamples: [String]
     
     var totalLines: Int { addedCount + skippedDuplicateCount + invalidCount }
-    
-    var summaryMessage: String {
-        "Added \(addedCount), skipped \(skippedDuplicateCount) duplicate(s), \(invalidCount) invalid row(s)."
-    }
 }
