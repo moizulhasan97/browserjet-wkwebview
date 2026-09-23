@@ -32,9 +32,7 @@ final class BrowserWindowState: ObservableObject {
     let userAgent: String?
     private let isolationMode: SessionIsolationMode
     private let sessionManager: SessionManager
-    let proxies: [AuthProxy]
     private let proxyPool = ProxyPoolService()
-    private let rotation: ProxyRotationType = .linear // for now; later derive from launcher
     private let initialURL: URL
 
     /// When true (trial expired), only one tab is allowed; add/close tab disabled; only refresh is useful.
@@ -43,7 +41,7 @@ final class BrowserWindowState: ObservableObject {
 
     // For `.perWindow`: share a single store and a single proxy (if needed)
     private lazy var perWindowProxy: AuthProxy? = {
-        proxyType.resolveAuthProxy(slot: 0, proxies: proxies)
+        proxyType.isLocal ? nil : proxyPool.getProxy(for: 0)
     }()
 
     private lazy var perWindowDataStore: WKWebsiteDataStore = {
@@ -76,7 +74,7 @@ final class BrowserWindowState: ObservableObject {
     init(
         proxyType: ProxyType,
         isolationMode: SessionIsolationMode,
-        proxies: [AuthProxy],
+        proxyProvider: AuthProxyProviding?,
         userAgent: String?,
         sessionManager: SessionManager,
         initialURL: URL,
@@ -86,7 +84,6 @@ final class BrowserWindowState: ObservableObject {
     ) {
         self.proxyType = proxyType
         self.isolationMode = isolationMode
-        self.proxies = proxies
         self.userAgent = userAgent
         self.sessionManager = sessionManager
         self.initialURL = initialURL
@@ -100,8 +97,8 @@ final class BrowserWindowState: ObservableObject {
             proxyType.diagnosticIdentifier,
             forKey: CrashReportingManager.CustomKey.activeVPNType
         )
-        if !proxyType.isLocal {
-            proxyPool.configure(provider: StaticAuthProxyProvider(proxies: proxies), rotation: rotation)
+        if !proxyType.isLocal, let proxyProvider {
+            proxyPool.configure(provider: proxyProvider)
         }
 
         if isTrialLockActive {

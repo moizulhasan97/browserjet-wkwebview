@@ -17,6 +17,9 @@ final class RemoteConfigManager: ObservableObject {
     @Published private(set) var lastFetchError: Error?
 
     private let remoteConfig: RemoteConfig
+    /// Decoded `builtin_vpn_config`, keyed by the raw value it came from, so decoding (and error reporting)
+    /// happens once per activated value instead of on every launcher render.
+    private var builtInVPNConfigCache: (raw: String, config: BuiltInVPNConfig)?
     /// Manual download page: Remote Config when fetch succeeded and value is valid; otherwise `MACOS_DOWNLOAD_URL` from Info.plist (xcconfig).
     var resolvedManualDownloadURL: URL? {
         if lastFetchError != nil {
@@ -265,6 +268,8 @@ final class RemoteConfigManager: ObservableObject {
             return FeatureFlagsConfig.defaultJSONString as NSString
         case .endpointsConfig:
             return EndpointsConfig.defaultJSONString as NSString
+        case .builtInVPNConfig:
+            return BuiltInVPNConfig.defaultJSONString as NSString
         default:
             return "" as NSString
         }
@@ -273,11 +278,58 @@ final class RemoteConfigManager: ObservableObject {
     func debugPrintAllValues() {
         for key in RemoteConfigKey.allCases {
             let value = remoteConfig.configValue(forKey: key.rawValue)
+            let printableValue = key.isSensitive
+                ? "<redacted, \(value.stringValue.count) chars>"
+                : value.stringValue
             AppLogger.debug("""
             🔹 \(key.rawValue)
-            value: \(value.stringValue)
+            value: \(printableValue)
             source: \(value.source)
             """)
+        }
+    }
+}
+
+// MARK: - Built-in VPN pools
+
+extension RemoteConfigManager: ProxyPoolTemplateProviding {
+    func proxyPoolTemplate(forVPNID vpnID: String) -> ProxyPoolTemplate? {
+        resolvedBuiltInVPNConfig.pools[vpnID]
+    }
+
+    /// Parses `builtin_vpn_config` JSON from Remote Config. Falls back to `.default` (no pools) on any failure,
+    /// which leaves built-in VPN unavailable rather than guessing credentials.
+    var resolvedBuiltInVPNConfig: BuiltInVPNConfig {
+        let raw = string(for: .builtInVPNConfig).trimmingCharacters(in: .whitespacesAndNewlines)
+        if let cache = builtInVPNConfigCache, cache.raw == raw {
+            return cache.config
+        }
+        let config = decodeBuiltInVPNConfig(from: raw)
+        builtInVPNConfigCache = (raw: raw, config: config)
+        return config
+    }
+
+    private func decodeBuiltInVPNConfig(from raw: String) -> BuiltInVPNConfig {
+        guard !raw.isEmpty, let data = raw.data(using: .utf8) else {
+            return .default
+        }
+        do {
+            let config = try JSONDecoder().decode(BuiltInVPNConfig.self, from: data)
+            guard config.isSupported else {
+                AppLogger.warning(
+                    """
+                    RemoteConfig: builtin_vpn_config schemaVersion \(config.schemaVersion) is not supported \
+                    (max \(BuiltInVPNConfig.supportedSchemaVersion)). Built-in VPN unavailable.
+                    """
+                )
+                return .default
+            }
+            AppLogger.info("RemoteConfig: builtin_vpn_config loaded - \(config.pools.count) pool(s)")
+            return config
+        } catch {
+            AppLogger.warning("RemoteConfig: builtin_vpn_config decode failed — \(error). Built-in VPN unavailable.")
+            CrashReportingManager.shared.record(error: error)
+            return .default
         }
     }
 }

@@ -66,16 +66,4 @@ extension ProxyType {
             }
         }
     }
-
-    /// Temporary resolver (until API + storage exists).
-    /// - For now: local => nil, proxy => pick proxies[slot] else first proxy.
-    func resolveAuthProxy(slot: Int, proxies: [AuthProxy]) -> AuthProxy? {
-        switch self {
-        case .local:
-            return nil
-        case .proxy:
-            if proxies.indices.contains(slot) { return proxies[slot] }
-            return proxies.first
-        }
-    }
 }

@@ -13,21 +13,18 @@ struct LaunchRequest: Hashable {
     let proxyType: ProxyType
     let isolationMode: SessionIsolationMode
     let userAgent: String?
-    let selectedVPN: VPNType?
 
     init(
         address: String,
         numberOfTabs: Int,
         proxyType: ProxyType,
         isolationMode: SessionIsolationMode,
-        userAgent: String? = nil,
-        selectedVPN: VPNType? = nil
+        userAgent: String? = nil
     ) {
         self.address = address
         self.numberOfTabs = numberOfTabs
         self.proxyType = proxyType
         self.isolationMode = isolationMode
         self.userAgent = userAgent
-        self.selectedVPN = selectedVPN
     }
 }

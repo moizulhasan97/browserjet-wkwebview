@@ -12,56 +12,39 @@ enum ProxyRotationType: Hashable {
     case random
 }
 
-protocol AuthProxyProvider {
-    func loadPool() -> [AuthProxy]
+/// Produces proxies one at a time for `ProxyPoolService`. Each implementation owns its rotation and
+/// uniqueness rules, so a browser window never needs a whole proxy list in memory.
+protocol AuthProxyProviding: AnyObject {
+    /// The next proxy to hand out, or `nil` when the source cannot produce one.
+    func nextProxy() -> AuthProxy?
 }
 
+/// Per-window bookkeeping of which proxy is assigned to which session slot.
 final class ProxyPoolService {
-    private var provider: AuthProxyProvider?
-    private var pool: [AuthProxy] = []
-    private var rotation: ProxyRotationType = .linear
+    private var provider: AuthProxyProviding?
 
     /// Assigned proxy per session slot
     private var assigned: [AuthProxy?] = []
 
-    private var linearIndex: Int = 0
-
-    private var randomDeck: [AuthProxy] = []
-    private var randomCursor: Int = 0
-
-    func configure(
-        provider: AuthProxyProvider,
-        rotation: ProxyRotationType
-    ) {
+    func configure(provider: AuthProxyProviding) {
         self.provider = provider
-        self.rotation = rotation
-        reloadPool()
-    }
-
-    private func reloadPool() {
-        pool = provider?.loadPool() ?? []
         assigned.removeAll()
-        linearIndex = 0
-        randomDeck.removeAll()
-        randomCursor = 0
     }
 
     func getProxy(for slot: Int) -> AuthProxy? {
-        guard !pool.isEmpty else { return nil }
-
         if slot < assigned.count, let existing = assigned[slot] {
             return existing
         }
 
-        guard let next = nextProxyFromRotation() else { return nil }
+        guard let next = provider?.nextProxy() else { return nil }
         ensureAssignedCapacity(upTo: slot)
         assigned[slot] = next
         return next
     }
 
+    /// Replaces the slot's proxy with the provider's next one (for generated pools: a new session, so a new exit IP).
     func burnProxy(for slot: Int) -> AuthProxy? {
-        guard !pool.isEmpty else { return nil }
-        guard let replacement = nextProxyFromRotation() else { return nil }
+        guard let replacement = provider?.nextProxy() else { return nil }
 
         ensureAssignedCapacity(upTo: slot)
         assigned[slot] = replacement
@@ -76,24 +59,6 @@ final class ProxyPoolService {
     private func ensureAssignedCapacity(upTo slot: Int) {
         if slot >= assigned.count {
             assigned.append(contentsOf: [AuthProxy?](repeating: nil, count: slot - assigned.count + 1))
-        }
-    }
-
-    private func nextProxyFromRotation() -> AuthProxy? {
-        switch rotation {
-        case .linear:
-            let proxy = pool[linearIndex % pool.count]
-            linearIndex += 1
-            return proxy
-
-        case .random:
-            if randomDeck.isEmpty || randomCursor >= randomDeck.count {
-                randomDeck = pool.shuffled()
-                randomCursor = 0
-            }
-            let proxy = randomDeck[randomCursor]
-            randomCursor += 1
-            return proxy
         }
     }
 }

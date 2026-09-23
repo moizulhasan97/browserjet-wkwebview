@@ -35,7 +35,6 @@ final class LicenseActivationCoordinator {
             // TODO: Full “change key” UX — invalidate any data tied to the old license before saving the new one.
             await MainActor.run {
                 PremiumProxyRepository.shared.clearForLicenseChange()
-                VPN1ProxyRepository.shared.clearForLicenseChange()
             }
         }
 
@@ -97,7 +96,6 @@ final class LicenseActivationCoordinator {
             previousKey != trimmedKey {
             await MainActor.run {
                 PremiumProxyRepository.shared.clearForLicenseChange()
-                VPN1ProxyRepository.shared.clearForLicenseChange()
             }
         }
 

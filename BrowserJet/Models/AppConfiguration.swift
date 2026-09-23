@@ -67,43 +67,36 @@ extension AppConfiguration {
 }
 
 extension AppConfiguration {
+    /// Built-in VPN tiers. Each tier's pool (hosts, credentials, session range) is delivered by
+    /// Remote Config `builtin_vpn_config` under `pools.<id>`; nothing is bundled in the app.
+    private static let builtInVPNConfigurations: [VPNConfiguration] = [
+        VPNConfiguration(
+            id: VPNType.vpn1.rawValue,
+            displayName: "VPN 1",
+            layout: .remoteConfigPool
+        )
+    ]
+
+    /// Regions offered per tier. The launcher lists them alphabetically.
+    private static let builtInVPNAllowedRegions: [VPNType: [RegionType]] = [
+        .vpn1: [.au, .ca, .nl, .nz, .uae, .uk, .us]
+    ]
+
     static let production: AppConfiguration = {
         let config = AppConfiguration(
             isUserAgentEnabled: true,
             defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
-            vpnConfigurations: [
-                VPNConfiguration(
-                    id: "vpn1",
-                    displayName: "VPN 1",
-                    layout: .remoteManaged
-                ),
-                VPNConfiguration(
-                    id: "vpn2",
-                    displayName: "VPN 2",
-                    layout: .datatude(
-                        DatatudePoolConfig(
-                            host: "rotating.prox-e.io",
-                            port: 5055,
-                            password: "mkdb1458!2025",
-                            counterRange: 11...99_999,
-                            counterDigitWidth: 8
-                        )
-                    )
-                )
-            ],
+            vpnConfigurations: AppConfiguration.builtInVPNConfigurations,
             duplicateTabCounts: Array(1...20),
             maxBrowserTabs: 20,
             // paymentCardURL: URL(string: "https://www.google.com/payment")!,
             // buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             // contactUsURL: URL(string: "https://browserjet.com/contact")!,
             // twitterURL: URL(string: "https://twitter.com/browserjet")!,
-            trialBlockedVPNs: [.vpn1],
-            vpnAllowedRegions: [
-                .vpn1: [.us],
-                .vpn2: [.uk, .us, .ca, .it, .nz, .au, .uae, .nl]
-            ]
+            trialBlockedVPNs: [],
+            vpnAllowedRegions: AppConfiguration.builtInVPNAllowedRegions
         )
         AppLogger.info("Production configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config
@@ -115,37 +108,15 @@ extension AppConfiguration {
             defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
-            vpnConfigurations: [
-                VPNConfiguration(
-                    id: "vpn1",
-                    displayName: "VPN 1",
-                    layout: .remoteManaged
-                ),
-                VPNConfiguration(
-                    id: "vpn2",
-                    displayName: "VPN 2",
-                    layout: .datatude(
-                        DatatudePoolConfig(
-                            host: "rotating.prox-e.io",
-                            port: 5055,
-                            password: "mkdb1458!2025",
-                            counterRange: 11...99_999,
-                            counterDigitWidth: 8
-                        )
-                    )
-                )
-            ],
+            vpnConfigurations: AppConfiguration.builtInVPNConfigurations,
             duplicateTabCounts: Array(1...20),
             maxBrowserTabs: 20,
             // paymentCardURL: URL(string: "https://www.google.com/payment")!,
             // buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             // contactUsURL: URL(string: "https://browserjet.com/contact")!,
             // twitterURL: URL(string: "https://twitter.com/browserjet")!,
-            trialBlockedVPNs: [.vpn1],
-            vpnAllowedRegions: [
-                .vpn1: [.us],
-                .vpn2: [.uk, .us, .ca, .it, .nz, .au, .uae, .nl]
-            ]
+            trialBlockedVPNs: [],
+            vpnAllowedRegions: AppConfiguration.builtInVPNAllowedRegions
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")
         return config

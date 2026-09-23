@@ -12,13 +12,6 @@ extension LauncherSettings {
     func makeLaunchRequest(appConfiguration: AppConfiguration) -> LaunchRequest {
         LicenseAccountStore.shared.refresh()
         let isTrialUser = LicenseAccountStore.shared.isTrialUser
-        let sanitizedSelectedVPN: VPNType? = {
-            guard let selectedVPN else { return nil }
-            if isTrialUser && appConfiguration.trialBlockedVPNs.contains(selectedVPN) {
-                return nil
-            }
-            return selectedVPN
-        }()
 
         let proxyType: ProxyType = {
             guard isTrialUser else { return resolvedProxyType() }
@@ -41,8 +34,7 @@ extension LauncherSettings {
             numberOfTabs: numberOfTabs.rawValue,
             proxyType: proxyType,
             isolationMode: appConfiguration.sessionIsolationModeValue,
-            userAgent: appConfiguration.userAgentValue,
-            selectedVPN: sanitizedSelectedVPN
+            userAgent: appConfiguration.userAgentValue
         )
     }
 }

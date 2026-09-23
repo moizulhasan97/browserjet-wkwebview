@@ -7,58 +7,63 @@
 
 import Foundation
 
+/// Supplies proxy pool definitions for built-in VPN tiers (Remote Config in the app, a stub in tests).
+@MainActor
+protocol ProxyPoolTemplateProviding {
+    func proxyPoolTemplate(forVPNID vpnID: String) -> ProxyPoolTemplate?
+}
+
+/// Resolves built-in VPN tiers into per-window proxy providers and reports whether a tier is usable right now.
+@MainActor
 final class VPNProvider {
     private let configurations: [VPNConfiguration]
+    private let templateProvider: ProxyPoolTemplateProviding
 
-    init(configurations: [VPNConfiguration]) {
+    init(configurations: [VPNConfiguration], templateProvider: ProxyPoolTemplateProviding) {
         self.configurations = configurations
+        self.templateProvider = templateProvider
     }
 
-    func generateProxies(for vpnID: String, region: RegionType?) -> [AuthProxy] {
-        guard let config = configurations.first(where: { $0.id == vpnID }) else {
-            return []
+    /// `false` when the tier is unknown, or its Remote Config pool is missing or invalid.
+    func isAvailable(_ vpn: VPNType) -> Bool {
+        guard let config = configuration(for: vpn) else { return false }
+
+        switch config.layout {
+        case .remoteConfigPool:
+            return templateProvider.proxyPoolTemplate(forVPNID: config.id) != nil
+        case .multiSlotZip:
+            return true
+        }
+    }
+
+    /// Builds a fresh provider per browser window, so session ids and rotation state are never shared between windows.
+    func makeProxyProvider(for vpn: VPNType, region: RegionType) -> AuthProxyProviding? {
+        guard let config = configuration(for: vpn) else {
+            AppLogger.warning("VPNProvider: no configuration for \(vpn.rawValue)")
+            return nil
         }
 
         switch config.layout {
-        case .remoteManaged:
-            // coming from API
-            return []
-
-        case let .datatude(pool):
-            guard let region else { return [] }
-            return Self.makeDatatudeProxies(config: pool, region: region)
+        case .remoteConfigPool:
+            guard let template = templateProvider.proxyPoolTemplate(forVPNID: config.id) else {
+                AppLogger.warning("VPNProvider: Remote Config has no usable pool for \(config.id)")
+                return nil
+            }
+            return TemplatedAuthProxyProvider(template: template, region: region)
 
         case let .multiSlotZip(password, portGen, ipGen, usernameStrategy):
-            return generateZippedProxies(
+            let proxies = generateZippedProxies(
                 password: password,
                 portGenerationConfig: portGen,
                 ipGenerationConfig: ipGen,
                 usernameStrategy: usernameStrategy
             )
+            return proxies.isEmpty ? nil : ListAuthProxyProvider(proxies: proxies)
         }
     }
 
-    private static func makeDatatudeProxies(config: DatatudePoolConfig, region: RegionType) -> [AuthProxy] {
-        let slug = region.datatudeRegionSlug
-        let format = "%0\(config.counterDigitWidth)d"
-        var out: [AuthProxy] = []
-        let capacity = config.counterRange.count
-        if capacity > 0 {
-            out.reserveCapacity(Swift.min(capacity, 100_000))
-        }
-        for index in stride(from: config.counterRange.lowerBound, through: config.counterRange.upperBound, by: 1) {
-            let suffix = String(format: format, locale: nil, index)
-            let username = "datatude-\(slug)-num\(suffix)"
-            out.append(
-                AuthProxy(
-                    host: config.host,
-                    port: config.port,
-                    username: username,
-                    password: config.password
-                )
-            )
-        }
-        return out
+    private func configuration(for vpn: VPNType) -> VPNConfiguration? {
+        configurations.first { $0.id == vpn.rawValue }
     }
 
     private func generateZippedProxies(
