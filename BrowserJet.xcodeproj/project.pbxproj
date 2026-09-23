@@ -116,6 +116,7 @@
 		AF69F5EC2F44C18E00B33610 /* BrowserAddressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */; };
 		AF69F5EE2F44CEE700B33610 /* HeadingStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */; };
 		AF69F5F12F43A3700B33610 /* BrowserWindowState+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */; };
+		AF6C78C5300AC68B00CE47AC /* UserAgentPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C78C4300AC68B00CE47AC /* UserAgentPreset.swift */; };
 		AF7A10012F90010000E49C58 /* LauncherMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7A10002F90010000E49C58 /* LauncherMessages.swift */; };
 		AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B42F4E71810064B8FD /* UserSession.swift */; };
 		AF80C5B92F4E74080064B8FD /* UserDefaultsKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */; };
@@ -294,6 +295,7 @@
 		AF69F5EB2F44C18E00B33610 /* BrowserAddressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserAddressBarView.swift; sourceTree = "<group>"; };
 		AF69F5ED2F44CEE400B33610 /* HeadingStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingStyles.swift; sourceTree = "<group>"; };
 		AF69F5F02F43A3700B33610 /* BrowserWindowState+Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserWindowState+Screenshot.swift"; sourceTree = "<group>"; };
+		AF6C78C4300AC68B00CE47AC /* UserAgentPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentPreset.swift; sourceTree = "<group>"; };
 		AF7A10002F90010000E49C58 /* LauncherMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherMessages.swift; sourceTree = "<group>"; };
 		AF80C5B42F4E71810064B8FD /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 		AF80C5B82F4E74070064B8FD /* UserDefaultsKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeyValueStore.swift; sourceTree = "<group>"; };
@@ -578,6 +580,7 @@
 		AF56EF0C2F3DF84A00E49C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				AF6C78C4300AC68B00CE47AC /* UserAgentPreset.swift */,
 				AFF643F42FBBA8AB00D975A6 /* AddressBarURLResolver.swift */,
 				AF99BFB52F9FDF6E0096FAE9 /* AppUpdatePolicy.swift */,
 				AF127D012F9FBA8200EE34E2 /* AppUtils.swift */,
@@ -1336,6 +1339,7 @@
 				AF401ABF2F4D1BE900EF265C /* ProxyEndpoint.swift in Sources */,
 				AFF3EB352F3CACB100C6F08E /* TextTypography.swift in Sources */,
 				AF401ABB2F4D1B1100EF265C /* AppUpdateService.swift in Sources */,
+				AF6C78C5300AC68B00CE47AC /* UserAgentPreset.swift in Sources */,
 				AF9D9BC42FB901170047856A /* LauncherStartURLPreferences.swift in Sources */,
 				AF9D9BC82FB90180047856A /* QuitConfirmationPreferences.swift in Sources */,
 				AF56EF1D2F3E045C00E49C58 /* LauncherTabPreset.swift in Sources */,

@@ -62,14 +62,14 @@ extension AppConfiguration {
 
     var userAgentValue: String? {
         guard isUserAgentEnabled else { return nil }
-        return nil
+        return UserAgentPreset.safariMacOS.rawUserAgentString
     }
 }
 
 extension AppConfiguration {
     static let production: AppConfiguration = {
         let config = AppConfiguration(
-            isUserAgentEnabled: false,
+            isUserAgentEnabled: true,
             defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
@@ -111,7 +111,7 @@ extension AppConfiguration {
 
     static let development: AppConfiguration = {
         let config = AppConfiguration(
-            isUserAgentEnabled: false,
+            isUserAgentEnabled: true,
             defaultSearchAddress: "https://www.ipchicken.com/",
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
