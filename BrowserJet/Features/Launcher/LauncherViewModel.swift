@@ -21,13 +21,24 @@ final class LauncherViewModel: ObservableObject {
 
     private let blockedVPNsForTrial: Set<VPNType>
     private let vpnAllowedRegions: [VPNType: [RegionType]]
+    private let vpnProvider: VPNProvider
 
+    /// Regions offered for the selected tier, in alphabetical order.
     var regionPickerOptions: [RegionType] {
-        guard let vpn = settings.selectedVPN else { return RegionType.allCases }
-        return vpnAllowedRegions[vpn] ?? RegionType.allCases
+        Self.allowedRegions(for: settings.selectedVPN, policy: vpnAllowedRegions)
     }
 
-    init(defaultSearchAddress: String, appConfiguration: AppConfiguration) {
+    /// True when built-in VPN is selected but its pool is not usable yet (e.g. Remote Config not delivered).
+    var isSelectedVPNUnavailable: Bool {
+        guard settings.areVPNControlsEnabled, let vpn = settings.selectedVPN else { return false }
+        return !vpnProvider.isAvailable(vpn)
+    }
+
+    init(
+        defaultSearchAddress: String,
+        appConfiguration: AppConfiguration,
+        vpnProvider: VPNProvider? = nil
+    ) {
         AppLogger.debug("LauncherViewModel initializing with default address: \(defaultSearchAddress)")
 
         LicenseAccountStore.shared.refresh()
@@ -37,6 +48,14 @@ final class LauncherViewModel: ObservableObject {
         self.isTrialUser = trial
         self.blockedVPNsForTrial = blocked
         self.defaultSearchAddress = defaultSearchAddress
+        if let vpnProvider {
+            self.vpnProvider = vpnProvider
+        } else {
+            self.vpnProvider = VPNProvider(
+                configurations: appConfiguration.vpnConfigurations,
+                templateProvider: RemoteConfigManager.shared
+            )
+        }
 
         let allVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
         let filtered: [VPNType]
@@ -67,26 +86,27 @@ final class LauncherViewModel: ObservableObject {
         AppLogger.debug("LauncherView appeared")
         Task { @MainActor in
             async let premiumRefresh: Void = PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
-            async let vpn1Refresh: Void = VPN1ProxyRepository.shared.refreshFromNetworkIfPossible()
+            await refreshVPNPoolsIfUnavailable()
             await premiumRefresh
-            await vpn1Refresh
-            applyDefaultBuiltInVPNSelection()
-            reconcileVPN1SelectionIfNeeded()
         }
     }
 
-    /// Launch is blocked when VPN + Premium is selected but the GPP list is empty, or VPN1 is selected without a VPR list.
+    /// Launch is blocked when VPN + Premium is selected but the GPP list is empty,
+    /// or when the selected built-in VPN has no usable pool.
     func isLaunchAllowed() -> Bool {
         guard settings.isValid else { return false }
-        if settings.isVPNEnabled && settings.isPremiumProxyEnabled {
+        guard settings.isVPNEnabled else { return true }
+        if settings.isPremiumProxyEnabled {
             return PremiumProxyRepository.shared.hasPremiumProxies
         }
-        if settings.isVPNEnabled,
-            !settings.isPremiumProxyEnabled,
-            settings.selectedVPN == .vpn1 {
-            return VPN1ProxyRepository.shared.hasVPN1Proxies
-        }
-        return true
+        return !isSelectedVPNUnavailable
+    }
+
+    /// Re-fetches Remote Config when an offered tier has no pool yet (e.g. the app started offline).
+    private func refreshVPNPoolsIfUnavailable() async {
+        guard availableVPNs.contains(where: { !vpnProvider.isAvailable($0) }) else { return }
+        AppLogger.info("LauncherViewModel: built-in VPN pool missing — re-fetching Remote Config")
+        await RemoteConfigManager.shared.fetchAndActivate()
     }
 
     func toggleVPN(_ newValue: Bool) {
@@ -99,7 +119,6 @@ final class LauncherViewModel: ObservableObject {
         settings.isVPNEnabled = newValue
         if newValue {
             applyDefaultBuiltInVPNSelection()
-            reconcileVPN1SelectionIfNeeded()
         } else {
             settings.isPremiumProxyEnabled = false
             premiumProxyUnavailableMessage = nil
@@ -107,37 +126,11 @@ final class LauncherViewModel: ObservableObject {
         }
     }
 
-    /// Paid: prefer VPN1 when the VPR list loaded; otherwise VPN2 (CEF launcher default). Trial: first allowed tier.
+    /// Keeps the current tier when it is still offered; otherwise selects the first offered tier.
     private func applyDefaultBuiltInVPNSelection() {
-        if isTrialUser {
-            if let first = availableVPNs.first {
-                settings.selectedVPN = first
-            }
-            reconcileRegionForSelectedVPN()
-            return
-        }
-        if VPN1ProxyRepository.shared.hasVPN1Proxies, availableVPNs.contains(.vpn1) {
-            settings.selectedVPN = .vpn1
-            AppLogger.info("LauncherViewModel: default built-in VPN → VPN1 (remote list available)")
-        } else if availableVPNs.contains(.vpn2) {
-            settings.selectedVPN = .vpn2
-            AppLogger.info("LauncherViewModel: default built-in VPN → VPN2 (VPN1 list empty or fetch failed)")
-        } else if let first = availableVPNs.first {
-            settings.selectedVPN = first
-        }
-        reconcileRegionForSelectedVPN()
-    }
-
-    /// If VPN1 is selected but VPR has no rows, fall back to VPN2.
-    private func reconcileVPN1SelectionIfNeeded() {
-        guard !isTrialUser else { return }
-        guard settings.selectedVPN == .vpn1 else { return }
-        guard !VPN1ProxyRepository.shared.hasVPN1Proxies else { return }
-        if availableVPNs.contains(.vpn2) {
-            settings.selectedVPN = .vpn2
-            AppLogger.info("LauncherViewModel: reconciled selection VPN1 → VPN2 (no VPN1 proxies)")
-        } else if let first = availableVPNs.first {
-            settings.selectedVPN = first
+        let isSelectionOffered = settings.selectedVPN.map { availableVPNs.contains($0) } ?? false
+        if !isSelectionOffered {
+            settings.selectedVPN = availableVPNs.first
         }
         reconcileRegionForSelectedVPN()
     }
@@ -199,14 +192,18 @@ final class LauncherViewModel: ObservableObject {
     }
 
     func updateSelectedRegion(_ region: RegionType) {
-        guard settings.selectedVPN != .vpn1 else { return }
+        guard regionPickerOptions.contains(region) else {
+            AppLogger.warning("Region \(region.rawValue) is not offered for the selected VPN")
+            return
+        }
         AppLogger.info("Region selection changed to: \(region.rawValue)")
         settings.selectedRegion = region
     }
 
+    /// Sorted by display code so the picker order never depends on how the policy is written.
     private static func allowedRegions(for vpn: VPNType?, policy: [VPNType: [RegionType]]) -> [RegionType] {
-        guard let vpn else { return RegionType.allCases }
-        return policy[vpn] ?? RegionType.allCases
+        let regions = vpn.flatMap { policy[$0] } ?? RegionType.allCases
+        return regions.sorted { $0.rawValue < $1.rawValue }
     }
 
     private static func pickInitialRegion(
@@ -214,7 +211,6 @@ final class LauncherViewModel: ObservableObject {
         policy: [VPNType: [RegionType]],
         preferred: RegionType = .uk
     ) -> RegionType {
-        if vpn == .vpn1 { return .us }
         let allowed = allowedRegions(for: vpn, policy: policy)
         if allowed.contains(preferred) { return preferred }
         return allowed.first ?? .uk
@@ -222,10 +218,6 @@ final class LauncherViewModel: ObservableObject {
 
     private func reconcileRegionForSelectedVPN() {
         guard let vpn = settings.selectedVPN else { return }
-        if vpn == .vpn1 {
-            settings.selectedRegion = .us
-            return
-        }
         let allowed = Self.allowedRegions(for: vpn, policy: vpnAllowedRegions)
         if let region = settings.selectedRegion, allowed.contains(region) { return }
         settings.selectedRegion = allowed.first

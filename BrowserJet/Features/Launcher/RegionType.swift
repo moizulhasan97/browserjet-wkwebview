@@ -24,7 +24,9 @@ enum RegionType: String, CaseIterable, Hashable {
 }
 
 extension RegionType {
-    var datatudeRegionSlug: String {
+    /// Default value substituted for `{region}` in proxy pool templates.
+    /// Remote Config can override it per region via `regionSlugs`.
+    var defaultProxySlug: String {
         switch self {
         case .uk: return "gb"
         case .us: return "us"

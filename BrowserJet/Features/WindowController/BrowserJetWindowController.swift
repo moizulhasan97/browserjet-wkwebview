@@ -51,12 +51,15 @@ protocol ShowableWindowController: AnyObject {
     func close()
     /// Fixed-size windows only: shrink/grow content area and re-center (no-op for types that don’t support it).
     func applyFixedContentSize(_ size: NSSize)
+    /// Fixed-size windows only: fit the window to a measured SwiftUI content height, keeping the top edge in place.
+    func fitContentHeight(_ height: CGFloat)
     /// Activation bootstrap only: hide titled window chrome so only the card is visible.
     func setActivationChromeBorderless(_ borderless: Bool)
 }
 
 extension ShowableWindowController {
     func applyFixedContentSize(_ size: NSSize) {}
+    func fitContentHeight(_ height: CGFloat) {}
     func setActivationChromeBorderless(_ borderless: Bool) {}
 }
 
@@ -176,17 +179,7 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
 
     func applyFixedContentSize(_ size: NSSize) {
         guard let window else { return }
-        // When the window uses fullSizeContentView with a visible title bar, SwiftUI
-        // lays out content within the safe area (below the title bar). The measured
-        // SwiftUI height therefore excludes the title bar. Add the title bar height so
-        // the window is tall enough for both the title bar overlay and the full content.
-        let titleBarAdjustment: CGFloat = {
-            guard window.styleMask.contains(.titled),
-                  window.styleMask.contains(.fullSizeContentView) else { return 0 }
-            return max(0, window.frame.height - window.contentLayoutRect.height)
-        }()
-
-        let adjusted = NSSize(width: size.width, height: size.height + titleBarAdjustment)
+        let adjusted = NSSize(width: size.width, height: size.height + Self.titleBarAdjustment(for: window))
         let clamped = NSSize(
             width: max(200, adjusted.width),
             height: max(120, adjusted.height)
@@ -203,6 +196,45 @@ final class BrowserJetWindowController<Content: View>: NSWindowController, Showa
         window.invalidateShadow()
 
         AppLogger.debug("BrowserJetWindowController content size → \(clamped.width)x\(clamped.height)")
+    }
+
+    func fitContentHeight(_ height: CGFloat) {
+        guard let window, height > 0 else { return }
+
+        let currentFrame = window.frame
+        var targetFrame = window.frameRect(
+            forContentRect: NSRect(
+                origin: currentFrame.origin,
+                size: NSSize(
+                    width: window.contentRect(forFrameRect: currentFrame).width,
+                    height: height + Self.titleBarAdjustment(for: window)
+                )
+            )
+        )
+        if let visibleHeight = window.screen?.visibleFrame.height {
+            targetFrame.size.height = min(targetFrame.height, visibleHeight)
+        }
+        guard abs(targetFrame.height - currentFrame.height) >= 1 else { return }
+
+        // Grow/shrink downward: the top edge stays where the user left the window.
+        targetFrame.origin.y = currentFrame.maxY - targetFrame.height
+
+        if !window.styleMask.contains(.resizable) {
+            window.minSize = targetFrame.size
+            window.maxSize = targetFrame.size
+        }
+        window.setFrame(targetFrame, display: true)
+        window.invalidateShadow()
+
+        AppLogger.debug("BrowserJetWindowController fitted content height → \(targetFrame.height)")
+    }
+
+    /// With a titled `.fullSizeContentView` window, SwiftUI lays content out below the title bar,
+    /// so measured SwiftUI heights exclude it. This is the height to add back.
+    private static func titleBarAdjustment(for window: NSWindow) -> CGFloat {
+        guard window.styleMask.contains(.titled),
+            window.styleMask.contains(.fullSizeContentView) else { return 0 }
+        return max(0, window.frame.height - window.contentLayoutRect.height)
     }
 
     func setActivationChromeBorderless(_ borderless: Bool) {

@@ -6,8 +6,8 @@
 import Foundation
 
 enum LauncherMessages {
-    /// Shown to trial users when some VPN tiers are reserved for paid plans (see `AppConfiguration.trialBlockedVPNs`).
-    static let trialPaidVpnFootnote = "VPN 1 is only available on a paid plan."
+    /// Shown when built-in VPN is on but its pool has not been delivered by Remote Config (e.g. offline first launch).
+    static let vpnUnavailable = "VPN is unavailable right now. Please check your internet connection and try again."
 
     /// Shown when the user turns Premium Proxy on but the GPP list is empty (fetch failed, still loading, or no rows).
     static let premiumNoProxiesAvailable = "No premium proxies are available."

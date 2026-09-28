@@ -109,7 +109,7 @@ private struct LeadingToolbar: View {
     let state = BrowserWindowState(
         proxyType: .local,
         isolationMode: .perTab,
-        proxies: [],
+        proxyProvider: nil,
         userAgent: nil,
         sessionManager: sessionManager,
         initialURL: URL(string: "https://google.com")!,

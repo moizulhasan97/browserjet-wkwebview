@@ -31,6 +31,8 @@ struct LauncherView: View {
     @StateObject private var viewModel: LauncherViewModel
     @ObservedObject private var premiumRepository = PremiumProxyRepository.shared
     @ObservedObject private var accountStore = LicenseAccountStore.shared
+    /// Observed so VPN availability and the Launch button re-evaluate once Remote Config activates.
+    @ObservedObject private var remoteConfigManager = RemoteConfigManager.shared
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var sessionManager: SessionManager
     @Environment(\.colorScheme)
@@ -251,8 +253,8 @@ private extension LauncherView {
     private var selectVPNSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             selectVPNRow
-            if viewModel.isTrialUser {
-                Text(LauncherMessages.trialPaidVpnFootnote)
+            if viewModel.isSelectedVPNUnavailable {
+                Text(LauncherMessages.vpnUnavailable)
                     .foregroundStyle(theme.textFieldSecondary)
                     .font(designSystem.typography.textBody1.font)
                     .fixedSize(horizontal: false, vertical: true)
@@ -304,10 +306,7 @@ private extension LauncherView {
             BrowserJetMenuPicker(
                 options: viewModel.regionPickerOptions,
                 selection: Binding(
-                    get: {
-                        if viewModel.settings.selectedVPN == .vpn1 { return .us }
-                        return viewModel.settings.selectedRegion ?? .uk
-                    },
+                    get: { viewModel.settings.selectedRegion ?? .uk },
                     set: { viewModel.updateSelectedRegion($0) }
                 ),
                 isDisabled: !viewModel.settings.areRegionControlsEnabled,
