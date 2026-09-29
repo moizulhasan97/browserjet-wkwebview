@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		741EB8100864414EB9E1849C /* BrowserTabPillShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5ACA9592E1B48DAA9223F65 /* BrowserTabPillShapes.swift */; };
 		AC1354060D144E8D9C8F2FA8 /* TabNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */; };
+		D4F630B3A8E96EB6AED52814 /* TabNavigationFailure.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF57B7AB441A530EE95EA8D3 /* TabNavigationFailure.swift */; };
+		DAE1FD16BE33867145A227AC /* NavigationErrorMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59853CD577C7794247564EFA /* NavigationErrorMessages.swift */; };
+		3DAB17021559902DF34BADF1 /* NavigationErrorPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D117462F0F76BEAE1BD9B93 /* NavigationErrorPresentation.swift */; };
+		BE775785227B5EF3CD64B546 /* NavigationErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8F450ECEB9997FEC44710F /* NavigationErrorView.swift */; };
 		AF0A09DD2F4653C400A12964 /* VPNConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */; };
 		AF0A09DF2F4653D400A12964 /* VPNProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09DE2F4653D300A12964 /* VPNProvider.swift */; };
 		AF0A09E12F4653F300A12964 /* UsernameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */; };
@@ -189,6 +193,10 @@
 
 /* Begin PBXFileReference section */
 		0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabNavigationDelegate.swift; sourceTree = "<group>"; };
+		AF57B7AB441A530EE95EA8D3 /* TabNavigationFailure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabNavigationFailure.swift; sourceTree = "<group>"; };
+		59853CD577C7794247564EFA /* NavigationErrorMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationErrorMessages.swift; sourceTree = "<group>"; };
+		0D117462F0F76BEAE1BD9B93 /* NavigationErrorPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationErrorPresentation.swift; sourceTree = "<group>"; };
+		2B8F450ECEB9997FEC44710F /* NavigationErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationErrorView.swift; sourceTree = "<group>"; };
 		AF0A09DC2F4653C100A12964 /* VPNConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNConfiguration.swift; sourceTree = "<group>"; };
 		AF0A09DE2F4653D300A12964 /* VPNProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNProvider.swift; sourceTree = "<group>"; };
 		AF0A09E02F4653DC00A12964 /* UsernameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameGenerator.swift; sourceTree = "<group>"; };
@@ -781,6 +789,7 @@
 				AFCA5CF32F75BC4B007A8578 /* DecryptedPremiumProxy.swift */,
 				AF69F5CE2F4376C000B33610 /* TabModel.swift */,
 				0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */,
+				AF57B7AB441A530EE95EA8D3 /* TabNavigationFailure.swift */,
 				AF69F5CC2F4376A200B33610 /* AuthProxy.swift */,
 			);
 			path = Model;
@@ -832,9 +841,20 @@
 		AF69F5E82F43A5B300B33610 /* WebView */ = {
 			isa = PBXGroup;
 			children = (
+				EDEBB86330D79DB7FC7A9F02 /* NavigationError */,
 				AF69F5E92F43A5BD00B33610 /* WebViewContainer.swift */,
 			);
 			path = WebView;
+			sourceTree = "<group>";
+		};
+		EDEBB86330D79DB7FC7A9F02 /* NavigationError */ = {
+			isa = PBXGroup;
+			children = (
+				59853CD577C7794247564EFA /* NavigationErrorMessages.swift */,
+				0D117462F0F76BEAE1BD9B93 /* NavigationErrorPresentation.swift */,
+				2B8F450ECEB9997FEC44710F /* NavigationErrorView.swift */,
+			);
+			path = NavigationError;
 			sourceTree = "<group>";
 		};
 		AF80C5BA2F4E74FE0064B8FD /* Core */ = {
@@ -1391,6 +1411,10 @@
 				AF69F5AD2F43713000B33610 /* BrowserMenuBuilder.swift in Sources */,
 				AF69F5CF2F4376C000B33610 /* TabModel.swift in Sources */,
 				AC1354060D144E8D9C8F2FA8 /* TabNavigationDelegate.swift in Sources */,
+				D4F630B3A8E96EB6AED52814 /* TabNavigationFailure.swift in Sources */,
+				DAE1FD16BE33867145A227AC /* NavigationErrorMessages.swift in Sources */,
+				3DAB17021559902DF34BADF1 /* NavigationErrorPresentation.swift in Sources */,
+				BE775785227B5EF3CD64B546 /* NavigationErrorView.swift in Sources */,
 				AFCA5CEC2F75B104007A8578 /* LicenseAccountStore.swift in Sources */,
 				AF401AA02F4CC79700EF265C /* BrowserJetTextfieldStyleProtocol.swift in Sources */,
 				AF80C5B52F4E71820064B8FD /* UserSession.swift in Sources */,

@@ -210,7 +210,7 @@ final class BrowserWindowState: ObservableObject {
             return
         }
         let closingTab = tabs[index]
-        if let url = closingTab.webView.url ?? URL(string: closingTab.addressText) {
+        if let url = closingTab.currentURL {
             pushClosedTab(url: url)
         }
         let slot = closingTab.sessionSlot
@@ -262,10 +262,9 @@ final class BrowserWindowState: ObservableObject {
             return
         }
 
-        // Capture the current URL before replacing the web view
-        let currentURL = tab.webView.url
-        ?? URL(string: tab.addressText)
-        ?? initialURL
+        // Capture the current URL before replacing the web view. `currentURL` prefers a
+        // failed destination, so burning from an error page retries that page.
+        let currentURL = tab.currentURL ?? initialURL
 
         // Build a fresh data store with the new proxy baked in
         let newStore = makeNewDataStore(proxy: newProxy)
@@ -356,22 +355,22 @@ extension BrowserWindowState {
 
     // MARK: Per-tab navigation actions
     func reloadSelectedTab() {
-        selectedTab?.webView.reload()
+        selectedTab?.reload()
     }
 
     func goBackSelectedTab() {
         guard let tab = selectedTab, tab.canGoBack else { return }
-        tab.webView.goBack()
+        tab.goBack()
     }
 
     func goForwardSelectedTab() {
         guard let tab = selectedTab, tab.canGoForward else { return }
-        tab.webView.goForward()
+        tab.goForward()
     }
 
     func reloadAllTabs() {
         for tab in tabs {
-            tab.webView.reload()
+            tab.reload()
         }
         AppLogger.info("Reload all tabs: \(tabs.count)")
     }
@@ -386,8 +385,7 @@ extension BrowserWindowState {
         let toCreate = min(max(0, count), room)
         guard toCreate > 0 else { return 0 }
 
-        let url = selected.webView.url
-        ?? URL(string: selected.addressText)
+        let url = selected.currentURL
         ?? URL(string: "about:blank")
         ?? URL(fileURLWithPath: "/")
         for _ in 0..<toCreate {
