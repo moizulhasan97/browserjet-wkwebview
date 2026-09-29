@@ -32,9 +32,11 @@ final class RecoverAccountViewModel: ObservableObject {
         defer { isLoading = false }
         do {
             try await licenseService.requestPasswordReset(email: trimmed)
+            AnalyticsManager.shared.log(.recoverAccountSubmitted(succeeded: true))
             return true
         } catch {
             errorMessage = error.localizedDescription
+            AnalyticsManager.shared.log(.recoverAccountSubmitted(succeeded: false))
             return false
         }
     }

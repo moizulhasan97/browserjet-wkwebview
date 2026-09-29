@@ -51,7 +51,17 @@ final class PremiumProxyRepository: ObservableObject {
             AppLogger.info("PremiumProxyRepository: fetched \(proxies.count) premium proxy row(s)")
         } catch {
             proxies = []
-            AppLogger.warning("PremiumProxyRepository: fetch failed (silent) — \(error.localizedDescription)")
+            switch error {
+            case PremiumProxyDecryptError.emptyProxyList:
+                AppLogger.info("PremiumProxyRepository: no premium proxies allocated for this license")
+            case is PremiumProxyDecryptError:
+                AppLogger.error(
+                    "PremiumProxyRepository: payload decode/decrypt failed unexpectedly - \(error.localizedDescription)"
+                )
+                CrashReportingManager.shared.record(error: error)
+            default:
+                AppLogger.warning("PremiumProxyRepository: fetch failed (silent) - \(error.localizedDescription)")
+            }
         }
     }
 

@@ -9,6 +9,17 @@ import Foundation
 import AppKit
 import WebKit
 
+private enum WKWebViewFault: Error, LocalizedError {
+    case webContentProcessTerminated(tabID: UUID, url: String)
+
+    var errorDescription: String? {
+        switch self {
+        case .webContentProcessTerminated(let tabID, let url):
+            return "WKWebView WebContent process terminated for tab \(tabID) at \(url)"
+        }
+    }
+}
+
 // MARK: - Tab Navigation Delegate
 final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
     private weak var tab: TabModel?
@@ -16,6 +27,11 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
     private var titleObservation: NSKeyValueObservation?
     private var urlObservation: NSKeyValueObservation?
     private var loadingTimeoutTask: Task<Void, Never>?
+    /// In-flight provisional navigation and its destination. Used as a fallback when
+    /// WebKit's error omits the failing URL; identity-matched so a superseded
+    /// navigation can never clear a newer one's target.
+    private var provisionalNavigation: WKNavigation?
+    private var provisionalURL: URL?
 
     init(tab: TabModel, onOpenInNewTab: ((URL) -> Void)? = nil) {
         self.tab = tab
@@ -34,9 +50,11 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         titleObservation = nil
         urlObservation = nil
 
-        // 2. Cancel any in-flight timeout
+        // 2. Cancel any in-flight timeout and provisional tracking
         loadingTimeoutTask?.cancel()
         loadingTimeoutTask = nil
+        provisionalNavigation = nil
+        provisionalURL = nil
 
         // 3. Re-attach self as navigation delegate on the new web view
         newWebView.navigationDelegate = self
@@ -59,7 +77,11 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
             guard let tab else { return }
             Task { @MainActor in
                 let newURLString = tab.webView.url?.absoluteString
-                tab.addressText = newURLString ?? tab.addressText
+                // While an error page is shown the address bar belongs to the failed
+                // destination; WebKit reverting `url` to the committed page must not overwrite it.
+                if tab.navigationFailure == nil {
+                    tab.addressText = newURLString ?? tab.addressText
+                }
 
                 if tab.hasNavigatedAwayFromInitialBlank == false,
                     let newURLString,
@@ -78,11 +100,13 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
 
     // swiftlint:disable:next implicitly_unwrapped_optional
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        provisionalNavigation = navigation
+        provisionalURL = webView.url
+
         Task { @MainActor [weak self] in
             guard let tab = self?.tab else { return }
             tab.isLoading = true
-            tab.canGoBack = webView.canGoBack
-            tab.canGoForward = webView.canGoForward
+            tab.refreshHistoryState()
 
             self?.loadingTimeoutTask?.cancel()
             self?.loadingTimeoutTask = Task { [weak self] in
@@ -101,8 +125,11 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
 
     // swiftlint:disable:next implicitly_unwrapped_optional
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        finishProvisionalNavigation(navigation)
+
         Task { @MainActor [weak self] in
             guard let tab = self?.tab else { return }
+            tab.clearNavigationFailure()
             if let title = webView.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 tab.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
             }
@@ -120,8 +147,7 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         Task { @MainActor [weak self] in
             guard let tab = self?.tab else { return }
             tab.isLoading = false
-            tab.canGoBack = webView.canGoBack
-            tab.canGoForward = webView.canGoForward
+            tab.refreshHistoryState()
             tab.addressText = webView.url?.absoluteString ?? tab.addressText
 
             if let title = webView.title, !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -170,13 +196,17 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         loadingTimeoutTask?.cancel()
         loadingTimeoutTask = nil
-
+        
         Task { @MainActor [weak self] in
             guard let tab = self?.tab else { return }
             tab.isLoading = false
-            tab.canGoBack = webView.canGoBack
-            tab.canGoForward = webView.canGoForward
+            tab.refreshHistoryState()
             AppLogger.warning("Navigation failed for tab \(tab.id): \(error.localizedDescription)")
+            if (error as NSError).code != NSURLErrorCancelled {
+                CrashReportingManager.shared.log(
+                    "webview_nav_failed: \(webView.url?.absoluteString ?? "?") - \(error.localizedDescription)"
+                )
+            }
         }
     }
 
@@ -184,14 +214,28 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         loadingTimeoutTask?.cancel()
         loadingTimeoutTask = nil
+        let attemptedURL = finishProvisionalNavigation(navigation)
 
         Task { @MainActor [weak self] in
             guard let tab = self?.tab else { return }
-            tab.isLoading = false
-            tab.canGoBack = webView.canGoBack
-            tab.canGoForward = webView.canGoForward
-            tab.addressText = webView.url?.absoluteString ?? tab.addressText
-            AppLogger.warning("Provisional navigation failed for tab \(tab.id): \(error.localizedDescription)")
+            guard let failure = TabNavigationFailure(error: error, fallbackURL: attemptedURL) else {
+                // Cancelled, superseded or handed off by policy: no error page.
+                tab.isLoading = false
+                tab.refreshHistoryState()
+                if tab.navigationFailure == nil {
+                    tab.addressText = webView.url?.absoluteString ?? tab.addressText
+                }
+                return
+            }
+
+            tab.presentNavigationFailure(failure)
+            AppLogger.warning(
+                "Provisional navigation failed for tab \(tab.id) (\(failure.diagnosticCode)): "
+                + error.localizedDescription
+            )
+            CrashReportingManager.shared.log(
+                "webview_nav_failed: \(failure.failingURL?.absoluteString ?? "?") - \(failure.diagnosticCode)"
+            )
         }
     }
 
@@ -243,6 +287,28 @@ final class TabNavigationDelegate: NSObject, WKNavigationDelegate {
         }
 
         decisionHandler(.allow)
+    }
+    
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        Task { @MainActor [weak self] in
+            guard let tab = self?.tab else { return }
+            let url = webView.url?.absoluteString ?? tab.addressText
+            AppLogger.error("WebContent process terminated for tab \(tab.id) at \(url)")
+            CrashReportingManager.shared.record(
+                error: WKWebViewFault.webContentProcessTerminated(tabID: tab.id, url: url)
+            )
+        }
+    }
+
+    /// Clears provisional tracking for `navigation` and returns its destination.
+    /// Returns `nil` when `navigation` is not the tracked one (already superseded).
+    @discardableResult
+    private func finishProvisionalNavigation(_ navigation: WKNavigation?) -> URL? {
+        guard let navigation, navigation === provisionalNavigation else { return nil }
+        let url = provisionalURL
+        provisionalNavigation = nil
+        provisionalURL = nil
+        return url
     }
 
     private func isSeatGeekCheckoutURL(_ url: URL) -> Bool {

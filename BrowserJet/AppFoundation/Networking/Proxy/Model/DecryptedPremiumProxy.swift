@@ -7,37 +7,6 @@
 
 import Foundation
 
-// MARK: - VPN1 API DTO (CEF `VPN1ProxyDTO`; `Port` is a string in JSON)
-
-struct VPN1ProxyDTO: Codable {
-    let vpnID: Int
-    let ipAddress: String
-    let port: String
-    let username: String
-    let password: String
-    let createdOn: String
-
-    enum CodingKeys: String, CodingKey {
-        case vpnID = "VPN_ID"
-        case ipAddress = "IP"
-        case port = "Port"
-        case username = "Username"
-        case password = "Password"
-        case createdOn = "CreatedOn"
-    }
-
-    func asDecryptedPremiumProxy() -> DecryptedPremiumProxy {
-        DecryptedPremiumProxy(
-            ipID: vpnID,
-            ipAddress: ipAddress,
-            port: Int(port) ?? 0,
-            username: username,
-            password: password,
-            createdOn: createdOn
-        )
-    }
-}
-
 struct DecryptedPremiumProxy: Codable, Hashable {
     let ipID: Int
     let ipAddress: String

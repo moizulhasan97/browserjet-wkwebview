@@ -161,6 +161,8 @@ final class WindowManager {
         }
 
         activationWC?.show()
+        CrashReportingManager.shared.log("window_manager: activation window shown")
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -196,9 +198,8 @@ final class WindowManager {
             .environmentObject(sessionManager)
             .environmentObject(LicenseAccountStore.shared)
 
-        let isTrialUser = LicenseAccountStore.shared.isTrialUser
-        let launcherHeight: CGFloat = isTrialUser ? 562 : 530// 506
-        let intendedSize = NSSize(width: 500, height: launcherHeight)
+        // Only the size before the first measurement; `resizeLauncherToContentHeight` fits the real content.
+        let intendedSize = LauncherWindowMetrics.initialContentSize
 
         launcherWC = BrowserJetWindowController(
             content: rootView,
@@ -209,6 +210,8 @@ final class WindowManager {
         )
 
         launcherWC?.show()
+        CrashReportingManager.shared.log("window_manager: launcher window shown")
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -218,19 +221,13 @@ final class WindowManager {
         sessionManager: SessionManager,
         appConfiguration: AppConfiguration
     ) {
-        let vpnProvider = VPNProvider(configurations: appConfiguration.vpnConfigurations)
-        let builtInRegion = builtInRegion(from: request.proxyType)
+        let proxyProvider = makeProxyProvider(for: request.proxyType, appConfiguration: appConfiguration)
 
-        let generatedProxies: [AuthProxy]
-
-        if request.proxyType.isPremiumSession {
-            generatedProxies = PremiumProxyRepository.shared.authProxiesForSession()
-        } else if request.selectedVPN == .vpn1 {
-            generatedProxies = VPN1ProxyRepository.shared.authProxiesForSession()
-        } else if let vpnID = request.selectedVPN?.rawValue {
-            generatedProxies = vpnProvider.generateProxies(for: vpnID, region: builtInRegion)
-        } else {
-            generatedProxies = []
+        // Fail closed: a proxied session without a proxy provider would silently browse unproxied.
+        guard request.proxyType.isLocal || proxyProvider != nil else {
+            AppLogger.error("WindowManager: no proxy provider for \(request.proxyType.statusTitle) — launch aborted")
+            CrashReportingManager.shared.log("window_manager: launch aborted - no proxy provider")
+            return
         }
 
         let initialURL = AddressBarURLResolver.resolve(request.address)
@@ -238,18 +235,30 @@ final class WindowManager {
             ?? URL(string: "https://www.google.com")
             ?? URL(string: "about:blank")
             ?? URL(fileURLWithPath: "/")
+        
+        CrashReportingManager.shared.setCustomValue(
+            request.numberOfTabs,
+            forKey: CrashReportingManager.CustomKey.requestedTabCount
+        )
+        
+        AnalyticsManager.shared.log(
+            .browserLaunched(
+                connectionCategory: request.proxyType.statusTitle,
+                tabCount: request.numberOfTabs,
+                isolationMode: String(describing: request.isolationMode)
+            )
+        )
 
         let state = BrowserWindowState(
             proxyType: request.proxyType,
             isolationMode: request.isolationMode,
-            proxies: generatedProxies,
+            proxyProvider: proxyProvider,
             userAgent: request.userAgent,
             sessionManager: sessionManager,
             initialURL: initialURL,
             initialTabCount: request.numberOfTabs,
             maxBrowserTabs: appConfiguration.maxBrowserTabs
         )
-
         let rootView = BrowserRootView(state: state, menu: .default)
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
@@ -275,6 +284,8 @@ final class WindowManager {
         launcherWC = nil
 
         browserWC?.show()
+        CrashReportingManager.shared.log("window_manager: browser window shown (proxyType=\(request.proxyType.statusTitle))")
+        refreshWindowCountCustomValue()
     }
 
     @MainActor
@@ -287,7 +298,7 @@ final class WindowManager {
         let state = BrowserWindowState(
             proxyType: .local,
             isolationMode: appConfiguration.sessionIsolationModeValue,
-            proxies: [],
+            proxyProvider: nil,
             userAgent: appConfiguration.userAgentValue,
             sessionManager: sessionManager,
             initialURL: paymentURL,
@@ -295,7 +306,7 @@ final class WindowManager {
             maxBrowserTabs: appConfiguration.maxBrowserTabs,
             isTrialLockActive: true
         )
-
+        
         let rootView = BrowserRootView(state: state, menu: .default)
             .environmentObject(themeManager)
             .environmentObject(sessionManager)
@@ -324,6 +335,8 @@ final class WindowManager {
 
         browserWC = browserWindowController
         browserWC?.show()
+        CrashReportingManager.shared.log("window_manager: browser window shown (trial-expired lock)")
+        refreshWindowCountCustomValue()
     }
 
     private static func hasStoredLicenseKey() -> Bool {
@@ -334,14 +347,37 @@ final class WindowManager {
         return !raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    private func builtInRegion(from proxyType: ProxyType) -> RegionType? {
-        guard case .proxy(let source) = proxyType else { return nil }
+    private func refreshWindowCountCustomValue() {
+        let visibleWindowCount = NSApp.windows.filter { $0.isVisible && !$0.isSheet }.count
+        CrashReportingManager.shared.setCustomValue(
+            visibleWindowCount,
+            forKey: CrashReportingManager.CustomKey.openWindowCount
+        )
+    }
+}
 
-        switch source {
-        case .builtIn(_, let region), .premium(_, let region):
-            return region
-        case .custom:
-            return nil
+// MARK: - Launcher sizing
+
+extension WindowManager {
+    /// Fits the launcher window to its SwiftUI content (e.g. when a footnote appears or disappears).
+    func resizeLauncherToContentHeight(_ measuredHeight: CGFloat) {
+        guard measuredHeight > 0, let launcherWC else { return }
+        launcherWC.fitContentHeight(measuredHeight)
+    }
+}
+
+// MARK: - Proxy providers
+
+private extension WindowManager {
+    @MainActor
+    func makeProxyProvider(for proxyType: ProxyType, appConfiguration: AppConfiguration) -> AuthProxyProviding? {
+        let vpnProvider = VPNProvider(
+            configurations: appConfiguration.vpnConfigurations,
+            templateProvider: RemoteConfigManager.shared
+        )
+        let factory = AuthProxyProviderFactory(vpnProvider: vpnProvider) {
+            PremiumProxyRepository.shared.authProxiesForSession()
         }
+        return factory.makeProvider(for: proxyType)
     }
 }

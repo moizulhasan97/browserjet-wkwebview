@@ -57,8 +57,10 @@ final class ChangeLicenseKeyViewModel: ObservableObject {
             do {
                 try await coordinator.changeLicenseKey(key: key)
                 didSucceed = true
+                AnalyticsManager.shared.log(.changeKeySubmitted(succeeded: true))
             } catch {
                 errorMessage = error.localizedDescription
+                AnalyticsManager.shared.log(.changeKeySubmitted(succeeded: false))
             }
         }
     }

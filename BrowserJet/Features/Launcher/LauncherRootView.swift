@@ -7,6 +7,17 @@
 
 import SwiftUI
 
+/// Launcher window geometry. Height is content-driven; `initialContentHeight` is only used
+/// until the first measurement arrives.
+enum LauncherWindowMetrics {
+    static let contentWidth: CGFloat = 500
+    static let initialContentHeight: CGFloat = 530
+
+    static var initialContentSize: NSSize {
+        NSSize(width: contentWidth, height: initialContentHeight)
+    }
+}
+
 // MARK: - Window Root (theme bridge)
 struct LauncherRootView: View {
     @Environment(\.colorScheme)
@@ -35,6 +46,14 @@ struct LauncherRootView: View {
             } else {
                 LauncherView(appConfiguration: appConfiguration)
                     .environment(\.appConfiguration, appConfiguration)
+                    .frame(width: LauncherWindowMetrics.contentWidth)
+                    .fixedSize(horizontal: false, vertical: true)
+                    // Content height never depends on window height (fixedSize), so resizing can't loop.
+                    .onGeometryChange(for: CGFloat.self) { proxy in
+                        proxy.size.height
+                    } action: { newHeight in
+                        WindowManager.shared.resizeLauncherToContentHeight(newHeight)
+                    }
             }
             // }
             // .padding(.top, -titleBarCompensation)

@@ -73,6 +73,10 @@ struct SettingsView: View {
                     defaultURLSection
                     Divider().overlay(theme.divider)
                     confirmBeforeQuitRow
+                    #if DEBUG
+                    Divider().overlay(theme.divider)
+                    developerRow
+                    #endif
                 }
             }
         }
@@ -163,6 +167,37 @@ struct SettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
+    
+    #if DEBUG
+    private var developerRow: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Developer")
+                .font(designSystem.typography.textBody1.font)
+                .foregroundStyle(theme.textPrimary)
+            
+            HStack(spacing: 12) {
+                BrowserJetAppButton(
+                    title: "Force Test Crash",
+                    type: .secondaryLarge,
+                    width: .fixed(width: 160),
+                    isDisabled: false
+                ) {
+                    CrashTestTrigger.forceCrash()
+                }
+                
+                BrowserJetAppButton(
+                    title: "Record Test Non-Fatal",
+                    type: .secondaryLarge,
+                    width: .fixed(width: 180),
+                    isDisabled: false
+                ) {
+                    CrashTestTrigger.recordTestNonFatal()
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    #endif
 
     private var footer: some View {
         HStack(spacing: 12) {

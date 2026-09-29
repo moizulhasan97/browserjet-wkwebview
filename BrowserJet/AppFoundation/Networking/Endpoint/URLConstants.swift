@@ -36,7 +36,7 @@ enum URLConstants {
     static func buyMoreLicensesURL(email: String?) -> URL? {
         makeServerURL(path: remoteConfig.buyMoreLicensesPath, email: email)
     }
-
+    
     static func licenseExpiredPaymentURL(email: String?) -> URL {
         makeServerURL(path: remoteConfig.browserPurchasePath, email: email)
         ?? fallbackLicenseExpiredPaymentURL(email: email)
@@ -54,7 +54,7 @@ enum URLConstants {
         ]
         return components?.url
     }
-
+    
     private static func fallbackLicenseExpiredPaymentURL(email: String?) -> URL {
         var components = URLComponents(string: "https://service.browserjet.com/BrowserPurchase.aspx")!
         components.queryItems = [

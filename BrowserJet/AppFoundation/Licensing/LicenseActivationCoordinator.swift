@@ -35,7 +35,6 @@ final class LicenseActivationCoordinator {
             // TODO: Full “change key” UX — invalidate any data tied to the old license before saving the new one.
             await MainActor.run {
                 PremiumProxyRepository.shared.clearForLicenseChange()
-                VPN1ProxyRepository.shared.clearForLicenseChange()
             }
         }
 
@@ -44,14 +43,20 @@ final class LicenseActivationCoordinator {
         licenseStore.save(response)
         await MainActor.run {
             LicenseAccountStore.shared.refresh()
+            AnalyticsManager.shared.setUserProperty(
+                LicenseAccountStore.shared.userKind?.rawValue,
+                forName: "user_kind"
+            )
         }
 
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
-
+        CrashReportingManager.shared.setUserID(fromLicenseKey: key)
+        AnalyticsManager.shared.setUserID(fromLicenseKey: key)
         await licenseService.updateKeyInBackendIfNeeded(key: key, keyValueStore: keyValueStore)
 
         if userSession.userStatus == .rejected {
+            CrashReportingManager.shared.log("license: activation outcome = shiftRequired")
             return .shiftRequired(key: key, email: response.userEmail)
         }
 
@@ -62,12 +67,15 @@ final class LicenseActivationCoordinator {
 
         if userSession.trialExpired {
             AppLogger.info("PAYMENT URL FOR TRIAL EXPIRED: \(paymentURL)")
+            CrashReportingManager.shared.log("license: activation outcome = trialExpired")
             return .trialExpired(paymentURL: paymentURL)
         }
         if userSession.hasLicenseExpired {
             AppLogger.info("PAYMENT URL FOR LICENSE EXPIRED: \(paymentURL)")
+            CrashReportingManager.shared.log("license: activation outcome = licenseExpired")
             return .licenseExpired(paymentURL: paymentURL)
         }
+        CrashReportingManager.shared.log("license: activation outcome = success")
         return .success
     }
 
@@ -88,7 +96,6 @@ final class LicenseActivationCoordinator {
             previousKey != trimmedKey {
             await MainActor.run {
                 PremiumProxyRepository.shared.clearForLicenseChange()
-                VPN1ProxyRepository.shared.clearForLicenseChange()
             }
         }
 
@@ -98,10 +105,16 @@ final class LicenseActivationCoordinator {
         licenseStore.save(response)
         await MainActor.run {
             LicenseAccountStore.shared.refresh()
+            AnalyticsManager.shared.setUserProperty(
+                LicenseAccountStore.shared.userKind?.rawValue,
+                forName: "user_kind"
+            )
         }
 
         keyValueStore.set(trimmedKey, forKey: StorageKeys.licenseKey)
         keyValueStore.set(response.userEmail, forKey: StorageKeys.userEmail)
+        CrashReportingManager.shared.setUserID(fromLicenseKey: trimmedKey)
+        AnalyticsManager.shared.setUserID(fromLicenseKey: trimmedKey)
 
         AppLogger.info("LicenseActivationCoordinator: change key successful, relaunch required")
     }

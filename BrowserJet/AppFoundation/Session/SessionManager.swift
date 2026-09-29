@@ -7,6 +7,23 @@
 
 import Foundation
 
+private enum SessionManagerFault: Error, LocalizedError {
+    case slotAccountingMismatch(activeSessions: Int, maxSessions: Int)
+    case invalidSlotIndexOnRelease(Int)
+    case doubleReleaseOfSlot(Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .slotAccountingMismatch(let active, let max):
+            return "SessionManager: canCreateSession was true (\(active)/\(max)) but no free slot found."
+        case .invalidSlotIndexOnRelease(let slot):
+            return "SessionManager: releaseSessionSlot called with out-of-range slot \(slot)."
+        case .doubleReleaseOfSlot(let slot):
+            return "SessionManager: releaseSessionSlot called for slot \(slot) already free."
+        }
+    }
+}
+
 @MainActor
 final class SessionManager: ObservableObject {
     let maxSessions: Int
@@ -31,6 +48,12 @@ final class SessionManager: ObservableObject {
         }
         guard let slot = slotInUse.firstIndex(where: { !$0 }) else {
             AppLogger.error("Failed to find available session slot despite canCreateSession being true")
+            CrashReportingManager.shared.record(
+                error: SessionManagerFault.slotAccountingMismatch(
+                    activeSessions: activeSessions,
+                    maxSessions: maxSessions
+                )
+            )
             return nil
         }
         slotInUse[slot] = true
@@ -42,10 +65,12 @@ final class SessionManager: ObservableObject {
     func releaseSessionSlot(_ slot: Int) {
         guard slotInUse.indices.contains(slot) else {
             AppLogger.error("Attempted to release invalid session slot: \(slot)")
+            CrashReportingManager.shared.record(error: SessionManagerFault.invalidSlotIndexOnRelease(slot))
             return
         }
         guard slotInUse[slot] else {
             AppLogger.warning("Attempted to release session slot \(slot) that was not in use")
+            CrashReportingManager.shared.record(error: SessionManagerFault.doubleReleaseOfSlot(slot))
             return
         }
         slotInUse[slot] = false

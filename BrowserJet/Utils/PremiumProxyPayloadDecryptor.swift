@@ -55,10 +55,6 @@ enum PremiumProxyPayloadDecryptor {
         try decodeEncryptedRemoteRows(from: responseData, decodePlain: decodePlainJSONProxyList)
     }
 
-    static func decodeVPN1Proxies(from responseData: Data) throws -> [DecryptedPremiumProxy] {
-        try decodeEncryptedRemoteRows(from: responseData, decodePlain: decodePlainJSONVPN1List)
-    }
-
     private static func decodeEncryptedRemoteRows(
         from responseData: Data,
         decodePlain: (Data) -> [DecryptedPremiumProxy]?
@@ -76,13 +72,6 @@ enum PremiumProxyPayloadDecryptor {
             return rows
         }
         throw PremiumProxyDecryptError.invalidJSON
-    }
-
-    private static func decodePlainJSONVPN1List(from data: Data) -> [DecryptedPremiumProxy]? {
-        guard let dtos = try? JSONDecoder().decode([VPN1ProxyDTO].self, from: data), !dtos.isEmpty else {
-            return nil
-        }
-        return dtos.map { $0.asDecryptedPremiumProxy() }
     }
 
     private static func decodePlainJSONProxyList(from data: Data) -> [DecryptedPremiumProxy]? {

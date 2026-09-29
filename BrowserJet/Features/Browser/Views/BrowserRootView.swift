@@ -16,6 +16,36 @@ private struct SelectedTabWebView: View {
         WebViewContainer(tab: tab, onOpenInNewTab: onOpenInNewTab)
             .id(tab.webViewID)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityHidden(tab.navigationFailure != nil)
+            .overlay {
+                navigationErrorOverlay
+                    .animation(.easeInOut(duration: 0.2), value: tab.navigationFailure)
+            }
+            .onChange(of: tab.navigationFailure) { _, failure in
+                guard failure != nil else { return }
+                resignWebViewFocus()
+            }
+    }
+
+    @ViewBuilder private var navigationErrorOverlay: some View {
+        if let failure = tab.navigationFailure {
+            NavigationErrorView(
+                failure: failure,
+                isProxied: !tab.proxyType.isLocal,
+                isRetrying: tab.isLoading
+            ) {
+                tab.reload()
+            }
+            .transition(.opacity)
+        }
+    }
+
+    /// The page underneath stays mounted; make sure it cannot keep receiving keystrokes.
+    private func resignWebViewFocus() {
+        guard let window = tab.webView.window,
+            let responder = window.firstResponder as? NSView,
+            responder.isDescendant(of: tab.webView) else { return }
+        window.makeFirstResponder(nil)
     }
 }
 
@@ -138,7 +168,9 @@ struct BrowserRootView: View {
 
     private func handleToolbarAction(_ action: BrowserToolbarAction) {
         guard let tab = state.selectedTab else { return }
-        if state.isTrialLockActive, action != .reload, action != .stop { return }
+        if state.isTrialLockActive, !menu.trialAllowedToolbarActions.contains(action) {
+            return
+        }
 
         if handleNavigationAction(action, on: tab) { return }
         handleStateAction(action)
@@ -147,16 +179,16 @@ struct BrowserRootView: View {
     private func handleNavigationAction(_ action: BrowserToolbarAction, on tab: TabModel) -> Bool {
         switch action {
         case .back:
-            tab.webView.goBack()
+            tab.goBack()
             return true
         case .forward:
-            tab.webView.goForward()
+            tab.goForward()
             return true
         case .reload:
-            tab.webView.reload()
+            tab.reload()
             return true
         case .stop:
-            tab.webView.stopLoading()
+            tab.stopLoading()
             return true
         default:
             return false
@@ -179,14 +211,9 @@ struct BrowserRootView: View {
     }
 
     private func handleMoreMenuItem(_ item: BrowserMoreMenuItem) {
-        //        if item == .about {
-        //            AboutBrowserJetWindowController.shared.show(
-        //                themeManager: themeManager,
-        //                colorScheme: colorScheme
-        //            )
-        //            return
-        //        }
-        if state.isTrialLockActive { return }
+        if state.isTrialLockActive, !menu.isMoreMenuItemAllowedWhenTrialLocked(item) {
+            return
+        }
         switch item {
         case .paymentCard:
             openIfAvailable(URLConstants.updateYourCardURL(email: currentUserEmail))
@@ -205,6 +232,10 @@ struct BrowserRootView: View {
     }
 
     private func open(_ url: URL) {
+        if state.isTrialLockActive {
+            state.selectedTab?.load(url)
+            return
+        }
         if sessionManager.canCreateSession && state.tabs.count < state.maxBrowserTabs {
             state.addTab(url: url)
         } else {
@@ -220,7 +251,7 @@ struct BrowserRootView: View {
     let state = BrowserWindowState(
         proxyType: .local,
         isolationMode: .perTab,
-        proxies: [],
+        proxyProvider: nil,
         userAgent: nil,
         sessionManager: sessionManager,
         // swiftlint:disable:next force_unwrapping
