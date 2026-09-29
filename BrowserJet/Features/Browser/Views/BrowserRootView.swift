@@ -16,6 +16,36 @@ private struct SelectedTabWebView: View {
         WebViewContainer(tab: tab, onOpenInNewTab: onOpenInNewTab)
             .id(tab.webViewID)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityHidden(tab.navigationFailure != nil)
+            .overlay {
+                navigationErrorOverlay
+                    .animation(.easeInOut(duration: 0.2), value: tab.navigationFailure)
+            }
+            .onChange(of: tab.navigationFailure) { _, failure in
+                guard failure != nil else { return }
+                resignWebViewFocus()
+            }
+    }
+
+    @ViewBuilder private var navigationErrorOverlay: some View {
+        if let failure = tab.navigationFailure {
+            NavigationErrorView(
+                failure: failure,
+                isProxied: !tab.proxyType.isLocal,
+                isRetrying: tab.isLoading
+            ) {
+                tab.reload()
+            }
+            .transition(.opacity)
+        }
+    }
+
+    /// The page underneath stays mounted; make sure it cannot keep receiving keystrokes.
+    private func resignWebViewFocus() {
+        guard let window = tab.webView.window,
+            let responder = window.firstResponder as? NSView,
+            responder.isDescendant(of: tab.webView) else { return }
+        window.makeFirstResponder(nil)
     }
 }
 
@@ -149,16 +179,16 @@ struct BrowserRootView: View {
     private func handleNavigationAction(_ action: BrowserToolbarAction, on tab: TabModel) -> Bool {
         switch action {
         case .back:
-            tab.webView.goBack()
+            tab.goBack()
             return true
         case .forward:
-            tab.webView.goForward()
+            tab.goForward()
             return true
         case .reload:
-            tab.webView.reload()
+            tab.reload()
             return true
         case .stop:
-            tab.webView.stopLoading()
+            tab.stopLoading()
             return true
         default:
             return false

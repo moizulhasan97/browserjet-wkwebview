@@ -42,7 +42,7 @@ struct BrowserTabPillView: View {
                 isHovering = hovering
             }
         }
-        .help(tab.title)
+        .help(tab.displayTitle)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isHovering)
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isSelected)
     }
@@ -53,7 +53,7 @@ struct BrowserTabPillView: View {
                 faviconOrLoader
 
                 if !isCompact {
-                    Text(tab.title)
+                    Text(tab.displayTitle)
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(titleColor)
                         .lineLimit(1)
@@ -308,7 +308,7 @@ extension BrowserTabPillView {
                 .controlSize(.small)
                 .frame(width: 16, height: 16)
                 .scaleEffect(isSelected ? 1.0 : 0.9)
-        } else if let img = tab.favicon {
+        } else if let img = tab.displayFavicon {
             Image(nsImage: img)
                 .resizable()
                 .scaledToFit()

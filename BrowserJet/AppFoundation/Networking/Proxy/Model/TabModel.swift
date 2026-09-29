@@ -31,8 +31,28 @@ final class TabModel: ObservableObject, Identifiable {
     @Published var canGoForward: Bool = false
     @Published var isLoading: Bool = false
 
+    /// Non-nil while a native error page is shown in place of the page.
+    /// Owned by `TabModel`; mutated only through the lifecycle API below.
+    @Published private(set) var navigationFailure: TabNavigationFailure?
+
     var shouldHideFaviconSlotForInitialBlank: Bool {
         startedAsAboutBlank && !hasNavigatedAwayFromInitialBlank && favicon == nil
+    }
+
+    /// What the user perceives as this tab's page: the failed destination while an
+    /// error page is on screen, otherwise the committed URL (typed text as a last resort).
+    var currentURL: URL? {
+        navigationFailure?.failingURL ?? webView.url ?? URL(string: addressText)
+    }
+
+    /// Tab-strip title. Mirrors Chrome by showing the failed host on an error page.
+    var displayTitle: String {
+        navigationFailure?.displayHost ?? title
+    }
+
+    /// Tab-strip favicon. Hidden on an error page so it never shows the previous site's icon.
+    var displayFavicon: NSImage? {
+        navigationFailure == nil ? favicon : nil
     }
 
     @Published private(set) var webView: WKWebView
@@ -113,6 +133,79 @@ extension TabModel {
     func load(_ input: String) {
         guard let url = AddressBarURLResolver.resolve(input) else { return }
         load(url)
+    }
+
+    /// Retries the failed destination while an error page is shown (Chrome parity);
+    /// otherwise reloads the committed page.
+    func reload() {
+        if let failingURL = navigationFailure?.failingURL {
+            load(failingURL)
+        } else {
+            webView.reload()
+        }
+    }
+
+    /// On an error page, Back reveals the committed page underneath — the same result
+    /// as leaving Chrome's error entry — instead of skipping a history item.
+    func goBack() {
+        if navigationFailure != nil, webView.url != nil {
+            dismissNavigationFailure()
+        } else {
+            webView.goBack()
+        }
+    }
+
+    func goForward() {
+        guard navigationFailure == nil else { return }
+        webView.goForward()
+    }
+
+    func stopLoading() {
+        webView.stopLoading()
+    }
+}
+
+// MARK: - Navigation failure lifecycle (driven by TabNavigationDelegate)
+extension TabModel {
+    func presentNavigationFailure(_ failure: TabNavigationFailure) {
+        navigationFailure = failure
+        isLoading = false
+        hasNavigatedAwayFromInitialBlank = true
+        if let failingURL = failure.failingURL {
+            addressText = failingURL.absoluteString
+        }
+        // The committed page stays alive underneath the error view; keep it silent.
+        webView.setAllMediaPlaybackSuspended(true, completionHandler: nil)
+        refreshHistoryState()
+    }
+
+    /// Called when new content commits; the error page is no longer relevant.
+    func clearNavigationFailure() {
+        guard navigationFailure != nil else { return }
+        navigationFailure = nil
+        webView.setAllMediaPlaybackSuspended(false, completionHandler: nil)
+        refreshHistoryState()
+    }
+
+    /// Single source of truth for Back / Forward availability. While an error page is
+    /// shown it behaves like its own history entry: Back reveals the committed page
+    /// underneath and Forward is unavailable.
+    func refreshHistoryState() {
+        if navigationFailure == nil {
+            canGoBack = webView.canGoBack
+            canGoForward = webView.canGoForward
+        } else {
+            canGoBack = webView.canGoBack || webView.url != nil
+            canGoForward = false
+        }
+    }
+}
+
+private extension TabModel {
+    func dismissNavigationFailure() {
+        webView.stopLoading()
+        clearNavigationFailure()
+        addressText = webView.url?.absoluteString ?? addressText
     }
 }
 
