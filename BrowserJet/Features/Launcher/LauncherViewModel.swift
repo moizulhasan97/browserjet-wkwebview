@@ -15,13 +15,43 @@ final class LauncherViewModel: ObservableObject {
     @Published var premiumProxyUnavailableMessage: String?
 
     private let defaultSearchAddress: String
-    let availableVPNs: [VPNType]
-
-    private(set) var isTrialUser: Bool = false
-
-    private let blockedVPNsForTrial: Set<VPNType>
+    /// Every built-in VPN tier this build ships. The plan decides which of them are offered (`availableVPNs`).
+    private let configuredVPNs: [VPNType]
+    private let tabPresets: [LauncherTabPreset]
     private let vpnAllowedRegions: [VPNType: [RegionType]]
     private let vpnProvider: VPNProvider
+    private let entitlementsProvider: PlanEntitlementsProviding
+
+    /// The current plan's entitlements. Read on demand (not cached) so the launcher follows licence refreshes
+    /// and Remote Config activations while it is open; `LauncherView` reconciles selections when it changes.
+    var entitlements: PlanEntitlements {
+        entitlementsProvider.currentEntitlements()
+    }
+
+    /// VPN tiers the plan grants. Empty for Basic and Trial by default, which hides the whole VPN section.
+    var availableVPNs: [VPNType] {
+        let current = entitlements
+        return configuredVPNs.filter { current.allows($0) }
+    }
+
+    var isVPNSectionVisible: Bool {
+        !availableVPNs.isEmpty
+    }
+
+    var isPremiumProxySectionVisible: Bool {
+        entitlements.isPremiumProxyAllowed
+    }
+
+    /// Pro keeps the existing UX (Premium Proxy sits under the VPN toggle). Without a VPN section (Basic),
+    /// Premium Proxy stands on its own; otherwise a Basic user who bought GPP could never turn it on.
+    var premiumProxyRequiresVPNToggle: Bool {
+        isVPNSectionVisible
+    }
+
+    /// "No. of Tabs" options, capped by the plan.
+    var tabCountOptions: [Int] {
+        LauncherTabPreset.tabCountOptions(upTo: entitlements.maxTabs, presets: tabPresets)
+    }
 
     /// Regions offered for the selected tier, in alphabetical order.
     var regionPickerOptions: [RegionType] {
@@ -37,16 +67,16 @@ final class LauncherViewModel: ObservableObject {
     init(
         defaultSearchAddress: String,
         appConfiguration: AppConfiguration,
-        vpnProvider: VPNProvider? = nil
+        vpnProvider: VPNProvider? = nil,
+        entitlementsProvider: PlanEntitlementsProviding? = nil
     ) {
         AppLogger.debug("LauncherViewModel initializing with default address: \(defaultSearchAddress)")
 
         LicenseAccountStore.shared.refresh()
-        let trial = LicenseAccountStore.shared.isTrialUser
-        let blocked = appConfiguration.trialBlockedVPNs
+        let entitlementsProvider = entitlementsProvider ?? LicensePlanEntitlementsProvider()
+        let initialEntitlements = entitlementsProvider.currentEntitlements()
 
-        self.isTrialUser = trial
-        self.blockedVPNsForTrial = blocked
+        self.entitlementsProvider = entitlementsProvider
         self.defaultSearchAddress = defaultSearchAddress
         if let vpnProvider {
             self.vpnProvider = vpnProvider
@@ -57,52 +87,113 @@ final class LauncherViewModel: ObservableObject {
             )
         }
 
-        let allVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
-        let filtered: [VPNType]
-        if trial {
-            filtered = allVPNs.filter { !blocked.contains($0) }
-        } else {
-            filtered = allVPNs
-        }
-        self.availableVPNs = filtered
-
+        let configuredVPNs = VPNType.from(configurations: appConfiguration.vpnConfigurations)
+        self.configuredVPNs = configuredVPNs
+        self.tabPresets = appConfiguration.launcherTabPresets
         self.vpnAllowedRegions = appConfiguration.vpnAllowedRegions
-        let initialVPN = filtered.first
+
+        let initialVPN = configuredVPNs.first { initialEntitlements.allows($0) }
         let initialRegion = Self.pickInitialRegion(for: initialVPN, policy: appConfiguration.vpnAllowedRegions)
 
         self.settings = LauncherSettings(
             address: "",
-            numberOfTabs: .one,
+            numberOfTabs: 1,
             isVPNEnabled: false,
             isPremiumProxyEnabled: false,
             selectedVPN: initialVPN,
             selectedRegion: initialRegion
         )
 
-        AppLogger.debug("LauncherViewModel initialized with default settings")
+        AppLogger.debug(
+            """
+            LauncherViewModel initialized - plan \(initialEntitlements.planID.rawValue), \
+            max tabs \(initialEntitlements.maxTabs)
+            """
+        )
     }
 
     func onAppear() {
         AppLogger.debug("LauncherView appeared")
+        reconcileWithEntitlements()
         Task { @MainActor in
-            async let premiumRefresh: Void = PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
+            async let premiumRefresh: Void = refreshPremiumProxiesIfAllowed()
             await refreshVPNPoolsIfUnavailable()
             await premiumRefresh
         }
     }
 
-    /// Launch is blocked when VPN + Premium is selected but the GPP list is empty,
+    /// Launch is blocked when Premium Proxy is selected but the GPP list is empty,
     /// or when the selected built-in VPN has no usable pool.
     func isLaunchAllowed() -> Bool {
         guard settings.isValid else { return false }
-        guard settings.isVPNEnabled else { return true }
         if settings.isPremiumProxyEnabled {
             return PremiumProxyRepository.shared.hasPremiumProxies
         }
+        guard settings.isVPNEnabled else { return true }
         return !isSelectedVPNUnavailable
     }
 
+    /// Builds the launch request against the latest licence, after pulling selections back inside the plan.
+    /// `nil` means the launch was cancelled; the launcher has been reconciled, so it now shows the plan's options.
+    func makeLaunchRequest(appConfiguration: AppConfiguration) -> LaunchRequest? {
+        LicenseAccountStore.shared.refresh()
+        let requestedConnection = settings.resolvedProxyType()
+        reconcileWithEntitlements()
+        // A plan change can land at click time (e.g. a downgrade). Never swap the connection the user chose for a
+        // different one (VPN → local would expose their real IP); stay on the updated launcher instead.
+        guard settings.resolvedProxyType() == requestedConnection else {
+            AppLogger.warning("Launch cancelled — the selected connection is no longer included in the plan")
+            CrashReportingManager.shared.log("launcher: launch cancelled - connection changed by plan")
+            return nil
+        }
+        return settings.makeLaunchRequest(appConfiguration: appConfiguration, entitlements: entitlements)
+    }
+
+    /// Brings the launcher's selections back inside the current plan.
+    ///
+    /// Why: entitlements can change while the launcher is open (licence re-check, Remote Config activation);
+    /// a hidden VPN toggle must not stay switched on, and the tab count must not exceed the new limit.
+    func reconcileWithEntitlements() {
+        let current = entitlements
+
+        if settings.numberOfTabs > current.maxTabs {
+            AppLogger.info("Tab count \(settings.numberOfTabs) exceeds plan limit - clamped to \(current.maxTabs)")
+            settings.numberOfTabs = current.maxTabs
+        }
+
+        if settings.isPremiumProxyEnabled && !current.isPremiumProxyAllowed {
+            AppLogger.info("Premium Proxy is not included in plan \(current.planID.rawValue) - turned off")
+            settings.isPremiumProxyEnabled = false
+            premiumProxyUnavailableMessage = nil
+        }
+
+        let offered = availableVPNs
+        guard !offered.isEmpty else {
+            if settings.isVPNEnabled {
+                AppLogger.info("VPN is not included in plan \(current.planID.rawValue) - turned off")
+                settings.isVPNEnabled = false
+            }
+            return
+        }
+        if settings.isPremiumProxyEnabled && !settings.isVPNEnabled {
+            // Upgraded while Premium Proxy was on standalone: Pro nests it under the VPN toggle, so mirror that
+            // state, otherwise the Premium Proxy toggle would be disabled while still on.
+            settings.isVPNEnabled = true
+        }
+        if !(settings.selectedVPN.map { offered.contains($0) } ?? false) {
+            settings.selectedVPN = offered.first
+            reconcileRegionForSelectedVPN()
+        }
+    }
+
+    /// Only plans that include Premium Proxy need the GPP list; skipping it saves a request per launcher open.
+    private func refreshPremiumProxiesIfAllowed() async {
+        guard entitlements.isPremiumProxyAllowed else { return }
+        await PremiumProxyRepository.shared.refreshFromNetworkIfPossible()
+    }
+
     /// Re-fetches Remote Config when an offered tier has no pool yet (e.g. the app started offline).
+    /// Only tiers in the plan are checked, so Basic (which is never served pools) doesn't re-fetch on every open.
     private func refreshVPNPoolsIfUnavailable() async {
         guard availableVPNs.contains(where: { !vpnProvider.isAvailable($0) }) else { return }
         AppLogger.info("LauncherViewModel: built-in VPN pool missing — re-fetching Remote Config")
@@ -119,7 +210,7 @@ final class LauncherViewModel: ObservableObject {
         settings.isVPNEnabled = newValue
         if newValue {
             applyDefaultBuiltInVPNSelection()
-        } else {
+        } else if premiumProxyRequiresVPNToggle {
             settings.isPremiumProxyEnabled = false
             premiumProxyUnavailableMessage = nil
             AppLogger.debug("VPN disabled, premium proxy also disabled")
@@ -128,15 +219,20 @@ final class LauncherViewModel: ObservableObject {
 
     /// Keeps the current tier when it is still offered; otherwise selects the first offered tier.
     private func applyDefaultBuiltInVPNSelection() {
-        let isSelectionOffered = settings.selectedVPN.map { availableVPNs.contains($0) } ?? false
+        let offered = availableVPNs
+        let isSelectionOffered = settings.selectedVPN.map { offered.contains($0) } ?? false
         if !isSelectionOffered {
-            settings.selectedVPN = availableVPNs.first
+            settings.selectedVPN = offered.first
         }
         reconcileRegionForSelectedVPN()
     }
 
     func togglePremiumProxy(_ newValue: Bool) {
-        guard settings.isVPNEnabled else {
+        guard entitlements.isPremiumProxyAllowed else {
+            AppLogger.warning("Premium proxy toggle ignored — not included in plan \(entitlements.planID.rawValue)")
+            return
+        }
+        guard !premiumProxyRequiresVPNToggle || settings.isVPNEnabled else {
             AppLogger.warning("Attempted to toggle premium proxy without VPN enabled")
             return
         }
@@ -174,14 +270,15 @@ final class LauncherViewModel: ObservableObject {
         updateAddress(newURL)
     }
 
-    func updateNumberOfTabs(_ preset: LauncherTabPreset) {
-        AppLogger.info("Number of tabs changed to: \(preset.rawValue)")
-        settings.numberOfTabs = preset
+    func updateNumberOfTabs(_ count: Int) {
+        let clamped = min(max(1, count), entitlements.maxTabs)
+        AppLogger.info("Number of tabs changed to: \(clamped)")
+        settings.numberOfTabs = clamped
     }
 
     func updateSelectedVPN(_ vpn: VPNType) {
-        if isTrialUser && blockedVPNsForTrial.contains(vpn) {
-            AppLogger.warning("Blocked VPN selection for trial user: \(vpn.rawValue)")
+        guard entitlements.allows(vpn) else {
+            AppLogger.warning("Blocked VPN selection not included in plan: \(vpn.rawValue)")
             settings.selectedVPN = availableVPNs.first
             reconcileRegionForSelectedVPN()
             return

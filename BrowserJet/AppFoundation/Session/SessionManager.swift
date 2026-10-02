@@ -33,7 +33,9 @@ final class SessionManager: ObservableObject {
         didSet { AppLogger.debug("Active sessions changed to: \(activeSessions)/\(maxSessions)") }
     }
 
-    init(maxSessions: Int = AppConfiguration.production.maxBrowserTabs) {
+    /// Sized to the absolute tab ceiling rather than a plan's limit: this is created at app start, before the
+    /// licence (and so the plan) is known. Each browser window enforces its own plan limit on top of it.
+    init(maxSessions: Int = PlanEntitlements.absoluteMaxTabs) {
         self.maxSessions = maxSessions
         self.slotInUse = Array(repeating: false, count: maxSessions)
         AppLogger.debug("SessionManager initialized - Max sessions: \(maxSessions)")

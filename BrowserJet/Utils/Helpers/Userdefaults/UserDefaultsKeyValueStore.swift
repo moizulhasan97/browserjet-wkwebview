@@ -16,6 +16,8 @@ enum StorageKeys {
     static let defaultStartURL = "DefaultStartURL"
     static let openBlankPage = "OpenBlankPage"
     static let confirmBeforeQuit = "ConfirmBeforeQuit"
+    /// Last plan whose Remote Config values were fetched with the `plan` custom signal (see `PlanSignalSynchronizer`).
+    static let remoteConfigPlanSignal = "RemoteConfigPlanSignal"
 }
 
 protocol KeyValueStoring: AnyObject {

@@ -13,15 +13,13 @@ struct AppConfiguration {
     private let sessionIsolationMode: SessionIsolationMode
     let launcherTabPresets: [LauncherTabPreset]
     let vpnConfigurations: [VPNConfiguration]
-    let duplicateTabCounts: [Int]
-    let maxBrowserTabs: Int
+    // Tab limits, duplicate-tab counts and per-plan VPN access are no longer app-wide constants:
+    // they depend on the user's plan and live in `PlanEntitlements` (Remote Config `plans_config`).
     // More-menu URLs
     // let paymentCardURL: URL
     // let buyLicensesURL: URL
     // let contactUsURL: URL
     // let twitterURL: URL
-    // Blocked VPNs for trial users
-    let trialBlockedVPNs: Set<VPNType>
     let vpnAllowedRegions: [VPNType: [RegionType]]
 
     init(
@@ -30,13 +28,10 @@ struct AppConfiguration {
         sessionIsolationMode: SessionIsolationMode,
         launcherTabPresets: [LauncherTabPreset],
         vpnConfigurations: [VPNConfiguration],
-        duplicateTabCounts: [Int],
-        maxBrowserTabs: Int,
         // paymentCardURL: URL,
         // buyLicensesURL: URL,
         // contactUsURL: URL,
         // twitterURL: URL,
-        trialBlockedVPNs: Set<VPNType>,
         vpnAllowedRegions: [VPNType: [RegionType]]
     ) {
         self.isUserAgentEnabled = isUserAgentEnabled
@@ -44,13 +39,10 @@ struct AppConfiguration {
         self.sessionIsolationMode = sessionIsolationMode
         self.launcherTabPresets = launcherTabPresets
         self.vpnConfigurations = vpnConfigurations
-        self.duplicateTabCounts = duplicateTabCounts
-        self.maxBrowserTabs = maxBrowserTabs
         // self.paymentCardURL = paymentCardURL
         // self.buyLicensesURL = buyLicensesURL
         // self.contactUsURL = contactUsURL
         // self.twitterURL = twitterURL
-        self.trialBlockedVPNs = trialBlockedVPNs
         self.vpnAllowedRegions = vpnAllowedRegions
     }
 }
@@ -89,13 +81,10 @@ extension AppConfiguration {
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
             vpnConfigurations: AppConfiguration.builtInVPNConfigurations,
-            duplicateTabCounts: Array(1...20),
-            maxBrowserTabs: 20,
             // paymentCardURL: URL(string: "https://www.google.com/payment")!,
             // buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             // contactUsURL: URL(string: "https://browserjet.com/contact")!,
             // twitterURL: URL(string: "https://twitter.com/browserjet")!,
-            trialBlockedVPNs: [],
             vpnAllowedRegions: AppConfiguration.builtInVPNAllowedRegions
         )
         AppLogger.info("Production configuration initialized - Default address: \(config.defaultSearchAddress)")
@@ -109,13 +98,10 @@ extension AppConfiguration {
             sessionIsolationMode: .perTab,
             launcherTabPresets: LauncherTabPreset.allCases,
             vpnConfigurations: AppConfiguration.builtInVPNConfigurations,
-            duplicateTabCounts: Array(1...20),
-            maxBrowserTabs: 20,
             // paymentCardURL: URL(string: "https://www.google.com/payment")!,
             // buyLicensesURL: URL(string: "https://www.google.com/buy")!,
             // contactUsURL: URL(string: "https://browserjet.com/contact")!,
             // twitterURL: URL(string: "https://twitter.com/browserjet")!,
-            trialBlockedVPNs: [],
             vpnAllowedRegions: AppConfiguration.builtInVPNAllowedRegions
         )
         AppLogger.info("Development configuration initialized - Default address: \(config.defaultSearchAddress)")

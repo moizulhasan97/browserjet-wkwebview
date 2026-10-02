@@ -14,8 +14,9 @@ struct BrowserJet: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self)
     private var appDelegate
     private let themeManager = ThemeManager()
+    // Capacity is the absolute ceiling; the per-plan tab limit is enforced by each browser window.
     private let sessionManager = SessionManager(
-        maxSessions: AppEnvironment.currentConfiguration.maxBrowserTabs
+        maxSessions: PlanEntitlements.absoluteMaxTabs
     )
     private let updaterController: SPUStandardUpdaterController
     private let sparkleUpdaterDelegate = SparkleUpdaterDelegate()

@@ -14,6 +14,8 @@ enum RemoteConfigKey: String, CaseIterable, Sendable {
     case featureFlagsConfig = "feature_flags_config"
     case endpointsConfig = "endpoints_config"
     case builtInVPNConfig = "builtin_vpn_config"
+    /// Subscription plans (Basic / Pro / Trial): tab limits, VPN access, Premium Proxy. See `PlansConfig`.
+    case plansConfig = "plans_config"
 
     /// Keys whose values carry credentials. Their values are never written to logs.
     var isSensitive: Bool {

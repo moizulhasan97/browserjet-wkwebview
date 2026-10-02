@@ -20,6 +20,10 @@ final class RemoteConfigManager: ObservableObject {
     /// Decoded `builtin_vpn_config`, keyed by the raw value it came from, so decoding (and error reporting)
     /// happens once per activated value instead of on every launcher render.
     private var builtInVPNConfigCache: (raw: String, config: BuiltInVPNConfig)?
+    /// Decoded `plans_config` by raw value (decode once per activation). Used by `RemoteConfigManager+Plans.swift`.
+    var plansConfigCache: (raw: String, config: PlansConfig)?
+    /// Last fetch queued through this manager; see `serializedFetch` (why fetches must not overlap).
+    private var fetchQueueTail: Task<Void, Never>?
     /// Manual download page: Remote Config when fetch succeeded and value is valid; otherwise `MACOS_DOWNLOAD_URL` from Info.plist (xcconfig).
     var resolvedManualDownloadURL: URL? {
         if lastFetchError != nil {
@@ -205,18 +209,7 @@ final class RemoteConfigManager: ObservableObject {
     }
     /// Fetches from the server and applies activated values when appropriate.
     func fetchAndActivate() async {
-        lastFetchError = nil
-        CrashReportingManager.shared.log("remote_config: fetch started")
-        do {
-            let status = try await remoteConfig.fetchAndActivate()
-            lastFetchStatus = status
-            CrashReportingManager.shared.log("remote_config: fetch succeeded - status \(status)")
-        } catch {
-            lastFetchError = error
-            lastFetchStatus = nil
-            AppLogger.warning("RemoteConfig: fetchAndActivate failed - \(error.localizedDescription)")
-            CrashReportingManager.shared.log("remote_config: fetch failed - \(error.localizedDescription)")
-        }
+        await serializedFetch { await self.performFetchAndActivate() }
     }
     
     // MARK: - Typed accessors
@@ -270,6 +263,9 @@ final class RemoteConfigManager: ObservableObject {
             return EndpointsConfig.defaultJSONString as NSString
         case .builtInVPNConfig:
             return BuiltInVPNConfig.defaultJSONString as NSString
+        case .plansConfig:
+            // Empty on purpose: `PlansConfig.default` (code) is the only in-app copy of the rules, used when empty.
+            return "" as NSString
         default:
             return "" as NSString
         }
@@ -287,6 +283,73 @@ final class RemoteConfigManager: ObservableObject {
             source: \(value.source)
             """)
         }
+    }
+}
+
+// MARK: - Fetch serialisation, forced fetch & custom signals (same file: uses the private `remoteConfig`)
+
+extension RemoteConfigManager {
+    /// Runs `operation` once every earlier queued fetch has finished. Why: Firebase answers a fetch issued while
+    /// another runs with the *previous* result (no call, no error), so a forced fetch could "succeed" unsent.
+    private func serializedFetch<T: Sendable>(_ operation: @escaping @MainActor @Sendable () async -> T) async -> T {
+        let previous = fetchQueueTail
+        let task = Task { @MainActor () -> T in
+            await previous?.value
+            return await operation()
+        }
+        fetchQueueTail = Task { @MainActor in _ = await task.value }
+        return await task.value
+    }
+
+    /// The regular fetch (unchanged behaviour); always run through `serializedFetch`.
+    private func performFetchAndActivate() async {
+        lastFetchError = nil
+        CrashReportingManager.shared.log("remote_config: fetch started")
+        do {
+            let status = try await remoteConfig.fetchAndActivate()
+            lastFetchStatus = status
+            CrashReportingManager.shared.log("remote_config: fetch succeeded - status \(status)")
+        } catch {
+            lastFetchError = error
+            lastFetchStatus = nil
+            AppLogger.warning("RemoteConfig: fetchAndActivate failed - \(error.localizedDescription)")
+            CrashReportingManager.shared.log("remote_config: fetch failed - \(error.localizedDescription)")
+        }
+    }
+
+    /// Fetches bypassing `minimumFetchInterval`, then activates; `true` only if the server was really asked.
+    /// Why: Firebase doesn't re-fetch when a custom signal changes, so plan-targeted values (VPN pools) would lag a
+    /// plan change by up to 1 h. Rare use only (Firebase throttles); on failure the active values stay as they are.
+    @discardableResult
+    func forceFetchAndActivate() async -> Bool {
+        await serializedFetch { await self.performForcedFetchAndActivate() }
+    }
+
+    private func performForcedFetchAndActivate() async -> Bool {
+        CrashReportingManager.shared.log("remote_config: forced fetch started")
+        do {
+            let status = try await remoteConfig.fetch(withExpirationDuration: 0)
+            guard status == .success else {
+                AppLogger.warning("RemoteConfig: forced fetch not completed - status \(status.rawValue)")
+                CrashReportingManager.shared.log("remote_config: forced fetch incomplete - \(status.rawValue)")
+                return false
+            }
+            let changed = try await remoteConfig.activate()
+            // Publishing a new status re-renders observers (e.g. the launcher picks up newly served VPN pools).
+            lastFetchError = nil
+            lastFetchStatus = changed ? .successFetchedFromRemote : .successUsingPreFetchedData
+            CrashReportingManager.shared.log("remote_config: forced fetch succeeded - changed \(changed)")
+            return true
+        } catch {
+            AppLogger.warning("RemoteConfig: forced fetch failed - \(error.localizedDescription)")
+            CrashReportingManager.shared.log("remote_config: forced fetch failed - \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    /// Sets (or, with `nil`, removes) a string custom signal that Firebase console conditions can target.
+    func setCustomSignal(_ key: String, to value: String?) async throws {
+        try await remoteConfig.setCustomSignals([key: value.map { CustomSignalValue.string($0) }])
     }
 }
 

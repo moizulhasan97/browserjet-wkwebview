@@ -31,17 +31,21 @@ struct BrowserToolbarView: View {
     let onAction: (BrowserToolbarAction) -> Void
     /// Called when the user confirms a duplicate-tabs count from the popover.
     var onDuplicateTabs: ((Int) -> Void)?
+    /// Highest count offered by the duplicate-tabs popover (derived from the window's plan tab limit).
+    let maxDuplicateCount: Int
 
     @State private var hovering: BrowserToolbarAction?
 
     init(
         actions: [BrowserToolbarAction],
         enabledActions: Set<BrowserToolbarAction>? = nil,
+        maxDuplicateCount: Int = 1,
         onAction: @escaping (BrowserToolbarAction) -> Void,
         onDuplicateTabs: ((Int) -> Void)? = nil
     ) {
         buttons = actions.map { ToolbarButtonDescriptor(action: $0) }
         self.enabledActions = enabledActions
+        self.maxDuplicateCount = maxDuplicateCount
         self.onAction = onAction
         self.onDuplicateTabs = onDuplicateTabs
     }
@@ -49,11 +53,13 @@ struct BrowserToolbarView: View {
     init(
         entries: [TrailingToolbarEntry],
         enabledActions: Set<BrowserToolbarAction>? = nil,
+        maxDuplicateCount: Int = 1,
         onAction: @escaping (BrowserToolbarAction) -> Void,
         onDuplicateTabs: ((Int) -> Void)? = nil
     ) {
         buttons = entries.map(ToolbarButtonDescriptor.init(entry:))
         self.enabledActions = enabledActions
+        self.maxDuplicateCount = maxDuplicateCount
         self.onAction = onAction
         self.onDuplicateTabs = onDuplicateTabs
     }
@@ -88,7 +94,7 @@ struct BrowserToolbarView: View {
                     ),
                     arrowEdge: .bottom
                 ) {
-                    DuplicateTabsPopoverView { count in
+                    DuplicateTabsPopoverView(maxCount: maxDuplicateCount) { count in
                         showingDuplicatePopover = false
                         onDuplicateTabs?(count)
                     }

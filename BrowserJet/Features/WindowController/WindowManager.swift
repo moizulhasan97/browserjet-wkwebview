@@ -257,7 +257,8 @@ final class WindowManager {
             sessionManager: sessionManager,
             initialURL: initialURL,
             initialTabCount: request.numberOfTabs,
-            maxBrowserTabs: appConfiguration.maxBrowserTabs
+            // The plan's limit captured at launch; the window keeps it even if the plan changes mid-session.
+            maxBrowserTabs: request.maxTabs
         )
         let rootView = BrowserRootView(state: state, menu: .default)
             .environmentObject(themeManager)
@@ -303,7 +304,8 @@ final class WindowManager {
             sessionManager: sessionManager,
             initialURL: paymentURL,
             initialTabCount: 1,
-            maxBrowserTabs: appConfiguration.maxBrowserTabs,
+            // Trial-lock windows show only the payment page in a single tab, whatever the plan.
+            maxBrowserTabs: 1,
             isTrialLockActive: true
         )
         

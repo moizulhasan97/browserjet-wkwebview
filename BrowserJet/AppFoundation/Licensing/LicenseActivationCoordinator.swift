@@ -47,6 +47,8 @@ final class LicenseActivationCoordinator {
                 LicenseAccountStore.shared.userKind?.rawValue,
                 forName: "user_kind"
             )
+            // Report the (possibly new) plan so Remote Config serves plan-targeted values, e.g. VPN pools only to Pro.
+            PlanSignalSynchronizer.shared.syncWithCurrentLicense()
         }
 
         keyValueStore.set(key, forKey: StorageKeys.licenseKey)
@@ -109,6 +111,8 @@ final class LicenseActivationCoordinator {
                 LicenseAccountStore.shared.userKind?.rawValue,
                 forName: "user_kind"
             )
+            // Report the (possibly new) plan so Remote Config serves plan-targeted values, e.g. VPN pools only to Pro.
+            PlanSignalSynchronizer.shared.syncWithCurrentLicense()
         }
 
         keyValueStore.set(trimmedKey, forKey: StorageKeys.licenseKey)

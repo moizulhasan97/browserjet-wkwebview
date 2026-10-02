@@ -38,9 +38,6 @@ struct LauncherView: View {
     @Environment(\.colorScheme)
     private var colorScheme
 
-    private var presets: [LauncherTabPreset] {
-        config.launcherTabPresets.filter { $0.rawValue <= config.maxBrowserTabs }
-    }
     private typealias Constants = LauncherViewConstants
 
     init(appConfiguration: AppConfiguration) {
@@ -78,6 +75,11 @@ struct LauncherView: View {
                 previousDefaultURL: payload.previousEffectiveURL
             )
         }
+        .onChange(of: viewModel.entitlements) { _, _ in
+            // Plan changed while the launcher is open (licence re-check or Remote Config activation):
+            // pull selections back inside the new plan so hidden controls can't stay switched on.
+            viewModel.reconcileWithEntitlements()
+        }
         .onChange(of: premiumRepository.hasPremiumProxies) { _, hasProxies in
             if hasProxies {
                 viewModel.clearPremiumProxyUnavailableMessage()
@@ -106,7 +108,7 @@ struct LauncherView: View {
     }
 
     private func showBrowser() {
-        let request = viewModel.settings.makeLaunchRequest(appConfiguration: config)
+        guard let request = viewModel.makeLaunchRequest(appConfiguration: config) else { return }
         WindowManager.shared.showBrowser(
             request: request,
             themeManager: themeManager,
@@ -172,31 +174,40 @@ private extension LauncherView {
             getLabel("No. of Tabs")
             Spacer()
             BrowserJetMenuPicker(
-                options: presets,
+                options: viewModel.tabCountOptions,
                 selection: Binding(
                     get: { viewModel.settings.numberOfTabs },
                     set: { viewModel.updateNumberOfTabs($0) }
                 ),
                 isDisabled: false,
                 width: Constants.menuPickerWidth
-            ) { $0.rawValue.toString }
+            ) { $0.toString }
         }
     }
 
-    // Bottom card
-    private var vpnCard: some View {
-        CardContainer {
-            VStack(spacing: Constants.cardInterItemSpacing) {
-                premiumProxyToggle
-                premiumStatusFootnotes
-                BrowserJetDivider()
-                HStack {
-                    getLabel("VPN Status")
-                    Spacer()
-                    vpnToggle
+    // Bottom card. Sections follow the plan: Basic hides VPN entirely (keeping Premium Proxy if the plan
+    // allows it), and a plan with neither hides the card, so the launcher never shows controls it can't use.
+    @ViewBuilder private var vpnCard: some View {
+        if viewModel.isPremiumProxySectionVisible || viewModel.isVPNSectionVisible {
+            CardContainer {
+                VStack(spacing: Constants.cardInterItemSpacing) {
+                    if viewModel.isPremiumProxySectionVisible {
+                        premiumProxyToggle
+                        premiumStatusFootnotes
+                    }
+                    if viewModel.isPremiumProxySectionVisible && viewModel.isVPNSectionVisible {
+                        BrowserJetDivider()
+                    }
+                    if viewModel.isVPNSectionVisible {
+                        HStack {
+                            getLabel("VPN Status")
+                            Spacer()
+                            vpnToggle
+                        }
+                        selectVPNSection
+                        selectionRegion
+                    }
                 }
-                selectVPNSection
-                selectionRegion
             }
         }
     }
@@ -233,9 +244,10 @@ private extension LauncherView {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    /// Disabled while VPN is off or GPP is still loading. If the list is empty after load, the user can tap ON to see “no premium proxies” messaging.
+    /// Disabled while GPP is still loading, and, on plans with a VPN section (Pro), while VPN is off.
+    /// If the list is empty after load, the user can tap ON to see “no premium proxies” messaging.
     private var premiumToggleDisabled: Bool {
-        if !viewModel.settings.isVPNEnabled || viewModel.availableVPNs.isEmpty { return true }
+        if viewModel.premiumProxyRequiresVPNToggle && !viewModel.settings.isVPNEnabled { return true }
         if viewModel.settings.isPremiumProxyEnabled { return false }
         return premiumRepository.isLoading
     }
@@ -262,26 +274,17 @@ private extension LauncherView {
         }
     }
 
-    @ViewBuilder private var selectVPNRow: some View {
-        if viewModel.availableVPNs.isEmpty {
-            HStack {
-                getLabel("Select VPN")
-                Spacer()
-                Text("—")
-                    .foregroundStyle(theme.textFieldSecondary)
-                    .font(designSystem.typography.textBody1.font)
-            }
-        } else {
-            HStack {
-                getLabel("Select VPN")
-                Spacer()
-                BrowserJetMenuPicker(
-                    options: viewModel.availableVPNs,
-                    selection: vpnPickerSelectionBinding,
-                    isDisabled: !viewModel.settings.areVPNControlsEnabled || viewModel.availableVPNs.isEmpty,
-                    width: Constants.menuPickerWidth
-                ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
-            }
+    // The empty-state ("—") branch is gone: the VPN section is now hidden whenever the plan offers no VPN.
+    private var selectVPNRow: some View {
+        HStack {
+            getLabel("Select VPN")
+            Spacer()
+            BrowserJetMenuPicker(
+                options: viewModel.availableVPNs,
+                selection: vpnPickerSelectionBinding,
+                isDisabled: !viewModel.settings.areVPNControlsEnabled,
+                width: Constants.menuPickerWidth
+            ) { VPNType.displayName(for: $0, in: config.vpnConfigurations) }
         }
     }
 

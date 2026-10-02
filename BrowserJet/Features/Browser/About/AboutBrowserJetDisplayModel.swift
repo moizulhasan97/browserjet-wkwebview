@@ -66,7 +66,13 @@ enum AboutBrowserJetContentBuilder {
     ) -> AboutBrowserJetDisplayModel {
         let kind = UserKind(rawValue: license.userKind) ?? .trial
 
-        let planBase = captainPlanBaseName(license: license, kind: kind)
+        // Plan names now come from the same resolution as entitlements (`plans_config.plans.<id>.displayName`),
+        // so About always matches what the user is actually entitled to, and names can change from Firebase.
+        let planBase = PlanResolver.entitlements(
+            userKind: kind,
+            tierCode: license.tierRawValue,
+            config: RemoteConfigManager.shared.resolvedPlansConfig
+        ).displayName
         let planDisplayName = kind == .trial ? "\(planBase) (Trial)" : planBase
 
         let presentationStatus = presentationStatus(license: license, kind: kind, referenceNow: referenceNow)
@@ -86,27 +92,6 @@ enum AboutBrowserJetContentBuilder {
             buildNumber: bundle.buildNumber,
             presentationStatus: presentationStatus
         )
-    }
-
-    private static func captainPlanBaseName(license: PersistedLicense, kind: UserKind) -> String {
-        let tierRaw = license.tierRawValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let tierRawLower = tierRaw.lowercased()
-
-        if kind == .trial && license.trialExpired {
-            /// We give trials only for Lite
-            return SubscriptionTier.basic.captainPlanMarketingLine
-        }
-
-        if tierRawLower == "lite" {
-            return SubscriptionTier.basic.captainPlanMarketingLine
-        }
-
-        if tierRaw.isEmpty && kind == .paid {
-            return SubscriptionTier.pro.captainPlanMarketingLine
-        }
-
-        let tierEnum = SubscriptionTier(rawValue: license.subscriptionTier) ?? .unknown
-        return tierEnum.captainPlanMarketingLine(resolvingUnknownUserKind: kind)
     }
 
     private static func presentationStatus(

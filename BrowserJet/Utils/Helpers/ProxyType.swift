@@ -14,7 +14,9 @@ enum ProxyType: Hashable {
 
 enum ProxySource: Hashable {
     case builtIn(vpn: VPNType, region: RegionType)
-    case premium(vpn: VPNType, region: RegionType)
+    /// Premium Proxy (GPP). No VPN/region payload: the GPP pool never used them, and Basic has Premium Proxy
+    /// without any VPN tier to select.
+    case premium
     case custom
 }
 
@@ -59,8 +61,8 @@ extension ProxyType {
             switch source {
             case .builtIn(let vpn, let region):
                 return "\(vpn.rawValue.uppercased()) (\(region.rawValue))"
-            case .premium(let vpn, let region):
-                return "Premium \(vpn.rawValue.uppercased()) (\(region.rawValue))"
+            case .premium:
+                return "Premium"
             case .custom:
                 return "Custom"
             }

@@ -171,6 +171,12 @@ final class BrowserWindowState: ObservableObject {
 
     func addTab(url: URL? = nil) {
         if isTrialLockActive { return }
+        // Plan tab limit, enforced here for every path that opens a tab (toolbar, ⌘T, target=_blank, reopen,
+        // duplicate, initial tabs): `SessionManager` is now sized to the absolute ceiling, not the plan limit.
+        guard tabs.count < maxBrowserTabs else {
+            AppLogger.info("New tab ignored — plan limit of \(maxBrowserTabs) tabs reached")
+            return
+        }
         // swiftlint:disable:next force_unwrapping
         let tabURL = url ?? URL(string: "about:blank")!
         guard let slot = sessionManager.acquireSessionSlot() else { return }

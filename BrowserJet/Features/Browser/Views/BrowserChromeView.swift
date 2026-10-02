@@ -63,6 +63,8 @@ struct BrowserChromeView: View {
                 BrowserToolbarView(
                     entries: menu.trailingEntries,
                     enabledActions: enabledToolbarActions,
+                    // The source tab already occupies one slot of the plan limit.
+                    maxDuplicateCount: max(1, state.maxBrowserTabs - 1),
                     onAction: onToolbarAction,
                     onDuplicateTabs: onDuplicateTabs
                 )

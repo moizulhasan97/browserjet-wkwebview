@@ -15,6 +15,9 @@ final class LicenseAccountStore: ObservableObject {
 
     @Published private(set) var userKind: UserKind?
     @Published private(set) var subscriptionTier: SubscriptionTier?
+    /// Raw backend tier code (e.g. `lite`, empty). Exposed because plan resolution maps the raw code through
+    /// Remote Config `plans_config.tierCodeMap`, so new backend codes can be mapped without a release.
+    @Published private(set) var tierRawValue: String = ""
     @Published private(set) var username: String = "User"
 
     private init(licenseStore: LicenseStore = LicenseStore()) {
@@ -26,6 +29,7 @@ final class LicenseAccountStore: ObservableObject {
         let license = licenseStore.load()
         userKind = Self.userKind(from: license)
         subscriptionTier = Self.subscriptionTier(from: license)
+        tierRawValue = license?.tierRawValue ?? ""
         username = Self.displayUsername(from: license)
     }
 

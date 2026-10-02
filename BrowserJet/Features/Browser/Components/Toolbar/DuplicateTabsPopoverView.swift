@@ -42,11 +42,24 @@ import SwiftUI
 struct DuplicateTabsPopoverView: View {
     @Environment(\.appTheme)
     private var theme
-    @Environment(\.appConfiguration)
-    private var config
 
-    @State private var selectedCount: Int = 2
+    @State private var selectedCount: Int
+    /// Highest duplicate count offered. Comes from the window's plan limit (it used to be the app-wide
+    /// `AppConfiguration.duplicateTabCounts`, 1...20), so Pro can duplicate up to its larger limit.
+    let maxCount: Int
     let onConfirm: (Int) -> Void
+
+    private var counts: [Int] {
+        Array(1...maxCount)
+    }
+
+    init(maxCount: Int, onConfirm: @escaping (Int) -> Void) {
+        let safeMax = max(1, maxCount)
+        self.maxCount = safeMax
+        self.onConfirm = onConfirm
+        // Default of 2 kept from before, clamped so the picker's selection is always one of its options.
+        _selectedCount = State(initialValue: min(2, safeMax))
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -55,7 +68,7 @@ struct DuplicateTabsPopoverView: View {
                 .foregroundStyle(theme.textPrimary)
 
             Picker("Count", selection: $selectedCount) {
-                ForEach(config.duplicateTabCounts, id: \.self) { count in
+                ForEach(counts, id: \.self) { count in
                     Text("\(count)").tag(count)
                 }
             }

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF39AC6394F32B1E59D119B2 /* PlanSignalSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB00E3B9B19E381E1AA628A /* PlanSignalSynchronizer.swift */; };
+		AFEA9301452750ECB0FA1992 /* PlanID.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFB29958EFDC709F4CFA339 /* PlanID.swift */; };
+		AF5117A26BA33443852AE29B /* PlanEntitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC03AF5D18395EA897337BD /* PlanEntitlements.swift */; };
+		AFC6B19855F5CBCB2153101A /* PlanResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4D560976953BDF5486CB23 /* PlanResolver.swift */; };
+		AFB21D2FE04DCEF9B15458A3 /* PlanEntitlementsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9D873AE2591153FE05BC52 /* PlanEntitlementsProvider.swift */; };
+		AF512841A9B78BEF2353C99D /* PlansConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF50C66CE776392D98BB282 /* PlansConfig.swift */; };
+		AF5A137D37147F2B5D650120 /* RemoteConfigManager+Plans.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF89AC62699CC0C30C19B99E /* RemoteConfigManager+Plans.swift */; };
 		741EB8100864414EB9E1849C /* BrowserTabPillShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5ACA9592E1B48DAA9223F65 /* BrowserTabPillShapes.swift */; };
 		AC1354060D144E8D9C8F2FA8 /* TabNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */; };
 		D4F630B3A8E96EB6AED52814 /* TabNavigationFailure.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF57B7AB441A530EE95EA8D3 /* TabNavigationFailure.swift */; };
@@ -192,6 +199,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AFB00E3B9B19E381E1AA628A /* PlanSignalSynchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanSignalSynchronizer.swift; sourceTree = "<group>"; };
+		AFFB29958EFDC709F4CFA339 /* PlanID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanID.swift; sourceTree = "<group>"; };
+		AFC03AF5D18395EA897337BD /* PlanEntitlements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEntitlements.swift; sourceTree = "<group>"; };
+		AF4D560976953BDF5486CB23 /* PlanResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanResolver.swift; sourceTree = "<group>"; };
+		AF9D873AE2591153FE05BC52 /* PlanEntitlementsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEntitlementsProvider.swift; sourceTree = "<group>"; };
+		AFF50C66CE776392D98BB282 /* PlansConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlansConfig.swift; sourceTree = "<group>"; };
+		AF89AC62699CC0C30C19B99E /* RemoteConfigManager+Plans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteConfigManager+Plans.swift"; sourceTree = "<group>"; };
 		0B97C17B67C54B3E99CF0FC6 /* TabNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabNavigationDelegate.swift; sourceTree = "<group>"; };
 		AF57B7AB441A530EE95EA8D3 /* TabNavigationFailure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabNavigationFailure.swift; sourceTree = "<group>"; };
 		59853CD577C7794247564EFA /* NavigationErrorMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationErrorMessages.swift; sourceTree = "<group>"; };
@@ -395,6 +409,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AF55209355F7C026792F55C6 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				AFFB29958EFDC709F4CFA339 /* PlanID.swift */,
+				AFC03AF5D18395EA897337BD /* PlanEntitlements.swift */,
+				AF4D560976953BDF5486CB23 /* PlanResolver.swift */,
+				AF9D873AE2591153FE05BC52 /* PlanEntitlementsProvider.swift */,
+			);
+			path = Entitlements;
+			sourceTree = "<group>";
+		};
 		AF0A09DB2F4653B100A12964 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
@@ -412,7 +437,10 @@
 				AF36518534F98C878371D064 /* BuiltInVPNConfig.swift */,
 				AF1682422FF9CA2C00BE5D69 /* EndpointsConfig.swift */,
 				AF1682402FF9C42D00BE5D69 /* FeatureFlagsConfig.swift */,
+				AFB00E3B9B19E381E1AA628A /* PlanSignalSynchronizer.swift */,
+				AFF50C66CE776392D98BB282 /* PlansConfig.swift */,
 				AF127CFA2F9ACA9600EE34E2 /* RemoteConfigManager.swift */,
+				AF89AC62699CC0C30C19B99E /* RemoteConfigManager+Plans.swift */,
 				AF127CF82F9ACA7E00EE34E2 /* RemoteConfigKey.swift */,
 			);
 			path = RemoteConfig;
@@ -766,6 +794,7 @@
 			children = (
 				AF16825E2FFA161400BE5D69 /* Analytics */,
 				AF1682442FF9E1FE00BE5D69 /* CrashReporting */,
+				AF55209355F7C026792F55C6 /* Entitlements */,
 				AF9D9BAE2FB7FA080047856A /* Shortcuts */,
 				AF127CF72F9ACA7800EE34E2 /* RemoteConfig */,
 				AF6086482F732CAA003931E2 /* Licensing */,
@@ -1309,6 +1338,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF39AC6394F32B1E59D119B2 /* PlanSignalSynchronizer.swift in Sources */,
+				AFEA9301452750ECB0FA1992 /* PlanID.swift in Sources */,
+				AF5117A26BA33443852AE29B /* PlanEntitlements.swift in Sources */,
+				AFC6B19855F5CBCB2153101A /* PlanResolver.swift in Sources */,
+				AFB21D2FE04DCEF9B15458A3 /* PlanEntitlementsProvider.swift in Sources */,
+				AF512841A9B78BEF2353C99D /* PlansConfig.swift in Sources */,
+				AF5A137D37147F2B5D650120 /* RemoteConfigManager+Plans.swift in Sources */,
 				AFDE6A3B9027E457F5AC71C8 /* TemplatedAuthProxyProvider.swift in Sources */,
 				AF2E5F54A2BCEB6A791B9388 /* AuthProxyProviderFactory.swift in Sources */,
 				AF5939A4FC73E4B12136DD7D /* BuiltInVPNConfig.swift in Sources */,

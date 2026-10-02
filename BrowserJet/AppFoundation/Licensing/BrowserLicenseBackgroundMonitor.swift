@@ -62,6 +62,9 @@ enum BrowserLicenseBackgroundMonitor {
                 licenseStore.save(response)
                 await MainActor.run {
                     LicenseAccountStore.shared.refresh()
+                    // A plan change detected mid-session re-targets Remote Config now (e.g. a downgrade drops the
+                    // cached VPN credentials); the open window keeps its limits until the next launch.
+                    PlanSignalSynchronizer.shared.syncWithCurrentLicense()
                 }
             } catch is CancellationError {
                 return
