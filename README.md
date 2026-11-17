@@ -26,4 +26,8 @@ BrowserJet is a macOS browser built using WKWebView with support for licensing, 
 
 See the following documentation:
 
+- `CLAUDE.md` — Shared AI engineering instructions and context entry point.
+- `docs/PROJECT_CONTEXT.md` — Architecture map and verified repository context.
+- `docs/AI_WORKFLOW.md` — Claude Code skills, task plans, and cross-session handoffs.
+- `docs/DEVELOPMENT.md` — Build and validation commands.
 - `CONTRIBUTING.md` — Git workflow, release process, branching strategy, pull request format, and distribution guide.
